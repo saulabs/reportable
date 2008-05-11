@@ -1,0 +1,11 @@
+sqlite3:
+  database: ":memory:"
+  adapter: sqlite3
+  timeout: 500
+
+mysql:
+  adapter: mysql
+  username: rails
+  password: mislav
+  encoding: utf8
+  database: reports_as_sparkline_test

@@ -69,7 +69,7 @@ end
 describe "Model#name_report should default to count operation on created at" do
   
   it "should call models count function" do
-    User.registrations_report.class.should == ActiveSupport::OrderedHash
+    User.registrations_report.class.should == Array
   end
   
 end
@@ -77,7 +77,7 @@ end
 describe "Model#name_report should default to count operation on created at" do
   
   it "should call models count function" do
-    User.registrations_report.class.should == ActiveSupport::OrderedHash
+    User.registrations_report.class.should == Array
   end
   
 end

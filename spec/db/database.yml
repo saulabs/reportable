@@ -5,7 +5,7 @@ sqlite3:
 
 mysql:
   adapter: mysql
-  username: rails
-  password: mislav
+  username: root
+  password: 
   encoding: utf8
   database: reports_as_sparkline_test

@@ -1,11 +1,3 @@
 sqlite3:
-  database: ":memory:"
-  adapter: sqlite3
-  timeout: 500
-
-mysql:
-  adapter: mysql
-  username: root
-  password: 
-  encoding: utf8
-  database: reports_as_sparkline_test
+  :adapter: sqlite3
+  :dbfile: spec/db/reports_as_sparkline.sqlite3.db

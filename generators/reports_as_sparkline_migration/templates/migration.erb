@@ -1,0 +1,71 @@
+class <%= class_name %> < ActiveRecord::Migration
+
+  def self.up
+    create_table :containers, :force => true do |t|
+      t.string     :name, :null => false, :limit => 250
+      t.timestamps
+    end
+    add_index :containers, :name, :unique => true
+
+    create_table :contents, :force => true do |t|
+      t.string     :name,        :null => false, :limit => 250
+      t.string     :title,                       :limit => 250
+      t.string     :slug,                        :limit => 250
+      t.integer    :parent_id
+      t.integer    :container_id
+      t.timestamps
+    end
+    add_index :contents, :container_id
+    add_index :contents, :name
+    add_index :contents, :slug
+    add_index :contents, [:container_id, :slug], :unique => true
+    
+    create_table :sections, :force => true do |t|
+      t.string     :name,       :null => false, :limit => 250
+      t.text       :body
+      t.integer    :content_id, :null => false
+      t.timestamps
+    end
+    add_index :sections, :content_id
+    add_index :sections, :name
+    add_index :sections, [:content_id, :name], :unique => true
+    
+    create_table :tags, :force => true do |t|
+      t.string     :name, :null => false, :limit => 100
+      t.string     :slug, :null => false, :limit => 100
+      t.timestamps
+    end
+    add_index :tags, :name
+    add_index :tags, :slug
+    
+    create_table :contents_tags, :force => true, :id => false do |t|
+      t.integer :content_id, :null => false
+      t.integer :tag_id,     :null => false
+    end
+    add_index :contents_tags, :content_id
+    add_index :contents_tags, :tag_id
+    add_index :contents_tags, [:tag_id, :content_id]
+  end
+
+  def self.down
+    remove_index :containers,    :name
+    remove_index :contents,      :container_id
+    remove_index :contents,      :name
+    remove_index :contents,      :slug
+    remove_index :contents,      [:container_id, :slug]
+    remove_index :sections,      :content_id
+    remove_index :sections,      :name
+    remove_index :tags,          :name
+    remove_index :tags,          :slug
+    remove_index :contents_tags, :content_id
+    remove_index :contents_tags, :tag_id
+    remove_index :contents_tags, :tag_id, :content_id
+
+    drop_table :containers
+    drop_table :contents
+    drop_table :sections
+    drop_table :tags
+    drop_table :contents_tags
+  end
+
+end

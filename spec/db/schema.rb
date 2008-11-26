@@ -1,17 +1,20 @@
 ActiveRecord::Schema.define(:version => 1) do
+
   create_table :users, :force => true do |t|
-    t.string :login, :string
+    t.string  :login,          :null => false
+    t.integer :profile_visits, :null => false, :default => 0
+
     t.timestamps
   end
-  
+
   create_table :report_caches, :force => true do |t|
-    t.string :model_name
-    t.string :report_name
-    t.string :report_range
-    t.float :value
-    t.datetime :start
-      
+    t.string :model_name,   :null => false
+    t.string :report_name,  :null => false
+    t.string :report_range, :null => false
+    t.float  :value,        :null => false
+
     t.timestamps
   end
-  add_index :report_caches, [:model_name, :report_name, :report_range, :start], :unique => true, :name => "report_caches_uk"
+  add_index :report_caches, [:model_name, :report_name, :report_range], :unique => true, :name => "report_caches_uk"
+
 end

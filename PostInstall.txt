@@ -1,7 +1,0 @@
-
-For more information on reports_as_sparkline, see http://reports_as_sparkline.rubyforge.org
-
-NOTE: Change this information in PostInstall.txt 
-You can also delete it if you don't want it.
-
-

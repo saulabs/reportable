@@ -1,4 +1,21 @@
-require 'config/requirements'
-require 'config/hoe' # setup Hoe + all gem configuration
+require 'rake'
+require 'rake/rdoctask'
+require 'spec/rake/spectask'
+ 
+desc 'Default: run specs.'
+task :default => :spec
+ 
+desc 'Run the specs'
+Spec::Rake::SpecTask.new(:spec) do |t|
+  t.spec_opts = ['-cfs']
+  t.spec_files = FileList['spec/**/*_spec.rb']
+end
 
-Dir['tasks/**/*.rake'].each { |rake| load rake }
+desc 'Generate documentation for the reports_as_sparkline plugin.'
+Rake::RDocTask.new(:rdoc) do |rdoc|
+  rdoc.rdoc_dir = 'rdoc'
+  rdoc.title    = 'reports_as_sparkline'
+  rdoc.options << '--line-numbers' << '--inline-source'
+  rdoc.rdoc_files.include('README.rdoc')
+  rdoc.rdoc_files.include('lib/**/*.rb')
+end

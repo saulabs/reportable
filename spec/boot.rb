@@ -1,23 +1,23 @@
 plugin_root = File.join(File.dirname(__FILE__), '..')
-version = ENV['RAILS_VERSION']
-version = nil if version and version == ""
 
-# first look for a symlink to a copy of the framework
-if !version and framework_root = ["#{plugin_root}/rails", "#{plugin_root}/../../rails"].find { |p| File.directory? p }
-  puts "found framework root: #{framework_root}"
-  # this allows for a plugin to be tested outside of an app and without Rails gems
-  $:.unshift "#{framework_root}/activesupport/lib", "#{framework_root}/activerecord/lib", "#{framework_root}/actionpack/lib"
-else
-  # simply use installed gems if available
-  puts "using Rails#{version ? ' ' + version : nil} gems"
-  require 'rubygems'
-  
-  if version
-    gem 'rails', version
-  else
-    gem 'actionpack'
-    gem 'activerecord'
-  end
-  require 'active_record'
-  require 'action_pack'
-end
+require 'rubygems'
+gem 'rails'
+require 'activerecord'
+require 'active_support'
+require 'action_controller'
+require 'action_view'
+
+$:.unshift "#{plugin_root}/lib"
+
+RAILS_ROOT = File.expand_path(File.dirname(__FILE__) + '/../')
+Rails::Initializer.run(:set_load_path)
+Rails::Initializer.run(:set_autoload_paths)
+
+require File.join(File.dirname(__FILE__), '/../init.rb')
+
+ActiveRecord::Base.logger = Logger.new(File.join(File.dirname(__FILE__), 'log', 'spec.log'))
+
+databases = YAML::load(IO.read(File.join(File.dirname(__FILE__), 'db', 'database.yml')))
+# TODO: connect to test database of rails project if exists
+ActiveRecord::Base.establish_connection(databases['sqlite3'])
+load(File.join(File.dirname(__FILE__), 'db', 'schema.rb'))

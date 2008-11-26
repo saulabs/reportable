@@ -1,0 +1,35 @@
+## ReportsAsSparkline
+
+This plugin shall allow you to generate sparklines and do reporting from your database with very little effort.
+
+### Example
+
+This shows the first basic usage. Consider the following user model, including *created_at* and *activated_at* timestamp fields.
+
+    class User < ActiveRecord::Base
+      report_as_sparkline :registrations
+      report_as_sparkline :activations, :date_column => :activated_at
+      report_as_sparkline :total_users, :cumulate => :registrations
+    end
+
+Using *report_as_sparkline* like this will add the following class methods to your User model:
+
+    # Generates a sparkline from the google chart api
+    # so you see the registrations per day
+    User.registrations_graph
+    
+    # Gets an array of the data to use in numerical display
+    User.registrations_report
+    
+### Implemented features
+* cumulate option that depends on other report
+    
+### Pending points
+
+* Create a model to cache results and reuse
+* Implement data ranges in arguments
+* Limit number of data points to maximum that the google chart api allows
+* Make graph styling configurable
+
+
+&copy; 2008 Martin Kavalar, Marco Otte-Witte (http://simplabs.com/#projects), released under the MIT license

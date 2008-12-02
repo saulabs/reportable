@@ -4,7 +4,7 @@ module Kvlr #:nodoc:
 
     class CumulatedReport < Report
 
-      def run(options)
+      def run(options = {})
         CumulatedReport.cumulate!(super)
       end
 

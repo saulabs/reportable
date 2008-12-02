@@ -10,7 +10,4 @@ require 'initializer'
 
 require File.join(File.dirname(__FILE__), 'boot') unless defined?(ActiveRecord)
 
-class User < ActiveRecord::Base
-  report_as_sparkline :registrations
-  report_as_sparkline :cumulated_registrations, :cumulate => :registrations
-end
+class User < ActiveRecord::Base; end

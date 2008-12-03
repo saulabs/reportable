@@ -30,8 +30,8 @@ describe Kvlr::ReportsAsSparkline::ReportCache do
 
     it 'should correctly return the last reporting period that is in the cache' do
       cached_data = [
-        Kvlr::ReportsAsSparkline::ReportCache.new(:reporting_period => @grouping.to_reporting_period(Time.now - 2.days)),
-        Kvlr::ReportsAsSparkline::ReportCache.new(:reporting_period => @grouping.to_reporting_period(Time.now - 3.days))
+        Kvlr::ReportsAsSparkline::ReportCache.new(:reporting_period => (Time.now - 3.days).to_date.to_formatted_s(:db)),
+        Kvlr::ReportsAsSparkline::ReportCache.new(:reporting_period => (Time.now - 2.days).to_date.to_formatted_s(:db))
       ]
 
       Kvlr::ReportsAsSparkline::ReportCache.send(

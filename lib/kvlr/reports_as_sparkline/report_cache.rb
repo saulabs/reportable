@@ -15,8 +15,7 @@ module Kvlr #:nodoc:
           )
           last_reporting_period_to_read = get_last_reporting_period(cached_data, grouping, grouping.first_reporting_period(limit))
           new_data = yield(last_reporting_period_to_read)
-          write_to_cache(new_data, report, grouping)
-          return cached_data + new_data
+          return update_cache(new_data, cached_data, report, grouping)
         end
       end
 
@@ -24,33 +23,32 @@ module Kvlr #:nodoc:
 
         def self.get_last_reporting_period(cached_data, grouping, acc)
           return acc if cached_data.empty?
-          if cached_data.any? { |cache| cache.reporting_period == acc } && !cached_data.any? { |cache| cache.reporting_period == grouping.next_reporting_period(acc) }
-            return acc
-          else
-            self.get_last_reporting_period(cached_data, grouping, grouping.next_reporting_period(acc))
-          end
-        end
-
-        def self.write_to_cache(data, report, grouping)
-          for row in data
-            cached = self.find(:first, :conditions => {
-              :model_name       => report.klass.to_s,
-              :report_name      => report.name.to_s,
-              :report_grouping  => grouping.identifier.to_s,
-              :reporting_period => grouping.to_reporting_period(DateTime.parse(row[0]))
-            })
-            if cached
-              cached.update_attributes!(:value => row[1])
-            else
-              self.create!(
-                :model_name       => report.klass.to_s,
-                :report_name      => report.name.to_s,
-                :report_grouping  => grouping.identifier.to_s,
-                :reporting_period => grouping.to_reporting_period(DateTime.parse(row[0])),
-                :value            => row[1]
-              )
+          period = grouping.to_reporting_period(DateTime.parse(cached_data[0].reporting_period))
+          cached_data[1..-2].each_with_index do |cached, i|
+            if grouping.next_reporting_period(grouping.to_reporting_period(DateTime.parse(cached.reporting_period))) != grouping.to_reporting_period(DateTime.parse(cached_data[i + 1].reporting_period))
+              return cached
             end
           end
+          return grouping.to_reporting_period(DateTime.parse(cached_data[-1].reporting_period))
+        end
+
+        def self.update_cache(new_data, cached_data, report, grouping)
+          rows_to_write = (0..-1)
+          if cached_data.size > 0 && new_data.size > 0
+            cached_data.last.update_attributes!(:value => new_data.first[1])
+            rows_to_write = (1..-1)
+          end
+          for row in (new_data[rows_to_write] || [])
+            self.create!(
+              :model_name => report.klass.to_s,
+              :report_name => report.name.to_s,
+              :report_grouping => grouping.identifier.to_s,
+              :reporting_period => grouping.to_reporting_period(DateTime.parse(row[0])),
+              :value => row[1]
+            )
+          end
+          result = cached_data.map { |cached| [Datetime.parse(cached.reporting_period), cached.value] }
+          result += new_data.map { |data| [DateTime.parse(data[0]), data[1]] }
         end
 
     end

@@ -12,7 +12,7 @@ ActiveRecord::Schema.define(:version => 1) do
     t.string   :report_name,      :null => false
     t.string   :report_grouping,  :null => false
     t.float    :value,            :null => false, :default => 0
-    t.datetime :reporting_period, :null => false
+    t.string   :reporting_period, :null => false
 
     t.timestamps
   end

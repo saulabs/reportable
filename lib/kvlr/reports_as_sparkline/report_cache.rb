@@ -13,23 +13,43 @@ module Kvlr #:nodoc:
             :limit => limit,
             :order => "#{date_column_name.to_s} DESC"
           )
-          last_reporting_period_to_read = get_last_reporting_period(cached_data, grouping)
+          last_reporting_period_to_read = get_last_reporting_period(cached_data, grouping, grouping.first_reporting_period(limit))
           new_data = yield(last_reporting_period_to_read)
-          #TODO: write new data
+          write_to_cache(new_data, report, grouping)
+          return cached_data + new_data
         end
-        #TODO: combine data read from cache and newly read data and return
       end
 
       private
 
-        def self.get_last_reporting_period(cached_data, grouping, acc = nil)
-          acc ||= grouping.to_reporting_period(Time.now)
+        def self.get_last_reporting_period(cached_data, grouping, acc)
           return acc if cached_data.empty?
-          acc = grouping.previous_reporting_period(acc)
-          if cached_data.any? { |cache| cache.reporting_period == acc }
+          if cached_data.any? { |cache| cache.reporting_period == acc } && !cached_data.any? { |cache| cache.reporting_period == grouping.next_reporting_period(acc) }
             return acc
           else
-            self.get_last_reporting_period(cached_data, grouping, acc)
+            self.get_last_reporting_period(cached_data, grouping, grouping.next_reporting_period(acc))
+          end
+        end
+
+        def self.write_to_cache(data, report, grouping)
+          for row in data
+            cached = self.find(:first, :conditions => {
+              :model_name       => report.klass.to_s,
+              :report_name      => report.name.to_s,
+              :report_grouping  => grouping.identifier.to_s,
+              :reporting_period => grouping.to_reporting_period(DateTime.parse(row[0]))
+            })
+            if cached
+              cached.update_attributes!(:value => row[1])
+            else
+              self.create!(
+                :model_name       => report.klass.to_s,
+                :report_name      => report.name.to_s,
+                :report_grouping  => grouping.identifier.to_s,
+                :reporting_period => grouping.to_reporting_period(DateTime.parse(row[0])),
+                :value            => row[1]
+              )
+            end
           end
         end
 

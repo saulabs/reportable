@@ -9,14 +9,14 @@ describe Kvlr::ReportsAsSparkline::Report do
   describe '.run' do
 
     it 'should invoke the default aggregation method on the model' do
-      User.should_receive(:count).once
+      User.should_receive(:count).once.and_return([])
 
       @report.run
     end
 
     it 'should invoke the custom aggregation method on the model if one is specified' do
       @report = Kvlr::ReportsAsSparkline::Report.new(User, :registrations, :aggregation => :sum)
-      User.should_receive(:sum).once
+      User.should_receive(:sum).once.and_return([])
 
       @report.run
     end

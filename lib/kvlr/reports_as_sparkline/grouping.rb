@@ -4,17 +4,19 @@ module Kvlr #:nodoc:
 
     class Grouping
 
-      attr_reader :identifier
-
       @@allowed_groupings = [:month, :week, :day, :hour]
 
       def initialize(grouping)
         raise ArgumentError.new("Argument grouping must be one of #{@@allowed_groupings.map(&:to_s).join(', ')}") unless @@allowed_groupings.include?(grouping)
-        @grouping = grouping
+        @identifier = grouping
+      end
+
+      def identifier
+        @identifier.to_s
       end
 
       def to_reporting_period(date_time)
-        return case @grouping
+        return case @identifier
           when :day
             date_time.to_date
           when :week
@@ -27,24 +29,38 @@ module Kvlr #:nodoc:
           end
       end
 
-      def previous_reporting_period(period)
-        return case @grouping
+      def next_reporting_period(period)
+        return case @identifier
           when :day
-            period - 1.day
+            period + 1.day
           when :week
-            period - 1.week
+            period + 1.week
           when :month
-            period -= 1.month
+            period += 1.month
             Date.new(period.year, period.month, 1)
           when :hour
-            period - 1.hour
+            period + 1.hour
+          end
+      end
+
+      def first_reporting_period(limit)
+        return case @identifier
+          when :day
+            to_reporting_period(Time.now - limit.days)
+          when :week
+            to_reporting_period(Time.now - limit.weeks)
+          when :month
+            date = Time.now - limit.months
+            Date.new(date.year, date.month, 1)
+          when :hour
+            to_reporting_period(Time.now - limit.hours)
           end
       end
 
       def to_sql(date_column_name)
         #TODO: DATE_FORMAT's format string is different on different RDBMs => custom format string for all supported RDBMs needed!
         # => this can be implemented using ActiveRecord::Base.connection.class
-        return case @grouping
+        return case @identifier
           when :day
             "DATE_FORMAT(#{date_column_name}, '%Y/%m/%d')"
           when :week

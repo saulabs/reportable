@@ -51,34 +51,34 @@ describe Kvlr::ReportsAsSparkline::Grouping do
 
   end
 
-  describe '.previous_reporting_period' do
+  describe '.next_reporting_period' do
 
-    it 'should return the first day of the month before the specified period for grouping :month' do
+    it 'should return the first day of the month after the specified period for grouping :month' do
       grouping = Kvlr::ReportsAsSparkline::Grouping.new(:month)
       period = grouping.to_reporting_period(Time.now)
 
-      grouping.previous_reporting_period(period).should == Date.new((period - 1.month).year, (period - 1.month).month, 1)
+      grouping.next_reporting_period(period).should == Date.new((period + 1.month).year, (period + 1.month).month, 1)
     end
 
-    it 'should return the date 1 week before the specified period for grouping :week' do
+    it 'should return the date 1 week after the specified period for grouping :week' do
       grouping = Kvlr::ReportsAsSparkline::Grouping.new(:week)
       period = grouping.to_reporting_period(Time.now)
 
-      grouping.previous_reporting_period(period).should == Date.new((period - 1.week).year, (period - 1.week).month, (period - 1.week).day)
+      grouping.next_reporting_period(period).should == Date.new((period + 1.week).year, (period + 1.week).month, (period + 1.week).day)
     end
 
-    it 'should return the date 1 day before the specified period for grouping :day' do
+    it 'should return the date 1 day after the specified period for grouping :day' do
       grouping = Kvlr::ReportsAsSparkline::Grouping.new(:day)
       period = grouping.to_reporting_period(Time.now)
 
-      grouping.previous_reporting_period(period).should == Date.new((period - 1.day).year, (period - 1.day).month, (period - 1.day).day)
+      grouping.next_reporting_period(period).should == Date.new((period + 1.day).year, (period + 1.day).month, (period + 1.day).day)
     end
 
-    it 'should return the date and time 1 hour before the specified period for grouping :hour' do
-      grouping = Kvlr::ReportsAsSparkline::Grouping.new(:day)
+    it 'should return the date and time 1 hour after the specified period for grouping :hour' do
+      grouping = Kvlr::ReportsAsSparkline::Grouping.new(:hour)
       period = grouping.to_reporting_period(Time.now)
 
-      grouping.previous_reporting_period(period).should == Date.new((period - 1.hour).year, (period - 1.hour).month, (period - 1.hour).day, (period - 1.hour).hour)
+      grouping.next_reporting_period(period).should == DateTime.new((period + 1.hour).year, (period + 1.hour).month, (period + 1.hour).day, (period + 1.hour).hour)
     end
 
   end

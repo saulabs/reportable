@@ -31,26 +31,26 @@ describe Kvlr::ReportsAsSparkline::ReportCache do
     it 'should correctly return the last reporting period that is in the cache' do
       cached_data = [
         Kvlr::ReportsAsSparkline::ReportCache.new(:reporting_period => @grouping.to_reporting_period(Time.now - 2.days)),
-        Kvlr::ReportsAsSparkline::ReportCache.new(:reporting_period => @grouping.to_reporting_period(Time.now - 3.day))
+        Kvlr::ReportsAsSparkline::ReportCache.new(:reporting_period => @grouping.to_reporting_period(Time.now - 3.days))
       ]
 
       Kvlr::ReportsAsSparkline::ReportCache.send(
         :get_last_reporting_period,
         cached_data,
-        @grouping
+        @grouping,
+        @grouping.first_reporting_period(3)
       ).should == @grouping.to_reporting_period(Time.now - 2.days)
     end
 
-    it 'should return the current reporting period if the cache is empty' do
+    it 'should return the first reporting period for (Time.now - limit * day/week/month/year) if the cache is empty' do
       Kvlr::ReportsAsSparkline::ReportCache.send(
         :get_last_reporting_period,
         [],
-        @grouping
-      ).should == @grouping.to_reporting_period(Time.now)
+        @grouping,
+        @grouping.first_reporting_period(3)
+      ).should == @grouping.to_reporting_period(Time.now - 3.days)
     end
 
   end
 
 end
-
-class YieldCheckException < Exception; end

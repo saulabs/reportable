@@ -16,6 +16,15 @@ ActiveRecord::Schema.define(:version => 1) do
 
     t.timestamps
   end
-  add_index :report_caches, [:model_name, :report_name, :report_grouping], :unique => true, :name => "report_caches_uk"
+  add_index :report_caches, [
+    :model_name,
+    :report_name,
+    :report_grouping
+  ], :name => 'report_caches_name_klass_grouping'
+  add_index :report_caches, [
+    :model_name, :report_name,
+    :report_grouping,
+    :reporting_period
+  ], :unique => true, :name => 'report_caches_name_klass_grouping_period'
 
 end

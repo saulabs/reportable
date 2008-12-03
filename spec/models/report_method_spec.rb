@@ -22,10 +22,6 @@ describe Kvlr::ReportsAsSparkline do
       lambda { User.registrations_report }.should_not raise_error(ArgumentError)
     end
 
-    it 'should return an ordered hash' do
-      User.registrations_report.class.should == ActiveSupport::OrderedHash
-    end
-
   end
 
 end

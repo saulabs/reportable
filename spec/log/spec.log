@@ -35433,3 +35433,1421 @@
   [4;36;1mSQL (0.000646)[0m   [0;1mCOMMIT[0m
   [4;35;1mSQL (0.000193)[0m   [0mBEGIN[0m
   [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000647)[0m   [0;1mSELECT * FROM `report_caches` WHERE (`report_caches`.`model_name` = 'User' AND `report_caches`.`report_name` = 'cumulated_registrations' AND `report_caches`.`report_grouping` = 'day') ORDER BY created_at DESC LIMIT 100[0m
+  [4;36;1mSQL (0.000532)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (0.008982)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.003782)[0m   [0;1mDROP TABLE "users"[0m
+  [4;35;1mSQL (0.003542)[0m   [0mCREATE TABLE "users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "login" varchar(255) NOT NULL, "profile_visits" integer DEFAULT 0 NOT NULL, "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.000508)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (0.002788)[0m   [0mDROP TABLE "report_caches"[0m
+  [4;36;1mSQL (0.003844)[0m   [0;1mCREATE TABLE "report_caches" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "model_name" varchar(255) NOT NULL, "report_name" varchar(255) NOT NULL, "report_grouping" varchar(255) NOT NULL, "value" float DEFAULT 0 NOT NULL, "reporting_period" datetime NOT NULL, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.003937)[0m   [0mCREATE INDEX "report_caches_name_klass_grouping" ON "report_caches" ("model_name", "report_name", "report_grouping")[0m
+  [4;36;1mSQL (0.002706)[0m   [0;1mCREATE UNIQUE INDEX "report_caches_name_klass_grouping_period" ON "report_caches" ("model_name", "report_name", "report_grouping", "reporting_period")[0m
+  [4;35;1mSQL (0.000595)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.000260)[0m   [0;1mSELECT version FROM "schema_migrations"[0m
+  [4;35;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000704)[0m   [0mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 100[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSQLite3::SQLException: no such function: DATE_FORMAT: SELECT sum("users".id) AS sum_id, DATE_FORMAT(created_at, '%Y/%m/%d') AS date_format_created_at_y_m_d FROM "users" WHERE (created_at >= '2008-08-25') GROUP BY DATE_FORMAT(created_at, '%Y/%m/%d') ORDER BY created_at DESC [0m
+  [4;35;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000766)[0m   [0mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 100[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSQLite3::SQLException: no such function: DATE_FORMAT: SELECT count("users".id) AS count_id, DATE_FORMAT(created_at, '%Y/%m/%d') AS date_format_created_at_y_m_d FROM "users" WHERE (created_at >= '2008-08-25') GROUP BY DATE_FORMAT(created_at, '%Y/%m/%d') ORDER BY created_at DESC [0m
+  [4;35;1mUser Create (0.000363)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 17:05:37', 'test 1', '2008-11-26 17:05:37')[0m
+  [4;36;1mUser Create (0.000574)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 17:05:37', 'test 2', '2008-11-19 17:05:37')[0m
+  [4;35;1mUser Create (0.000618)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 17:05:37', 'test 3', '2008-11-19 17:05:37')[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000963)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'cumulated_registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 100[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSQLite3::SQLException: no such function: DATE_FORMAT: SELECT count("users".id) AS count_id, DATE_FORMAT(created_at, '%Y/%m/%d') AS date_format_created_at_y_m_d FROM "users" WHERE (created_at >= '2008-08-25') GROUP BY DATE_FORMAT(created_at, '%Y/%m/%d') ORDER BY created_at DESC [0m
+  [4;36;1mUser Load (0.000460)[0m   [0;1mSELECT * FROM "users" [0m
+  [4;35;1mUser Destroy (0.000335)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 1
+[0m
+  [4;36;1mUser Destroy (0.000608)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 2
+[0m
+  [4;35;1mUser Destroy (0.000601)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 3
+[0m
+  [4;36;1mUser Create (0.000564)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 17:05:37', 'test 1', '2008-11-26 17:05:37')[0m
+  [4;35;1mUser Create (0.000463)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 17:05:37', 'test 2', '2008-11-19 17:05:37')[0m
+  [4;36;1mUser Create (0.000497)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 17:05:37', 'test 3', '2008-11-19 17:05:37')[0m
+  [4;35;1mKvlr::ReportsAsSparkline::ReportCache Load (0.003070)[0m   [0mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'cumulated_registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 100[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSQLite3::SQLException: no such function: DATE_FORMAT: SELECT sum("users".profile_visits) AS sum_profile_visits, DATE_FORMAT(created_at, '%Y/%m/%d') AS date_format_created_at_y_m_d FROM "users" WHERE (created_at >= '2008-08-25') GROUP BY DATE_FORMAT(created_at, '%Y/%m/%d') ORDER BY created_at DESC [0m
+  [4;35;1mUser Load (0.001234)[0m   [0mSELECT * FROM "users" [0m
+  [4;36;1mUser Destroy (0.000378)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 4
+[0m
+  [4;35;1mUser Destroy (0.000484)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 5
+[0m
+  [4;36;1mUser Destroy (0.000716)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 6
+[0m
+  [4;35;1mUser Create (0.000500)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 17:05:37', 'test 1', '2008-11-26 17:05:37')[0m
+  [4;36;1mUser Create (0.000528)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 17:05:37', 'test 2', '2008-11-19 17:05:37')[0m
+  [4;35;1mUser Create (0.000505)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 17:05:37', 'test 3', '2008-11-19 17:05:37')[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000924)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'cumulated_registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 100[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSQLite3::SQLException: no such function: DATE_FORMAT: SELECT count("users".id) AS count_id, DATE_FORMAT(created_at, '%Y/%m/%d') AS date_format_created_at_y_m_d FROM "users" WHERE (login IN ('test 1','test 2') AND created_at >= '2008-08-25') GROUP BY DATE_FORMAT(created_at, '%Y/%m/%d') ORDER BY created_at DESC [0m
+  [4;36;1mUser Load (0.000517)[0m   [0;1mSELECT * FROM "users" [0m
+  [4;35;1mUser Destroy (0.000344)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 7
+[0m
+  [4;36;1mUser Destroy (0.000784)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 8
+[0m
+  [4;35;1mUser Destroy (0.000535)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 9
+[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000607)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 100[0m
+  [4;35;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000543)[0m   [0mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 100[0m
+  [4;36;1mUser Create (0.000413)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 17:05:37', 'test 1', '2008-11-26 17:05:37')[0m
+  [4;35;1mUser Create (0.000393)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 17:05:37', 'test 2', '2008-11-19 17:05:37')[0m
+  [4;36;1mUser Create (0.000400)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 17:05:37', 'test 3', '2008-11-19 17:05:37')[0m
+  [4;35;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000838)[0m   [0mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 3[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSQLite3::SQLException: no such function: DATE_FORMAT: SELECT sum("users".profile_visits) AS sum_profile_visits, DATE_FORMAT(created_at, '%Y/%m/%d') AS date_format_created_at_y_m_d FROM "users" WHERE (created_at >= '2008-11-30') GROUP BY DATE_FORMAT(created_at, '%Y/%m/%d') ORDER BY created_at DESC [0m
+  [4;35;1mUser Load (0.000874)[0m   [0mSELECT * FROM "users" [0m
+  [4;36;1mUser Destroy (0.000321)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 10
+[0m
+  [4;35;1mUser Destroy (0.000219)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 11
+[0m
+  [4;36;1mUser Destroy (0.000574)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 12
+[0m
+  [4;35;1mUser Create (0.000435)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 17:05:37', 'test 1', '2008-11-26 17:05:37')[0m
+  [4;36;1mUser Create (0.000656)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 17:05:37', 'test 2', '2008-11-19 17:05:37')[0m
+  [4;35;1mUser Create (0.000526)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 17:05:37', 'test 3', '2008-11-19 17:05:37')[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.001199)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 100[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSQLite3::SQLException: no such function: DATE_FORMAT: SELECT count("users".id) AS count_id, DATE_FORMAT(created_at, '%Y/%m/%d') AS date_format_created_at_y_m_d FROM "users" WHERE (created_at >= '2008-08-25') GROUP BY DATE_FORMAT(created_at, '%Y/%m/%d') ORDER BY created_at DESC [0m
+  [4;36;1mUser Load (0.000417)[0m   [0;1mSELECT * FROM "users" [0m
+  [4;35;1mUser Destroy (0.000288)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 13
+[0m
+  [4;36;1mUser Destroy (0.000426)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 14
+[0m
+  [4;35;1mUser Destroy (0.000676)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 15
+[0m
+  [4;36;1mUser Create (0.000557)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 17:05:37', 'test 1', '2008-11-26 17:05:37')[0m
+  [4;35;1mUser Create (0.000430)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 17:05:37', 'test 2', '2008-11-19 17:05:37')[0m
+  [4;36;1mUser Create (0.000573)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 17:05:37', 'test 3', '2008-11-19 17:05:37')[0m
+  [4;35;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000943)[0m   [0mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 100[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSQLite3::SQLException: no such function: DATE_FORMAT: SELECT sum("users".profile_visits) AS sum_profile_visits, DATE_FORMAT(created_at, '%Y/%m/%d') AS date_format_created_at_y_m_d FROM "users" WHERE (created_at >= '2008-08-25') GROUP BY DATE_FORMAT(created_at, '%Y/%m/%d') ORDER BY created_at DESC [0m
+  [4;35;1mUser Load (0.000598)[0m   [0mSELECT * FROM "users" [0m
+  [4;36;1mUser Destroy (0.000510)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 16
+[0m
+  [4;35;1mUser Destroy (0.000743)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 17
+[0m
+  [4;36;1mUser Destroy (0.000455)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 18
+[0m
+  [4;35;1mUser Create (0.000456)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 17:05:37', 'test 1', '2008-11-26 17:05:37')[0m
+  [4;36;1mUser Create (0.000541)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 17:05:37', 'test 2', '2008-11-19 17:05:37')[0m
+  [4;35;1mUser Create (0.000556)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 17:05:37', 'test 3', '2008-11-19 17:05:37')[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.001156)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 100[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSQLite3::SQLException: no such function: DATE_FORMAT: SELECT count("users".id) AS count_id, DATE_FORMAT(created_at, '%Y/%m/%d') AS date_format_created_at_y_m_d FROM "users" WHERE (login IN ('test 1','test 2') AND created_at >= '2008-08-25') GROUP BY DATE_FORMAT(created_at, '%Y/%m/%d') ORDER BY created_at DESC [0m
+  [4;36;1mUser Load (0.000574)[0m   [0;1mSELECT * FROM "users" [0m
+  [4;35;1mUser Destroy (0.000395)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 19
+[0m
+  [4;36;1mUser Destroy (0.000614)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 20
+[0m
+  [4;35;1mUser Destroy (0.000622)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 21
+[0m
+  [4;36;1mSQL (0.000198)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (0.000519)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.155676)[0m   [0;1mDROP TABLE "users"[0m
+  [4;35;1mSQL (0.137423)[0m   [0mCREATE TABLE "users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "login" varchar(255) NOT NULL, "profile_visits" integer DEFAULT 0 NOT NULL, "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.000522)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (0.035856)[0m   [0mDROP TABLE "report_caches"[0m
+  [4;36;1mSQL (0.002971)[0m   [0;1mCREATE TABLE "report_caches" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "model_name" varchar(255) NOT NULL, "report_name" varchar(255) NOT NULL, "report_grouping" varchar(255) NOT NULL, "value" float DEFAULT 0 NOT NULL, "reporting_period" datetime NOT NULL, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.002936)[0m   [0mCREATE INDEX "report_caches_name_klass_grouping" ON "report_caches" ("model_name", "report_name", "report_grouping")[0m
+  [4;36;1mSQL (0.002696)[0m   [0;1mCREATE UNIQUE INDEX "report_caches_name_klass_grouping_period" ON "report_caches" ("model_name", "report_name", "report_grouping", "reporting_period")[0m
+  [4;35;1mSQL (0.000794)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.000290)[0m   [0;1mSELECT version FROM "schema_migrations"[0m
+  [4;35;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000656)[0m   [0mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 100[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000475)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 100[0m
+  [4;35;1mUser Create (0.000375)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 17:11:12', 'test 1', '2008-11-26 17:11:12')[0m
+  [4;36;1mUser Create (0.000464)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 17:11:12', 'test 2', '2008-11-19 17:11:12')[0m
+  [4;35;1mUser Create (0.000387)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 17:11:12', 'test 3', '2008-11-19 17:11:12')[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000842)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'cumulated_registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 100[0m
+  [4;35;1mUser Load (0.000587)[0m   [0mSELECT * FROM "users" [0m
+  [4;36;1mUser Destroy (0.000404)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 1
+[0m
+  [4;35;1mUser Destroy (0.000324)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 2
+[0m
+  [4;36;1mUser Destroy (0.000325)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 3
+[0m
+  [4;35;1mUser Create (0.000571)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 17:11:12', 'test 1', '2008-11-26 17:11:12')[0m
+  [4;36;1mUser Create (0.000563)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 17:11:12', 'test 2', '2008-11-19 17:11:12')[0m
+  [4;35;1mUser Create (0.000467)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 17:11:12', 'test 3', '2008-11-19 17:11:12')[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.001164)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'cumulated_registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 100[0m
+  [4;35;1mUser Load (0.000607)[0m   [0mSELECT * FROM "users" [0m
+  [4;36;1mUser Destroy (0.000445)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 4
+[0m
+  [4;35;1mUser Destroy (0.000624)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 5
+[0m
+  [4;36;1mUser Destroy (0.000614)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 6
+[0m
+  [4;35;1mUser Create (0.000635)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 17:11:12', 'test 1', '2008-11-26 17:11:12')[0m
+  [4;36;1mUser Create (0.000545)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 17:11:12', 'test 2', '2008-11-19 17:11:12')[0m
+  [4;35;1mUser Create (0.000392)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 17:11:12', 'test 3', '2008-11-19 17:11:12')[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000858)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'cumulated_registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 100[0m
+  [4;35;1mUser Load (0.000518)[0m   [0mSELECT * FROM "users" [0m
+  [4;36;1mUser Destroy (0.000342)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 7
+[0m
+  [4;35;1mUser Destroy (0.000526)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 8
+[0m
+  [4;36;1mUser Destroy (0.000699)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 9
+[0m
+  [4;35;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000763)[0m   [0mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 100[0m
+  [4;36;1mSQL (0.000324)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000767)[0m   [0mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 100[0m
+  [4;36;1mSQL (0.000293)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mUser Create (0.000348)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 17:11:12', 'test 1', '2008-11-26 17:11:12')[0m
+  [4;36;1mUser Create (0.000527)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 17:11:12', 'test 2', '2008-11-19 17:11:12')[0m
+  [4;35;1mUser Create (0.000496)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 17:11:12', 'test 3', '2008-11-19 17:11:12')[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.001012)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 3[0m
+  [4;35;1mUser Load (0.000522)[0m   [0mSELECT * FROM "users" [0m
+  [4;36;1mUser Destroy (0.000468)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 10
+[0m
+  [4;35;1mUser Destroy (0.000399)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 11
+[0m
+  [4;36;1mUser Destroy (0.000586)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 12
+[0m
+  [4;35;1mUser Create (0.000619)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 17:11:12', 'test 1', '2008-11-26 17:11:12')[0m
+  [4;36;1mUser Create (0.000486)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 17:11:12', 'test 2', '2008-11-19 17:11:12')[0m
+  [4;35;1mUser Create (0.000320)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 17:11:12', 'test 3', '2008-11-19 17:11:12')[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000901)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 100[0m
+  [4;35;1mUser Load (0.000532)[0m   [0mSELECT * FROM "users" [0m
+  [4;36;1mUser Destroy (0.000407)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 13
+[0m
+  [4;35;1mUser Destroy (0.000691)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 14
+[0m
+  [4;36;1mUser Destroy (0.000634)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 15
+[0m
+  [4;35;1mUser Create (0.000478)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 17:11:12', 'test 1', '2008-11-26 17:11:12')[0m
+  [4;36;1mUser Create (0.000300)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 17:11:12', 'test 2', '2008-11-19 17:11:12')[0m
+  [4;35;1mUser Create (0.000295)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 17:11:12', 'test 3', '2008-11-19 17:11:12')[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000520)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 100[0m
+  [4;35;1mUser Load (0.000355)[0m   [0mSELECT * FROM "users" [0m
+  [4;36;1mUser Destroy (0.000306)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 16
+[0m
+  [4;35;1mUser Destroy (0.000638)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 17
+[0m
+  [4;36;1mUser Destroy (0.000488)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 18
+[0m
+  [4;35;1mUser Create (0.000485)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 17:11:12', 'test 1', '2008-11-26 17:11:12')[0m
+  [4;36;1mUser Create (0.000447)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 17:11:12', 'test 2', '2008-11-19 17:11:12')[0m
+  [4;35;1mUser Create (0.001418)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 17:11:12', 'test 3', '2008-11-19 17:11:12')[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000943)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 100[0m
+  [4;35;1mUser Load (0.000494)[0m   [0mSELECT * FROM "users" [0m
+  [4;36;1mUser Destroy (0.000350)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 19
+[0m
+  [4;35;1mUser Destroy (0.000247)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 20
+[0m
+  [4;36;1mUser Destroy (0.000581)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 21
+[0m
+  [4;36;1mSQL (0.000300)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (0.000520)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.002880)[0m   [0;1mDROP TABLE "users"[0m
+  [4;35;1mSQL (0.002999)[0m   [0mCREATE TABLE "users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "login" varchar(255) NOT NULL, "profile_visits" integer DEFAULT 0 NOT NULL, "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.000435)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (0.002744)[0m   [0mDROP TABLE "report_caches"[0m
+  [4;36;1mSQL (0.002893)[0m   [0;1mCREATE TABLE "report_caches" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "model_name" varchar(255) NOT NULL, "report_name" varchar(255) NOT NULL, "report_grouping" varchar(255) NOT NULL, "value" float DEFAULT 0 NOT NULL, "reporting_period" datetime NOT NULL, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.003360)[0m   [0mCREATE INDEX "report_caches_name_klass_grouping" ON "report_caches" ("model_name", "report_name", "report_grouping")[0m
+  [4;36;1mSQL (0.002661)[0m   [0;1mCREATE UNIQUE INDEX "report_caches_name_klass_grouping_period" ON "report_caches" ("model_name", "report_name", "report_grouping", "reporting_period")[0m
+  [4;35;1mSQL (0.000519)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.000254)[0m   [0;1mSELECT version FROM "schema_migrations"[0m
+  [4;35;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000637)[0m   [0mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 100[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000480)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 100[0m
+  [4;35;1mUser Create (0.000481)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 17:12:36', 'test 1', '2008-11-26 17:12:36')[0m
+  [4;36;1mUser Create (0.000398)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 17:12:36', 'test 2', '2008-11-19 17:12:36')[0m
+  [4;35;1mUser Create (0.000385)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 17:12:36', 'test 3', '2008-11-19 17:12:36')[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000774)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'cumulated_registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 100[0m
+  [4;35;1mUser Load (0.000481)[0m   [0mSELECT * FROM "users" [0m
+  [4;36;1mUser Destroy (0.000488)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 1
+[0m
+  [4;35;1mUser Destroy (0.000321)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 2
+[0m
+  [4;36;1mUser Destroy (0.000293)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 3
+[0m
+  [4;35;1mUser Create (0.000417)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 17:12:36', 'test 1', '2008-11-26 17:12:36')[0m
+  [4;36;1mUser Create (0.000567)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 17:12:36', 'test 2', '2008-11-19 17:12:36')[0m
+  [4;35;1mUser Create (0.000502)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 17:12:36', 'test 3', '2008-11-19 17:12:36')[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000627)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'cumulated_registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 100[0m
+  [4;35;1mUser Load (0.000463)[0m   [0mSELECT * FROM "users" [0m
+  [4;36;1mUser Destroy (0.000305)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 4
+[0m
+  [4;35;1mUser Destroy (0.000476)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 5
+[0m
+  [4;36;1mUser Destroy (0.000453)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 6
+[0m
+  [4;35;1mUser Create (0.000443)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 17:12:37', 'test 1', '2008-11-26 17:12:37')[0m
+  [4;36;1mUser Create (0.000745)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 17:12:37', 'test 2', '2008-11-19 17:12:37')[0m
+  [4;35;1mUser Create (0.000475)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 17:12:37', 'test 3', '2008-11-19 17:12:37')[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000877)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'cumulated_registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 100[0m
+  [4;35;1mUser Load (0.000553)[0m   [0mSELECT * FROM "users" [0m
+  [4;36;1mUser Destroy (0.000389)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 7
+[0m
+  [4;35;1mUser Destroy (0.000632)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 8
+[0m
+  [4;36;1mUser Destroy (0.000664)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 9
+[0m
+  [4;35;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000630)[0m   [0mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 100[0m
+  [4;36;1mSQL (0.000278)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000589)[0m   [0mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 100[0m
+  [4;36;1mSQL (0.000273)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mUser Create (0.000341)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 17:12:37', 'test 1', '2008-11-26 17:12:37')[0m
+  [4;36;1mUser Create (0.000467)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 17:12:37', 'test 2', '2008-11-19 17:12:37')[0m
+  [4;35;1mUser Create (0.000428)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 17:12:37', 'test 3', '2008-11-19 17:12:37')[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000851)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 3[0m
+  [4;35;1mUser Load (0.000520)[0m   [0mSELECT * FROM "users" [0m
+  [4;36;1mUser Destroy (0.000373)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 10
+[0m
+  [4;35;1mUser Destroy (0.000794)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 11
+[0m
+  [4;36;1mUser Destroy (0.000414)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 12
+[0m
+  [4;35;1mUser Create (0.000504)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 17:12:37', 'test 1', '2008-11-26 17:12:37')[0m
+  [4;36;1mUser Create (0.000490)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 17:12:37', 'test 2', '2008-11-19 17:12:37')[0m
+  [4;35;1mUser Create (0.000473)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 17:12:37', 'test 3', '2008-11-19 17:12:37')[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000907)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 100[0m
+  [4;35;1mUser Load (0.000542)[0m   [0mSELECT * FROM "users" [0m
+  [4;36;1mUser Destroy (0.000387)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 13
+[0m
+  [4;35;1mUser Destroy (0.000599)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 14
+[0m
+  [4;36;1mUser Destroy (0.000650)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 15
+[0m
+  [4;35;1mUser Create (0.000529)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 17:12:37', 'test 1', '2008-11-26 17:12:37')[0m
+  [4;36;1mUser Create (0.000586)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 17:12:37', 'test 2', '2008-11-19 17:12:37')[0m
+  [4;35;1mUser Create (0.001252)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 17:12:37', 'test 3', '2008-11-19 17:12:37')[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000939)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 100[0m
+  [4;35;1mUser Load (0.000555)[0m   [0mSELECT * FROM "users" [0m
+  [4;36;1mUser Destroy (0.000383)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 16
+[0m
+  [4;35;1mUser Destroy (0.000390)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 17
+[0m
+  [4;36;1mUser Destroy (0.000405)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 18
+[0m
+  [4;35;1mUser Create (0.000486)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 17:12:37', 'test 1', '2008-11-26 17:12:37')[0m
+  [4;36;1mUser Create (0.000530)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 17:12:37', 'test 2', '2008-11-19 17:12:37')[0m
+  [4;35;1mUser Create (0.000734)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 17:12:37', 'test 3', '2008-11-19 17:12:37')[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000545)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 100[0m
+  [4;35;1mUser Load (0.000339)[0m   [0mSELECT * FROM "users" [0m
+  [4;36;1mUser Destroy (0.000802)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 19
+[0m
+  [4;35;1mUser Destroy (0.000625)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 20
+[0m
+  [4;36;1mUser Destroy (0.000539)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 21
+[0m
+  [4;36;1mSQL (0.000201)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (0.000515)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.214670)[0m   [0;1mDROP TABLE "users"[0m
+  [4;35;1mSQL (0.003400)[0m   [0mCREATE TABLE "users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "login" varchar(255) NOT NULL, "profile_visits" integer DEFAULT 0 NOT NULL, "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.000562)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (0.002363)[0m   [0mDROP TABLE "report_caches"[0m
+  [4;36;1mSQL (0.002795)[0m   [0;1mCREATE TABLE "report_caches" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "model_name" varchar(255) NOT NULL, "report_name" varchar(255) NOT NULL, "report_grouping" varchar(255) NOT NULL, "value" float DEFAULT 0 NOT NULL, "reporting_period" datetime NOT NULL, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.002742)[0m   [0mCREATE INDEX "report_caches_name_klass_grouping" ON "report_caches" ("model_name", "report_name", "report_grouping")[0m
+  [4;36;1mSQL (0.002395)[0m   [0;1mCREATE UNIQUE INDEX "report_caches_name_klass_grouping_period" ON "report_caches" ("model_name", "report_name", "report_grouping", "reporting_period")[0m
+  [4;35;1mSQL (0.000553)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.000363)[0m   [0;1mSELECT version FROM "schema_migrations"[0m
+  [4;35;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000643)[0m   [0mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 100[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000490)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 100[0m
+  [4;35;1mUser Create (0.000377)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 17:12:54', 'test 1', '2008-11-26 17:12:54')[0m
+  [4;36;1mUser Create (0.000487)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 17:12:54', 'test 2', '2008-11-19 17:12:54')[0m
+  [4;35;1mUser Create (0.000593)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 17:12:54', 'test 3', '2008-11-19 17:12:54')[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.001097)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'cumulated_registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 100[0m
+  [4;35;1mUser Load (0.000846)[0m   [0mSELECT * FROM "users" [0m
+  [4;36;1mUser Destroy (0.000433)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 1
+[0m
+  [4;35;1mUser Destroy (0.000400)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 2
+[0m
+  [4;36;1mUser Destroy (0.000366)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 3
+[0m
+  [4;35;1mUser Create (0.000449)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 17:12:55', 'test 1', '2008-11-26 17:12:55')[0m
+  [4;36;1mUser Create (0.000408)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 17:12:55', 'test 2', '2008-11-19 17:12:55')[0m
+  [4;35;1mUser Create (0.000446)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 17:12:55', 'test 3', '2008-11-19 17:12:55')[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000900)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'cumulated_registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 100[0m
+  [4;35;1mUser Load (0.000526)[0m   [0mSELECT * FROM "users" [0m
+  [4;36;1mUser Destroy (0.000377)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 4
+[0m
+  [4;35;1mUser Destroy (0.000661)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 5
+[0m
+  [4;36;1mUser Destroy (0.000670)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 6
+[0m
+  [4;35;1mUser Create (0.000558)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 17:12:55', 'test 1', '2008-11-26 17:12:55')[0m
+  [4;36;1mUser Create (0.000769)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 17:12:55', 'test 2', '2008-11-19 17:12:55')[0m
+  [4;35;1mUser Create (0.000472)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 17:12:55', 'test 3', '2008-11-19 17:12:55')[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000689)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'cumulated_registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 100[0m
+  [4;35;1mUser Load (0.000440)[0m   [0mSELECT * FROM "users" [0m
+  [4;36;1mUser Destroy (0.000407)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 7
+[0m
+  [4;35;1mUser Destroy (0.000601)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 8
+[0m
+  [4;36;1mUser Destroy (0.000700)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 9
+[0m
+  [4;35;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000672)[0m   [0mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 100[0m
+  [4;36;1mSQL (0.000246)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000577)[0m   [0mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 100[0m
+  [4;36;1mSQL (0.000256)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mUser Create (0.000533)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 17:12:55', 'test 1', '2008-11-26 17:12:55')[0m
+  [4;36;1mUser Create (0.000424)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 17:12:55', 'test 2', '2008-11-19 17:12:55')[0m
+  [4;35;1mUser Create (0.000472)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 17:12:55', 'test 3', '2008-11-19 17:12:55')[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000841)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 3[0m
+  [4;35;1mUser Load (0.000656)[0m   [0mSELECT * FROM "users" [0m
+  [4;36;1mUser Destroy (0.000378)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 10
+[0m
+  [4;35;1mUser Destroy (0.000432)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 11
+[0m
+  [4;36;1mUser Destroy (0.000644)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 12
+[0m
+  [4;35;1mUser Create (0.000568)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 17:12:55', 'test 1', '2008-11-26 17:12:55')[0m
+  [4;36;1mUser Create (0.001193)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 17:12:55', 'test 2', '2008-11-19 17:12:55')[0m
+  [4;35;1mUser Create (0.000472)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 17:12:55', 'test 3', '2008-11-19 17:12:55')[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.001043)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 100[0m
+  [4;35;1mUser Load (0.000555)[0m   [0mSELECT * FROM "users" [0m
+  [4;36;1mUser Destroy (0.000391)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 13
+[0m
+  [4;35;1mUser Destroy (0.000641)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 14
+[0m
+  [4;36;1mUser Destroy (0.000434)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 15
+[0m
+  [4;35;1mUser Create (0.000487)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 17:12:55', 'test 1', '2008-11-26 17:12:55')[0m
+  [4;36;1mUser Create (0.000438)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 17:12:55', 'test 2', '2008-11-19 17:12:55')[0m
+  [4;35;1mUser Create (0.000493)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 17:12:55', 'test 3', '2008-11-19 17:12:55')[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.001057)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 100[0m
+  [4;35;1mUser Load (0.000485)[0m   [0mSELECT * FROM "users" [0m
+  [4;36;1mUser Destroy (0.000342)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 16
+[0m
+  [4;35;1mUser Destroy (0.000629)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 17
+[0m
+  [4;36;1mUser Destroy (0.000639)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 18
+[0m
+  [4;35;1mUser Create (0.000550)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 17:12:55', 'test 1', '2008-11-26 17:12:55')[0m
+  [4;36;1mUser Create (0.000463)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 17:12:55', 'test 2', '2008-11-19 17:12:55')[0m
+  [4;35;1mUser Create (0.000503)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 17:12:55', 'test 3', '2008-11-19 17:12:55')[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.001135)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 100[0m
+  [4;35;1mUser Load (0.000639)[0m   [0mSELECT * FROM "users" [0m
+  [4;36;1mUser Destroy (0.000476)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 19
+[0m
+  [4;35;1mUser Destroy (0.000488)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 20
+[0m
+  [4;36;1mUser Destroy (0.000637)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 21
+[0m
+  [4;36;1mSQL (0.000220)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (0.000530)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.002889)[0m   [0;1mDROP TABLE "users"[0m
+  [4;35;1mSQL (0.003076)[0m   [0mCREATE TABLE "users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "login" varchar(255) NOT NULL, "profile_visits" integer DEFAULT 0 NOT NULL, "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.000485)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (0.003305)[0m   [0mDROP TABLE "report_caches"[0m
+  [4;36;1mSQL (0.003630)[0m   [0;1mCREATE TABLE "report_caches" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "model_name" varchar(255) NOT NULL, "report_name" varchar(255) NOT NULL, "report_grouping" varchar(255) NOT NULL, "value" float DEFAULT 0 NOT NULL, "reporting_period" datetime NOT NULL, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.003284)[0m   [0mCREATE INDEX "report_caches_name_klass_grouping" ON "report_caches" ("model_name", "report_name", "report_grouping")[0m
+  [4;36;1mSQL (0.003320)[0m   [0;1mCREATE UNIQUE INDEX "report_caches_name_klass_grouping_period" ON "report_caches" ("model_name", "report_name", "report_grouping", "reporting_period")[0m
+  [4;35;1mSQL (0.000381)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.000470)[0m   [0;1mSELECT version FROM "schema_migrations"[0m
+  [4;35;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000738)[0m   [0mSELECT * FROM "report_caches" WHERE ("report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day' AND "report_caches"."model_name" = 'User') ORDER BY created_at DESC LIMIT 100[0m
+  [4;36;1mSQL (0.000287)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000654)[0m   [0mSELECT * FROM "report_caches" WHERE ("report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day' AND "report_caches"."model_name" = 'User') ORDER BY created_at DESC LIMIT 100[0m
+  [4;36;1mSQL (0.000599)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mUser Create (0.000415)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 17:13:26', 'test 1', '2008-11-26 17:13:26')[0m
+  [4;36;1mUser Create (0.000522)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 17:13:26', 'test 2', '2008-11-19 17:13:26')[0m
+  [4;35;1mUser Create (0.000463)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 17:13:26', 'test 3', '2008-11-19 17:13:26')[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000835)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day' AND "report_caches"."model_name" = 'User') ORDER BY created_at DESC LIMIT 3[0m
+  [4;35;1mUser Load (0.000557)[0m   [0mSELECT * FROM "users" [0m
+  [4;36;1mUser Destroy (0.000388)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 1
+[0m
+  [4;35;1mUser Destroy (0.000460)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 2
+[0m
+  [4;36;1mUser Destroy (0.000622)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 3
+[0m
+  [4;35;1mUser Create (0.000476)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 17:13:26', 'test 1', '2008-11-26 17:13:26')[0m
+  [4;36;1mUser Create (0.000459)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 17:13:26', 'test 2', '2008-11-19 17:13:26')[0m
+  [4;35;1mUser Create (0.000425)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 17:13:26', 'test 3', '2008-11-19 17:13:26')[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.001256)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day' AND "report_caches"."model_name" = 'User') ORDER BY created_at DESC LIMIT 100[0m
+  [4;35;1mUser Load (0.001047)[0m   [0mSELECT * FROM "users" [0m
+  [4;36;1mUser Destroy (0.000488)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 4
+[0m
+  [4;35;1mUser Destroy (0.000663)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 5
+[0m
+  [4;36;1mUser Destroy (0.000444)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 6
+[0m
+  [4;35;1mUser Create (0.000479)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 17:13:26', 'test 1', '2008-11-26 17:13:26')[0m
+  [4;36;1mUser Create (0.000461)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 17:13:26', 'test 2', '2008-11-19 17:13:26')[0m
+  [4;35;1mUser Create (0.000479)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 17:13:26', 'test 3', '2008-11-19 17:13:26')[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000969)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day' AND "report_caches"."model_name" = 'User') ORDER BY created_at DESC LIMIT 100[0m
+  [4;35;1mUser Load (0.000568)[0m   [0mSELECT * FROM "users" [0m
+  [4;36;1mUser Destroy (0.000439)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 7
+[0m
+  [4;35;1mUser Destroy (0.000629)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 8
+[0m
+  [4;36;1mUser Destroy (0.000485)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 9
+[0m
+  [4;35;1mUser Create (0.000475)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 17:13:26', 'test 1', '2008-11-26 17:13:26')[0m
+  [4;36;1mUser Create (0.000473)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 17:13:26', 'test 2', '2008-11-19 17:13:26')[0m
+  [4;35;1mUser Create (0.000408)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 17:13:26', 'test 3', '2008-11-19 17:13:26')[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000746)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day' AND "report_caches"."model_name" = 'User') ORDER BY created_at DESC LIMIT 100[0m
+  [4;35;1mUser Load (0.000497)[0m   [0mSELECT * FROM "users" [0m
+  [4;36;1mUser Destroy (0.000368)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 10
+[0m
+  [4;35;1mUser Destroy (0.000679)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 11
+[0m
+  [4;36;1mUser Destroy (0.000524)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 12
+[0m
+  [4;36;1mSQL (0.000208)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (0.000524)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.002618)[0m   [0;1mDROP TABLE "users"[0m
+  [4;35;1mSQL (0.003191)[0m   [0mCREATE TABLE "users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "login" varchar(255) NOT NULL, "profile_visits" integer DEFAULT 0 NOT NULL, "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.000516)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (0.003887)[0m   [0mDROP TABLE "report_caches"[0m
+  [4;36;1mSQL (0.003064)[0m   [0;1mCREATE TABLE "report_caches" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "model_name" varchar(255) NOT NULL, "report_name" varchar(255) NOT NULL, "report_grouping" varchar(255) NOT NULL, "value" float DEFAULT 0 NOT NULL, "reporting_period" datetime NOT NULL, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.003153)[0m   [0mCREATE INDEX "report_caches_name_klass_grouping" ON "report_caches" ("model_name", "report_name", "report_grouping")[0m
+  [4;36;1mSQL (0.002834)[0m   [0;1mCREATE UNIQUE INDEX "report_caches_name_klass_grouping_period" ON "report_caches" ("model_name", "report_name", "report_grouping", "reporting_period")[0m
+  [4;35;1mSQL (0.000457)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.000247)[0m   [0;1mSELECT version FROM "schema_migrations"[0m
+  [4;35;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000793)[0m   [0mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 100[0m
+  [4;36;1mSQL (0.000933)[0m   [0;1mSELECT sum("users".id) AS sum_id, strftime(created_at, '%Y/%m/%d') AS strftime_created_at_y_m_d FROM "users" WHERE (created_at >= '2008-08-25') GROUP BY strftime(created_at, '%Y/%m/%d') ORDER BY created_at DESC [0m
+  [4;35;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000579)[0m   [0mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 100[0m
+  [4;36;1mSQL (0.000747)[0m   [0;1mSELECT count("users".id) AS count_id, strftime(created_at, '%Y/%m/%d') AS strftime_created_at_y_m_d FROM "users" WHERE (created_at >= '2008-08-25') GROUP BY strftime(created_at, '%Y/%m/%d') ORDER BY created_at DESC [0m
+  [4;35;1mUser Create (0.000375)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 17:14:02', 'test 1', '2008-11-26 17:14:02')[0m
+  [4;36;1mUser Create (0.000346)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 17:14:02', 'test 2', '2008-11-19 17:14:02')[0m
+  [4;35;1mUser Create (0.000463)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 17:14:02', 'test 3', '2008-11-19 17:14:02')[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000909)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'cumulated_registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 100[0m
+  [4;35;1mSQL (0.001173)[0m   [0mSELECT count("users".id) AS count_id, strftime(created_at, '%Y/%m/%d') AS strftime_created_at_y_m_d FROM "users" WHERE (created_at >= '2008-08-25') GROUP BY strftime(created_at, '%Y/%m/%d') ORDER BY created_at DESC [0m
+  [4;36;1mUser Load (0.000516)[0m   [0;1mSELECT * FROM "users" [0m
+  [4;35;1mUser Destroy (0.000438)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 1
+[0m
+  [4;36;1mUser Destroy (0.000448)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 2
+[0m
+  [4;35;1mUser Destroy (0.000317)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 3
+[0m
+  [4;36;1mUser Create (0.000377)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 17:14:02', 'test 1', '2008-11-26 17:14:02')[0m
+  [4;35;1mUser Create (0.001384)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 17:14:02', 'test 2', '2008-11-19 17:14:02')[0m
+  [4;36;1mUser Create (0.000424)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 17:14:02', 'test 3', '2008-11-19 17:14:02')[0m
+  [4;35;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000953)[0m   [0mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'cumulated_registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 100[0m
+  [4;36;1mSQL (0.001219)[0m   [0;1mSELECT sum("users".profile_visits) AS sum_profile_visits, strftime(created_at, '%Y/%m/%d') AS strftime_created_at_y_m_d FROM "users" WHERE (created_at >= '2008-08-25') GROUP BY strftime(created_at, '%Y/%m/%d') ORDER BY created_at DESC [0m
+  [4;35;1mUser Load (0.000521)[0m   [0mSELECT * FROM "users" [0m
+  [4;36;1mUser Destroy (0.000376)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 4
+[0m
+  [4;35;1mUser Destroy (0.000579)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 5
+[0m
+  [4;36;1mUser Destroy (0.000609)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 6
+[0m
+  [4;35;1mUser Create (0.000790)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 17:14:02', 'test 1', '2008-11-26 17:14:02')[0m
+  [4;36;1mUser Create (0.001339)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 17:14:02', 'test 2', '2008-11-19 17:14:02')[0m
+  [4;35;1mUser Create (0.000434)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 17:14:02', 'test 3', '2008-11-19 17:14:02')[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000884)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'cumulated_registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 100[0m
+  [4;35;1mSQL (0.001595)[0m   [0mSELECT count("users".id) AS count_id, strftime(created_at, '%Y/%m/%d') AS strftime_created_at_y_m_d FROM "users" WHERE (login IN ('test 1','test 2') AND created_at >= '2008-08-25') GROUP BY strftime(created_at, '%Y/%m/%d') ORDER BY created_at DESC [0m
+  [4;36;1mUser Load (0.000494)[0m   [0;1mSELECT * FROM "users" [0m
+  [4;35;1mUser Destroy (0.000336)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 7
+[0m
+  [4;36;1mUser Destroy (0.000635)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 8
+[0m
+  [4;35;1mUser Destroy (0.000427)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 9
+[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000693)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 100[0m
+  [4;35;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000702)[0m   [0mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 100[0m
+  [4;36;1mUser Create (0.000338)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 17:14:02', 'test 1', '2008-11-26 17:14:02')[0m
+  [4;35;1mUser Create (0.000469)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 17:14:02', 'test 2', '2008-11-19 17:14:02')[0m
+  [4;36;1mUser Create (0.000505)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 17:14:02', 'test 3', '2008-11-19 17:14:02')[0m
+  [4;35;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000943)[0m   [0mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 3[0m
+  [4;36;1mSQL (0.001205)[0m   [0;1mSELECT sum("users".profile_visits) AS sum_profile_visits, strftime(created_at, '%Y/%m/%d') AS strftime_created_at_y_m_d FROM "users" WHERE (created_at >= '2008-11-30') GROUP BY strftime(created_at, '%Y/%m/%d') ORDER BY created_at DESC [0m
+  [4;35;1mUser Load (0.000516)[0m   [0mSELECT * FROM "users" [0m
+  [4;36;1mUser Destroy (0.000412)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 10
+[0m
+  [4;35;1mUser Destroy (0.000680)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 11
+[0m
+  [4;36;1mUser Destroy (0.000519)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 12
+[0m
+  [4;35;1mUser Create (0.000469)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 17:14:02', 'test 1', '2008-11-26 17:14:02')[0m
+  [4;36;1mUser Create (0.000456)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 17:14:02', 'test 2', '2008-11-19 17:14:02')[0m
+  [4;35;1mUser Create (0.000383)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 17:14:02', 'test 3', '2008-11-19 17:14:02')[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000688)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 100[0m
+  [4;35;1mSQL (0.001105)[0m   [0mSELECT count("users".id) AS count_id, strftime(created_at, '%Y/%m/%d') AS strftime_created_at_y_m_d FROM "users" WHERE (created_at >= '2008-08-25') GROUP BY strftime(created_at, '%Y/%m/%d') ORDER BY created_at DESC [0m
+  [4;36;1mUser Load (0.000372)[0m   [0;1mSELECT * FROM "users" [0m
+  [4;35;1mUser Destroy (0.000288)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 13
+[0m
+  [4;36;1mUser Destroy (0.000279)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 14
+[0m
+  [4;35;1mUser Destroy (0.000270)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 15
+[0m
+  [4;36;1mUser Create (0.000383)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 17:14:02', 'test 1', '2008-11-26 17:14:02')[0m
+  [4;35;1mUser Create (0.000372)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 17:14:02', 'test 2', '2008-11-19 17:14:02')[0m
+  [4;36;1mUser Create (0.000360)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 17:14:02', 'test 3', '2008-11-19 17:14:02')[0m
+  [4;35;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000678)[0m   [0mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 100[0m
+  [4;36;1mSQL (0.001066)[0m   [0;1mSELECT sum("users".profile_visits) AS sum_profile_visits, strftime(created_at, '%Y/%m/%d') AS strftime_created_at_y_m_d FROM "users" WHERE (created_at >= '2008-08-25') GROUP BY strftime(created_at, '%Y/%m/%d') ORDER BY created_at DESC [0m
+  [4;35;1mUser Load (0.000363)[0m   [0mSELECT * FROM "users" [0m
+  [4;36;1mUser Destroy (0.000287)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 16
+[0m
+  [4;35;1mUser Destroy (0.000398)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 17
+[0m
+  [4;36;1mUser Destroy (0.000397)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 18
+[0m
+  [4;35;1mUser Create (0.000439)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 17:14:02', 'test 1', '2008-11-26 17:14:02')[0m
+  [4;36;1mUser Create (0.000467)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 17:14:02', 'test 2', '2008-11-19 17:14:02')[0m
+  [4;35;1mUser Create (0.000525)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 17:14:02', 'test 3', '2008-11-19 17:14:02')[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000908)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 100[0m
+  [4;35;1mSQL (0.001989)[0m   [0mSELECT count("users".id) AS count_id, strftime(created_at, '%Y/%m/%d') AS strftime_created_at_y_m_d FROM "users" WHERE (login IN ('test 1','test 2') AND created_at >= '2008-08-25') GROUP BY strftime(created_at, '%Y/%m/%d') ORDER BY created_at DESC [0m
+  [4;36;1mUser Load (0.000554)[0m   [0;1mSELECT * FROM "users" [0m
+  [4;35;1mUser Destroy (0.000396)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 19
+[0m
+  [4;36;1mUser Destroy (0.000684)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 20
+[0m
+  [4;35;1mUser Destroy (0.000459)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 21
+[0m
+  [4;36;1mSQL (0.000203)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (0.000517)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.002758)[0m   [0;1mDROP TABLE "users"[0m
+  [4;35;1mSQL (0.002853)[0m   [0mCREATE TABLE "users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "login" varchar(255) NOT NULL, "profile_visits" integer DEFAULT 0 NOT NULL, "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.001181)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (0.003465)[0m   [0mDROP TABLE "report_caches"[0m
+  [4;36;1mSQL (0.003223)[0m   [0;1mCREATE TABLE "report_caches" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "model_name" varchar(255) NOT NULL, "report_name" varchar(255) NOT NULL, "report_grouping" varchar(255) NOT NULL, "value" float DEFAULT 0 NOT NULL, "reporting_period" datetime NOT NULL, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.002840)[0m   [0mCREATE INDEX "report_caches_name_klass_grouping" ON "report_caches" ("model_name", "report_name", "report_grouping")[0m
+  [4;36;1mSQL (0.003725)[0m   [0;1mCREATE UNIQUE INDEX "report_caches_name_klass_grouping_period" ON "report_caches" ("model_name", "report_name", "report_grouping", "reporting_period")[0m
+  [4;35;1mSQL (0.000462)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.000206)[0m   [0;1mSELECT version FROM "schema_migrations"[0m
+  [4;35;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000828)[0m   [0mSELECT * FROM "report_caches" WHERE ("report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day' AND "report_caches"."model_name" = 'User') ORDER BY created_at DESC LIMIT 100[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000518)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day' AND "report_caches"."model_name" = 'User') ORDER BY created_at DESC LIMIT 100[0m
+  [4;35;1mUser Create (0.000344)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 17:14:52', 'test 1', '2008-11-26 17:14:52')[0m
+  [4;36;1mUser Create (0.000412)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 17:14:52', 'test 2', '2008-11-19 17:14:52')[0m
+  [4;35;1mUser Create (0.000461)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 17:14:52', 'test 3', '2008-11-19 17:14:52')[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000916)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day' AND "report_caches"."model_name" = 'User') ORDER BY created_at DESC LIMIT 3[0m
+  [4;35;1mSQL (0.001138)[0m   [0mSELECT sum("users".profile_visits) AS sum_profile_visits, strftime(created_at, '%Y/%m/%d') AS strftime_created_at_y_m_d FROM "users" WHERE (created_at >= '2008-11-30') GROUP BY strftime(created_at, '%Y/%m/%d') ORDER BY created_at DESC [0m
+  [4;36;1mUser Load (0.000541)[0m   [0;1mSELECT * FROM "users" [0m
+  [4;35;1mUser Destroy (0.000420)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 1
+[0m
+  [4;36;1mUser Destroy (0.000396)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 2
+[0m
+  [4;35;1mUser Destroy (0.000507)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 3
+[0m
+  [4;36;1mUser Create (0.000467)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 17:14:52', 'test 1', '2008-11-26 17:14:52')[0m
+  [4;35;1mUser Create (0.000456)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 17:14:52', 'test 2', '2008-11-19 17:14:52')[0m
+  [4;36;1mUser Create (0.000409)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 17:14:52', 'test 3', '2008-11-19 17:14:52')[0m
+  [4;35;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000724)[0m   [0mSELECT * FROM "report_caches" WHERE ("report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day' AND "report_caches"."model_name" = 'User') ORDER BY created_at DESC LIMIT 100[0m
+  [4;36;1mSQL (0.001216)[0m   [0;1mSELECT count("users".id) AS count_id, strftime(created_at, '%Y/%m/%d') AS strftime_created_at_y_m_d FROM "users" WHERE (created_at >= '2008-08-25') GROUP BY strftime(created_at, '%Y/%m/%d') ORDER BY created_at DESC [0m
+  [4;35;1mUser Load (0.000455)[0m   [0mSELECT * FROM "users" [0m
+  [4;36;1mUser Destroy (0.000327)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 4
+[0m
+  [4;35;1mUser Destroy (0.000295)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 5
+[0m
+  [4;36;1mUser Destroy (0.000262)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 6
+[0m
+  [4;35;1mUser Create (0.000387)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 17:14:52', 'test 1', '2008-11-26 17:14:52')[0m
+  [4;36;1mUser Create (0.000345)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 17:14:52', 'test 2', '2008-11-19 17:14:52')[0m
+  [4;35;1mUser Create (0.000446)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 17:14:52', 'test 3', '2008-11-19 17:14:52')[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000612)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day' AND "report_caches"."model_name" = 'User') ORDER BY created_at DESC LIMIT 100[0m
+  [4;35;1mSQL (0.001328)[0m   [0mSELECT sum("users".profile_visits) AS sum_profile_visits, strftime(created_at, '%Y/%m/%d') AS strftime_created_at_y_m_d FROM "users" WHERE (created_at >= '2008-08-25') GROUP BY strftime(created_at, '%Y/%m/%d') ORDER BY created_at DESC [0m
+  [4;36;1mUser Load (0.000425)[0m   [0;1mSELECT * FROM "users" [0m
+  [4;35;1mUser Destroy (0.000283)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 7
+[0m
+  [4;36;1mUser Destroy (0.000335)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 8
+[0m
+  [4;35;1mUser Destroy (0.000622)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 9
+[0m
+  [4;36;1mUser Create (0.000679)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 17:14:52', 'test 1', '2008-11-26 17:14:52')[0m
+  [4;35;1mUser Create (0.000537)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 17:14:53', 'test 2', '2008-11-19 17:14:53')[0m
+  [4;36;1mUser Create (0.000491)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 17:14:53', 'test 3', '2008-11-19 17:14:53')[0m
+  [4;35;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000912)[0m   [0mSELECT * FROM "report_caches" WHERE ("report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day' AND "report_caches"."model_name" = 'User') ORDER BY created_at DESC LIMIT 100[0m
+  [4;36;1mSQL (0.001912)[0m   [0;1mSELECT count("users".id) AS count_id, strftime(created_at, '%Y/%m/%d') AS strftime_created_at_y_m_d FROM "users" WHERE (login IN ('test 1','test 2') AND created_at >= '2008-08-25') GROUP BY strftime(created_at, '%Y/%m/%d') ORDER BY created_at DESC [0m
+  [4;35;1mUser Load (0.000639)[0m   [0mSELECT * FROM "users" [0m
+  [4;36;1mUser Destroy (0.000473)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 10
+[0m
+  [4;35;1mUser Destroy (0.000648)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 11
+[0m
+  [4;36;1mUser Destroy (0.000471)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 12
+[0m
+  [4;36;1mSQL (0.000201)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (0.000514)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.002954)[0m   [0;1mDROP TABLE "users"[0m
+  [4;35;1mSQL (0.002859)[0m   [0mCREATE TABLE "users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "login" varchar(255) NOT NULL, "profile_visits" integer DEFAULT 0 NOT NULL, "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.000482)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (0.002518)[0m   [0mDROP TABLE "report_caches"[0m
+  [4;36;1mSQL (0.003162)[0m   [0;1mCREATE TABLE "report_caches" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "model_name" varchar(255) NOT NULL, "report_name" varchar(255) NOT NULL, "report_grouping" varchar(255) NOT NULL, "value" float DEFAULT 0 NOT NULL, "reporting_period" varchar(255) NOT NULL, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.002647)[0m   [0mCREATE INDEX "report_caches_name_klass_grouping" ON "report_caches" ("model_name", "report_name", "report_grouping")[0m
+  [4;36;1mSQL (0.003054)[0m   [0;1mCREATE UNIQUE INDEX "report_caches_name_klass_grouping_period" ON "report_caches" ("model_name", "report_name", "report_grouping", "reporting_period")[0m
+  [4;35;1mSQL (0.000554)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.000268)[0m   [0;1mSELECT version FROM "schema_migrations"[0m
+  [4;35;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000578)[0m   [0mSELECT * FROM "report_caches" WHERE ("report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day' AND "report_caches"."model_name" = 'User') ORDER BY created_at DESC LIMIT 100[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000550)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day' AND "report_caches"."model_name" = 'User') ORDER BY created_at DESC LIMIT 100[0m
+  [4;35;1mUser Create (0.000391)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 17:15:14', 'test 1', '2008-11-26 17:15:14')[0m
+  [4;36;1mUser Create (0.000417)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 17:15:14', 'test 2', '2008-11-19 17:15:14')[0m
+  [4;35;1mUser Create (0.000476)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 17:15:14', 'test 3', '2008-11-19 17:15:14')[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000859)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day' AND "report_caches"."model_name" = 'User') ORDER BY created_at DESC LIMIT 3[0m
+  [4;35;1mSQL (0.001120)[0m   [0mSELECT sum("users".profile_visits) AS sum_profile_visits, strftime(created_at, '%Y/%m/%d') AS strftime_created_at_y_m_d FROM "users" WHERE (created_at >= '2008-11-30') GROUP BY strftime(created_at, '%Y/%m/%d') ORDER BY created_at DESC [0m
+  [4;36;1mUser Load (0.000522)[0m   [0;1mSELECT * FROM "users" [0m
+  [4;35;1mUser Destroy (0.000313)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 1
+[0m
+  [4;36;1mUser Destroy (0.000643)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 2
+[0m
+  [4;35;1mUser Destroy (0.000533)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 3
+[0m
+  [4;36;1mUser Create (0.000455)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 17:15:14', 'test 1', '2008-11-26 17:15:14')[0m
+  [4;35;1mUser Create (0.000417)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 17:15:14', 'test 2', '2008-11-19 17:15:14')[0m
+  [4;36;1mUser Create (0.000432)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 17:15:14', 'test 3', '2008-11-19 17:15:14')[0m
+  [4;35;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000910)[0m   [0mSELECT * FROM "report_caches" WHERE ("report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day' AND "report_caches"."model_name" = 'User') ORDER BY created_at DESC LIMIT 100[0m
+  [4;36;1mSQL (0.001394)[0m   [0;1mSELECT count("users".id) AS count_id, strftime(created_at, '%Y/%m/%d') AS strftime_created_at_y_m_d FROM "users" WHERE (created_at >= '2008-08-25') GROUP BY strftime(created_at, '%Y/%m/%d') ORDER BY created_at DESC [0m
+  [4;35;1mUser Load (0.000982)[0m   [0mSELECT * FROM "users" [0m
+  [4;36;1mUser Destroy (0.000436)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 4
+[0m
+  [4;35;1mUser Destroy (0.000428)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 5
+[0m
+  [4;36;1mUser Destroy (0.000627)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 6
+[0m
+  [4;35;1mUser Create (0.000494)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 17:15:14', 'test 1', '2008-11-26 17:15:14')[0m
+  [4;36;1mUser Create (0.000423)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 17:15:14', 'test 2', '2008-11-19 17:15:14')[0m
+  [4;35;1mUser Create (0.000413)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 17:15:14', 'test 3', '2008-11-19 17:15:14')[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000739)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day' AND "report_caches"."model_name" = 'User') ORDER BY created_at DESC LIMIT 100[0m
+  [4;35;1mSQL (0.001120)[0m   [0mSELECT sum("users".profile_visits) AS sum_profile_visits, strftime(created_at, '%Y/%m/%d') AS strftime_created_at_y_m_d FROM "users" WHERE (created_at >= '2008-08-25') GROUP BY strftime(created_at, '%Y/%m/%d') ORDER BY created_at DESC [0m
+  [4;36;1mUser Load (0.001844)[0m   [0;1mSELECT * FROM "users" [0m
+  [4;35;1mUser Destroy (0.000331)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 7
+[0m
+  [4;36;1mUser Destroy (0.000246)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 8
+[0m
+  [4;35;1mUser Destroy (0.000220)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 9
+[0m
+  [4;36;1mUser Create (0.000421)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 17:15:14', 'test 1', '2008-11-26 17:15:14')[0m
+  [4;35;1mUser Create (0.000541)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 17:15:14', 'test 2', '2008-11-19 17:15:14')[0m
+  [4;36;1mUser Create (0.000543)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 17:15:14', 'test 3', '2008-11-19 17:15:14')[0m
+  [4;35;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000852)[0m   [0mSELECT * FROM "report_caches" WHERE ("report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day' AND "report_caches"."model_name" = 'User') ORDER BY created_at DESC LIMIT 100[0m
+  [4;36;1mSQL (0.001997)[0m   [0;1mSELECT count("users".id) AS count_id, strftime(created_at, '%Y/%m/%d') AS strftime_created_at_y_m_d FROM "users" WHERE (login IN ('test 1','test 2') AND created_at >= '2008-08-25') GROUP BY strftime(created_at, '%Y/%m/%d') ORDER BY created_at DESC [0m
+  [4;35;1mUser Load (0.000569)[0m   [0mSELECT * FROM "users" [0m
+  [4;36;1mUser Destroy (0.000420)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 10
+[0m
+  [4;35;1mUser Destroy (0.000448)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 11
+[0m
+  [4;36;1mUser Destroy (0.000427)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 12
+[0m
+  [4;36;1mSQL (0.000219)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (0.000545)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.004560)[0m   [0;1mDROP TABLE "users"[0m
+  [4;35;1mSQL (0.003210)[0m   [0mCREATE TABLE "users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "login" varchar(255) NOT NULL, "profile_visits" integer DEFAULT 0 NOT NULL, "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.000499)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (0.002545)[0m   [0mDROP TABLE "report_caches"[0m
+  [4;36;1mSQL (0.003137)[0m   [0;1mCREATE TABLE "report_caches" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "model_name" varchar(255) NOT NULL, "report_name" varchar(255) NOT NULL, "report_grouping" varchar(255) NOT NULL, "value" float DEFAULT 0 NOT NULL, "reporting_period" datetime NOT NULL, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.003350)[0m   [0mCREATE INDEX "name_klass_grouping" ON "report_caches" ("model_name", "report_name", "report_grouping")[0m
+  [4;36;1mSQL (0.004128)[0m   [0;1mCREATE UNIQUE INDEX "name_klass_grouping_period" ON "report_caches" ("model_name", "report_name", "report_grouping", "reporting_period")[0m
+  [4;35;1mSQL (0.001534)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.000862)[0m   [0;1mSELECT version FROM "schema_migrations"[0m
+  [4;35;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000639)[0m   [0mSELECT * FROM "report_caches" WHERE ("report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day' AND "report_caches"."model_name" = 'User') ORDER BY created_at DESC LIMIT 100[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000498)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day' AND "report_caches"."model_name" = 'User') ORDER BY created_at DESC LIMIT 100[0m
+  [4;35;1mUser Create (0.000354)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 17:16:14', 'test 1', '2008-11-26 17:16:14')[0m
+  [4;36;1mUser Create (0.000427)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 17:16:14', 'test 2', '2008-11-19 17:16:14')[0m
+  [4;35;1mUser Create (0.000396)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 17:16:14', 'test 3', '2008-11-19 17:16:14')[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000771)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day' AND "report_caches"."model_name" = 'User') ORDER BY created_at DESC LIMIT 3[0m
+  [4;35;1mSQL (0.001134)[0m   [0mSELECT sum("users".profile_visits) AS sum_profile_visits, strftime(created_at, '%Y/%m/%d') AS strftime_created_at_y_m_d FROM "users" WHERE (created_at >= '2008-11-30') GROUP BY strftime(created_at, '%Y/%m/%d') ORDER BY created_at DESC [0m
+  [4;36;1mUser Load (0.000446)[0m   [0;1mSELECT * FROM "users" [0m
+  [4;35;1mUser Destroy (0.000311)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 1
+[0m
+  [4;36;1mUser Destroy (0.000676)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 2
+[0m
+  [4;35;1mUser Destroy (0.000604)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 3
+[0m
+  [4;36;1mUser Create (0.000452)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 17:16:14', 'test 1', '2008-11-26 17:16:14')[0m
+  [4;35;1mUser Create (0.000549)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 17:16:14', 'test 2', '2008-11-19 17:16:14')[0m
+  [4;36;1mUser Create (0.000375)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 17:16:14', 'test 3', '2008-11-19 17:16:14')[0m
+  [4;35;1mKvlr::ReportsAsSparkline::ReportCache Load (0.001050)[0m   [0mSELECT * FROM "report_caches" WHERE ("report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day' AND "report_caches"."model_name" = 'User') ORDER BY created_at DESC LIMIT 100[0m
+  [4;36;1mSQL (0.001411)[0m   [0;1mSELECT count("users".id) AS count_id, strftime(created_at, '%Y/%m/%d') AS strftime_created_at_y_m_d FROM "users" WHERE (created_at >= '2008-08-25') GROUP BY strftime(created_at, '%Y/%m/%d') ORDER BY created_at DESC [0m
+  [4;35;1mUser Load (0.000767)[0m   [0mSELECT * FROM "users" [0m
+  [4;36;1mUser Destroy (0.000424)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 4
+[0m
+  [4;35;1mUser Destroy (0.000423)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 5
+[0m
+  [4;36;1mUser Destroy (0.000415)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 6
+[0m
+  [4;35;1mUser Create (0.000599)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 17:16:14', 'test 1', '2008-11-26 17:16:14')[0m
+  [4;36;1mUser Create (0.000479)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 17:16:14', 'test 2', '2008-11-19 17:16:14')[0m
+  [4;35;1mUser Create (0.000327)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 17:16:14', 'test 3', '2008-11-19 17:16:14')[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000510)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day' AND "report_caches"."model_name" = 'User') ORDER BY created_at DESC LIMIT 100[0m
+  [4;35;1mSQL (0.000816)[0m   [0mSELECT sum("users".profile_visits) AS sum_profile_visits, strftime(created_at, '%Y/%m/%d') AS strftime_created_at_y_m_d FROM "users" WHERE (created_at >= '2008-08-25') GROUP BY strftime(created_at, '%Y/%m/%d') ORDER BY created_at DESC [0m
+  [4;36;1mUser Load (0.000440)[0m   [0;1mSELECT * FROM "users" [0m
+  [4;35;1mUser Destroy (0.000279)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 7
+[0m
+  [4;36;1mUser Destroy (0.000256)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 8
+[0m
+  [4;35;1mUser Destroy (0.000427)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 9
+[0m
+  [4;36;1mUser Create (0.000434)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 17:16:14', 'test 1', '2008-11-26 17:16:14')[0m
+  [4;35;1mUser Create (0.000443)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 17:16:14', 'test 2', '2008-11-19 17:16:14')[0m
+  [4;36;1mUser Create (0.000443)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 17:16:14', 'test 3', '2008-11-19 17:16:14')[0m
+  [4;35;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000877)[0m   [0mSELECT * FROM "report_caches" WHERE ("report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day' AND "report_caches"."model_name" = 'User') ORDER BY created_at DESC LIMIT 100[0m
+  [4;36;1mSQL (0.001484)[0m   [0;1mSELECT count("users".id) AS count_id, strftime(created_at, '%Y/%m/%d') AS strftime_created_at_y_m_d FROM "users" WHERE (login IN ('test 1','test 2') AND created_at >= '2008-08-25') GROUP BY strftime(created_at, '%Y/%m/%d') ORDER BY created_at DESC [0m
+  [4;35;1mUser Load (0.000958)[0m   [0mSELECT * FROM "users" [0m
+  [4;36;1mUser Destroy (0.000481)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 10
+[0m
+  [4;35;1mUser Destroy (0.000250)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 11
+[0m
+  [4;36;1mUser Destroy (0.000218)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 12
+[0m
+  [4;36;1mSQL (0.000201)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (0.000508)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.003428)[0m   [0;1mDROP TABLE "users"[0m
+  [4;35;1mSQL (0.003207)[0m   [0mCREATE TABLE "users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "login" varchar(255) NOT NULL, "profile_visits" integer DEFAULT 0 NOT NULL, "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.000608)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (0.002385)[0m   [0mDROP TABLE "report_caches"[0m
+  [4;36;1mSQL (0.002890)[0m   [0;1mCREATE TABLE "report_caches" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "model_name" varchar(255) NOT NULL, "report_name" varchar(255) NOT NULL, "report_grouping" varchar(255) NOT NULL, "value" float DEFAULT 0 NOT NULL, "reporting_period" datetime NOT NULL, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.003325)[0m   [0mCREATE INDEX "name_klass_grouping" ON "report_caches" ("model_name", "report_name", "report_grouping")[0m
+  [4;36;1mSQL (0.003265)[0m   [0;1mCREATE UNIQUE INDEX "name_klass_grouping_period" ON "report_caches" ("model_name", "report_name", "report_grouping", "reporting_period")[0m
+  [4;35;1mSQL (0.000514)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.000321)[0m   [0;1mSELECT version FROM "schema_migrations"[0m
+  [4;35;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000688)[0m   [0mSELECT * FROM "report_caches" WHERE ("report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day' AND "report_caches"."model_name" = 'User') ORDER BY created_at DESC LIMIT 100[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000469)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day' AND "report_caches"."model_name" = 'User') ORDER BY created_at DESC LIMIT 100[0m
+  [4;35;1mUser Create (0.000349)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 17:16:46', 'test 1', '2008-11-26 17:16:46')[0m
+  [4;36;1mUser Create (0.000430)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 17:16:46', 'test 2', '2008-11-19 17:16:46')[0m
+  [4;35;1mUser Create (0.000643)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 17:16:46', 'test 3', '2008-11-19 17:16:46')[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000753)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day' AND "report_caches"."model_name" = 'User') ORDER BY created_at DESC LIMIT 3[0m
+  [4;35;1mSQL (0.001093)[0m   [0mSELECT sum("users".profile_visits) AS sum_profile_visits, strftime(created_at, '%Y/%m/%d') AS strftime_created_at_y_m_d FROM "users" WHERE (created_at >= '2008-11-30') GROUP BY strftime(created_at, '%Y/%m/%d') ORDER BY created_at DESC [0m
+  [4;36;1mUser Load (0.000508)[0m   [0;1mSELECT * FROM "users" [0m
+  [4;35;1mUser Destroy (0.000332)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 1
+[0m
+  [4;36;1mUser Destroy (0.000526)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 2
+[0m
+  [4;35;1mUser Destroy (0.000357)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 3
+[0m
+  [4;36;1mUser Create (0.000460)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 17:16:46', 'test 1', '2008-11-26 17:16:46')[0m
+  [4;35;1mUser Create (0.000475)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 17:16:46', 'test 2', '2008-11-19 17:16:46')[0m
+  [4;36;1mUser Create (0.000492)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 17:16:46', 'test 3', '2008-11-19 17:16:46')[0m
+  [4;35;1mKvlr::ReportsAsSparkline::ReportCache Load (0.001065)[0m   [0mSELECT * FROM "report_caches" WHERE ("report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day' AND "report_caches"."model_name" = 'User') ORDER BY created_at DESC LIMIT 100[0m
+  [4;36;1mSQL (0.001236)[0m   [0;1mSELECT count("users".id) AS count_id, strftime(created_at, '%Y/%m/%d') AS strftime_created_at_y_m_d FROM "users" WHERE (created_at >= '2008-08-25') GROUP BY strftime(created_at, '%Y/%m/%d') ORDER BY created_at DESC [0m
+  [4;35;1mUser Load (0.000520)[0m   [0mSELECT * FROM "users" [0m
+  [4;36;1mUser Destroy (0.000426)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 4
+[0m
+  [4;35;1mUser Destroy (0.000692)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 5
+[0m
+  [4;36;1mUser Destroy (0.000721)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 6
+[0m
+  [4;35;1mUser Create (0.000466)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 17:16:46', 'test 1', '2008-11-26 17:16:46')[0m
+  [4;36;1mUser Create (0.000436)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 17:16:46', 'test 2', '2008-11-19 17:16:46')[0m
+  [4;35;1mUser Create (0.000432)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 17:16:46', 'test 3', '2008-11-19 17:16:46')[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000920)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day' AND "report_caches"."model_name" = 'User') ORDER BY created_at DESC LIMIT 100[0m
+  [4;35;1mSQL (0.001125)[0m   [0mSELECT sum("users".profile_visits) AS sum_profile_visits, strftime(created_at, '%Y/%m/%d') AS strftime_created_at_y_m_d FROM "users" WHERE (created_at >= '2008-08-25') GROUP BY strftime(created_at, '%Y/%m/%d') ORDER BY created_at DESC [0m
+  [4;36;1mUser Load (0.001100)[0m   [0;1mSELECT * FROM "users" [0m
+  [4;35;1mUser Destroy (0.000473)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 7
+[0m
+  [4;36;1mUser Destroy (0.000555)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 8
+[0m
+  [4;35;1mUser Destroy (0.000450)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 9
+[0m
+  [4;36;1mUser Create (0.000519)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 17:16:46', 'test 1', '2008-11-26 17:16:46')[0m
+  [4;35;1mUser Create (0.000415)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 17:16:46', 'test 2', '2008-11-19 17:16:46')[0m
+  [4;36;1mUser Create (0.000462)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 17:16:46', 'test 3', '2008-11-19 17:16:46')[0m
+  [4;35;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000835)[0m   [0mSELECT * FROM "report_caches" WHERE ("report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day' AND "report_caches"."model_name" = 'User') ORDER BY created_at DESC LIMIT 100[0m
+  [4;36;1mSQL (0.001775)[0m   [0;1mSELECT count("users".id) AS count_id, strftime(created_at, '%Y/%m/%d') AS strftime_created_at_y_m_d FROM "users" WHERE (login IN ('test 1','test 2') AND created_at >= '2008-08-25') GROUP BY strftime(created_at, '%Y/%m/%d') ORDER BY created_at DESC [0m
+  [4;35;1mUser Load (0.000560)[0m   [0mSELECT * FROM "users" [0m
+  [4;36;1mUser Destroy (0.000420)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 10
+[0m
+  [4;35;1mUser Destroy (0.001208)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 11
+[0m
+  [4;36;1mUser Destroy (0.000624)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 12
+[0m
+  [4;36;1mSQL (0.000435)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (0.000609)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.002894)[0m   [0;1mDROP TABLE "users"[0m
+  [4;35;1mSQL (0.002367)[0m   [0mCREATE TABLE "users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "login" varchar(255) NOT NULL, "profile_visits" integer DEFAULT 0 NOT NULL, "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.000382)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (0.002019)[0m   [0mDROP TABLE "report_caches"[0m
+  [4;36;1mSQL (0.002595)[0m   [0;1mCREATE TABLE "report_caches" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "model_name" varchar(255) NOT NULL, "report_name" varchar(255) NOT NULL, "report_grouping" varchar(255) NOT NULL, "value" float DEFAULT 0 NOT NULL, "reporting_period" datetime NOT NULL, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.002285)[0m   [0mCREATE INDEX "name_klass_grouping" ON "report_caches" ("model_name", "report_name", "report_grouping")[0m
+  [4;36;1mSQL (0.002070)[0m   [0;1mCREATE UNIQUE INDEX "name_klass_grouping_period" ON "report_caches" ("model_name", "report_name", "report_grouping", "reporting_period")[0m
+  [4;35;1mSQL (0.005508)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.000314)[0m   [0;1mSELECT version FROM "schema_migrations"[0m
+  [4;35;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000661)[0m   [0mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 100[0m
+  [4;36;1mSQL (0.000840)[0m   [0;1mSELECT sum("users".id) AS sum_id, strftime(created_at, '%Y/%m/%d') AS strftime_created_at_y_m_d FROM "users" WHERE (created_at >= '2008-08-25') GROUP BY strftime(created_at, '%Y/%m/%d') ORDER BY created_at DESC [0m
+  [4;35;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000449)[0m   [0mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 100[0m
+  [4;36;1mSQL (0.000754)[0m   [0;1mSELECT count("users".id) AS count_id, strftime(created_at, '%Y/%m/%d') AS strftime_created_at_y_m_d FROM "users" WHERE (created_at >= '2008-08-25') GROUP BY strftime(created_at, '%Y/%m/%d') ORDER BY created_at DESC [0m
+  [4;35;1mUser Create (0.000370)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 17:31:11', 'test 1', '2008-11-26 17:31:11')[0m
+  [4;36;1mUser Create (0.000436)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 17:31:11', 'test 2', '2008-11-19 17:31:11')[0m
+  [4;35;1mUser Create (0.000431)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 17:31:11', 'test 3', '2008-11-19 17:31:11')[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000773)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'cumulated_registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 100[0m
+  [4;35;1mSQL (0.001206)[0m   [0mSELECT count("users".id) AS count_id, strftime(created_at, '%Y/%m/%d') AS strftime_created_at_y_m_d FROM "users" WHERE (created_at >= '2008-08-25') GROUP BY strftime(created_at, '%Y/%m/%d') ORDER BY created_at DESC [0m
+  [4;36;1mUser Load (0.000488)[0m   [0;1mSELECT * FROM "users" [0m
+  [4;35;1mUser Destroy (0.000357)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 1
+[0m
+  [4;36;1mUser Destroy (0.000516)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 2
+[0m
+  [4;35;1mUser Destroy (0.000415)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 3
+[0m
+  [4;36;1mUser Create (0.000564)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 17:31:11', 'test 1', '2008-11-26 17:31:11')[0m
+  [4;35;1mUser Create (0.000611)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 17:31:11', 'test 2', '2008-11-19 17:31:11')[0m
+  [4;36;1mUser Create (0.000665)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 17:31:11', 'test 3', '2008-11-19 17:31:11')[0m
+  [4;35;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000955)[0m   [0mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'cumulated_registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 100[0m
+  [4;36;1mSQL (0.001269)[0m   [0;1mSELECT sum("users".profile_visits) AS sum_profile_visits, strftime(created_at, '%Y/%m/%d') AS strftime_created_at_y_m_d FROM "users" WHERE (created_at >= '2008-08-25') GROUP BY strftime(created_at, '%Y/%m/%d') ORDER BY created_at DESC [0m
+  [4;35;1mUser Load (0.000500)[0m   [0mSELECT * FROM "users" [0m
+  [4;36;1mUser Destroy (0.000404)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 4
+[0m
+  [4;35;1mUser Destroy (0.000396)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 5
+[0m
+  [4;36;1mUser Destroy (0.000658)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 6
+[0m
+  [4;35;1mUser Create (0.000662)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 17:31:11', 'test 1', '2008-11-26 17:31:11')[0m
+  [4;36;1mUser Create (0.000461)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 17:31:11', 'test 2', '2008-11-19 17:31:11')[0m
+  [4;35;1mUser Create (0.000465)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 17:31:11', 'test 3', '2008-11-19 17:31:11')[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000864)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'cumulated_registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 100[0m
+  [4;35;1mSQL (0.001865)[0m   [0mSELECT count("users".id) AS count_id, strftime(created_at, '%Y/%m/%d') AS strftime_created_at_y_m_d FROM "users" WHERE (login IN ('test 1','test 2') AND created_at >= '2008-08-25') GROUP BY strftime(created_at, '%Y/%m/%d') ORDER BY created_at DESC [0m
+  [4;36;1mUser Load (0.000521)[0m   [0;1mSELECT * FROM "users" [0m
+  [4;35;1mUser Destroy (0.000365)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 7
+[0m
+  [4;36;1mUser Destroy (0.000466)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 8
+[0m
+  [4;35;1mUser Destroy (0.000625)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 9
+[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000705)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 100[0m
+  [4;35;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000492)[0m   [0mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 100[0m
+  [4;36;1mUser Create (0.000355)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 17:31:11', 'test 1', '2008-11-26 17:31:11')[0m
+  [4;35;1mUser Create (0.000652)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 17:31:11', 'test 2', '2008-11-19 17:31:11')[0m
+  [4;36;1mUser Create (0.000500)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 17:31:11', 'test 3', '2008-11-19 17:31:11')[0m
+  [4;35;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000747)[0m   [0mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 3[0m
+  [4;36;1mSQL (0.001208)[0m   [0;1mSELECT sum("users".profile_visits) AS sum_profile_visits, strftime(created_at, '%Y/%m/%d') AS strftime_created_at_y_m_d FROM "users" WHERE (created_at >= '2008-11-30') GROUP BY strftime(created_at, '%Y/%m/%d') ORDER BY created_at DESC [0m
+  [4;35;1mUser Create (0.000427)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 17:31:11', 'test 1', '2008-11-26 17:31:11')[0m
+  [4;36;1mUser Create (0.000559)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 17:31:11', 'test 2', '2008-11-19 17:31:11')[0m
+  [4;35;1mUser Create (0.000509)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 17:31:11', 'test 3', '2008-11-19 17:31:11')[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000699)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 100[0m
+  [4;35;1mSQL (0.001329)[0m   [0mSELECT count("users".id) AS count_id, strftime(created_at, '%Y/%m/%d') AS strftime_created_at_y_m_d FROM "users" WHERE (created_at >= '2008-08-25') GROUP BY strftime(created_at, '%Y/%m/%d') ORDER BY created_at DESC [0m
+  [4;36;1mUser Create (0.000416)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 17:31:11', 'test 1', '2008-11-26 17:31:11')[0m
+  [4;35;1mUser Create (0.000600)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 17:31:11', 'test 2', '2008-11-19 17:31:11')[0m
+  [4;36;1mUser Create (0.001108)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 17:31:11', 'test 3', '2008-11-19 17:31:11')[0m
+  [4;35;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000729)[0m   [0mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 100[0m
+  [4;36;1mSQL (0.001096)[0m   [0;1mSELECT sum("users".profile_visits) AS sum_profile_visits, strftime(created_at, '%Y/%m/%d') AS strftime_created_at_y_m_d FROM "users" WHERE (created_at >= '2008-08-25') GROUP BY strftime(created_at, '%Y/%m/%d') ORDER BY created_at DESC [0m
+  [4;35;1mUser Create (0.000450)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 17:31:11', 'test 1', '2008-11-26 17:31:11')[0m
+  [4;36;1mUser Create (0.000388)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 17:31:11', 'test 2', '2008-11-19 17:31:11')[0m
+  [4;35;1mUser Create (0.000492)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 17:31:11', 'test 3', '2008-11-19 17:31:11')[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.002554)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 100[0m
+  [4;35;1mSQL (0.002017)[0m   [0mSELECT count("users".id) AS count_id, strftime(created_at, '%Y/%m/%d') AS strftime_created_at_y_m_d FROM "users" WHERE (login IN ('test 1','test 2') AND created_at >= '2008-08-25') GROUP BY strftime(created_at, '%Y/%m/%d') ORDER BY created_at DESC [0m
+  [4;36;1mSQL (0.000196)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (0.000518)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSQLite3::BusyException: database is locked: DROP TABLE "users"[0m
+  [4;36;1mSQL (0.000197)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (0.000522)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.066644)[0m   [0;1mDROP TABLE "users"[0m
+  [4;35;1mSQL (0.033155)[0m   [0mCREATE TABLE "users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "login" varchar(255) NOT NULL, "profile_visits" integer DEFAULT 0 NOT NULL, "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.000505)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (0.003382)[0m   [0mDROP TABLE "report_caches"[0m
+  [4;36;1mSQL (0.003204)[0m   [0;1mCREATE TABLE "report_caches" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "model_name" varchar(255) NOT NULL, "report_name" varchar(255) NOT NULL, "report_grouping" varchar(255) NOT NULL, "value" float DEFAULT 0 NOT NULL, "reporting_period" datetime NOT NULL, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.002498)[0m   [0mCREATE INDEX "name_klass_grouping" ON "report_caches" ("model_name", "report_name", "report_grouping")[0m
+  [4;36;1mSQL (0.002415)[0m   [0;1mCREATE UNIQUE INDEX "name_klass_grouping_period" ON "report_caches" ("model_name", "report_name", "report_grouping", "reporting_period")[0m
+  [4;35;1mSQL (0.000413)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.000321)[0m   [0;1mSELECT version FROM "schema_migrations"[0m
+  [4;35;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000748)[0m   [0mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 100[0m
+  [4;36;1mSQL (0.000832)[0m   [0;1mSELECT sum("users".id) AS sum_id, strftime('%Y/%m/%d', created_at) AS strftime_y_m_d_created_at FROM "users" WHERE (created_at >= '2008-08-25') GROUP BY strftime('%Y/%m/%d', created_at) ORDER BY created_at DESC [0m
+  [4;35;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000487)[0m   [0mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 100[0m
+  [4;36;1mSQL (0.000771)[0m   [0;1mSELECT count("users".id) AS count_id, strftime('%Y/%m/%d', created_at) AS strftime_y_m_d_created_at FROM "users" WHERE (created_at >= '2008-08-25') GROUP BY strftime('%Y/%m/%d', created_at) ORDER BY created_at DESC [0m
+  [4;35;1mUser Create (0.000384)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 17:40:22', 'test 1', '2008-11-26 17:40:22')[0m
+  [4;36;1mUser Create (0.000510)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 17:40:22', 'test 2', '2008-11-19 17:40:22')[0m
+  [4;35;1mUser Create (0.000526)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 17:40:22', 'test 3', '2008-11-19 17:40:22')[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.001011)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'cumulated_registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 100[0m
+  [4;35;1mSQL (0.001386)[0m   [0mSELECT count("users".id) AS count_id, strftime('%Y/%m/%d', created_at) AS strftime_y_m_d_created_at FROM "users" WHERE (created_at >= '2008-08-25') GROUP BY strftime('%Y/%m/%d', created_at) ORDER BY created_at DESC [0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000195)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'cumulated_registrations' AND "report_caches"."report_grouping" = 'day' AND "report_caches"."reporting_period" = '2008-11-26') LIMIT 1[0m
+  [4;35;1mKvlr::ReportsAsSparkline::ReportCache Create (0.000405)[0m   [0mINSERT INTO "report_caches" ("updated_at", "report_name", "model_name", "value", "report_grouping", "reporting_period", "created_at") VALUES('2008-12-03 17:40:22', 'cumulated_registrations', 'User', 1.0, 'day', '2008-11-26', '2008-12-03 17:40:22')[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000115)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'cumulated_registrations' AND "report_caches"."report_grouping" = 'day' AND "report_caches"."reporting_period" = '2008-11-19') LIMIT 1[0m
+  [4;35;1mKvlr::ReportsAsSparkline::ReportCache Create (0.000151)[0m   [0mINSERT INTO "report_caches" ("updated_at", "report_name", "model_name", "value", "report_grouping", "reporting_period", "created_at") VALUES('2008-12-03 17:40:22', 'cumulated_registrations', 'User', 2.0, 'day', '2008-11-19', '2008-12-03 17:40:22')[0m
+  [4;36;1mUser Load (0.000750)[0m   [0;1mSELECT * FROM "users" [0m
+  [4;35;1mUser Destroy (0.000342)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 1
+[0m
+  [4;36;1mUser Destroy (0.000773)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 2
+[0m
+  [4;35;1mUser Destroy (0.000597)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 3
+[0m
+  [4;36;1mUser Create (0.000520)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 17:40:22', 'test 1', '2008-11-26 17:40:22')[0m
+  [4;35;1mUser Create (0.000461)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 17:40:22', 'test 2', '2008-11-19 17:40:22')[0m
+  [4;36;1mUser Create (0.000387)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 17:40:22', 'test 3', '2008-11-19 17:40:22')[0m
+  [4;35;1mKvlr::ReportsAsSparkline::ReportCache Load (0.001288)[0m   [0mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'cumulated_registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 100[0m
+  [4;36;1mUser Load (0.000471)[0m   [0;1mSELECT * FROM "users" [0m
+  [4;35;1mUser Destroy (0.000320)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 4
+[0m
+  [4;36;1mUser Destroy (0.000646)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 5
+[0m
+  [4;35;1mUser Destroy (0.000673)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 6
+[0m
+  [4;36;1mUser Create (0.000528)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 17:40:25', 'test 1', '2008-11-26 17:40:25')[0m
+  [4;35;1mUser Create (0.000447)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 17:40:25', 'test 2', '2008-11-19 17:40:25')[0m
+  [4;36;1mUser Create (0.000463)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 17:40:25', 'test 3', '2008-11-19 17:40:25')[0m
+  [4;35;1mKvlr::ReportsAsSparkline::ReportCache Load (0.001350)[0m   [0mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'cumulated_registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 100[0m
+  [4;36;1mUser Load (0.000435)[0m   [0;1mSELECT * FROM "users" [0m
+  [4;35;1mUser Destroy (0.000384)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 7
+[0m
+  [4;36;1mUser Destroy (0.000500)[0m   [0;1m DELETE FROM "users"
+ WHERE "id" = 8
+[0m
+  [4;35;1mUser Destroy (0.000463)[0m   [0m DELETE FROM "users"
+ WHERE "id" = 9
+[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000670)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 100[0m
+  [4;35;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000483)[0m   [0mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 100[0m
+  [4;36;1mUser Create (0.000380)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 17:40:29', 'test 1', '2008-11-26 17:40:29')[0m
+  [4;35;1mUser Create (0.000481)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 17:40:29', 'test 2', '2008-11-19 17:40:29')[0m
+  [4;36;1mUser Create (0.000474)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 17:40:29', 'test 3', '2008-11-19 17:40:29')[0m
+  [4;35;1mKvlr::ReportsAsSparkline::ReportCache Load (0.001165)[0m   [0mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 3[0m
+  [4;36;1mSQL (0.001164)[0m   [0;1mSELECT sum("users".profile_visits) AS sum_profile_visits, strftime('%Y/%m/%d', created_at) AS strftime_y_m_d_created_at FROM "users" WHERE (created_at >= '2008-11-30') GROUP BY strftime('%Y/%m/%d', created_at) ORDER BY created_at DESC [0m
+  [4;35;1mUser Create (0.000600)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 17:40:29', 'test 1', '2008-11-26 17:40:29')[0m
+  [4;36;1mUser Create (0.000587)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 17:40:29', 'test 2', '2008-11-19 17:40:29')[0m
+  [4;35;1mUser Create (0.000632)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 17:40:29', 'test 3', '2008-11-19 17:40:29')[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.001060)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 100[0m
+  [4;35;1mSQL (0.002124)[0m   [0mSELECT count("users".id) AS count_id, strftime('%Y/%m/%d', created_at) AS strftime_y_m_d_created_at FROM "users" WHERE (created_at >= '2008-08-25') GROUP BY strftime('%Y/%m/%d', created_at) ORDER BY created_at DESC [0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000255)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day' AND "report_caches"."reporting_period" = '2008-11-26') LIMIT 1[0m
+  [4;35;1mKvlr::ReportsAsSparkline::ReportCache Create (0.001712)[0m   [0mINSERT INTO "report_caches" ("updated_at", "report_name", "model_name", "value", "report_grouping", "reporting_period", "created_at") VALUES('2008-12-03 17:40:29', 'registrations', 'User', 2.0, 'day', '2008-11-26', '2008-12-03 17:40:29')[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000192)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day' AND "report_caches"."reporting_period" = '2008-11-19') LIMIT 1[0m
+  [4;35;1mKvlr::ReportsAsSparkline::ReportCache Create (0.000109)[0m   [0mINSERT INTO "report_caches" ("updated_at", "report_name", "model_name", "value", "report_grouping", "reporting_period", "created_at") VALUES('2008-12-03 17:40:29', 'registrations', 'User', 4.0, 'day', '2008-11-19', '2008-12-03 17:40:29')[0m
+  [4;36;1mUser Create (0.000311)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 17:40:29', 'test 1', '2008-11-26 17:40:29')[0m
+  [4;35;1mUser Create (0.000254)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 17:40:29', 'test 2', '2008-11-19 17:40:29')[0m
+  [4;36;1mUser Create (0.000277)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 17:40:29', 'test 3', '2008-11-19 17:40:29')[0m
+  [4;35;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000767)[0m   [0mSELECT * FROM "report_caches" WHERE ("report_caches"."model_name" = 'User' AND "report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day') ORDER BY created_at DESC LIMIT 100[0m
+  [4;36;1mSQL (0.000205)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (0.000508)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.003360)[0m   [0;1mDROP TABLE "users"[0m
+  [4;35;1mSQL (0.003078)[0m   [0mCREATE TABLE "users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "login" varchar(255) NOT NULL, "profile_visits" integer DEFAULT 0 NOT NULL, "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.000705)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (0.002619)[0m   [0mDROP TABLE "report_caches"[0m
+  [4;36;1mSQL (0.002639)[0m   [0;1mCREATE TABLE "report_caches" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "model_name" varchar(255) NOT NULL, "report_name" varchar(255) NOT NULL, "report_grouping" varchar(255) NOT NULL, "value" float DEFAULT 0 NOT NULL, "reporting_period" datetime NOT NULL, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.003643)[0m   [0mCREATE INDEX "name_klass_grouping" ON "report_caches" ("model_name", "report_name", "report_grouping")[0m
+  [4;36;1mSQL (0.003177)[0m   [0;1mCREATE UNIQUE INDEX "name_klass_grouping_period" ON "report_caches" ("model_name", "report_name", "report_grouping", "reporting_period")[0m
+  [4;35;1mSQL (0.000359)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.000280)[0m   [0;1mSELECT version FROM "schema_migrations"[0m
+  [4;35;1mKvlr::ReportsAsSparkline::ReportCache Load (0.112610)[0m   [0mSELECT * FROM "report_caches" WHERE ("report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day' AND "report_caches"."model_name" = 'User') ORDER BY created_at DESC LIMIT 100[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000742)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day' AND "report_caches"."model_name" = 'User') ORDER BY created_at DESC LIMIT 100[0m
+  [4;35;1mUser Create (0.000354)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 19:30:57', 'test 1', '2008-11-26 19:30:57')[0m
+  [4;36;1mUser Create (0.000500)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 19:30:57', 'test 2', '2008-11-19 19:30:57')[0m
+  [4;35;1mUser Create (0.000420)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 19:30:57', 'test 3', '2008-11-19 19:30:57')[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000744)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day' AND "report_caches"."model_name" = 'User') ORDER BY created_at DESC LIMIT 3[0m
+  [4;35;1mSQL (0.001341)[0m   [0mSELECT sum("users".profile_visits) AS sum_profile_visits, strftime('%Y/%m/%d', created_at) AS strftime_y_m_d_created_at FROM "users" WHERE (created_at >= '2008-11-30') GROUP BY strftime('%Y/%m/%d', created_at) ORDER BY created_at DESC [0m
+  [4;36;1mUser Create (0.000423)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 19:30:57', 'test 1', '2008-11-26 19:30:57')[0m
+  [4;35;1mUser Create (0.000488)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 19:30:57', 'test 2', '2008-11-19 19:30:57')[0m
+  [4;36;1mUser Create (0.000437)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 19:30:57', 'test 3', '2008-11-19 19:30:57')[0m
+  [4;35;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000884)[0m   [0mSELECT * FROM "report_caches" WHERE ("report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day' AND "report_caches"."model_name" = 'User') ORDER BY created_at DESC LIMIT 100[0m
+  [4;36;1mSQL (0.001609)[0m   [0;1mSELECT count("users".id) AS count_id, strftime('%Y/%m/%d', created_at) AS strftime_y_m_d_created_at FROM "users" WHERE (created_at >= '2008-08-25') GROUP BY strftime('%Y/%m/%d', created_at) ORDER BY created_at DESC [0m
+  [4;35;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000185)[0m   [0mSELECT * FROM "report_caches" WHERE ("report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day' AND "report_caches"."reporting_period" = '2008-11-26' AND "report_caches"."model_name" = 'User') LIMIT 1[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Create (0.000504)[0m   [0;1mINSERT INTO "report_caches" ("updated_at", "report_name", "model_name", "value", "report_grouping", "reporting_period", "created_at") VALUES('2008-12-03 19:30:57', 'registrations', 'User', 2.0, 'day', '2008-11-26', '2008-12-03 19:30:57')[0m
+  [4;35;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000157)[0m   [0mSELECT * FROM "report_caches" WHERE ("report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day' AND "report_caches"."reporting_period" = '2008-11-19' AND "report_caches"."model_name" = 'User') LIMIT 1[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Create (0.000153)[0m   [0;1mINSERT INTO "report_caches" ("updated_at", "report_name", "model_name", "value", "report_grouping", "reporting_period", "created_at") VALUES('2008-12-03 19:30:57', 'registrations', 'User', 4.0, 'day', '2008-11-19', '2008-12-03 19:30:57')[0m
+  [4;35;1mUser Create (0.000520)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 19:30:57', 'test 1', '2008-11-26 19:30:57')[0m
+  [4;36;1mUser Create (0.000520)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 19:30:57', 'test 2', '2008-11-19 19:30:57')[0m
+  [4;35;1mUser Create (0.000564)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 19:30:57', 'test 3', '2008-11-19 19:30:57')[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.001691)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day' AND "report_caches"."model_name" = 'User') ORDER BY created_at DESC LIMIT 100[0m
+  [4;35;1mUser Create (0.000561)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 19:31:00', 'test 1', '2008-11-26 19:31:00')[0m
+  [4;36;1mUser Create (0.000501)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 19:31:01', 'test 2', '2008-11-19 19:31:01')[0m
+  [4;35;1mUser Create (0.000454)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 19:31:01', 'test 3', '2008-11-19 19:31:01')[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.001311)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day' AND "report_caches"."model_name" = 'User') ORDER BY created_at DESC LIMIT 100[0m
+  [4;36;1mSQL (0.000205)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (0.000510)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.002990)[0m   [0;1mDROP TABLE "users"[0m
+  [4;35;1mSQL (0.003325)[0m   [0mCREATE TABLE "users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "login" varchar(255) NOT NULL, "profile_visits" integer DEFAULT 0 NOT NULL, "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.000515)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (0.003737)[0m   [0mDROP TABLE "report_caches"[0m
+  [4;36;1mSQL (0.003289)[0m   [0;1mCREATE TABLE "report_caches" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "model_name" varchar(255) NOT NULL, "report_name" varchar(255) NOT NULL, "report_grouping" varchar(255) NOT NULL, "value" float DEFAULT 0 NOT NULL, "reporting_period" datetime NOT NULL, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.004390)[0m   [0mCREATE INDEX "name_klass_grouping" ON "report_caches" ("model_name", "report_name", "report_grouping")[0m
+  [4;36;1mSQL (0.002665)[0m   [0;1mCREATE UNIQUE INDEX "name_klass_grouping_period" ON "report_caches" ("model_name", "report_name", "report_grouping", "reporting_period")[0m
+  [4;35;1mSQL (0.000505)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.000256)[0m   [0;1mSELECT version FROM "schema_migrations"[0m
+  [4;35;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000538)[0m   [0mSELECT * FROM "report_caches" WHERE ("report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day' AND "report_caches"."model_name" = 'User') ORDER BY created_at DESC LIMIT 100[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000465)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day' AND "report_caches"."model_name" = 'User') ORDER BY created_at DESC LIMIT 100[0m
+  [4;35;1mUser Create (0.000360)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 19:31:12', 'test 1', '2008-11-26 19:31:12')[0m
+  [4;36;1mUser Create (0.000446)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 19:31:12', 'test 2', '2008-11-19 19:31:12')[0m
+  [4;35;1mUser Create (0.000419)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 19:31:12', 'test 3', '2008-11-19 19:31:12')[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000944)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day' AND "report_caches"."model_name" = 'User') ORDER BY created_at DESC LIMIT 3[0m
+  [4;35;1mSQL (0.001057)[0m   [0mSELECT sum("users".profile_visits) AS sum_profile_visits, strftime('%Y/%m/%d', created_at) AS strftime_y_m_d_created_at FROM "users" WHERE (created_at >= '2008-11-30') GROUP BY strftime('%Y/%m/%d', created_at) ORDER BY created_at DESC [0m
+  [4;36;1mUser Create (0.000419)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 19:31:12', 'test 1', '2008-11-26 19:31:12')[0m
+  [4;35;1mUser Create (0.000550)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 19:31:12', 'test 2', '2008-11-19 19:31:12')[0m
+  [4;36;1mUser Create (0.000533)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 19:31:12', 'test 3', '2008-11-19 19:31:12')[0m
+  [4;35;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000879)[0m   [0mSELECT * FROM "report_caches" WHERE ("report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day' AND "report_caches"."model_name" = 'User') ORDER BY created_at DESC LIMIT 100[0m
+  [4;36;1mSQL (0.001368)[0m   [0;1mSELECT count("users".id) AS count_id, strftime('%Y/%m/%d', created_at) AS strftime_y_m_d_created_at FROM "users" WHERE (created_at >= '2008-08-25') GROUP BY strftime('%Y/%m/%d', created_at) ORDER BY created_at DESC [0m
+  [4;35;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000245)[0m   [0mSELECT * FROM "report_caches" WHERE ("report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day' AND "report_caches"."reporting_period" = '2008-11-26' AND "report_caches"."model_name" = 'User') LIMIT 1[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Create (0.000502)[0m   [0;1mINSERT INTO "report_caches" ("updated_at", "report_name", "model_name", "value", "report_grouping", "reporting_period", "created_at") VALUES('2008-12-03 19:31:12', 'registrations', 'User', 2.0, 'day', '2008-11-26', '2008-12-03 19:31:12')[0m
+  [4;35;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000128)[0m   [0mSELECT * FROM "report_caches" WHERE ("report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day' AND "report_caches"."reporting_period" = '2008-11-19' AND "report_caches"."model_name" = 'User') LIMIT 1[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Create (0.000127)[0m   [0;1mINSERT INTO "report_caches" ("updated_at", "report_name", "model_name", "value", "report_grouping", "reporting_period", "created_at") VALUES('2008-12-03 19:31:12', 'registrations', 'User', 4.0, 'day', '2008-11-19', '2008-12-03 19:31:12')[0m
+  [4;35;1mUser Create (0.000462)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 19:31:12', 'test 1', '2008-11-26 19:31:12')[0m
+  [4;36;1mUser Create (0.000461)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 19:31:12', 'test 2', '2008-11-19 19:31:12')[0m
+  [4;35;1mUser Create (0.000403)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 19:31:12', 'test 3', '2008-11-19 19:31:12')[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.001213)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day' AND "report_caches"."model_name" = 'User') ORDER BY created_at DESC LIMIT 100[0m
+  [4;36;1mSQL (0.000204)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (0.000507)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.002888)[0m   [0;1mDROP TABLE "users"[0m
+  [4;35;1mSQL (0.003031)[0m   [0mCREATE TABLE "users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "login" varchar(255) NOT NULL, "profile_visits" integer DEFAULT 0 NOT NULL, "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.000489)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (0.002571)[0m   [0mDROP TABLE "report_caches"[0m
+  [4;36;1mSQL (0.002575)[0m   [0;1mCREATE TABLE "report_caches" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "model_name" varchar(255) NOT NULL, "report_name" varchar(255) NOT NULL, "report_grouping" varchar(255) NOT NULL, "value" float DEFAULT 0 NOT NULL, "reporting_period" datetime NOT NULL, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.004678)[0m   [0mCREATE INDEX "name_klass_grouping" ON "report_caches" ("model_name", "report_name", "report_grouping")[0m
+  [4;36;1mSQL (0.002550)[0m   [0;1mCREATE UNIQUE INDEX "name_klass_grouping_period" ON "report_caches" ("model_name", "report_name", "report_grouping", "reporting_period")[0m
+  [4;35;1mSQL (0.000406)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.000261)[0m   [0;1mSELECT version FROM "schema_migrations"[0m
+  [4;35;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000567)[0m   [0mSELECT * FROM "report_caches" WHERE ("report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day' AND "report_caches"."model_name" = 'User') ORDER BY created_at DESC LIMIT 100[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000456)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day' AND "report_caches"."model_name" = 'User') ORDER BY created_at DESC LIMIT 100[0m
+  [4;35;1mUser Create (0.000381)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 19:31:28', 'test 1', '2008-11-26 19:31:28')[0m
+  [4;36;1mUser Create (0.000407)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 19:31:28', 'test 2', '2008-11-19 19:31:28')[0m
+  [4;35;1mUser Create (0.000424)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 19:31:28', 'test 3', '2008-11-19 19:31:28')[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.001006)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day' AND "report_caches"."model_name" = 'User') ORDER BY created_at DESC LIMIT 3[0m
+  [4;35;1mSQL (0.001162)[0m   [0mSELECT sum("users".profile_visits) AS sum_profile_visits, strftime('%Y/%m/%d', created_at) AS strftime_y_m_d_created_at FROM "users" WHERE (created_at >= '2008-11-30') GROUP BY strftime('%Y/%m/%d', created_at) ORDER BY created_at DESC [0m
+  [4;36;1mUser Create (0.000429)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 19:31:28', 'test 1', '2008-11-26 19:31:28')[0m
+  [4;35;1mUser Create (0.000468)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 19:31:28', 'test 2', '2008-11-19 19:31:28')[0m
+  [4;36;1mUser Create (0.000511)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 19:31:28', 'test 3', '2008-11-19 19:31:28')[0m
+  [4;35;1mKvlr::ReportsAsSparkline::ReportCache Load (0.001032)[0m   [0mSELECT * FROM "report_caches" WHERE ("report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day' AND "report_caches"."model_name" = 'User') ORDER BY created_at DESC LIMIT 100[0m
+  [4;36;1mSQL (0.001316)[0m   [0;1mSELECT count("users".id) AS count_id, strftime('%Y/%m/%d', created_at) AS strftime_y_m_d_created_at FROM "users" WHERE (created_at >= '2008-08-25') GROUP BY strftime('%Y/%m/%d', created_at) ORDER BY created_at DESC [0m
+  [4;35;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000177)[0m   [0mSELECT * FROM "report_caches" WHERE ("report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day' AND "report_caches"."reporting_period" = '2008-11-26' AND "report_caches"."model_name" = 'User') LIMIT 1[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Create (0.000498)[0m   [0;1mINSERT INTO "report_caches" ("updated_at", "report_name", "model_name", "value", "report_grouping", "reporting_period", "created_at") VALUES('2008-12-03 19:31:28', 'registrations', 'User', 2.0, 'day', '2008-11-26', '2008-12-03 19:31:28')[0m
+  [4;35;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000195)[0m   [0mSELECT * FROM "report_caches" WHERE ("report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day' AND "report_caches"."reporting_period" = '2008-11-19' AND "report_caches"."model_name" = 'User') LIMIT 1[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Create (0.000162)[0m   [0;1mINSERT INTO "report_caches" ("updated_at", "report_name", "model_name", "value", "report_grouping", "reporting_period", "created_at") VALUES('2008-12-03 19:31:28', 'registrations', 'User', 4.0, 'day', '2008-11-19', '2008-12-03 19:31:28')[0m
+  [4;35;1mUser Create (0.000491)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 19:31:28', 'test 1', '2008-11-26 19:31:28')[0m
+  [4;36;1mUser Create (0.000442)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 19:31:28', 'test 2', '2008-11-19 19:31:28')[0m
+  [4;35;1mUser Create (0.000443)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 19:31:28', 'test 3', '2008-11-19 19:31:28')[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.001334)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day' AND "report_caches"."model_name" = 'User') ORDER BY created_at DESC LIMIT 100[0m
+  [4;36;1mSQL (0.000204)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (0.000513)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.002687)[0m   [0;1mDROP TABLE "users"[0m
+  [4;35;1mSQL (0.003019)[0m   [0mCREATE TABLE "users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "login" varchar(255) NOT NULL, "profile_visits" integer DEFAULT 0 NOT NULL, "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.000531)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (0.002816)[0m   [0mDROP TABLE "report_caches"[0m
+  [4;36;1mSQL (0.003087)[0m   [0;1mCREATE TABLE "report_caches" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "model_name" varchar(255) NOT NULL, "report_name" varchar(255) NOT NULL, "report_grouping" varchar(255) NOT NULL, "value" float DEFAULT 0 NOT NULL, "reporting_period" datetime NOT NULL, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.003322)[0m   [0mCREATE INDEX "name_klass_grouping" ON "report_caches" ("model_name", "report_name", "report_grouping")[0m
+  [4;36;1mSQL (0.002970)[0m   [0;1mCREATE UNIQUE INDEX "name_klass_grouping_period" ON "report_caches" ("model_name", "report_name", "report_grouping", "reporting_period")[0m
+  [4;35;1mSQL (0.002664)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.000498)[0m   [0;1mSELECT version FROM "schema_migrations"[0m
+  [4;35;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000603)[0m   [0mSELECT * FROM "report_caches" WHERE ("report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day' AND "report_caches"."model_name" = 'User') ORDER BY created_at DESC LIMIT 100[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000477)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day' AND "report_caches"."model_name" = 'User') ORDER BY created_at DESC LIMIT 100[0m
+  [4;35;1mUser Create (0.000341)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 19:31:48', 'test 1', '2008-11-26 19:31:48')[0m
+  [4;36;1mUser Create (0.000403)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 19:31:48', 'test 2', '2008-11-19 19:31:48')[0m
+  [4;35;1mUser Create (0.000443)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 19:31:48', 'test 3', '2008-11-19 19:31:48')[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000942)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day' AND "report_caches"."model_name" = 'User') ORDER BY created_at DESC LIMIT 3[0m
+  [4;35;1mSQL (0.001059)[0m   [0mSELECT sum("users".profile_visits) AS sum_profile_visits, strftime('%Y/%m/%d', created_at) AS strftime_y_m_d_created_at FROM "users" WHERE (created_at >= '2008-11-30') GROUP BY strftime('%Y/%m/%d', created_at) ORDER BY created_at DESC [0m
+  [4;36;1mUser Create (0.000425)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 19:31:48', 'test 1', '2008-11-26 19:31:48')[0m
+  [4;35;1mUser Create (0.000534)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 19:31:48', 'test 2', '2008-11-19 19:31:48')[0m
+  [4;36;1mUser Create (0.000391)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 19:31:48', 'test 3', '2008-11-19 19:31:48')[0m
+  [4;35;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000950)[0m   [0mSELECT * FROM "report_caches" WHERE ("report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day' AND "report_caches"."model_name" = 'User') ORDER BY created_at DESC LIMIT 100[0m
+  [4;36;1mSQL (0.001509)[0m   [0;1mSELECT count("users".id) AS count_id, strftime('%Y/%m/%d', created_at) AS strftime_y_m_d_created_at FROM "users" WHERE (created_at >= '2008-08-25') GROUP BY strftime('%Y/%m/%d', created_at) ORDER BY created_at DESC [0m
+  [4;35;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000196)[0m   [0mSELECT * FROM "report_caches" WHERE ("report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day' AND "report_caches"."reporting_period" = '2008-11-26' AND "report_caches"."model_name" = 'User') LIMIT 1[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Create (0.000553)[0m   [0;1mINSERT INTO "report_caches" ("updated_at", "report_name", "model_name", "value", "report_grouping", "reporting_period", "created_at") VALUES('2008-12-03 19:31:48', 'registrations', 'User', 2.0, 'day', '2008-11-26', '2008-12-03 19:31:48')[0m
+  [4;35;1mKvlr::ReportsAsSparkline::ReportCache Load (0.000148)[0m   [0mSELECT * FROM "report_caches" WHERE ("report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day' AND "report_caches"."reporting_period" = '2008-11-19' AND "report_caches"."model_name" = 'User') LIMIT 1[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Create (0.000130)[0m   [0;1mINSERT INTO "report_caches" ("updated_at", "report_name", "model_name", "value", "report_grouping", "reporting_period", "created_at") VALUES('2008-12-03 19:31:48', 'registrations', 'User', 4.0, 'day', '2008-11-19', '2008-12-03 19:31:48')[0m
+  [4;35;1mUser Create (0.000355)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(1, '2008-12-03 19:31:48', 'test 1', '2008-11-26 19:31:48')[0m
+  [4;36;1mUser Create (0.000489)[0m   [0;1mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(2, '2008-12-03 19:31:48', 'test 2', '2008-11-19 19:31:48')[0m
+  [4;35;1mUser Create (0.000475)[0m   [0mINSERT INTO "users" ("profile_visits", "updated_at", "login", "created_at") VALUES(3, '2008-12-03 19:31:48', 'test 3', '2008-11-19 19:31:48')[0m
+  [4;36;1mKvlr::ReportsAsSparkline::ReportCache Load (0.001360)[0m   [0;1mSELECT * FROM "report_caches" WHERE ("report_caches"."report_name" = 'registrations' AND "report_caches"."report_grouping" = 'day' AND "report_caches"."model_name" = 'User') ORDER BY created_at DESC LIMIT 100[0m

@@ -57,7 +57,7 @@ describe Kvlr::ReportsAsSparkline::Report do
       end
 
       after do
-        User.destroy_all
+        #User.destroy_all
       end
 
     end

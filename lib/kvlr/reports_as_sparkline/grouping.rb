@@ -26,7 +26,7 @@ module Kvlr #:nodoc:
             Date.new(date_time.year, date_time.month)
           when :hour
             DateTime.new(date_time.year, date_time.month, date_time.day, date_time.hour)
-          end
+        end
       end
 
       def next_reporting_period(period)
@@ -40,7 +40,7 @@ module Kvlr #:nodoc:
             Date.new(period.year, period.month, 1)
           when :hour
             period + 1.hour
-          end
+        end
       end
 
       def first_reporting_period(limit)
@@ -54,23 +54,47 @@ module Kvlr #:nodoc:
             Date.new(date.year, date.month, 1)
           when :hour
             to_reporting_period(Time.now - limit.hours)
-          end
+        end
       end
 
       def to_sql(date_column_name)
         #TODO: DATE_FORMAT's format string is different on different RDBMs => custom format string for all supported RDBMs needed!
         # => this can be implemented using ActiveRecord::Base.connection.class
-        return case @identifier
-          when :day
-            "DATE_FORMAT(#{date_column_name}, '%Y/%m/%d')"
-          when :week
-            "DATE_FORMAT(#{date_column_name}, '%Y-%u')"
-          when :month
-            "DATE_FORMAT(#{date_column_name}, '%Y/%m')"
-          when :hour
-            "DATE_FORMAT(#{date_column_name}, '%Y/%m/%d/%H')"
-          end
+        return case ActiveRecord::Base.connection.class.to_s
+          when 'ActiveRecord::ConnectionAdapters::MysqlAdapter'
+            mysql_format(date_column_name)
+          when 'ActiveRecord::ConnectionAdapters::SQLite3Adapter'
+            sqlite_format(date_column_name)
+        end
       end
+
+      private
+
+        def mysql_format(date_column_name)
+          return case @identifier
+            when :day
+              "DATE_FORMAT(#{date_column_name}, '%Y/%m/%d')"
+            when :week
+              "DATE_FORMAT(#{date_column_name}, '%Y-%u')"
+            when :month
+              "DATE_FORMAT(#{date_column_name}, '%Y/%m')"
+            when :hour
+              "DATE_FORMAT(#{date_column_name}, '%Y/%m/%d/%H')"
+          end
+        end
+
+        def sqlite_format(date_column_name)
+          return case @identifier
+            when :day
+              "strftime('%Y/%m/%d', #{date_column_name})"
+            when :week
+              "strftime('%Y-%W', #{date_column_name})"
+            when :month
+              "strftime('%Y/%m', #{date_column_name})"
+            when :hour
+              "strftime('%Y/%m/%d/%H', #{date_column_name})"
+          end
+        end
 
     end
 

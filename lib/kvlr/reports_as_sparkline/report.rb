@@ -34,7 +34,7 @@ module Kvlr #:nodoc:
             options[:value_column_name].to_s,
             :conditions => conditions,
             :group => grouping.to_sql(options[:date_column_name]),
-            :order => "#{options[:date_column_name].to_s} DESC"
+            :order => "#{grouping.to_sql(options[:date_column_name])} DESC"
           )
         end
       end

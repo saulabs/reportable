@@ -65,6 +65,8 @@ module Kvlr #:nodoc:
             mysql_format(date_column_name)
           when 'ActiveRecord::ConnectionAdapters::SQLite3Adapter'
             sqlite_format(date_column_name)
+          when 'ActiveRecord::ConnectionAdapters::PostgreSQLAdapter'
+            postgresql_format(date_column_name)
         end
       end
 
@@ -93,6 +95,19 @@ module Kvlr #:nodoc:
               "strftime('%Y/%m', #{date_column_name})"
             when :hour
               "strftime('%Y/%m/%d/%H', #{date_column_name})"
+          end
+        end
+
+        def postgresql_format(date_column_name)
+          return case @identifier
+            when :day
+              "date_trunc('day', #{date_column_name})"
+            when :week
+              "date_trunc('week', #{date_column_name})"
+            when :month
+              "date_trunc('month', #{date_column_name})"
+            when :hour
+              "date_trunc('hour', #{date_column_name})"
           end
         end
 

@@ -8,4 +8,10 @@ mysql:
   username: reports_as_spark
   password: reports_as_spark
   host: localhost
-  
+
+postgresql:
+  adapter: postgresql
+  database: reports_as_sparkline_test
+  username: reports_as_sparkline
+  password: reports_as_sparkline
+  host: localhost

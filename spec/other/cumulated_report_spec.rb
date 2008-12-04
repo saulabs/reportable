@@ -39,6 +39,7 @@ describe Kvlr::ReportsAsSparkline::CumulatedReport do
 
       after do
         User.destroy_all
+        Kvlr::ReportsAsSparkline::ReportCache.destroy_all
       end
 
     end

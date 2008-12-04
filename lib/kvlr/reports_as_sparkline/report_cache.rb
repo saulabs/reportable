@@ -23,13 +23,14 @@ module Kvlr #:nodoc:
 
         def self.get_last_reporting_period(cached_data, grouping, acc)
           return acc if cached_data.empty?
-          period = grouping.to_reporting_period(DateTime.parse(cached_data[0].reporting_period))
+          puts cached_data[0].reporting_period.class.inspect
+          period = grouping.to_reporting_period(cached_data[0].reporting_period)
           cached_data[1..-2].each_with_index do |cached, i|
             if grouping.next_reporting_period(grouping.to_reporting_period(DateTime.parse(cached.reporting_period))) != grouping.to_reporting_period(DateTime.parse(cached_data[i + 1].reporting_period))
               return cached
             end
           end
-          return grouping.to_reporting_period(DateTime.parse(cached_data[-1].reporting_period))
+          return grouping.to_reporting_period(cached_data[-1].reporting_period)
         end
 
         def self.update_cache(new_data, cached_data, report, grouping)

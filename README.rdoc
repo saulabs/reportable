@@ -1,6 +1,6 @@
-## ReportsAsSparkline
+= ReportsAsSparkline
 
-This plugin shall allow you to generate sparklines and do reporting from your database with very little effort.
+ReportsAsSparkline enables you to generate reports and sparklines from your database with very little effort.
 
 ### Example
 
@@ -24,12 +24,14 @@ Using *report_as_sparkline* like this will add the following class methods to yo
 ### Implemented features
 * cumulate option that depends on other report
     
-### Pending points
+== TODOs/ future plans
 
-* Create a model to cache results and reuse
+* support for Oracle and DB2 (and others?) missing
 * Implement data ranges in arguments
 * Limit number of data points to maximum that the google chart api allows
 * Make graph styling configurable
+
+If you want ot suggest any new features or report bugs, do so at http://simplabs.lighthouseapp.com/projects/21060-reportsassparkline/overview.
 
 
 &copy; 2008 Martin Kavalar, Marco Otte-Witte (http://simplabs.com/#projects), released under the MIT license

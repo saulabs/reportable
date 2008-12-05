@@ -10,14 +10,14 @@ describe Kvlr::ReportsAsSparkline::ReportCache do
 
     it 'should raise an ArgumentError if no block is given' do
       lambda do
-        Kvlr::ReportsAsSparkline::ReportCache.cached_transaction(@report, :count, 100, 'created_at')
+        Kvlr::ReportsAsSparkline::ReportCache.cached_transaction(@report, 100)
       end.should raise_error(ArgumentError)
     end
 
     it 'sould start a transaction' do
       Kvlr::ReportsAsSparkline::ReportCache.should_receive(:transaction)
 
-      Kvlr::ReportsAsSparkline::ReportCache.cached_transaction(@report, :count, 100, 'created_at') {}
+      Kvlr::ReportsAsSparkline::ReportCache.cached_transaction(@report, 100) {}
     end
 
   end
@@ -38,7 +38,7 @@ describe Kvlr::ReportsAsSparkline::ReportCache do
         :get_last_reporting_period,
         cached_data,
         @grouping,
-        @grouping.first_reporting_period(3)
+        10
       ).should == @grouping.to_reporting_period(Time.now - 2.days)
     end
 
@@ -47,8 +47,8 @@ describe Kvlr::ReportsAsSparkline::ReportCache do
         :get_last_reporting_period,
         [],
         @grouping,
-        @grouping.first_reporting_period(3)
-      ).should == @grouping.to_reporting_period(Time.now - 3.days)
+        10
+      ).should == @grouping.to_reporting_period(Time.now - 10.days)
     end
 
   end

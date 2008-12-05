@@ -10,7 +10,8 @@ ActiveRecord::Schema.define(:version => 1) do
   create_table :report_caches, :force => true do |t|
     t.string   :model_name,       :null => false
     t.string   :report_name,      :null => false
-    t.string   :report_grouping,  :null => false
+    t.string   :grouping,         :null => false
+    t.string   :aggregation,      :null => false
     t.float    :value,            :null => false, :default => 0
     t.datetime :reporting_period, :null => false
 
@@ -19,12 +20,15 @@ ActiveRecord::Schema.define(:version => 1) do
   add_index :report_caches, [
     :model_name,
     :report_name,
-    :report_grouping
-  ], :name => 'name_klass_grouping'
+    :grouping,
+    :aggregation
+  ], :name => 'name_model_grouping_agregation'
   add_index :report_caches, [
-    :model_name, :report_name,
-    :report_grouping,
+    :model_name,
+    :report_name,
+    :grouping,
+    :aggregation,
     :reporting_period
-  ], :unique => true, :name => 'name_klass_grouping_period'
+  ], :unique => true, :name => 'name_model_grouping_aggregation_period'
 
 end

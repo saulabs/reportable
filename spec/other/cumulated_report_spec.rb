@@ -24,7 +24,8 @@ describe Kvlr::ReportsAsSparkline::CumulatedReport do
       end
 
       it 'should return correct data for :aggregation => :sum' do
-        result = @report.run(:aggregation => :sum, :value_column_name => :profile_visits).to_a
+        @report = Kvlr::ReportsAsSparkline::CumulatedReport.new(User, :registrations, :aggregation => :sum, :value_column_name => :profile_visits)
+        result = @report.run().to_a
 
         result[0][1].should == 1
         result[1][1].should == 6

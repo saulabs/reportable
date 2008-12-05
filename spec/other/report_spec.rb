@@ -64,9 +64,9 @@ describe Kvlr::ReportsAsSparkline::Report do
       end
 
       it 'should validate the specified options' do
-        @report.should_receive(:ensure_valid_options).once.with(:aggregation => :sum, :value_column_name => :profile_visits, :limit => 3)
+        @report.should_receive(:ensure_valid_options).once.with(:limit => 3)
 
-        result = @report.run(:aggregation => :sum, :value_column_name => :profile_visits, :limit => 3)
+        result = @report.run(:limit => 3)
       end
 
       it 'should return correct data for :aggregation => :count' do
@@ -77,7 +77,8 @@ describe Kvlr::ReportsAsSparkline::Report do
       end
 
       it 'should return correct data for :aggregation => :sum' do
-        result = @report.run(:aggregation => :sum, :value_column_name => :profile_visits).to_a
+        @report = Kvlr::ReportsAsSparkline::Report.new(User, :registrations, :aggregation => :sum, :value_column_name => :profile_visits)
+        result = @report.run().to_a
 
         result[0][1].should == 1
         result[1][1].should == 5
@@ -104,26 +105,26 @@ describe Kvlr::ReportsAsSparkline::Report do
     it 'should return conditions for date_column_name >= begin_at only if no custom conditions are specified' do
       begin_at = Time.now
 
-      @report.send(:setup_conditions, begin_at, 'created_at').should == ['created_at >= ?', begin_at]
+      @report.send(:setup_conditions, begin_at).should == ['created_at >= ?', begin_at]
     end
 
     it 'should return conditions for date_column_name >= begin_at only if an empty Hash of custom conditions is specified' do
       begin_at = Time.now
 
-      @report.send(:setup_conditions, begin_at, 'created_at', {}).should == ['created_at >= ?', begin_at]
+      @report.send(:setup_conditions, begin_at, {}).should == ['created_at >= ?', begin_at]
     end
 
     it 'should return conditions for date_column_name >= begin_at only if an empty Array of custom conditions is specified' do
       begin_at = Time.now
 
-      @report.send(:setup_conditions, begin_at, 'created_at', []).should == ['created_at >= ?', begin_at]
+      @report.send(:setup_conditions, begin_at, []).should == ['created_at >= ?', begin_at]
     end
 
     it 'should correctly include custom conditions if they are specified as a Hash' do
       begin_at = Time.now
       custom_conditions = { :first_name => 'first name', :last_name => 'last name' }
 
-      conditions = @report.send(:setup_conditions, begin_at, 'created_at', custom_conditions)
+      conditions = @report.send(:setup_conditions, begin_at, custom_conditions)
       #cannot check for equality of complete conditions array since hashes are not ordered (thus it is unknown whether first_name or last_name comes first)
       conditions[0].should include('first_name = ?')
       conditions[0].should include('last_name = ?')
@@ -137,7 +138,7 @@ describe Kvlr::ReportsAsSparkline::Report do
       begin_at = Time.now
       custom_conditions = ['first_name = ? AND last_name = ?', 'first name', 'last name']
 
-      @report.send(:setup_conditions, begin_at, 'created_at', custom_conditions).should == [
+      @report.send(:setup_conditions, begin_at, custom_conditions).should == [
         'first_name = ? AND last_name = ? AND created_at >= ?',
         'first name',
         'last name',

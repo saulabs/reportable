@@ -19,6 +19,5 @@ FileUtils.mkdir_p File.join(File.dirname(__FILE__), 'log')
 ActiveRecord::Base.logger = Logger.new(File.join(File.dirname(__FILE__), 'log', 'spec.log'))
 
 databases = YAML::load(IO.read(File.join(File.dirname(__FILE__), 'db', 'database.yml')))
-# TODO: connect to test database of rails project if exists
 ActiveRecord::Base.establish_connection(databases['sqlite3'])
 load(File.join(File.dirname(__FILE__), 'db', 'schema.rb'))

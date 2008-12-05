@@ -27,9 +27,7 @@ module Kvlr #:nodoc:
         options = @options.merge(options)
         grouping = Grouping.new(options[:grouping])
         ReportCache.cached_transaction(self, grouping, options[:limit], options[:date_column_name]) do |begin_at|
-          conditions = [options[:conditions][0], *options[:conditions][1..-1]]
-          conditions[0] += "#{(conditions[0].blank? ? '' : ' AND ') + options[:date_column_name].to_s} >= ?"
-          conditions << begin_at
+          conditions = setup_conditions(begin_at, options[:date_column_name], options[:conditions])
           @klass.send(options[:aggregation],
             options[:value_column_name].to_s,
             :conditions => conditions,
@@ -40,6 +38,20 @@ module Kvlr #:nodoc:
       end
 
       private
+
+        def setup_conditions(begin_at, date_column_name, custom_conditions = [])
+          conditions = ['']
+          if custom_conditions.is_a?(Hash)
+            conditions = [
+              custom_conditions.map{ |k, v| "#{k.to_s} = ?" }.join(' AND '),
+              *custom_conditions.map{ |k, v| v }
+            ]
+          elsif custom_conditions.size > 0
+            conditions = [(custom_conditions[0] || ''), *custom_conditions[1..-1]]
+          end
+          conditions[0] += "#{(conditions[0].blank? ? '' : ' AND ') + date_column_name.to_s} >= ?"
+          conditions << begin_at
+        end
 
         def ensure_valid_options(options)
           options.each_key do |k|

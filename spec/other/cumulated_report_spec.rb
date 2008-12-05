@@ -6,7 +6,7 @@ describe Kvlr::ReportsAsSparkline::CumulatedReport do
     @report = Kvlr::ReportsAsSparkline::CumulatedReport.new(User, :cumulated_registrations)
   end
 
-  describe '#run' do
+  describe '.run' do
 
     describe do
 

@@ -4,8 +4,9 @@ module Kvlr #:nodoc:
 
     class ReportCache < ActiveRecord::Base
 
-      def self.cached_transaction(report, limit, &block)
+      def self.cached_transaction(report, limit, no_cache = false, &block)
         raise ArgumentError.new('A block must be given') unless block_given?
+        return yield(report.grouping.first_reporting_period(limit)) if no_cache
         self.transaction do
           cached_data = self.find(
             :all,

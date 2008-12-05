@@ -11,7 +11,7 @@ module Kvlr #:nodoc:
         @klass             = klass
         @name              = name
         @date_column_name  = (options[:date_column_name] || 'created_at').to_s
-        @value_column_name = (options[:value_column_name] || (options[:aggregation] != :sum ? 'id' : @name)).to_s
+        @value_column_name = (options[:value_column_name] || (options[:aggregation] != :sum ? 'id' : name)).to_s
         @aggregation       = options[:aggregation] || :count
         @grouping          = Grouping.new(options[:grouping] || :day)
         @options = {
@@ -19,13 +19,12 @@ module Kvlr #:nodoc:
           :conditions        => options[:conditions] || ['']
         }
         @options.merge!(options)
-        @options[:conditions][0].freeze
       end
 
       def run(options = {})
         ensure_valid_options(options)
-        options = @options.merge(options)
-        ReportCache.cached_transaction(self, options[:limit]) do |begin_at|
+        ReportCache.cached_transaction(self, options, options.key?(:conditions)) do |begin_at|
+          options = @options.merge(options)
           conditions = setup_conditions(begin_at, options[:conditions])
           @klass.send(@aggregation,
             @value_column_name,
@@ -52,7 +51,7 @@ module Kvlr #:nodoc:
           conditions << begin_at
         end
 
-        def ensure_valid_options(options)
+        def ensure_valid_options(options, context = :initialize)
           options.each_key do |k|
             raise ArgumentError.new("Invalid option #{k}") unless [:limit, :aggregation, :grouping, :date_column_name, :value_column_name, :conditions].include?(k)
           end

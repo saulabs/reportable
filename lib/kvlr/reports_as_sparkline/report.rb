@@ -16,16 +16,24 @@ module Kvlr #:nodoc:
         @grouping          = Grouping.new(options[:grouping] || :day)
         @options = {
           :limit             => options[:limit] || 100,
-          :conditions        => options[:conditions] || ['']
+          :conditions        => options[:conditions] || []
         }
         @options.merge!(options)
       end
 
       def run(options = {})
         ensure_valid_options(options)
-        ReportCache.cached_transaction(self, options, options.key?(:conditions)) do |begin_at|
-          options = @options.merge(options)
-          conditions = setup_conditions(begin_at, options[:conditions])
+        custom_conditions = options.key?(:conditions)
+        options.reverse_merge!(@options)
+        ReportCache.cached_transaction(self, options[:limit], custom_conditions) do |begin_at|
+          read_data(begin_at, options[:conditions])
+        end
+      end
+
+      private
+
+        def read_data(begin_at, conditions = [])
+          conditions = setup_conditions(begin_at, conditions)
           @klass.send(@aggregation,
             @value_column_name,
             :conditions => conditions,
@@ -33,17 +41,11 @@ module Kvlr #:nodoc:
             :order => "#{@grouping.to_sql(@date_column_name)} DESC"
           )
         end
-      end
-
-      private
 
         def setup_conditions(begin_at, custom_conditions = [])
           conditions = ['']
           if custom_conditions.is_a?(Hash)
-            conditions = [
-              custom_conditions.map{ |k, v| "#{k.to_s} = ?" }.join(' AND '),
-              *custom_conditions.map{ |k, v| v }
-            ]
+            conditions = [custom_conditions.map{ |k, v| "#{k.to_s} = ?" }.join(' AND '), *custom_conditions.map{ |k, v| v }]
           elsif custom_conditions.size > 0
             conditions = [(custom_conditions[0] || ''), *custom_conditions[1..-1]]
           end
@@ -63,8 +65,8 @@ module Kvlr #:nodoc:
           if options[:grouping] && !allowed_groupings.include?(options[:grouping])
             raise ArgumentError.new("Invalid grouping #{options[:grouping]}; use one of #{allowed_groupings.join(', ')}")
           end
-          if options[:conditions] && !options[:conditions].is_a?(Array)
-            raise ArgumentError.new("Invalid conditions: conditions must be specified as an array like ['user_name = ?', 'username']")
+          if options[:conditions] && !options[:conditions].is_a?(Array) && !options[:conditions].is_a?(Hash)
+            raise ArgumentError.new("Invalid conditions: conditions must be specified as an Array or a Hash")
           end
         end
 

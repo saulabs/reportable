@@ -6,58 +6,23 @@ describe Kvlr::ReportsAsSparkline::Report do
     @report = Kvlr::ReportsAsSparkline::Report.new(User, :registrations)
   end
 
-  share_as :OptionValidation do
-
-    it 'should not raise an error if valid options are specified' do
-      lambda { @report.send(:ensure_valid_options, {
-        :limit             => 100,
-        :aggregation       => :count,
-        :grouping          => :day,
-        :date_column_name  => 'created_at',
-        :value_column_name => 'id',
-        :conditions        => []
-      }) }.should_not raise_error(ArgumentError)
-    end
-
-    it 'should raise an error if an unsupported option is specified' do
-      lambda { @report.send(:ensure_valid_options, { :invalid => :option }) }.should raise_error(ArgumentError)
-    end
-
-    it 'should raise an error if an invalid aggregation is specified' do
-      lambda { @report.send(:ensure_valid_options, { :aggregation => :invalid }) }.should raise_error(ArgumentError)
-    end
-
-    it 'should raise an error if an invalid grouping is specified' do
-      lambda { @report.send(:ensure_valid_options, { :aggregation => :invalid }) }.should raise_error(ArgumentError)
-    end
-
-    it 'should raise an error if malformed conditions are specified' do
-      lambda { @report.send(:ensure_valid_options, { :conditions => 1 }) }.should raise_error(ArgumentError)
-      lambda { @report.send(:ensure_valid_options, { :conditions => { :user_name => 'username' } }) }.should raise_error(ArgumentError)
-    end
-
-  end
-
   describe '.run' do
 
-    include OptionValidation
-
-    it 'should invoke the default aggregation method on the model' do
-      User.should_receive(:count).once.and_return([])
+    it 'should run a cached transaction' do
+      Kvlr::ReportsAsSparkline::ReportCache.should_receive(:cached_transaction).once.with(@report, 100, false)
 
       @report.run
     end
 
-    it 'should invoke the custom aggregation method on the model if one is specified' do
-      @report = Kvlr::ReportsAsSparkline::Report.new(User, :registrations, :aggregation => :sum)
-      User.should_receive(:sum).once.and_return([])
+    it 'should run a cached transaction but specify no_cache when custom conditions are given' do
+      Kvlr::ReportsAsSparkline::ReportCache.should_receive(:cached_transaction).once.with(@report, 100, true)
 
-      @report.run
+      @report.run(:conditions => { :some => :condition })
     end
 
     describe do
 
-      before do
+      before(:all) do
         User.create!(:login => 'test 1', :created_at => Time.now - 1.week,  :profile_visits => 1)
         User.create!(:login => 'test 2', :created_at => Time.now - 2.weeks, :profile_visits => 2)
         User.create!(:login => 'test 3', :created_at => Time.now - 2.weeks, :profile_visits => 3)
@@ -91,11 +56,21 @@ describe Kvlr::ReportsAsSparkline::Report do
         result[1][1].should == 1
       end
 
-      after do
+      after(:all) do
         User.destroy_all
         Kvlr::ReportsAsSparkline::ReportCache.destroy_all
       end
 
+    end
+
+  end
+
+  describe '.read_data' do
+
+    it 'should invoke the aggregation method on the model' do
+      User.should_receive(:count).once.and_return([])
+
+      @report.send(:read_data, Time.now)
     end
 
   end
@@ -144,6 +119,37 @@ describe Kvlr::ReportsAsSparkline::Report do
         'last name',
         begin_at
       ]
+    end
+
+  end
+
+  describe '.ensure_valid_options' do
+
+    it 'should not raise an error if valid options are specified' do
+      lambda { @report.send(:ensure_valid_options, {
+        :limit             => 100,
+        :aggregation       => :count,
+        :grouping          => :day,
+        :date_column_name  => 'created_at',
+        :value_column_name => 'id',
+        :conditions        => []
+      }) }.should_not raise_error(ArgumentError)
+    end
+
+    it 'should raise an error if an unsupported option is specified' do
+      lambda { @report.send(:ensure_valid_options, { :invalid => :option }) }.should raise_error(ArgumentError)
+    end
+
+    it 'should raise an error if an invalid aggregation is specified' do
+      lambda { @report.send(:ensure_valid_options, { :aggregation => :invalid }) }.should raise_error(ArgumentError)
+    end
+
+    it 'should raise an error if an invalid grouping is specified' do
+      lambda { @report.send(:ensure_valid_options, { :aggregation => :invalid }) }.should raise_error(ArgumentError)
+    end
+
+    it 'should raise an error if malformed conditions are specified' do
+      lambda { @report.send(:ensure_valid_options, { :conditions => 1 }) }.should raise_error(ArgumentError)
     end
 
   end

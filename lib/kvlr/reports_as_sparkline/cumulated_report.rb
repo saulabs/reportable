@@ -5,12 +5,12 @@ module Kvlr #:nodoc:
     class CumulatedReport < Report
 
       def run(options = {})
-        CumulatedReport.cumulate!(super)
+        cumulate(super)
       end
 
       protected
 
-        def self.cumulate!(data)
+        def cumulate(data)
           acc = 0
           data.collect do |element|
             acc += element[1].to_i

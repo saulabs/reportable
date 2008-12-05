@@ -54,16 +54,17 @@ module Kvlr #:nodoc:
         end
 
         def ensure_valid_options(options, context = :initialize)
-          options.each_key do |k|
-            raise ArgumentError.new("Invalid option #{k}") unless [:limit, :aggregation, :grouping, :date_column_name, :value_column_name, :conditions].include?(k)
-          end
-          allowed_aggregations = [:count, :sum]
-          if options[:aggregation] && !allowed_aggregations.include?(options[:aggregation])
-            raise ArgumentError.new("Invalid aggregation #{options[:aggregation]}; use either #{allowed_aggregations.map(&:to_s).join(' or ')}")
-          end
-          allowed_groupings = [:hour, :day, :month, :year]
-          if options[:grouping] && !allowed_groupings.include?(options[:grouping])
-            raise ArgumentError.new("Invalid grouping #{options[:grouping]}; use one of #{allowed_groupings.join(', ')}")
+          case context
+            when :initialize
+              options.each_key do |k|
+                raise ArgumentError.new("Invalid option #{k}") unless [:limit, :aggregation, :grouping, :date_column_name, :value_column_name, :conditions].include?(k)
+              end
+              raise ArgumentError.new("Invalid aggregation #{options[:aggregation]}") if options[:aggregation] && ![:count, :sum].include?(options[:aggregation])
+              raise ArgumentError.new("Invalid grouping #{options[:grouping]}") if options[:grouping] && ![:hour, :day, :week, :month].include?(options[:grouping])
+            when :run
+              options.each_key do |k|
+                raise ArgumentError.new("Invalid option #{k}") unless [:limit, :conditions].include?(k)
+              end
           end
           if options[:conditions] && !options[:conditions].is_a?(Array) && !options[:conditions].is_a?(Hash)
             raise ArgumentError.new("Invalid conditions: conditions must be specified as an Array or a Hash")

@@ -125,33 +125,63 @@ describe Kvlr::ReportsAsSparkline::Report do
 
   describe '.ensure_valid_options' do
 
-    it 'should not raise an error if valid options are specified' do
-      lambda { @report.send(:ensure_valid_options, {
-        :limit             => 100,
-        :aggregation       => :count,
-        :grouping          => :day,
-        :date_column_name  => 'created_at',
-        :value_column_name => 'id',
-        :conditions        => []
-      }) }.should_not raise_error(ArgumentError)
-    end
-
-    it 'should raise an error if an unsupported option is specified' do
-      lambda { @report.send(:ensure_valid_options, { :invalid => :option }) }.should raise_error(ArgumentError)
-    end
-
-    it 'should raise an error if an invalid aggregation is specified' do
-      lambda { @report.send(:ensure_valid_options, { :aggregation => :invalid }) }.should raise_error(ArgumentError)
-    end
-
-    it 'should raise an error if an invalid grouping is specified' do
-      lambda { @report.send(:ensure_valid_options, { :aggregation => :invalid }) }.should raise_error(ArgumentError)
-    end
-
     it 'should raise an error if malformed conditions are specified' do
       lambda { @report.send(:ensure_valid_options, { :conditions => 1 }) }.should raise_error(ArgumentError)
     end
 
+    it 'should not raise an error if conditions are specified as an Array' do
+      lambda { @report.send(:ensure_valid_options, { :conditions => ['first_name = ?', 'first name'] }) }.should_not raise_error(ArgumentError)
+    end
+
+    it 'should not raise an error if conditions are specified as a Hash' do
+      lambda { @report.send(:ensure_valid_options, { :conditions => { :first_name => 'first name' } }) }.should_not raise_error(ArgumentError)
+    end
+
+    describe 'for context :initialize' do
+
+      it 'should not raise an error if valid options are specified' do
+        lambda { @report.send(:ensure_valid_options, {
+            :limit             => 100,
+            :aggregation       => :count,
+            :grouping          => :day,
+            :date_column_name  => 'created_at',
+            :value_column_name => 'id',
+            :conditions        => []
+          })
+        }.should_not raise_error(ArgumentError)
+      end
+      
+      it 'should raise an error if an unsupported option is specified' do
+        lambda { @report.send(:ensure_valid_options, { :invalid => :option }) }.should raise_error(ArgumentError)
+      end
+      
+      it 'should raise an error if an invalid aggregation is specified' do
+        lambda { @report.send(:ensure_valid_options, { :aggregation => :invalid }) }.should raise_error(ArgumentError)
+      end
+      
+      it 'should raise an error if an invalid grouping is specified' do
+        lambda { @report.send(:ensure_valid_options, { :grouping => :decade }) }.should raise_error(ArgumentError)
+      end
+
+    end
+
+    describe 'for context :run' do
+
+      it 'should not raise an error if valid options are specified' do
+        lambda { @report.send(:ensure_valid_options, {
+            :limit      => 100,
+            :conditions => []
+          },
+          :run)
+        }.should_not raise_error(ArgumentError)
+      end
+      
+      it 'should raise an error if an unsupported option is specified' do
+        lambda { @report.send(:ensure_valid_options, { :aggregation => :sum }, :run) }.should raise_error(ArgumentError)
+      end
+
+    end
+  
   end
 
 end

@@ -29,20 +29,6 @@ module Kvlr #:nodoc:
         end
       end
 
-      def next_reporting_period(period)
-        return case @identifier
-          when :day
-            period + 1.day
-          when :week
-            period + 1.week
-          when :month
-            period += 1.month
-            Date.new(period.year, period.month, 1)
-          when :hour
-            period + 1.hour
-        end
-      end
-
       def first_reporting_period(limit)
         return case @identifier
           when :day

@@ -30,13 +30,13 @@ module Kvlr #:nodoc:
       #   report_as_sparkline :rake, :operation => :sum
       # end
       def report_as_sparkline(name, options = {})
-        if options.delete(:cumulate)
-          report = Kvlr::ReportsAsSparkline::CumulatedReport.new(self, name, options)
-        else
-          report = Kvlr::ReportsAsSparkline::Report.new(self, name, options)
-        end
         (class << self; self; end).instance_eval do
           define_method "#{name.to_s}_report".to_sym do |*args|
+            if options.delete(:cumulate)
+              report = Kvlr::ReportsAsSparkline::CumulatedReport.new(self, name, options)
+            else
+              report = Kvlr::ReportsAsSparkline::Report.new(self, name, options)
+            end
             raise ArgumentError.new unless args.length == 0 || (args.length == 1 && args[0].is_a?(Hash))
             report.run(args.length == 0 ? {} : args[0])
           end

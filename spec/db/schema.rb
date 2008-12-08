@@ -3,6 +3,7 @@ ActiveRecord::Schema.define(:version => 1) do
   create_table :users, :force => true do |t|
     t.string  :login,          :null => false
     t.integer :profile_visits, :null => false, :default => 0
+    t.string  :type,           :null => false, :default => 'User'
 
     t.timestamps
   end

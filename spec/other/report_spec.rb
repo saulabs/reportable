@@ -28,8 +28,8 @@ describe Kvlr::ReportsAsSparkline::Report do
         User.create!(:login => 'test 3', :created_at => Time.now - 2.weeks, :profile_visits => 3)
       end
 
-      it 'should validate the specified options' do
-        @report.should_receive(:ensure_valid_options).once.with(:limit => 3)
+      it 'should validate the specified options for the :run context' do
+        @report.should_receive(:ensure_valid_options).once.with({ :limit => 3 }, :run)
 
         result = @report.run(:limit => 3)
       end
@@ -168,11 +168,7 @@ describe Kvlr::ReportsAsSparkline::Report do
     describe 'for context :run' do
 
       it 'should not raise an error if valid options are specified' do
-        lambda { @report.send(:ensure_valid_options, {
-            :limit      => 100,
-            :conditions => []
-          },
-          :run)
+        lambda { @report.send(:ensure_valid_options, { :limit => 100, :conditions => [] }, :run)
         }.should_not raise_error(ArgumentError)
       end
       

@@ -22,7 +22,7 @@ module Kvlr #:nodoc:
       end
 
       def run(options = {})
-        ensure_valid_options(options)
+        ensure_valid_options(options, :run)
         custom_conditions = options.key?(:conditions)
         options.reverse_merge!(@options)
         ReportCache.cached_transaction(self, options[:limit], custom_conditions) do |begin_at|
@@ -66,9 +66,7 @@ module Kvlr #:nodoc:
                 raise ArgumentError.new("Invalid option #{k}") unless [:limit, :conditions].include?(k)
               end
           end
-          if options[:conditions] && !options[:conditions].is_a?(Array) && !options[:conditions].is_a?(Hash)
-            raise ArgumentError.new("Invalid conditions: conditions must be specified as an Array or a Hash")
-          end
+          raise ArgumentError.new("Invalid conditions: #{options[:conditions].inspect}") if options[:conditions] && !options[:conditions].is_a?(Array) && !options[:conditions].is_a?(Hash)
         end
 
     end

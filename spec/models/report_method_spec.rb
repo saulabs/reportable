@@ -15,7 +15,7 @@ describe Kvlr::ReportsAsSparkline do
     end
 
     it 'should not raise an error when called with a hash' do
-      lambda { User.registrations_report({ :aggregation => :sum }) }.should_not raise_error(ArgumentError)
+      lambda { User.registrations_report({ :limit => 1 }) }.should_not raise_error(ArgumentError)
     end
 
     it 'should not raise an error when called without a parameter' do
@@ -24,8 +24,41 @@ describe Kvlr::ReportsAsSparkline do
 
   end
 
+  describe 'for inherited models' do
+
+    before(:all) do
+      User.create!(:login => 'test 1', :created_at => Time.now - 1.week,  :profile_visits => 1)
+      User.create!(:login => 'test 2', :created_at => Time.now - 2.weeks, :profile_visits => 2)
+      SpecialUser.create!(:login => 'test 3', :created_at => Time.now - 2.weeks, :profile_visits => 3)
+    end
+
+    it 'should include all data when invoked on the base model class' do
+      result = User.registrations_report.to_a
+
+      result.length.should == 2
+      result[0][1].should  == 1
+      result[1][1].should  == 2
+    end
+
+    it 'should include all data when invoked on the base model class' do
+      result = SpecialUser.registrations_report.to_a
+
+      result.length.should == 1
+      result[0][1].should  == 1
+    end
+
+    after(:all) do
+      User.destroy_all
+      SpecialUser.destroy_all
+      Kvlr::ReportsAsSparkline::ReportCache.destroy_all
+    end
+
+  end
+
 end
 
 class User < ActiveRecord::Base
-  report_as_sparkline :registrations
+  report_as_sparkline :registrations, :cumulate => true
 end
+
+class SpecialUser < User; end

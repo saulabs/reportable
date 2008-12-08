@@ -11,10 +11,10 @@ Spec::Rake::SpecTask.new(:spec) do |t|
   t.spec_files = FileList['spec/**/*_spec.rb']
 end
 
-desc 'Generate documentation for the reports_as_sparkline plugin.'
+desc 'Generate documentation for the ReportsAsSparkline plugin.'
 Rake::RDocTask.new(:rdoc) do |rdoc|
   rdoc.rdoc_dir = 'rdoc'
-  rdoc.title    = 'reports_as_sparkline'
+  rdoc.title    = 'ReportsAsSparkline'
   rdoc.options << '--line-numbers' << '--inline-source'
   rdoc.rdoc_files.include('README.rdoc')
   rdoc.rdoc_files.include('lib/**/*.rb')

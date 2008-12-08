@@ -98,4 +98,7 @@ describe Kvlr::ReportsAsSparkline::ReportCache do
 
   end
 
+  describe '#update_cache' do
+  end
+
 end

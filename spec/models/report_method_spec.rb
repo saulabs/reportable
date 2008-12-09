@@ -35,30 +35,33 @@ describe Kvlr::ReportsAsSparkline do
     it 'should include all data when invoked on the base model class' do
       result = User.registrations_report.to_a
 
-      result.length.should == 2
-      result[0][1].should  == 1
-      result[1][1].should  == 2
+      result.length.should == 20
+      result[7][1].should  == 1
+      result[14][1].should  == 2
     end
 
     it 'should include all data when invoked on the base model class' do
       result = SpecialUser.registrations_report.to_a
 
-      result.length.should == 1
-      result[0][1].should  == 1
+      result.length.should == 20
+      result[14][1].should  == 1
     end
 
     after(:all) do
       User.destroy_all
       SpecialUser.destroy_all
-      Kvlr::ReportsAsSparkline::ReportCache.destroy_all
     end
 
+  end
+
+  after do
+    Kvlr::ReportsAsSparkline::ReportCache.destroy_all
   end
 
 end
 
 class User < ActiveRecord::Base
-  report_as_sparkline :registrations, :cumulate => true
+  report_as_sparkline :registrations, :cumulate => true, :limit => 20
 end
 
 class SpecialUser < User; end

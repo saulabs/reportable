@@ -34,30 +34,42 @@ describe Kvlr::ReportsAsSparkline::Report do
         result = @report.run(:limit => 3)
       end
 
-      it 'should return correct data for :aggregation => :count' do
+      it 'should return correct data for :aggregation => :count and grouping :day' do
+        @report = Kvlr::ReportsAsSparkline::Report.new(User, :registrations, :aggregation => :count, :grouping => :day)
         result = @report.run.to_a
 
-        result[0][1].should == 1
-        result[1][1].should == 2
+        result[7][1].should == 1
+        result[14][1].should == 2
+      end
+
+      it 'should return correct data for :aggregation => :count and grouping :week' do
+        @report = Kvlr::ReportsAsSparkline::Report.new(User, :registrations, :aggregation => :count, :grouping => :week)
+        result = @report.run.to_a
+
+        result[1][1].should == 1
+        result[2][1].should == 2
       end
 
       it 'should return correct data for :aggregation => :sum' do
         @report = Kvlr::ReportsAsSparkline::Report.new(User, :registrations, :aggregation => :sum, :value_column_name => :profile_visits)
         result = @report.run().to_a
 
-        result[0][1].should == 1
-        result[1][1].should == 5
+        result[7][1].should == 1
+        result[14][1].should == 5
       end
 
       it 'should return correct data with custom conditions' do
         result = @report.run(:conditions => ['login IN (?)', ['test 1', 'test 2']]).to_a
 
-        result[0][1].should == 1
-        result[1][1].should == 1
+        result[7][1].should == 1
+        result[14][1].should == 1
       end
 
       after(:all) do
         User.destroy_all
+      end
+
+      after do
         Kvlr::ReportsAsSparkline::ReportCache.destroy_all
       end
 

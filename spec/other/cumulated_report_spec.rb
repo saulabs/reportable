@@ -23,27 +23,30 @@ describe Kvlr::ReportsAsSparkline::CumulatedReport do
     it 'should return correct data for :aggregation => :count' do
       result = @report.run.to_a
 
-      result[0][1].should == 1
-      result[1][1].should == 3
+      result[7][1].should == 1
+      result[14][1].should == 3
     end
 
     it 'should return correct data for :aggregation => :sum' do
       @report = Kvlr::ReportsAsSparkline::CumulatedReport.new(User, :registrations, :aggregation => :sum, :value_column_name => :profile_visits)
       result = @report.run().to_a
 
-      result[0][1].should == 1
-      result[1][1].should == 6
+      result[7][1].should == 1
+      result[14][1].should == 6
     end
 
     it 'should return correct data with custom conditions' do
       result = @report.run(:conditions => ['login IN (?)', ['test 1', 'test 2']]).to_a
 
-      result[0][1].should == 1
-      result[1][1].should == 2
+      result[7][1].should == 1
+      result[14][1].should == 2
     end
 
     after(:all) do
       User.destroy_all
+    end
+
+    after do
       Kvlr::ReportsAsSparkline::ReportCache.destroy_all
     end
 

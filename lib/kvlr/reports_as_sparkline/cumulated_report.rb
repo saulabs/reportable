@@ -11,11 +11,13 @@ module Kvlr #:nodoc:
       protected
 
         def cumulate(data)
-          acc = 0
-          data.collect do |element|
-            acc += element[1].to_i
-            [element[0], acc]
+          acc = 0.0
+          result = []
+          data.reverse_each do |element|
+            acc += element[1].to_f
+            result << [element[0], acc]
           end
+          result.reverse
         end
 
     end

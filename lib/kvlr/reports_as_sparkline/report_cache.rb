@@ -6,7 +6,7 @@ module Kvlr #:nodoc:
 
       serialize :reporting_period, Kvlr::ReportsAsSparkline::ReportingPeriod
 
-      def self.cached_transaction(report, limit, no_cache = false, &block)
+      def self.process(report, limit, no_cache = false, &block)
         raise ArgumentError.new('A block must be given') unless block_given?
         self.transaction do
           cached_data = if no_cache

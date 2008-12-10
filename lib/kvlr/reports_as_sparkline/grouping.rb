@@ -14,11 +14,26 @@ module Kvlr #:nodoc:
       end
 
       def date_parts_from_db_string(db_string)
-        parts = db_string.split('/').map(&:to_i)
-        if @identifier == :week
-          parts[1] += 1
+        if ActiveRecord::Base.connection.class.to_s == 'ActiveRecord::ConnectionAdapters::PostgreSQLAdapter'
+          if @identifier == :hour
+            return (db_string[0..9].split('-') + db_string[11..12]).map(&:to_i)
+          elsif @identifier == :day
+            return db_string[0..9].split('-').map(&:to_i)
+          elsif @identifier == :week
+            parts = db_string[0..9].split('-').map(&:to_i)
+            date = Date.new(parts[0], parts[1], parts[2])
+            return [date.year, date.cweek]
+          elsif @identifier == :month
+            return db_string[0..6].split('-')[0..1].map(&:to_i)
+          end
+        else
+          parts = db_string.split('/').map(&:to_i)
+          return parts if ActiveRecord::Base.connection.class.to_s == 'ActiveRecord::ConnectionAdapters::MysqlAdapter'
+          if @identifier == :week
+            parts[1] += 1
+          end
+          parts
         end
-        parts
       end
 
       def to_sql(date_column_name)

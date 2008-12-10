@@ -25,7 +25,7 @@ module Kvlr #:nodoc:
         ensure_valid_options(options, :run)
         custom_conditions = options.key?(:conditions)
         options.reverse_merge!(@options)
-        ReportCache.cached_transaction(self, options[:limit], custom_conditions) do |begin_at|
+        ReportCache.process(self, options[:limit], custom_conditions) do |begin_at|
           read_data(begin_at, options[:conditions])
         end
       end

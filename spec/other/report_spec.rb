@@ -8,69 +8,82 @@ describe Kvlr::ReportsAsSparkline::Report do
 
   describe '.run' do
 
-    it 'should run a cached transaction' do
-      Kvlr::ReportsAsSparkline::ReportCache.should_receive(:cached_transaction).once.with(@report, 100, false)
+    it 'should process the data with the report cache' do
+      Kvlr::ReportsAsSparkline::ReportCache.should_receive(:process).once.with(@report, 100, false)
 
       @report.run
     end
 
-    it 'should run a cached transaction but specify no_cache when custom conditions are given' do
-      Kvlr::ReportsAsSparkline::ReportCache.should_receive(:cached_transaction).once.with(@report, 100, true)
+    it 'should process the data with the report cache and specify no_cache when custom conditions are given' do
+      Kvlr::ReportsAsSparkline::ReportCache.should_receive(:process).once.with(@report, 100, true)
 
       @report.run(:conditions => { :some => :condition })
     end
 
-    describe do
+    it 'should validate the specified options for the :run context' do
+      @report.should_receive(:ensure_valid_options).once.with({ :limit => 3 }, :run)
 
-      before(:all) do
-        User.create!(:login => 'test 1', :created_at => Time.now - 1.week,  :profile_visits => 1)
-        User.create!(:login => 'test 2', :created_at => Time.now - 2.weeks, :profile_visits => 2)
-        User.create!(:login => 'test 3', :created_at => Time.now - 2.weeks, :profile_visits => 3)
-      end
+      result = @report.run(:limit => 3)
+    end
 
-      it 'should validate the specified options for the :run context' do
-        @report.should_receive(:ensure_valid_options).once.with({ :limit => 3 }, :run)
+    for grouping in [:hour, :day, :week, :month] do
 
-        result = @report.run(:limit => 3)
-      end
+      describe "for grouping #{grouping.to_s}" do
 
-      it 'should return correct data for :aggregation => :count and grouping :day' do
-        @report = Kvlr::ReportsAsSparkline::Report.new(User, :registrations, :aggregation => :count, :grouping => :day)
-        result = @report.run.to_a
+        before(:all) do
+          User.create!(:login => 'test 1', :created_at => Time.now - 1.send(grouping), :profile_visits => 1)
+          User.create!(:login => 'test 2', :created_at => Time.now - 3.send(grouping), :profile_visits => 2)
+          User.create!(:login => 'test 3', :created_at => Time.now - 3.send(grouping), :profile_visits => 3)
+        end
 
-        result[7][1].should == 1
-        result[14][1].should == 2
-      end
+        it 'should return correct data for :aggregation => :count' do
+          @report = Kvlr::ReportsAsSparkline::Report.new(User, :registrations, :aggregation => :count, :grouping => grouping)
+          result = @report.run.to_a
 
-      it 'should return correct data for :aggregation => :count and grouping :week' do
-        @report = Kvlr::ReportsAsSparkline::Report.new(User, :registrations, :aggregation => :count, :grouping => :week)
-        result = @report.run.to_a
+          result[0][1].should == 0
+          result[1][1].should == 1
+          result[2][1].should == 0
+          result[3][1].should == 2
+        end
 
-        result[1][1].should == 1
-        result[2][1].should == 2
-      end
+        it 'should return correct data for :aggregation => :sum' do
+          @report = Kvlr::ReportsAsSparkline::Report.new(User, :registrations, :aggregation => :sum, :grouping => grouping, :value_column_name => :profile_visits)
+          result = @report.run().to_a
 
-      it 'should return correct data for :aggregation => :sum' do
-        @report = Kvlr::ReportsAsSparkline::Report.new(User, :registrations, :aggregation => :sum, :value_column_name => :profile_visits)
-        result = @report.run().to_a
+          result[0][1].should == 0
+          result[1][1].should == 1
+          result[2][1].should == 0
+          result[3][1].should == 5
+        end
 
-        result[7][1].should == 1
-        result[14][1].should == 5
-      end
+        it 'should return correct data with custom conditions for :aggregation => :count' do
+          @report = Kvlr::ReportsAsSparkline::Report.new(User, :registrations, :aggregation => :count, :grouping => grouping)
+          result = @report.run(:conditions => ['login IN (?)', ['test 1', 'test 2']]).to_a
 
-      it 'should return correct data with custom conditions' do
-        result = @report.run(:conditions => ['login IN (?)', ['test 1', 'test 2']]).to_a
+          result[0][1].should == 0
+          result[1][1].should == 1
+          result[2][1].should == 0
+          result[3][1].should == 1
+        end
 
-        result[7][1].should == 1
-        result[14][1].should == 1
-      end
+        it 'should return correct data with custom conditions for :aggregation => :sum' do
+          @report = Kvlr::ReportsAsSparkline::Report.new(User, :registrations, :aggregation => :sum, :grouping => grouping, :value_column_name => :profile_visits)
+          result = @report.run(:conditions => ['login IN (?)', ['test 1', 'test 2']]).to_a
 
-      after(:all) do
-        User.destroy_all
-      end
+          result[0][1].should == 0
+          result[1][1].should == 1
+          result[2][1].should == 0
+          result[3][1].should == 2
+        end
 
-      after do
-        Kvlr::ReportsAsSparkline::ReportCache.destroy_all
+        after(:all) do
+          User.destroy_all
+        end
+
+        after(:each) do
+          Kvlr::ReportsAsSparkline::ReportCache.destroy_all
+        end
+
       end
 
     end
@@ -80,7 +93,14 @@ describe Kvlr::ReportsAsSparkline::Report do
   describe '.read_data' do
 
     it 'should invoke the aggregation method on the model' do
+      @report = Kvlr::ReportsAsSparkline::Report.new(User, :registrations, :aggregation => :count)
       User.should_receive(:count).once.and_return([])
+
+      @report.send(:read_data, Time.now)
+    end
+
+    it 'should build the conditions' do
+      @report.should_receive(:setup_conditions).once.and_return([])
 
       @report.send(:read_data, Time.now)
     end

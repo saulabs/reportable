@@ -2,7 +2,7 @@ require File.join(File.dirname(__FILE__), '..', 'spec_helper')
 
 describe Kvlr::ReportsAsSparkline::ReportCache do
 
-  describe '#cached_transaction' do
+  describe '#process' do
 
     before do
       @report = Kvlr::ReportsAsSparkline::Report.new(User, :registrations)
@@ -12,19 +12,19 @@ describe Kvlr::ReportsAsSparkline::ReportCache do
 
     it 'should raise an ArgumentError if no block is given' do
       lambda do
-        Kvlr::ReportsAsSparkline::ReportCache.cached_transaction(@report, 100)
+        Kvlr::ReportsAsSparkline::ReportCache.process(@report, 100)
       end.should raise_error(ArgumentError)
     end
 
     it 'sould start a transaction' do
       Kvlr::ReportsAsSparkline::ReportCache.should_receive(:transaction)
 
-      Kvlr::ReportsAsSparkline::ReportCache.cached_transaction(@report, 100) {}
+      Kvlr::ReportsAsSparkline::ReportCache.process(@report, 100) {}
     end
 
     it 'should yield to the given block' do
       lambda {
-        Kvlr::ReportsAsSparkline::ReportCache.cached_transaction(@report, 100) { raise YieldMatchException.new }
+        Kvlr::ReportsAsSparkline::ReportCache.process(@report, 100) { raise YieldMatchException.new }
       }.should raise_error(YieldMatchException)
     end
 
@@ -41,17 +41,17 @@ describe Kvlr::ReportsAsSparkline::ReportCache do
         :order => "reporting_period DESC"
       )
 
-      Kvlr::ReportsAsSparkline::ReportCache.cached_transaction(@report, 100) { [] }
+      Kvlr::ReportsAsSparkline::ReportCache.process(@report, 100) { [] }
     end
 
     it 'should update the cache' do
       Kvlr::ReportsAsSparkline::ReportCache.should_receive(:update_cache)
 
-      Kvlr::ReportsAsSparkline::ReportCache.cached_transaction(@report, 100) { [] }
+      Kvlr::ReportsAsSparkline::ReportCache.process(@report, 100) { [] }
     end
 
     it 'should yield the first reporting period if the cache is empty' do
-      Kvlr::ReportsAsSparkline::ReportCache.cached_transaction(@report, 100) do |begin_at|
+      Kvlr::ReportsAsSparkline::ReportCache.process(@report, 100) do |begin_at|
         begin_at.should == Kvlr::ReportsAsSparkline::ReportingPeriod.first(@report.grouping, 100).date_time
         []
       end
@@ -69,7 +69,7 @@ describe Kvlr::ReportsAsSparkline::ReportCache do
       })
       Kvlr::ReportsAsSparkline::ReportCache.stub!(:find).and_return([cached])
 
-      Kvlr::ReportsAsSparkline::ReportCache.cached_transaction(@report, 100) do |begin_at|
+      Kvlr::ReportsAsSparkline::ReportCache.process(@report, 100) do |begin_at|
         begin_at.should == reporting_period.date_time
         []
       end
@@ -80,7 +80,7 @@ describe Kvlr::ReportsAsSparkline::ReportCache do
       it 'should not read any data from cache' do
         Kvlr::ReportsAsSparkline::ReportCache.should_not_receive(:find)
 
-        Kvlr::ReportsAsSparkline::ReportCache.cached_transaction(@report, 100, true) {}
+        Kvlr::ReportsAsSparkline::ReportCache.process(@report, 100, true) {}
       end
 
     end

@@ -37,7 +37,7 @@ describe Kvlr::ReportsAsSparkline::Report do
         end
 
         it 'should return correct data for :aggregation => :count' do
-          @report = Kvlr::ReportsAsSparkline::Report.new(User, :registrations, :aggregation => :count, :grouping => grouping)
+          @report = Kvlr::ReportsAsSparkline::Report.new(User, :registrations, :aggregation => :count, :grouping => grouping, :limit => 10)
           result = @report.run.to_a
 
           result[0][1].should == 0
@@ -47,7 +47,7 @@ describe Kvlr::ReportsAsSparkline::Report do
         end
 
         it 'should return correct data for :aggregation => :sum' do
-          @report = Kvlr::ReportsAsSparkline::Report.new(User, :registrations, :aggregation => :sum, :grouping => grouping, :value_column_name => :profile_visits)
+          @report = Kvlr::ReportsAsSparkline::Report.new(User, :registrations, :aggregation => :sum, :grouping => grouping, :value_column_name => :profile_visits, :limit => 10)
           result = @report.run().to_a
 
           result[0][1].should == 0
@@ -57,7 +57,7 @@ describe Kvlr::ReportsAsSparkline::Report do
         end
 
         it 'should return correct data with custom conditions for :aggregation => :count' do
-          @report = Kvlr::ReportsAsSparkline::Report.new(User, :registrations, :aggregation => :count, :grouping => grouping)
+          @report = Kvlr::ReportsAsSparkline::Report.new(User, :registrations, :aggregation => :count, :grouping => grouping, :limit => 10)
           result = @report.run(:conditions => ['login IN (?)', ['test 1', 'test 2']]).to_a
 
           result[0][1].should == 0
@@ -67,7 +67,7 @@ describe Kvlr::ReportsAsSparkline::Report do
         end
 
         it 'should return correct data with custom conditions for :aggregation => :sum' do
-          @report = Kvlr::ReportsAsSparkline::Report.new(User, :registrations, :aggregation => :sum, :grouping => grouping, :value_column_name => :profile_visits)
+          @report = Kvlr::ReportsAsSparkline::Report.new(User, :registrations, :aggregation => :sum, :grouping => grouping, :value_column_name => :profile_visits, :limit => 10)
           result = @report.run(:conditions => ['login IN (?)', ['test 1', 'test 2']]).to_a
 
           result[0][1].should == 0

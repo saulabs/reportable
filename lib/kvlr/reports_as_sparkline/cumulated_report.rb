@@ -17,7 +17,8 @@ module Kvlr #:nodoc:
             acc += element[1].to_f
             result << [element[0], acc]
           end
-          result.reverse
+          result.reverse!
+          result
         end
 
     end

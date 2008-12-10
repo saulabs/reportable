@@ -14,6 +14,12 @@ describe Kvlr::ReportsAsSparkline::CumulatedReport do
       @report.run
     end
 
+    it 'should return an array of the same length as the specified limit' do
+      @report = Kvlr::ReportsAsSparkline::CumulatedReport.new(User, :cumulated_registrations, :limit => 10)
+
+      @report.run.length.should == 10
+    end
+
     for grouping in [:hour, :day, :week, :month] do
 
       describe "for grouping #{grouping.to_s}" do
@@ -22,6 +28,24 @@ describe Kvlr::ReportsAsSparkline::CumulatedReport do
           User.create!(:login => 'test 1', :created_at => Time.now - 1.send(grouping), :profile_visits => 1)
           User.create!(:login => 'test 2', :created_at => Time.now - 3.send(grouping), :profile_visits => 2)
           User.create!(:login => 'test 3', :created_at => Time.now - 3.send(grouping), :profile_visits => 3)
+        end
+
+        describe do
+
+          before do
+            @grouping = Kvlr::ReportsAsSparkline::Grouping.new(grouping)
+            @report = Kvlr::ReportsAsSparkline::CumulatedReport.new(User, :cumulated_registrations, :grouping => grouping, :limit => 10)
+            @result = @report.run
+          end
+
+          it "should return data starting with the current reporting period" do
+            @result.first[0].should == Kvlr::ReportsAsSparkline::ReportingPeriod.new(@grouping).date_time
+          end
+
+          it "should return data ending with reporting period (Time.now - (limit - 1).#{grouping.to_s})" do
+            @result.last[0].should == Kvlr::ReportsAsSparkline::ReportingPeriod.new(@grouping, Time.now - 9.send(grouping)).date_time
+          end
+
         end
 
         it 'should return correct data for :aggregation => :count' do
@@ -36,7 +60,7 @@ describe Kvlr::ReportsAsSparkline::CumulatedReport do
 
         it 'should return correct data for :aggregation => :sum' do
           @report = Kvlr::ReportsAsSparkline::CumulatedReport.new(User, :registrations, :aggregation => :sum, :grouping => grouping, :value_column_name => :profile_visits, :limit => 10)
-          result = @report.run().to_a
+          result = @report.run()
 
           result[0][1].should == 6
           result[1][1].should == 6
@@ -46,7 +70,7 @@ describe Kvlr::ReportsAsSparkline::CumulatedReport do
 
         it 'should return correct data with custom conditions for :aggregation => :count' do
           @report = Kvlr::ReportsAsSparkline::CumulatedReport.new(User, :registrations, :aggregation => :count, :grouping => grouping, :limit => 10)
-          result = @report.run(:conditions => ['login IN (?)', ['test 1', 'test 2']]).to_a
+          result = @report.run(:conditions => ['login IN (?)', ['test 1', 'test 2']])
 
           result[0][1].should == 2
           result[1][1].should == 2
@@ -56,7 +80,7 @@ describe Kvlr::ReportsAsSparkline::CumulatedReport do
 
         it 'should return correct data with custom conditions for :aggregation => :sum' do
           @report = Kvlr::ReportsAsSparkline::CumulatedReport.new(User, :registrations, :aggregation => :sum, :grouping => grouping, :value_column_name => :profile_visits, :limit => 10)
-          result = @report.run(:conditions => ['login IN (?)', ['test 1', 'test 2']]).to_a
+          result = @report.run(:conditions => ['login IN (?)', ['test 1', 'test 2']])
 
           result[0][1].should == 3
           result[1][1].should == 3
@@ -68,10 +92,10 @@ describe Kvlr::ReportsAsSparkline::CumulatedReport do
           User.destroy_all
         end
 
-        after(:each) do
-          Kvlr::ReportsAsSparkline::ReportCache.destroy_all
-        end
+      end
 
+      after(:each) do
+        Kvlr::ReportsAsSparkline::ReportCache.destroy_all
       end
 
     end

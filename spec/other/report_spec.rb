@@ -195,6 +195,10 @@ describe Kvlr::ReportsAsSparkline::Report do
         lambda { @report.send(:ensure_valid_options, { :grouping => :decade }) }.should raise_error(ArgumentError)
       end
 
+      it 'should raise an error if aggregation :sum is spesicied without the name of the column holding the value to sum' do
+        lambda { @report.send(:ensure_valid_options, { :aggregation => :sum }) }.should raise_error(ArgumentError)
+      end
+
     end
 
     describe 'for context :run' do

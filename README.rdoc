@@ -31,5 +31,4 @@ You can than render sparklines for these reports with sparkline_tag in your view
 
 If you want ot suggest any new features or report bugs, do so at http://simplabs.lighthouseapp.com/projects/21060-reportsassparkline/overview.
 
-
-&copy; 2008 Martin Kavalar, Marco Otte-Witte (http://simplabs.com/#projects), released under the MIT license
+© 2008 Martin Kavalar, Marco Otte-Witte (http://simplabs.com/#projects), released under the MIT license

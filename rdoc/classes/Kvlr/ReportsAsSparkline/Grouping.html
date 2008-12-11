@@ -78,6 +78,12 @@
 
   <div id="contextContent">
 
+    <div id="description">
+      <p>
+This is the grouping a report uses to group records in the database
+</p>
+
+    </div>
 
 
    </div>
@@ -86,10 +92,8 @@
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000007">date_parts_from_db_string</a>&nbsp;&nbsp;
-      <a href="#M000006">identifier</a>&nbsp;&nbsp;
-      <a href="#M000005">new</a>&nbsp;&nbsp;
-      <a href="#M000008">to_sql</a>&nbsp;&nbsp;
+      <a href="#M000005">identifier</a>&nbsp;&nbsp;
+      <a href="#M000004">new</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -111,25 +115,33 @@
     <div id="methods">
       <h3 class="section-bar">Public Class methods</h3>
 
-      <div id="method-M000005" class="method-detail">
-        <a name="M000005"></a>
+      <div id="method-M000004" class="method-detail">
+        <a name="M000004"></a>
 
         <div class="method-heading">
-          <a href="#M000005" class="method-signature">
-          <span class="method-name">new</span><span class="method-args">(grouping)</span>
+          <a href="#M000004" class="method-signature">
+          <span class="method-name">new</span><span class="method-args">(identifier)</span>
           </a>
         </div>
       
         <div class="method-description">
+          <h4>Parameters</h4>
+<ul>
+<li><tt><a href="Grouping.html#M000005">identifier</a></tt> - The <a
+href="Grouping.html#M000005">identifier</a> of the grouping - one of :hour,
+:day, :week or :month
+
+</li>
+</ul>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000005-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000005-source">
+            onclick="toggleCode('M000004-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000004-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/kvlr/reports_as_sparkline/grouping.rb, line 7</span>
- 7:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">grouping</span>)
- 8:         <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>.<span class="ruby-identifier">new</span>(<span class="ruby-node">&quot;Invalid grouping #{grouping}&quot;</span>) <span class="ruby-keyword kw">unless</span> [<span class="ruby-identifier">:hour</span>, <span class="ruby-identifier">:day</span>, <span class="ruby-identifier">:week</span>, <span class="ruby-identifier">:month</span>].<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">grouping</span>)
- 9:         <span class="ruby-ivar">@identifier</span> = <span class="ruby-identifier">grouping</span>
-10:       <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/kvlr/reports_as_sparkline/grouping.rb, line 10</span>
+10:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">identifier</span>)
+11:         <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>.<span class="ruby-identifier">new</span>(<span class="ruby-node">&quot;Invalid grouping #{grouping}&quot;</span>) <span class="ruby-keyword kw">unless</span> [<span class="ruby-identifier">:hour</span>, <span class="ruby-identifier">:day</span>, <span class="ruby-identifier">:week</span>, <span class="ruby-identifier">:month</span>].<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">identifier</span>)
+12:         <span class="ruby-ivar">@identifier</span> = <span class="ruby-identifier">identifier</span>
+13:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -137,95 +149,28 @@
 
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000007" class="method-detail">
-        <a name="M000007"></a>
+      <div id="method-M000005" class="method-detail">
+        <a name="M000005"></a>
 
         <div class="method-heading">
-          <a href="#M000007" class="method-signature">
-          <span class="method-name">date_parts_from_db_string</span><span class="method-args">(db_string)</span>
-          </a>
-        </div>
-      
-        <div class="method-description">
-          <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000007-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000007-source">
-<pre>
-    <span class="ruby-comment cmt"># File lib/kvlr/reports_as_sparkline/grouping.rb, line 16</span>
-16:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">date_parts_from_db_string</span>(<span class="ruby-identifier">db_string</span>)
-17:         <span class="ruby-keyword kw">if</span> <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Base</span>.<span class="ruby-identifier">connection</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">to_s</span> <span class="ruby-operator">==</span> <span class="ruby-value str">'ActiveRecord::ConnectionAdapters::PostgreSQLAdapter'</span>
-18:           <span class="ruby-keyword kw">case</span> <span class="ruby-ivar">@identifier</span>
-19:             <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:hour</span>
-20:               <span class="ruby-keyword kw">return</span> (<span class="ruby-identifier">db_string</span>[<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-value">9</span>].<span class="ruby-identifier">split</span>(<span class="ruby-value str">'-'</span>) <span class="ruby-operator">+</span> [<span class="ruby-identifier">db_string</span>[<span class="ruby-value">11</span><span class="ruby-operator">..</span><span class="ruby-value">12</span>]]).<span class="ruby-identifier">map</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">:to_i</span>)
-21:             <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:day</span>
-22:               <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">db_string</span>[<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-value">9</span>].<span class="ruby-identifier">split</span>(<span class="ruby-value str">'-'</span>).<span class="ruby-identifier">map</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">:to_i</span>)
-23:             <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:week</span>
-24:               <span class="ruby-identifier">parts</span> = <span class="ruby-identifier">db_string</span>[<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-value">9</span>].<span class="ruby-identifier">split</span>(<span class="ruby-value str">'-'</span>).<span class="ruby-identifier">map</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">:to_i</span>)
-25:               <span class="ruby-identifier">date</span> = <span class="ruby-constant">Date</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">parts</span>[<span class="ruby-value">0</span>], <span class="ruby-identifier">parts</span>[<span class="ruby-value">1</span>], <span class="ruby-identifier">parts</span>[<span class="ruby-value">2</span>])
-26:               <span class="ruby-keyword kw">return</span> [<span class="ruby-identifier">date</span>.<span class="ruby-identifier">year</span>, <span class="ruby-identifier">date</span>.<span class="ruby-identifier">cweek</span>]
-27:             <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:month</span>
-28:               <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">db_string</span>[<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-value">6</span>].<span class="ruby-identifier">split</span>(<span class="ruby-value str">'-'</span>)[<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-value">1</span>].<span class="ruby-identifier">map</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">:to_i</span>)
-29:           <span class="ruby-keyword kw">end</span>
-30:         <span class="ruby-keyword kw">else</span>
-31:           <span class="ruby-identifier">parts</span> = <span class="ruby-identifier">db_string</span>.<span class="ruby-identifier">split</span>(<span class="ruby-value str">'/'</span>).<span class="ruby-identifier">map</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">:to_i</span>)
-32:           <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">parts</span> <span class="ruby-keyword kw">if</span> <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Base</span>.<span class="ruby-identifier">connection</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">to_s</span> <span class="ruby-operator">==</span> <span class="ruby-value str">'ActiveRecord::ConnectionAdapters::MysqlAdapter'</span>
-33:           <span class="ruby-identifier">parts</span>[<span class="ruby-value">1</span>] <span class="ruby-operator">+=</span> <span class="ruby-value">1</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@identifier</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:week</span>
-34:           <span class="ruby-identifier">parts</span>
-35:         <span class="ruby-keyword kw">end</span>
-36:       <span class="ruby-keyword kw">end</span>
-</pre>
-          </div>
-        </div>
-      </div>
-
-      <div id="method-M000006" class="method-detail">
-        <a name="M000006"></a>
-
-        <div class="method-heading">
-          <a href="#M000006" class="method-signature">
+          <a href="#M000005" class="method-signature">
           <span class="method-name">identifier</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
+          <p>
+Returns the <a href="Grouping.html">Grouping</a>&#8216;s <a
+href="Grouping.html#M000005">identifier</a>
+</p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000006-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000006-source">
+            onclick="toggleCode('M000005-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000005-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/kvlr/reports_as_sparkline/grouping.rb, line 12</span>
-12:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">identifier</span>
-13:         <span class="ruby-ivar">@identifier</span>
-14:       <span class="ruby-keyword kw">end</span>
-</pre>
-          </div>
-        </div>
-      </div>
-
-      <div id="method-M000008" class="method-detail">
-        <a name="M000008"></a>
-
-        <div class="method-heading">
-          <a href="#M000008" class="method-signature">
-          <span class="method-name">to_sql</span><span class="method-args">(date_column_name)</span>
-          </a>
-        </div>
-      
-        <div class="method-description">
-          <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000008-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000008-source">
-<pre>
-    <span class="ruby-comment cmt"># File lib/kvlr/reports_as_sparkline/grouping.rb, line 38</span>
-38:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_sql</span>(<span class="ruby-identifier">date_column_name</span>)
-39:         <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">case</span> <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Base</span>.<span class="ruby-identifier">connection</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">to_s</span>
-40:           <span class="ruby-keyword kw">when</span> <span class="ruby-value str">'ActiveRecord::ConnectionAdapters::MysqlAdapter'</span>
-41:             <span class="ruby-identifier">mysql_format</span>(<span class="ruby-identifier">date_column_name</span>)
-42:           <span class="ruby-keyword kw">when</span> <span class="ruby-value str">'ActiveRecord::ConnectionAdapters::SQLite3Adapter'</span>
-43:             <span class="ruby-identifier">sqlite_format</span>(<span class="ruby-identifier">date_column_name</span>)
-44:           <span class="ruby-keyword kw">when</span> <span class="ruby-value str">'ActiveRecord::ConnectionAdapters::PostgreSQLAdapter'</span>
-45:             <span class="ruby-identifier">postgresql_format</span>(<span class="ruby-identifier">date_column_name</span>)
-46:         <span class="ruby-keyword kw">end</span>
-47:       <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/kvlr/reports_as_sparkline/grouping.rb, line 16</span>
+16:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">identifier</span>
+17:         <span class="ruby-ivar">@identifier</span>
+18:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>

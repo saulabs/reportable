@@ -2,10 +2,23 @@ module Kvlr #:nodoc:
 
   module ReportsAsSparkline #:nodoc:
 
+    # The Report class that does all the data retrieval and calculations
     class Report
 
       attr_reader :klass, :name, :date_column_name, :value_column_name, :grouping, :aggregation
 
+      # ==== Parameters
+      # * <tt>klass</tt> - The model the report works on (This is the class you invoke Kvlr::ReportsAsSparkline::ClassMethods#report_as_sparkline on)
+      # * <tt>name</tt> - The name of the report (as in Kvlr::ReportsAsSparkline::ClassMethods#report_as_sparkline)
+      #
+      # ==== Options
+      #
+      # * <tt>:date_column_name</tt> - The name of the date column on that the records are aggregated
+      # * <tt>:value_column_name</tt> - The name of the column that holds the value to sum for aggregation :sum
+      # * <tt>:aggregation</tt> - The aggregation to use (either :count or :sum); when using :sum, :value_column_name must also be specified
+      # * <tt>:grouping</tt> - The period records are grouped on (:hour, :day, :week, :month)
+      # * <tt>:limit</tt> - The number of periods to get (see :grouping)
+      # * <tt>:conditions</tt> - Conditions like in ActiveRecord::Base#find; only records that match there conditions are reported on
       def initialize(klass, name, options = {})
         ensure_valid_options(options)
         @klass             = klass
@@ -21,6 +34,11 @@ module Kvlr #:nodoc:
         @options.merge!(options)
       end
 
+      # Runs the report and returns an array of array of DateTimes and Floats
+      #
+      # ==== Options
+      # * <tt>:limit</tt> - The number of periods to get
+      # * <tt>:conditions</tt> - Conditions like in ActiveRecord::Base#find; only records that match there conditions are reported on (<b>Beware that when you specify conditions here, caching will be disabled</b>)
       def run(options = {})
         ensure_valid_options(options, :run)
         custom_conditions = options.key?(:conditions)

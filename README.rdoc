@@ -1,29 +1,27 @@
 = ReportsAsSparkline
 
-ReportsAsSparkline enables you to generate reports and sparklines from your database with very little effort.
+ReportsAsSparkline enables you to generate reports and sparklines from your model's data with very little effort.
 
-### Example
+== Example
 
-This shows the first basic usage. Consider the following user model, including *created_at* and *activated_at* timestamp fields.
+This shows the basic usage. Consider the following user model, including +created_at+ and +activated_at+ timestamp fields.
 
-    class User < ActiveRecord::Base
-      report_as_sparkline :registrations
-      report_as_sparkline :activations, :date_column => :activated_at
-      report_as_sparkline :total_users, :cumulate => :registrations
+  class User < ActiveRecord::Base
+    report_as_sparkline :registrations
+    report_as_sparkline :activations,  :date_column_name => :activated_at
+    report_as_sparkline :total_users,  :cumulate         => true
     end
 
-Using *report_as_sparkline* like this will add the following class methods to your User model:
+Using +report_as_sparkline+ like this will add the following class methods to your User model:
 
-    # Generates a sparkline from the google chart api
-    # so you see the registrations per day
-    User.registrations_graph
-    
-    # Gets an array of the data to use in numerical display
-    User.registrations_report
-    
-### Implemented features
-* cumulate option that depends on other report
-    
+  User.registrations_report
+  User.activations_report
+  User.total_users_report
+
+You can than render sparklines for these reports with sparkline_tag in your view:
+
+  <%= sparkline_tag(User.registrations_report) %>
+
 == TODOs/ future plans
 
 * support for Oracle and DB2 (and others?) missing

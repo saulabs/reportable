@@ -8,7 +8,7 @@ module Kvlr #:nodoc:
 
     module ClassMethods
 
-      # Generates a report on a model. The report can then be executed via <name>_report
+      # Generates a report on a model. That report can then be executed via the new method <name>_report (see documentation of Kvlr::ReportsAsSparkline::Report#run).
       # 
       # ==== Parameters
       #

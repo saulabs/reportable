@@ -78,6 +78,13 @@
 
   <div id="contextContent">
 
+    <div id="description">
+      <p>
+The <a href="Report.html">Report</a> class that does all the data retrieval
+and calculations
+</p>
+
+    </div>
 
 
    </div>
@@ -86,8 +93,8 @@
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000014">new</a>&nbsp;&nbsp;
-      <a href="#M000015">run</a>&nbsp;&nbsp;
+      <a href="#M000009">new</a>&nbsp;&nbsp;
+      <a href="#M000010">run</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -147,35 +154,74 @@
     <div id="methods">
       <h3 class="section-bar">Public Class methods</h3>
 
-      <div id="method-M000014" class="method-detail">
-        <a name="M000014"></a>
+      <div id="method-M000009" class="method-detail">
+        <a name="M000009"></a>
 
         <div class="method-heading">
-          <a href="#M000014" class="method-signature">
+          <a href="#M000009" class="method-signature">
           <span class="method-name">new</span><span class="method-args">(klass, name, options = {})</span>
           </a>
         </div>
       
         <div class="method-description">
+          <h4>Parameters</h4>
+<ul>
+<li><tt>klass</tt> - The model the report works on (This is the class you
+invoke <a
+href="ClassMethods.html#M000001">Kvlr::ReportsAsSparkline::ClassMethods#report_as_sparkline</a>
+on)
+
+</li>
+<li><tt>name</tt> - The name of the report (as in <a
+href="ClassMethods.html#M000001">Kvlr::ReportsAsSparkline::ClassMethods#report_as_sparkline</a>)
+
+</li>
+</ul>
+<h4>Options</h4>
+<ul>
+<li><tt>:date_column_name</tt> - The name of the date column on that the
+records are aggregated
+
+</li>
+<li><tt>:value_column_name</tt> - The name of the column that holds the value
+to sum for aggregation :sum
+
+</li>
+<li><tt>:aggregation</tt> - The aggregation to use (either :count or :sum);
+when using :sum, :value_column_name must also be specified
+
+</li>
+<li><tt>:grouping</tt> - The period records are grouped on (:hour, :day, :week,
+:month)
+
+</li>
+<li><tt>:limit</tt> - The number of periods to get (see :grouping)
+
+</li>
+<li><tt>:conditions</tt> - Conditions like in ActiveRecord::Base#find; only
+records that match there conditions are reported on
+
+</li>
+</ul>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000014-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000014-source">
+            onclick="toggleCode('M000009-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000009-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/kvlr/reports_as_sparkline/report.rb, line 9</span>
- 9:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">klass</span>, <span class="ruby-identifier">name</span>, <span class="ruby-identifier">options</span> = {})
-10:         <span class="ruby-identifier">ensure_valid_options</span>(<span class="ruby-identifier">options</span>)
-11:         <span class="ruby-ivar">@klass</span>             = <span class="ruby-identifier">klass</span>
-12:         <span class="ruby-ivar">@name</span>              = <span class="ruby-identifier">name</span>
-13:         <span class="ruby-ivar">@date_column_name</span>  = (<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:date_column_name</span>] <span class="ruby-operator">||</span> <span class="ruby-value str">'created_at'</span>).<span class="ruby-identifier">to_s</span>
-14:         <span class="ruby-ivar">@value_column_name</span> = (<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:value_column_name</span>] <span class="ruby-operator">||</span> (<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:aggregation</span>] <span class="ruby-operator">!=</span> <span class="ruby-identifier">:sum</span> <span class="ruby-operator">?</span> <span class="ruby-value str">'id'</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">name</span>)).<span class="ruby-identifier">to_s</span>
-15:         <span class="ruby-ivar">@aggregation</span>       = <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:aggregation</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">:count</span>
-16:         <span class="ruby-ivar">@grouping</span>          = <span class="ruby-constant">Grouping</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:grouping</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">:day</span>)
-17:         <span class="ruby-ivar">@options</span> = {
-18:           <span class="ruby-identifier">:limit</span>             =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:limit</span>] <span class="ruby-operator">||</span> <span class="ruby-value">100</span>,
-19:           <span class="ruby-identifier">:conditions</span>        =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:conditions</span>] <span class="ruby-operator">||</span> []
-20:         }
-21:         <span class="ruby-ivar">@options</span>.<span class="ruby-identifier">merge!</span>(<span class="ruby-identifier">options</span>)
-22:       <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/kvlr/reports_as_sparkline/report.rb, line 22</span>
+22:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">klass</span>, <span class="ruby-identifier">name</span>, <span class="ruby-identifier">options</span> = {})
+23:         <span class="ruby-identifier">ensure_valid_options</span>(<span class="ruby-identifier">options</span>)
+24:         <span class="ruby-ivar">@klass</span>             = <span class="ruby-identifier">klass</span>
+25:         <span class="ruby-ivar">@name</span>              = <span class="ruby-identifier">name</span>
+26:         <span class="ruby-ivar">@date_column_name</span>  = (<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:date_column_name</span>] <span class="ruby-operator">||</span> <span class="ruby-value str">'created_at'</span>).<span class="ruby-identifier">to_s</span>
+27:         <span class="ruby-ivar">@value_column_name</span> = (<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:value_column_name</span>] <span class="ruby-operator">||</span> (<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:aggregation</span>] <span class="ruby-operator">!=</span> <span class="ruby-identifier">:sum</span> <span class="ruby-operator">?</span> <span class="ruby-value str">'id'</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">name</span>)).<span class="ruby-identifier">to_s</span>
+28:         <span class="ruby-ivar">@aggregation</span>       = <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:aggregation</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">:count</span>
+29:         <span class="ruby-ivar">@grouping</span>          = <span class="ruby-constant">Grouping</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:grouping</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">:day</span>)
+30:         <span class="ruby-ivar">@options</span> = {
+31:           <span class="ruby-identifier">:limit</span>             =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:limit</span>] <span class="ruby-operator">||</span> <span class="ruby-value">100</span>,
+32:           <span class="ruby-identifier">:conditions</span>        =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:conditions</span>] <span class="ruby-operator">||</span> []
+33:         }
+34:         <span class="ruby-ivar">@options</span>.<span class="ruby-identifier">merge!</span>(<span class="ruby-identifier">options</span>)
+35:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -183,29 +229,43 @@
 
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000015" class="method-detail">
-        <a name="M000015"></a>
+      <div id="method-M000010" class="method-detail">
+        <a name="M000010"></a>
 
         <div class="method-heading">
-          <a href="#M000015" class="method-signature">
+          <a href="#M000010" class="method-signature">
           <span class="method-name">run</span><span class="method-args">(options = {})</span>
           </a>
         </div>
       
         <div class="method-description">
+          <p>
+Runs the report and returns an array of array of DateTimes and Floats
+</p>
+<h4>Options</h4>
+<ul>
+<li><tt>:limit</tt> - The number of periods to get
+
+</li>
+<li><tt>:conditions</tt> - Conditions like in ActiveRecord::Base#find; only
+records that match there conditions are reported on (<b>Beware that when
+you specify conditions here, caching will be disabled</b>)
+
+</li>
+</ul>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000015-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000015-source">
+            onclick="toggleCode('M000010-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000010-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/kvlr/reports_as_sparkline/report.rb, line 24</span>
-24:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">run</span>(<span class="ruby-identifier">options</span> = {})
-25:         <span class="ruby-identifier">ensure_valid_options</span>(<span class="ruby-identifier">options</span>, <span class="ruby-identifier">:run</span>)
-26:         <span class="ruby-identifier">custom_conditions</span> = <span class="ruby-identifier">options</span>.<span class="ruby-identifier">key?</span>(<span class="ruby-identifier">:conditions</span>)
-27:         <span class="ruby-identifier">options</span>.<span class="ruby-identifier">reverse_merge!</span>(<span class="ruby-ivar">@options</span>)
-28:         <span class="ruby-constant">ReportCache</span>.<span class="ruby-identifier">process</span>(<span class="ruby-keyword kw">self</span>, <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:limit</span>], <span class="ruby-identifier">custom_conditions</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">begin_at</span><span class="ruby-operator">|</span>
-29:           <span class="ruby-identifier">read_data</span>(<span class="ruby-identifier">begin_at</span>, <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:conditions</span>])
-30:         <span class="ruby-keyword kw">end</span>
-31:       <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/kvlr/reports_as_sparkline/report.rb, line 42</span>
+42:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">run</span>(<span class="ruby-identifier">options</span> = {})
+43:         <span class="ruby-identifier">ensure_valid_options</span>(<span class="ruby-identifier">options</span>, <span class="ruby-identifier">:run</span>)
+44:         <span class="ruby-identifier">custom_conditions</span> = <span class="ruby-identifier">options</span>.<span class="ruby-identifier">key?</span>(<span class="ruby-identifier">:conditions</span>)
+45:         <span class="ruby-identifier">options</span>.<span class="ruby-identifier">reverse_merge!</span>(<span class="ruby-ivar">@options</span>)
+46:         <span class="ruby-constant">ReportCache</span>.<span class="ruby-identifier">process</span>(<span class="ruby-keyword kw">self</span>, <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:limit</span>], <span class="ruby-identifier">custom_conditions</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">begin_at</span><span class="ruby-operator">|</span>
+47:           <span class="ruby-identifier">read_data</span>(<span class="ruby-identifier">begin_at</span>, <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:conditions</span>])
+48:         <span class="ruby-keyword kw">end</span>
+49:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>

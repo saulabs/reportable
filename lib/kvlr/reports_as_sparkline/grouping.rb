@@ -3,11 +3,10 @@ module Kvlr #:nodoc:
   module ReportsAsSparkline #:nodoc:
 
     # This is the grouping a report uses to group records in the database
-    #
-    # ==== Parameters
-    #  * <tt>identifier</tt> - The identifier of the grouping - one of :hour, :day, :week or :month
     class Grouping
 
+      # ==== Parameters
+      # * <tt>identifier</tt> - The identifier of the grouping - one of :hour, :day, :week or :month
       def initialize(identifier)
         raise ArgumentError.new("Invalid grouping #{grouping}") unless [:hour, :day, :week, :month].include?(identifier)
         @identifier = identifier

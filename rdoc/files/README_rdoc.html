@@ -56,7 +56,7 @@
     </tr>
     <tr class="top-aligned-row">
       <td><strong>Last Update:</strong></td>
-      <td>Thu Dec 04 14:58:12 +0100 2008</td>
+      <td>Thu Dec 11 20:18:28 +0100 2008</td>
     </tr>
     </table>
   </div>
@@ -72,42 +72,36 @@
       <h1>ReportsAsSparkline</h1>
 <p>
 ReportsAsSparkline enables you to generate reports and sparklines from your
-database with very little effort.
+model&#8216;s data with very little effort.
 </p>
+<h2>Example</h2>
 <p>
-### Example
-</p>
-<p>
-This shows the first basic usage. Consider the following user model,
-including <b>created_at</b> and <b>activated_at</b> timestamp fields.
+This shows the basic usage. Consider the following user model, including
+<tt>created_at</tt> and <tt>activated_at</tt> timestamp fields.
 </p>
 <pre>
-    class User &lt; ActiveRecord::Base
-      report_as_sparkline :registrations
-      report_as_sparkline :activations, :date_column =&gt; :activated_at
-      report_as_sparkline :total_users, :cumulate =&gt; :registrations
+  class User &lt; ActiveRecord::Base
+    report_as_sparkline :registrations
+    report_as_sparkline :activations,  :date_column_name =&gt; :activated_at
+    report_as_sparkline :total_users,  :cumulate         =&gt; true
     end
 </pre>
 <p>
-Using <b>report_as_sparkline</b> like this will add the following class
+Using <tt>report_as_sparkline</tt> like this will add the following class
 methods to your User model:
 </p>
 <pre>
-    # Generates a sparkline from the google chart api
-    # so you see the registrations per day
-    User.registrations_graph
-
-    # Gets an array of the data to use in numerical display
-    User.registrations_report
+  User.registrations_report
+  User.activations_report
+  User.total_users_report
 </pre>
 <p>
-### Implemented features
+You can than render sparklines for these reports with sparkline_tag in your
+view:
 </p>
-<ul>
-<li>cumulate option that depends on other report
-
-</li>
-</ul>
+<pre>
+  &lt;%= sparkline_tag(User.registrations_report) %&gt;
+</pre>
 <h2>TODOs/ future plans</h2>
 <ul>
 <li>support for Oracle and DB2 (and others?) missing

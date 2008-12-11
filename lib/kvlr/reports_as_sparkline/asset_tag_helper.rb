@@ -8,13 +8,13 @@ module Kvlr #:nodoc:
       #
       # ==== Parameters
       #
-      # *<tt>data</tt> - The data to render the sparkline for
+      # * <tt>data</tt> - The data to render the sparkline for
       #
       # ==== Options
       #
-      # *<tt>width</tt> - The width of the generated image
-      # *<tt>height</tt> - The height of the generated image
-      # *<tt>color</tt> - The base color of the generated image (hex code)
+      # * <tt>width</tt> - The width of the generated image
+      # * <tt>height</tt> - The height of the generated image
+      # * <tt>color</tt> - The base color of the generated image (hex code)
       #
       # ==== Example
       # <%= sparkline_tag(User.registrations_report, :width => 200, :height => 100, :color => '000') %>

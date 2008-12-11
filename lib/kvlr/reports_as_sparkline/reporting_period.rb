@@ -2,15 +2,24 @@ module Kvlr #:nodoc:
 
   module ReportsAsSparkline #:nodoc:
 
+    # A ReportingPeriod is  - depending on the Grouping - either a specific hour, a day, a month or a year. All records falling into this period will be grouped.
     class ReportingPeriod
 
       attr_reader :date_time, :grouping
 
+      # ==== Parameters
+      # * <tt>grouping</tt> - The Kvlr::ReportsAsSparkline::Grouping of the reporting period
+      # * <tt>date_time</tt> - The DateTime that reporting period is created for
       def initialize(grouping, date_time = DateTime.now)
         @grouping  = grouping
         @date_time = parse_date_time(date_time)
       end
 
+      # Returns the first reporting period for a grouping and a limit; e.g. the first reporting period for Grouping :day and limit 2 would be Time.now - 2.days
+      #
+      # ==== Parameters
+      # * <tt>grouping</tt> - The Kvlr::ReportsAsSparkline::Grouping of the reporting period
+      # * <tt>limit</tt> - The number of reporting periods until the first one
       def self.first(grouping, limit)
         return case grouping.identifier
           when :hour
@@ -40,6 +49,7 @@ module Kvlr #:nodoc:
         result
       end
 
+      # Returns the previous reporting period
       def previous
         return case @grouping.identifier
           when :hour

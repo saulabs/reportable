@@ -25,7 +25,7 @@ module Kvlr #:nodoc:
         end
       end
 
-      def self.from_db_string(grouping, db_string)
+      def self.from_db_string(grouping, db_string) #:nodoc:
         parts = grouping.date_parts_from_db_string(db_string)
         result = case grouping.identifier
           when :hour
@@ -53,7 +53,7 @@ module Kvlr #:nodoc:
         end
       end
 
-      def ==(other)
+      def ==(other) #:nodoc:
         if other.class == Kvlr::ReportsAsSparkline::ReportingPeriod
           return @date_time.to_s == other.date_time.to_s && @grouping.identifier.to_s == other.grouping.identifier.to_s
         end

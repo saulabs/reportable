@@ -2,18 +2,23 @@ module Kvlr #:nodoc:
 
   module ReportsAsSparkline #:nodoc:
 
+    # This is the grouping a report uses to group records in the database
+    #
+    # ==== Parameters
+    #  * <tt>identifier</tt> - The identifier of the grouping - one of :hour, :day, :week or :month
     class Grouping
 
-      def initialize(grouping)
-        raise ArgumentError.new("Invalid grouping #{grouping}") unless [:hour, :day, :week, :month].include?(grouping)
-        @identifier = grouping
+      def initialize(identifier)
+        raise ArgumentError.new("Invalid grouping #{grouping}") unless [:hour, :day, :week, :month].include?(identifier)
+        @identifier = identifier
       end
 
+      # Returns the Grouping's identifier
       def identifier
         @identifier
       end
 
-      def date_parts_from_db_string(db_string)
+      def date_parts_from_db_string(db_string) #:nodoc:
         if ActiveRecord::Base.connection.class.to_s == 'ActiveRecord::ConnectionAdapters::PostgreSQLAdapter'
           case @identifier
             when :hour
@@ -35,7 +40,7 @@ module Kvlr #:nodoc:
         end
       end
 
-      def to_sql(date_column_name)
+      def to_sql(date_column_name) #:nodoc:
         return case ActiveRecord::Base.connection.class.to_s
           when 'ActiveRecord::ConnectionAdapters::MysqlAdapter'
             mysql_format(date_column_name)

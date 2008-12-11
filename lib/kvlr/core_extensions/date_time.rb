@@ -1,13 +1,14 @@
-module Simplabs
+module Kvlr #:nodoc:
 
-  module CoreExtensions
+  module CoreExtensions #:nodoc:
 
     module DateTime
 
       ::DateTime.class_eval do
 
+        # Converts the DateTime into a Kvlr::ReportsAsSparkline::ReportingPeriod
         def to_reporting_period(grouping)
-          Kvlr::ReportsAsSparkline::ReportsAsSparkline.new(grouping, self)
+          Kvlr::ReportsAsSparkline::ReportingPeriod.new(grouping, self)
         end
 
       end

@@ -1,7 +1,5 @@
-# Generates the migration that adds the caching table
-class ReportsAsSparklineMigrationGenerator < Rails::Generator::NamedBase
+class ReportsAsSparklineMigrationGenerator < Rails::Generator::NamedBase #:nodoc:
 
-  # Creates the generator's manifest
   def manifest
     record do |m|
       m.migration_template 'migration.erb', 'db/migrate'

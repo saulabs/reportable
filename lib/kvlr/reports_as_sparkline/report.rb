@@ -32,7 +32,7 @@ module Kvlr #:nodoc:
 
       private
 
-        def read_data(begin_at, conditions = [])
+        def read_data(begin_at, conditions = []) #:nodoc:
           conditions = setup_conditions(begin_at, conditions)
           @klass.send(@aggregation,
             @value_column_name,
@@ -42,7 +42,7 @@ module Kvlr #:nodoc:
           )
         end
 
-        def setup_conditions(begin_at, custom_conditions = [])
+        def setup_conditions(begin_at, custom_conditions = []) #:nodoc:
           conditions = ['']
           if custom_conditions.is_a?(Hash)
             conditions = [custom_conditions.map{ |k, v| "#{k.to_s} = ?" }.join(' AND '), *custom_conditions.map{ |k, v| v }]
@@ -53,7 +53,7 @@ module Kvlr #:nodoc:
           conditions << begin_at
         end
 
-        def ensure_valid_options(options, context = :initialize)
+        def ensure_valid_options(options, context = :initialize) #:nodoc:
           case context
             when :initialize
               options.each_key do |k|

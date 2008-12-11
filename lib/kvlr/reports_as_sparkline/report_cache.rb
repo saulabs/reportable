@@ -2,7 +2,7 @@ module Kvlr #:nodoc:
 
   module ReportsAsSparkline #:nodoc:
 
-    class ReportCache < ActiveRecord::Base
+    class ReportCache < ActiveRecord::Base #:nodoc:
 
       serialize :reporting_period, Kvlr::ReportsAsSparkline::ReportingPeriod
 

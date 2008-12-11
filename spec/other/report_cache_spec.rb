@@ -168,7 +168,19 @@ describe Kvlr::ReportsAsSparkline::ReportCache do
       result.length.should == 10
     end
 
-    #TODO: add specs for update of record in cache fpr last_reporting_period_to_read if present
+    it 'should update the last cached record if new data has been read for the last reporting period to read' do
+      Kvlr::ReportsAsSparkline::ReportingPeriod.stub!(:from_db_string).and_return(@last_reporting_period_to_read)
+      @cached.should_receive(:update_attributes!).once.with(:value => 1.0)
+
+      Kvlr::ReportsAsSparkline::ReportCache.send(:prepare_result, @new_data, [@cached], @last_reporting_period_to_read, @report)
+    end
+
+    it 'should not update the last cached record if new data has been read for the last reporting period to read but no_cache is specified' do
+      Kvlr::ReportsAsSparkline::ReportingPeriod.stub!(:from_db_string).and_return(@last_reporting_period_to_read)
+      @cached.should_not_receive(:update_attributes!)
+
+      Kvlr::ReportsAsSparkline::ReportCache.send(:prepare_result, @new_data, [@cached], @last_reporting_period_to_read, @report, true)
+    end
 
   end
 

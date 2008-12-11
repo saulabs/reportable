@@ -50,8 +50,10 @@ module Kvlr #:nodoc:
             result << [cached.reporting_period.date_time, cached.value]
             reporting_period = reporting_period.previous
           end while reporting_period != last_reporting_period_to_read
-          if !no_cache && cached = cached_data.detect { |cached| cached.reporting_period == last_reporting_period_to_read } && data = new_data.detect { |data| data[0] == last_reporting_period_to_read }
-            cached.update_attributes!(:value => data[1])
+          unless no_cache
+            cached = cached_data.last || nil
+            data = (new_data.first && new_data.first[0] == last_reporting_period_to_read) ? new_data.first : nil
+            cached.update_attributes!(:value => data[1]) unless cached.nil? || data.nil?
           end
           result
         end

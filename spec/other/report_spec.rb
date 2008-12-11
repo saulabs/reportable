@@ -36,7 +36,7 @@ describe Kvlr::ReportsAsSparkline::Report do
           User.create!(:login => 'test 3', :created_at => Time.now - 3.send(grouping), :profile_visits => 3)
         end
 
-        it 'should return correct data for :aggregation => :count' do
+        it 'should return correct data for aggregation :count' do
           @report = Kvlr::ReportsAsSparkline::Report.new(User, :registrations, :aggregation => :count, :grouping => grouping, :limit => 10)
           result = @report.run.to_a
 
@@ -46,7 +46,7 @@ describe Kvlr::ReportsAsSparkline::Report do
           result[3][1].should == 2
         end
 
-        it 'should return correct data for :aggregation => :sum' do
+        it 'should return correct data for aggregation :sum' do
           @report = Kvlr::ReportsAsSparkline::Report.new(User, :registrations, :aggregation => :sum, :grouping => grouping, :value_column_name => :profile_visits, :limit => 10)
           result = @report.run().to_a
 
@@ -56,7 +56,7 @@ describe Kvlr::ReportsAsSparkline::Report do
           result[3][1].should == 5
         end
 
-        it 'should return correct data with custom conditions for :aggregation => :count' do
+        it 'should return correct data for aggregation :count when custom conditions are specified' do
           @report = Kvlr::ReportsAsSparkline::Report.new(User, :registrations, :aggregation => :count, :grouping => grouping, :limit => 10)
           result = @report.run(:conditions => ['login IN (?)', ['test 1', 'test 2']]).to_a
 
@@ -66,7 +66,7 @@ describe Kvlr::ReportsAsSparkline::Report do
           result[3][1].should == 1
         end
 
-        it 'should return correct data with custom conditions for :aggregation => :sum' do
+        it 'should return correct data for aggregation :sum when custom conditions are specified' do
           @report = Kvlr::ReportsAsSparkline::Report.new(User, :registrations, :aggregation => :sum, :grouping => grouping, :value_column_name => :profile_visits, :limit => 10)
           result = @report.run(:conditions => ['login IN (?)', ['test 1', 'test 2']]).to_a
 
@@ -99,7 +99,7 @@ describe Kvlr::ReportsAsSparkline::Report do
       @report.send(:read_data, Time.now)
     end
 
-    it 'should build the conditions' do
+    it 'should setup the conditions' do
       @report.should_receive(:setup_conditions).once.and_return([])
 
       @report.send(:read_data, Time.now)
@@ -109,19 +109,19 @@ describe Kvlr::ReportsAsSparkline::Report do
 
   describe '.setup_conditions' do
 
-    it 'should return conditions for date_column_name >= begin_at only if no custom conditions are specified' do
+    it 'should return conditions for date_column_name >= begin_at only when no custom conditions are specified' do
       begin_at = Time.now
 
       @report.send(:setup_conditions, begin_at).should == ['created_at >= ?', begin_at]
     end
 
-    it 'should return conditions for date_column_name >= begin_at only if an empty Hash of custom conditions is specified' do
+    it 'should return conditions for date_column_name >= begin_at only when an empty Hash of custom conditions is specified' do
       begin_at = Time.now
 
       @report.send(:setup_conditions, begin_at, {}).should == ['created_at >= ?', begin_at]
     end
 
-    it 'should return conditions for date_column_name >= begin_at only if an empty Array of custom conditions is specified' do
+    it 'should return conditions for date_column_name >= begin_at only when an empty Array of custom conditions is specified' do
       begin_at = Time.now
 
       @report.send(:setup_conditions, begin_at, []).should == ['created_at >= ?', begin_at]
@@ -176,8 +176,8 @@ describe Kvlr::ReportsAsSparkline::Report do
             :limit             => 100,
             :aggregation       => :count,
             :grouping          => :day,
-            :date_column_name  => 'created_at',
-            :value_column_name => 'id',
+            :date_column_name  => :created_at,
+            :value_column_name => :id,
             :conditions        => []
           })
         }.should_not raise_error(ArgumentError)
@@ -195,7 +195,7 @@ describe Kvlr::ReportsAsSparkline::Report do
         lambda { @report.send(:ensure_valid_options, { :grouping => :decade }) }.should raise_error(ArgumentError)
       end
 
-      it 'should raise an error if aggregation :sum is spesicied without the name of the column holding the value to sum' do
+      it 'should raise an error if aggregation :sum is spesicied but no :value_column_name' do
         lambda { @report.send(:ensure_valid_options, { :aggregation => :sum }) }.should raise_error(ArgumentError)
       end
 

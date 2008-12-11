@@ -48,7 +48,7 @@ describe Kvlr::ReportsAsSparkline::CumulatedReport do
 
         end
 
-        it 'should return correct data for :aggregation => :count' do
+        it 'should return correct data for aggregation :count' do
           @report = Kvlr::ReportsAsSparkline::CumulatedReport.new(User, :registrations, :aggregation => :count, :grouping => grouping, :limit => 10)
           result = @report.run
 
@@ -58,7 +58,7 @@ describe Kvlr::ReportsAsSparkline::CumulatedReport do
           result[3][1].should == 2
         end
 
-        it 'should return correct data for :aggregation => :sum' do
+        it 'should return correct data for aggregation :sum' do
           @report = Kvlr::ReportsAsSparkline::CumulatedReport.new(User, :registrations, :aggregation => :sum, :grouping => grouping, :value_column_name => :profile_visits, :limit => 10)
           result = @report.run()
 
@@ -68,7 +68,7 @@ describe Kvlr::ReportsAsSparkline::CumulatedReport do
           result[3][1].should == 5
         end
 
-        it 'should return correct data with custom conditions for :aggregation => :count' do
+        it 'should return correct data for aggregation :count when custom conditions are specified' do
           @report = Kvlr::ReportsAsSparkline::CumulatedReport.new(User, :registrations, :aggregation => :count, :grouping => grouping, :limit => 10)
           result = @report.run(:conditions => ['login IN (?)', ['test 1', 'test 2']])
 
@@ -78,7 +78,7 @@ describe Kvlr::ReportsAsSparkline::CumulatedReport do
           result[3][1].should == 1
         end
 
-        it 'should return correct data with custom conditions for :aggregation => :sum' do
+        it 'should return correct data for aggregation :sum when custom conditions are specified' do
           @report = Kvlr::ReportsAsSparkline::CumulatedReport.new(User, :registrations, :aggregation => :sum, :grouping => grouping, :value_column_name => :profile_visits, :limit => 10)
           result = @report.run(:conditions => ['login IN (?)', ['test 1', 'test 2']])
 

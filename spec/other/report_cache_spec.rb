@@ -31,7 +31,7 @@ describe Kvlr::ReportsAsSparkline::ReportCache do
       }.should raise_error(YieldMatchException)
     end
 
-    it 'should read existing data for the report from cache if no_cache' do
+    it 'should read existing data for the report from cache' do
       Kvlr::ReportsAsSparkline::ReportCache.should_receive(:find).once.with(
         :all,
         :conditions => {
@@ -47,10 +47,14 @@ describe Kvlr::ReportsAsSparkline::ReportCache do
       Kvlr::ReportsAsSparkline::ReportCache.process(@report, 10) { [] }
     end
 
-    it 'should update the cache' do
-      Kvlr::ReportsAsSparkline::ReportCache.should_receive(:prepare_result)
+    it 'should prepare the results before it returns them' do
+      new_data = []
+      cached_data = []
+      Kvlr::ReportsAsSparkline::ReportCache.stub!(:find).and_return(cached_data)
+      last_reporting_period_to_read = Kvlr::ReportsAsSparkline::ReportingPeriod.first(@report.grouping, 10)
+      Kvlr::ReportsAsSparkline::ReportCache.should_receive(:prepare_result).once.with(new_data, cached_data, last_reporting_period_to_read, @report, false)
 
-      Kvlr::ReportsAsSparkline::ReportCache.process(@report, 10) { [] }
+      Kvlr::ReportsAsSparkline::ReportCache.process(@report, 10) { new_data }
     end
 
     it 'should yield the first reporting period if the cache is empty' do
@@ -110,12 +114,12 @@ describe Kvlr::ReportsAsSparkline::ReportCache do
     end
 
     it 'should convert the date strings from the newly read data to reporting periods' do
-      Kvlr::ReportsAsSparkline::ReportingPeriod.should_receive(:from_db_string).once.with(@report.grouping, '2008/12').and_return(Kvlr::ReportsAsSparkline::ReportingPeriod.new(@report.grouping))
+      Kvlr::ReportsAsSparkline::ReportingPeriod.should_receive(:from_db_string).once.with(@report.grouping, @new_data[0][0]).and_return(Kvlr::ReportsAsSparkline::ReportingPeriod.new(@report.grouping))
 
       Kvlr::ReportsAsSparkline::ReportCache.send(:prepare_result, @new_data, [], @last_reporting_period_to_read, @report)
     end
 
-    it 'should create a new Kvlr::ReportsAsSparkline::ReportCache with the correct data and value 0 if no new_data has been read' do
+    it 'should create a new Kvlr::ReportsAsSparkline::ReportCache with the correct data and value 0 if no new data has been read' do
       Kvlr::ReportsAsSparkline::ReportCache.should_receive(:new).once.with(
         :model_name       => @report.klass.to_s,
         :report_name      => @report.name.to_s,
@@ -128,7 +132,7 @@ describe Kvlr::ReportsAsSparkline::ReportCache do
       Kvlr::ReportsAsSparkline::ReportCache.send(:prepare_result, [], [], @last_reporting_period_to_read, @report)
     end
 
-    it 'should create a new Kvlr::ReportsAsSparkline::ReportCache with the correct data and value if no new_data has been read' do
+    it 'should create a new Kvlr::ReportsAsSparkline::ReportCache with the correct data and value if new data has been read' do
       Kvlr::ReportsAsSparkline::ReportCache.should_receive(:new).once.with(
         :model_name       => @report.klass.to_s,
         :report_name      => @report.name.to_s,
@@ -145,12 +149,6 @@ describe Kvlr::ReportsAsSparkline::ReportCache do
       @cached.should_receive(:save!).once
 
       Kvlr::ReportsAsSparkline::ReportCache.send(:prepare_result, @new_data, [], @last_reporting_period_to_read, @report)
-    end
-
-    it 'should not save the created Kvlr::ReportsAsSparkline::ReportCache if no_cache is specified' do
-      @cached.should_not_receive(:save!)
-
-      Kvlr::ReportsAsSparkline::ReportCache.send(:prepare_result, @new_data, [], @last_reporting_period_to_read, @report, true)
     end
 
     it 'should return an array of arrays of Dates and Floats' do
@@ -175,11 +173,21 @@ describe Kvlr::ReportsAsSparkline::ReportCache do
       Kvlr::ReportsAsSparkline::ReportCache.send(:prepare_result, @new_data, [@cached], @last_reporting_period_to_read, @report)
     end
 
-    it 'should not update the last cached record if new data has been read for the last reporting period to read but no_cache is specified' do
-      Kvlr::ReportsAsSparkline::ReportingPeriod.stub!(:from_db_string).and_return(@last_reporting_period_to_read)
-      @cached.should_not_receive(:update_attributes!)
+    describe 'with no_cache = true' do
 
-      Kvlr::ReportsAsSparkline::ReportCache.send(:prepare_result, @new_data, [@cached], @last_reporting_period_to_read, @report, true)
+      it 'should not save the created Kvlr::ReportsAsSparkline::ReportCache' do
+        @cached.should_not_receive(:save!)
+
+        Kvlr::ReportsAsSparkline::ReportCache.send(:prepare_result, @new_data, [], @last_reporting_period_to_read, @report, true)
+      end
+
+      it 'should not update the last cached record if new data has been read for the last reporting period to read' do
+        Kvlr::ReportsAsSparkline::ReportingPeriod.stub!(:from_db_string).and_return(@last_reporting_period_to_read)
+        @cached.should_not_receive(:update_attributes!)
+
+        Kvlr::ReportsAsSparkline::ReportCache.send(:prepare_result, @new_data, [@cached], @last_reporting_period_to_read, @report, true)
+      end
+
     end
 
   end

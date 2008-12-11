@@ -42,20 +42,12 @@ describe Kvlr::ReportsAsSparkline::Grouping do
         ActiveRecord::Base.connection.stub!(:class).and_return(ActiveRecord::ConnectionAdapters::PostgreSQLAdapter)
       end
 
-      it 'should use date_trunc with trunc "hour" for grouping :hour' do
-        Kvlr::ReportsAsSparkline::Grouping.new(:hour).send(:to_sql, 'created_at').should == "date_trunc('hour', created_at)"
-      end
+      for grouping in [:hour, :day, :week, :month] do
 
-      it 'should use date_trunc with trunc "day" for grouping :day' do
-        Kvlr::ReportsAsSparkline::Grouping.new(:day).send(:to_sql, 'created_at').should == "date_trunc('day', created_at)"
-      end
+        it "should use date_trunc with truncation identifier \"#{grouping.to_s}\" for grouping :#{grouping.to_s}" do
+          Kvlr::ReportsAsSparkline::Grouping.new(grouping).send(:to_sql, 'created_at').should == "date_trunc('#{grouping.to_s}', created_at)"
+        end
 
-      it 'should use date_trunc with trunc "week" for grouping :week' do
-        Kvlr::ReportsAsSparkline::Grouping.new(:week).send(:to_sql, 'created_at').should == "date_trunc('week', created_at)"
-      end
-
-      it 'should use date_trunc with trunc "month" for grouping :month' do
-        Kvlr::ReportsAsSparkline::Grouping.new(:month).send(:to_sql, 'created_at').should == "date_trunc('month', created_at)"
       end
 
     end
@@ -87,21 +79,22 @@ describe Kvlr::ReportsAsSparkline::Grouping do
   end
 
   describe '#date_parts_from_db_string' do
-=begin
-    for grouping in [[:hour, '2008/12/31/12'], [:day, '2008/12/31'], [:month, '2008/12']] do
 
-      it "should split the string with '/' for grouping :#{grouping[0].to_s}" do
-        db_string = grouping[1]
-
-        Kvlr::ReportsAsSparkline::Grouping.new(grouping[0]).date_parts_from_db_string(db_string).should == db_string.split('/').map(&:to_i)
-      end
-
-    end
-=end
     describe 'for SQLite3' do
 
-      it 'should split the string with "/" and increment the week by 1 for grouping :week' do
+      before do
         ActiveRecord::Base.connection.stub!(:class).and_return(ActiveRecord::ConnectionAdapters::SQLite3Adapter)
+      end
+
+      for grouping in [[:hour, '2008/12/31/12'], [:day, '2008/12/31'], [:month, '2008/12']] do
+
+        it "should split the string with '/' for grouping :#{grouping[0].to_s}" do
+          Kvlr::ReportsAsSparkline::Grouping.new(grouping[0]).date_parts_from_db_string(grouping[1]).should == grouping[1].split('/').map(&:to_i)
+        end
+
+      end
+
+      it 'should split the string with "/" and increment the week by 1 for grouping :week' do
         db_string = '2008/2'
         expected = [2008, 3]
 
@@ -116,6 +109,10 @@ describe Kvlr::ReportsAsSparkline::Grouping do
         ActiveRecord::Base.connection.stub!(:class).and_return(ActiveRecord::ConnectionAdapters::PostgreSQLAdapter)
       end
 
+      it 'should split the date part of the string with "-" and read out the hour for grouping :hour' do
+        Kvlr::ReportsAsSparkline::Grouping.new(:hour).date_parts_from_db_string('2008-12-03 06:00:00').should == [2008, 12, 03, 6]
+      end
+
       it 'should split the date part of the string with "-" for grouping :day' do
         Kvlr::ReportsAsSparkline::Grouping.new(:day).date_parts_from_db_string('2008-12-03 00:00:00').should == [2008, 12, 03]
       end
@@ -124,16 +121,24 @@ describe Kvlr::ReportsAsSparkline::Grouping do
         Kvlr::ReportsAsSparkline::Grouping.new(:week).date_parts_from_db_string('2008-12-01 00:00:00').should == [2008, 49]
       end
 
+      it 'should split the date part of the string with "-" and return year and month for grouping :month' do
+        Kvlr::ReportsAsSparkline::Grouping.new(:month).date_parts_from_db_string('2008-12-01 00:00:00').should == [2008, 12]
+      end
+
     end
 
     describe 'for MySQL' do
 
-      it 'should split the string with "/" for grouping :week' do
+      before do
         ActiveRecord::Base.connection.stub!(:class).and_return(ActiveRecord::ConnectionAdapters::MysqlAdapter)
-        db_string = '2008/2'
-        expected = [2008, 2]
+      end
 
-        Kvlr::ReportsAsSparkline::Grouping.new(:week).date_parts_from_db_string(db_string).should == expected
+      for grouping in [[:hour, '2008/12/31/12'], [:day, '2008/12/31'], [:week, '2008/40'], [:month, '2008/12']] do
+
+        it "should split the string with '/' for grouping :#{grouping[0].to_s}" do
+          Kvlr::ReportsAsSparkline::Grouping.new(grouping[0]).date_parts_from_db_string(grouping[1]).should == grouping[1].split('/').map(&:to_i)
+        end
+
       end
 
     end

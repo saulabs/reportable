@@ -16,7 +16,7 @@ module Kvlr #:nodoc:
       def date_parts_from_db_string(db_string)
         if ActiveRecord::Base.connection.class.to_s == 'ActiveRecord::ConnectionAdapters::PostgreSQLAdapter'
           if @identifier == :hour
-            return (db_string[0..9].split('-') + db_string[11..12]).map(&:to_i)
+            return (db_string[0..9].split('-') + [db_string[11..12]]).map(&:to_i)
           elsif @identifier == :day
             return db_string[0..9].split('-').map(&:to_i)
           elsif @identifier == :week

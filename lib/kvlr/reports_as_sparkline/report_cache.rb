@@ -36,26 +36,34 @@ module Kvlr #:nodoc:
           reporting_period = ReportingPeriod.new(report.grouping)
           while reporting_period != last_reporting_period_to_read
             data = new_data.detect { |data| data[0] == reporting_period }
-            cached = self.new(
-              :model_name       => report.klass.to_s,
-              :report_name      => report.name.to_s,
-              :grouping         => report.grouping.identifier.to_s,
-              :aggregation      => report.aggregation.to_s,
-              :reporting_period => reporting_period.date_time,
-              :value            => (data ? data[1] : 0.0)
-            )
+            cached = build_cached_data(report, reporting_period, data ? data[1] : 0.0)
             cached.save! unless no_cache
             result << [reporting_period.date_time, cached.value]
             reporting_period = reporting_period.previous
           end
           data = (new_data.first && new_data.first[0] == last_reporting_period_to_read) ? new_data.first : nil
           unless no_cache
-            cached = cached_data.last || nil
-            cached.update_attributes!(:value => data[1]) unless cached.nil? || data.nil?
+            if data && cached = cached_data.last
+              cached.update_attributes!(:value => data[1])
+            else
+              cached = build_cached_data(report, last_reporting_period_to_read, data ? data[1] : 0.0)
+              cached.save!
+              result << [last_reporting_period_to_read.date_time, cached.value]
+            end
           end
-          result << [last_reporting_period_to_read.date_time, data ? data[1] : 0.0]
           result += (cached_data.map { |cached| [cached.reporting_period, cached.value] }).reverse
           result
+        end
+
+        def self.build_cached_data(report, reporting_period, value)
+          self.new(
+            :model_name       => report.klass.to_s,
+            :report_name      => report.name.to_s,
+            :grouping         => report.grouping.identifier.to_s,
+            :aggregation      => report.aggregation.to_s,
+            :reporting_period => reporting_period.date_time,
+            :value            => value
+          )
         end
 
     end

@@ -6,7 +6,7 @@ class <%= class_name %> < ActiveRecord::Migration
     t.string   :grouping,         :null => false
     t.string   :aggregation,      :null => false
     t.float    :value,            :null => false, :default => 0
-    t.string   :reporting_period, :null => false
+    t.datetime :reporting_period, :null => false
 
     t.timestamps
   end

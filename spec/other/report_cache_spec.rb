@@ -41,10 +41,10 @@ describe Kvlr::ReportsAsSparkline::ReportCache do
           :aggregation => @report.aggregation.to_s
         },
         :limit => 10,
-        :order => "reporting_period DESC"
+        :order => 'reporting_period ASC'
       )
 
-      Kvlr::ReportsAsSparkline::ReportCache.process(@report, 10) { [] }
+      puts Kvlr::ReportsAsSparkline::ReportCache.process(@report, 10) { [] }
     end
 
     it 'should prepare the results before it returns them' do
@@ -72,7 +72,7 @@ describe Kvlr::ReportsAsSparkline::ReportCache do
         :grouping         => @report.grouping.identifier.to_s,
         :aggregation      => @report.aggregation.to_s,
         :value            => 1,
-        :reporting_period => reporting_period
+        :reporting_period => reporting_period.date_time
       })
       Kvlr::ReportsAsSparkline::ReportCache.stub!(:find).and_return([cached])
 
@@ -109,7 +109,7 @@ describe Kvlr::ReportsAsSparkline::ReportCache do
       Kvlr::ReportsAsSparkline::ReportingPeriod.stub!(:from_db_string).and_return(Kvlr::ReportsAsSparkline::ReportingPeriod.new(@report.grouping))
       @cached = Kvlr::ReportsAsSparkline::ReportCache.new
       @cached.stub!(:save!)
-      @cached.stub!(:reporting_period).and_return(Kvlr::ReportsAsSparkline::ReportingPeriod.new(@report.grouping))
+      @cached.stub!(:reporting_period).and_return(Kvlr::ReportsAsSparkline::ReportingPeriod.new(@report.grouping).date_time)
       Kvlr::ReportsAsSparkline::ReportCache.stub!(:new).and_return(@cached)
     end
 
@@ -158,12 +158,6 @@ describe Kvlr::ReportsAsSparkline::ReportCache do
       result[0].should be_kind_of(Array)
       result[0][0].should be_kind_of(Date)
       result[0][1].should be_kind_of(Float)
-    end
-
-    it 'should return an array with :limit elements' do
-      result = Kvlr::ReportsAsSparkline::ReportCache.send(:prepare_result, @new_data, [], @last_reporting_period_to_read, @report, true)
-
-      result.length.should == 10
     end
 
     it 'should update the last cached record if new data has been read for the last reporting period to read' do

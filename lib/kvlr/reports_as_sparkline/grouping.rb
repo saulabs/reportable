@@ -8,7 +8,7 @@ module Kvlr #:nodoc:
       # ==== Parameters
       # * <tt>identifier</tt> - The identifier of the grouping - one of :hour, :day, :week or :month
       def initialize(identifier)
-        raise ArgumentError.new("Invalid grouping #{grouping}") unless [:hour, :day, :week, :month].include?(identifier)
+        raise ArgumentError.new("Invalid grouping #{identifier}") unless [:hour, :day, :week, :month].include?(identifier)
         @identifier = identifier
       end
 

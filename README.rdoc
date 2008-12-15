@@ -24,7 +24,7 @@ You can than render sparklines for these reports with sparkline_tag in your view
 
 == Installation
 
-Installation requires 2 simple steps:
+Installation requires 3 simple steps:
 
 <b>get the plugin</b>
 

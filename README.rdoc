@@ -22,6 +22,28 @@ You can than render sparklines for these reports with sparkline_tag in your view
 
   <%= sparkline_tag(User.registrations_report) %>
 
+== Installation
+
+Installation requires 2 simple steps:
+
+<b>get the plugin</b>
+
+From your RAILS_ROOT in Rails &gt;= 2.1, do
+
+  ./script/plugin install git://github.com/mk/reports_as_sparkline.git
+
+If you are on Rails &lt; 2.1, do this from your RAILS_ROOT
+
+  git clone git://github.com/mk/reports_as_sparkline.git vendor/plugins/reports_as_sparkline
+
+<b>generate migration</b>
+
+  ./script/generate report_as_sparkline_migration add_report_as_sparkline_tables
+
+<b>migrate</b>
+
+  rake db:migrate
+
 == TODOs/ future plans
 
 * support for Oracle and DB2 (and others?) missing

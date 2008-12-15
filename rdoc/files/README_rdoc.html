@@ -56,7 +56,7 @@
     </tr>
     <tr class="top-aligned-row">
       <td><strong>Last Update:</strong></td>
-      <td>Thu Dec 11 20:20:56 +0100 2008</td>
+      <td>Mon Dec 15 16:08:44 +0100 2008</td>
     </tr>
     </table>
   </div>
@@ -101,6 +101,37 @@ view:
 </p>
 <pre>
   &lt;%= sparkline_tag(User.registrations_report) %&gt;
+</pre>
+<h2>Installation</h2>
+<p>
+Installation requires 2 simple steps:
+</p>
+<p>
+<b>get the plugin</b>
+</p>
+<p>
+From your RAILS_ROOT in Rails &amp;gt;= 2.1, do
+</p>
+<pre>
+  ./script/plugin install git://github.com/mk/reports_as_sparkline.git
+</pre>
+<p>
+If you are on Rails &amp;lt; 2.1, do this from your RAILS_ROOT
+</p>
+<pre>
+  git clone git://github.com/mk/reports_as_sparkline.git vendor/plugins/reports_as_sparkline
+</pre>
+<p>
+<b>generate migration</b>
+</p>
+<pre>
+  ./script/generate report_as_sparkline_migration add_report_as_sparkline_tables
+</pre>
+<p>
+<b>migrate</b>
+</p>
+<pre>
+  rake db:migrate
 </pre>
 <h2>TODOs/ future plans</h2>
 <ul>

@@ -26,16 +26,16 @@ module Kvlr #:nodoc:
       # ==== Examples
       #
       #  class Game < ActiveRecord::Base
-      #    report_as_sparkline :games_per_day
-      #    report_as_sparkline :games_played_total, :cumulate => true
+      #    reports_as_sparkline :games_per_day
+      #    reports_as_sparkline :games_played_total, :cumulate => true
       #  end
       #  class User < ActiveRecord::Base
-      #    report_as_sparkline :registrations, :operation => :count
-      #    report_as_sparkline :activations, :date_column_name => :activated_at, :operation => :count
-      #    report_as_sparkline :total_users_report, :cumulate => true
-      #    report_as_sparkline :rake, :aggregation => :sum, :value_column_name => :profile_visits
+      #    reports_as_sparkline :registrations, :operation => :count
+      #    reports_as_sparkline :activations, :date_column_name => :activated_at, :operation => :count
+      #    reports_as_sparkline :total_users_report, :cumulate => true
+      #    reports_as_sparkline :rake, :aggregation => :sum, :value_column_name => :profile_visits
       #  end
-      def report_as_sparkline(name, options = {})
+      def reports_as_sparkline(name, options = {})
         (class << self; self; end).instance_eval do
           define_method "#{name.to_s}_report".to_sym do |*args|
             if options.delete(:cumulate)

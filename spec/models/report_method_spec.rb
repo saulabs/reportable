@@ -39,7 +39,7 @@ describe Kvlr::ReportsAsSparkline do
 end
 
 class User < ActiveRecord::Base
-  report_as_sparkline :registrations, :limit => 10
+  reports_as_sparkline :registrations, :limit => 10
 end
 
 class SpecialUser < User; end

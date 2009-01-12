@@ -8,8 +8,8 @@ module Kvlr #:nodoc:
       attr_reader :klass, :name, :date_column_name, :value_column_name, :grouping, :aggregation
 
       # ==== Parameters
-      # * <tt>klass</tt> - The model the report works on (This is the class you invoke Kvlr::ReportsAsSparkline::ClassMethods#report_as_sparkline on)
-      # * <tt>name</tt> - The name of the report (as in Kvlr::ReportsAsSparkline::ClassMethods#report_as_sparkline)
+      # * <tt>klass</tt> - The model the report works on (This is the class you invoke Kvlr::ReportsAsSparkline::ClassMethods#reports_as_sparkline on)
+      # * <tt>name</tt> - The name of the report (as in Kvlr::ReportsAsSparkline::ClassMethods#reports_as_sparkline)
       #
       # ==== Options
       #

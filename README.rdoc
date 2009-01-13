@@ -8,8 +8,8 @@ This shows the basic usage. Consider the following user model, including +create
 
   class User < ActiveRecord::Base
     report_as_sparkline :registrations
-    report_as_sparkline :activations,  :date_column_name => :activated_at
-    report_as_sparkline :total_users,  :cumulate         => true
+    report_as_sparkline :activations,  :date_column => :activated_at
+    report_as_sparkline :total_users,  :cumulate    => true
     end
 
 Using +report_as_sparkline+ like this will add the following class methods to your User model:

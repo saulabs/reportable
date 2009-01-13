@@ -56,7 +56,7 @@
     </tr>
     <tr class="top-aligned-row">
       <td><strong>Last Update:</strong></td>
-      <td>Mon Dec 15 16:22:56 +0100 2008</td>
+      <td>Tue Jan 13 16:35:03 +0100 2009</td>
     </tr>
     </table>
   </div>
@@ -82,8 +82,8 @@ This shows the basic usage. Consider the following user model, including
 <pre>
   class User &lt; ActiveRecord::Base
     report_as_sparkline :registrations
-    report_as_sparkline :activations,  :date_column_name =&gt; :activated_at
-    report_as_sparkline :total_users,  :cumulate         =&gt; true
+    report_as_sparkline :activations,  :date_column =&gt; :activated_at
+    report_as_sparkline :total_users,  :cumulate    =&gt; true
     end
 </pre>
 <p>

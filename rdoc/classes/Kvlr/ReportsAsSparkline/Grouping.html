@@ -139,7 +139,7 @@ href="Grouping.html#M000005">identifier</a> of the grouping - one of :hour,
 <pre>
     <span class="ruby-comment cmt"># File lib/kvlr/reports_as_sparkline/grouping.rb, line 10</span>
 10:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">identifier</span>)
-11:         <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>.<span class="ruby-identifier">new</span>(<span class="ruby-node">&quot;Invalid grouping #{grouping}&quot;</span>) <span class="ruby-keyword kw">unless</span> [<span class="ruby-identifier">:hour</span>, <span class="ruby-identifier">:day</span>, <span class="ruby-identifier">:week</span>, <span class="ruby-identifier">:month</span>].<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">identifier</span>)
+11:         <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>.<span class="ruby-identifier">new</span>(<span class="ruby-node">&quot;Invalid grouping #{identifier}&quot;</span>) <span class="ruby-keyword kw">unless</span> [<span class="ruby-identifier">:hour</span>, <span class="ruby-identifier">:day</span>, <span class="ruby-identifier">:week</span>, <span class="ruby-identifier">:month</span>].<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">identifier</span>)
 12:         <span class="ruby-ivar">@identifier</span> = <span class="ruby-identifier">identifier</span>
 13:       <span class="ruby-keyword kw">end</span>
 </pre>

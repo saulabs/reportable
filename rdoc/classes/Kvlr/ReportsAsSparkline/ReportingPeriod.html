@@ -96,7 +96,7 @@ month or a year. All records falling into this period will be grouped.
       <div class="name-list">
       <a href="#M000007">first</a>&nbsp;&nbsp;
       <a href="#M000006">new</a>&nbsp;&nbsp;
-      <a href="#M000008">previous</a>&nbsp;&nbsp;
+      <a href="#M000008">next</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -151,7 +151,8 @@ Returns the <a href="ReportingPeriod.html#M000007">first</a> reporting
 period for a grouping and a limit; e.g. the <a
 href="ReportingPeriod.html#M000007">first</a> reporting period for <a
 href="Grouping.html">Grouping</a> :day and limit 2 would be Time.now -
-2.days
+1.days (since limit is 2, 2 reporting periods are included in the range,
+that is yesterday and today)
 </p>
 <h4>Parameters</h4>
 <ul>
@@ -169,20 +170,20 @@ href="ReportingPeriod.html#M000007">first</a> one
             onclick="toggleCode('M000007-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000007-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/kvlr/reports_as_sparkline/reporting_period.rb, line 23</span>
-23:       <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">first</span>(<span class="ruby-identifier">grouping</span>, <span class="ruby-identifier">limit</span>)
-24:         <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">grouping</span>.<span class="ruby-identifier">identifier</span>
-25:           <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:hour</span>
-26:             <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">grouping</span>, <span class="ruby-constant">DateTime</span>.<span class="ruby-identifier">now</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">limit</span>.<span class="ruby-identifier">hours</span>)
-27:           <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:day</span>
-28:             <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">grouping</span>, <span class="ruby-constant">DateTime</span>.<span class="ruby-identifier">now</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">limit</span>.<span class="ruby-identifier">days</span>)
-29:           <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:week</span>
-30:             <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">grouping</span>, <span class="ruby-constant">DateTime</span>.<span class="ruby-identifier">now</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">limit</span>.<span class="ruby-identifier">weeks</span>)
-31:           <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:month</span>
-32:             <span class="ruby-identifier">date</span> = <span class="ruby-constant">DateTime</span>.<span class="ruby-identifier">now</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">limit</span>.<span class="ruby-identifier">months</span>
-33:             <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">grouping</span>, <span class="ruby-constant">Date</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">date</span>.<span class="ruby-identifier">year</span>, <span class="ruby-identifier">date</span>.<span class="ruby-identifier">month</span>, <span class="ruby-value">1</span>))
-34:         <span class="ruby-keyword kw">end</span>
-35:       <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/kvlr/reports_as_sparkline/reporting_period.rb, line 24</span>
+24:       <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">first</span>(<span class="ruby-identifier">grouping</span>, <span class="ruby-identifier">limit</span>)
+25:         <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">grouping</span>.<span class="ruby-identifier">identifier</span>
+26:           <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:hour</span>
+27:             <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">grouping</span>, <span class="ruby-constant">DateTime</span>.<span class="ruby-identifier">now</span> <span class="ruby-operator">-</span> (<span class="ruby-identifier">limit</span> <span class="ruby-operator">-</span> <span class="ruby-value">1</span>).<span class="ruby-identifier">hours</span>)
+28:           <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:day</span>
+29:             <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">grouping</span>, <span class="ruby-constant">DateTime</span>.<span class="ruby-identifier">now</span> <span class="ruby-operator">-</span> (<span class="ruby-identifier">limit</span> <span class="ruby-operator">-</span> <span class="ruby-value">1</span>).<span class="ruby-identifier">days</span>)
+30:           <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:week</span>
+31:             <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">grouping</span>, <span class="ruby-constant">DateTime</span>.<span class="ruby-identifier">now</span> <span class="ruby-operator">-</span> (<span class="ruby-identifier">limit</span> <span class="ruby-operator">-</span> <span class="ruby-value">1</span>).<span class="ruby-identifier">weeks</span>)
+32:           <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:month</span>
+33:             <span class="ruby-identifier">date</span> = <span class="ruby-constant">DateTime</span>.<span class="ruby-identifier">now</span> <span class="ruby-operator">-</span> (<span class="ruby-identifier">limit</span> <span class="ruby-operator">-</span> <span class="ruby-value">1</span>).<span class="ruby-identifier">months</span>
+34:             <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">grouping</span>, <span class="ruby-constant">Date</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">date</span>.<span class="ruby-identifier">year</span>, <span class="ruby-identifier">date</span>.<span class="ruby-identifier">month</span>, <span class="ruby-value">1</span>))
+35:         <span class="ruby-keyword kw">end</span>
+36:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -230,32 +231,33 @@ reporting period
 
         <div class="method-heading">
           <a href="#M000008" class="method-signature">
-          <span class="method-name">previous</span><span class="method-args">()</span>
+          <span class="method-name">next</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Returns the <a href="ReportingPeriod.html#M000008">previous</a> reporting
-period
+Returns the <a href="ReportingPeriod.html#M000008">next</a> reporting
+period (that is <a href="ReportingPeriod.html#M000008">next</a>
+hour/day/month/year)
 </p>
           <p><a class="source-toggle" href="#"
             onclick="toggleCode('M000008-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000008-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/kvlr/reports_as_sparkline/reporting_period.rb, line 53</span>
-53:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">previous</span>
-54:         <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">case</span> <span class="ruby-ivar">@grouping</span>.<span class="ruby-identifier">identifier</span>
-55:           <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:hour</span>
-56:             <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@grouping</span>, <span class="ruby-ivar">@date_time</span> <span class="ruby-operator">-</span> <span class="ruby-value">1</span>.<span class="ruby-identifier">hour</span>)
-57:           <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:day</span>
-58:             <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@grouping</span>, <span class="ruby-ivar">@date_time</span> <span class="ruby-operator">-</span> <span class="ruby-value">1</span>.<span class="ruby-identifier">day</span>)
-59:           <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:week</span>
-60:             <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@grouping</span>, <span class="ruby-ivar">@date_time</span> <span class="ruby-operator">-</span> <span class="ruby-value">1</span>.<span class="ruby-identifier">week</span>)
-61:           <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:month</span>
-62:             <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@grouping</span>, <span class="ruby-ivar">@date_time</span> <span class="ruby-operator">-</span> <span class="ruby-value">1</span>.<span class="ruby-identifier">month</span>)
-63:         <span class="ruby-keyword kw">end</span>
-64:       <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/kvlr/reports_as_sparkline/reporting_period.rb, line 54</span>
+54:       <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">next</span>
+55:         <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">case</span> <span class="ruby-ivar">@grouping</span>.<span class="ruby-identifier">identifier</span>
+56:           <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:hour</span>
+57:             <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@grouping</span>, <span class="ruby-ivar">@date_time</span> <span class="ruby-operator">+</span> <span class="ruby-value">1</span>.<span class="ruby-identifier">hour</span>)
+58:           <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:day</span>
+59:             <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@grouping</span>, <span class="ruby-ivar">@date_time</span> <span class="ruby-operator">+</span> <span class="ruby-value">1</span>.<span class="ruby-identifier">day</span>)
+60:           <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:week</span>
+61:             <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@grouping</span>, <span class="ruby-ivar">@date_time</span> <span class="ruby-operator">+</span> <span class="ruby-value">1</span>.<span class="ruby-identifier">week</span>)
+62:           <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:month</span>
+63:             <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@grouping</span>, <span class="ruby-ivar">@date_time</span> <span class="ruby-operator">+</span> <span class="ruby-value">1</span>.<span class="ruby-identifier">month</span>)
+64:         <span class="ruby-keyword kw">end</span>
+65:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>

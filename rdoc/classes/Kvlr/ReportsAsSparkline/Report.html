@@ -125,17 +125,17 @@ and calculations
           <td class="context-item-desc"></td>
         </tr>
         <tr class="top-aligned-row context-row">
-          <td class="context-item-name">grouping</td>
-          <td class="context-item-value">&nbsp;[R]&nbsp;</td>
-          <td class="context-item-desc"></td>
-        </tr>
-        <tr class="top-aligned-row context-row">
           <td class="context-item-name">klass</td>
           <td class="context-item-value">&nbsp;[R]&nbsp;</td>
           <td class="context-item-desc"></td>
         </tr>
         <tr class="top-aligned-row context-row">
           <td class="context-item-name">name</td>
+          <td class="context-item-value">&nbsp;[R]&nbsp;</td>
+          <td class="context-item-desc"></td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">options</td>
           <td class="context-item-value">&nbsp;[R]&nbsp;</td>
           <td class="context-item-desc"></td>
         </tr>
@@ -215,13 +215,14 @@ records that match there conditions are reported on
 26:         <span class="ruby-ivar">@date_column</span>  = (<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:date_column</span>] <span class="ruby-operator">||</span> <span class="ruby-value str">'created_at'</span>).<span class="ruby-identifier">to_s</span>
 27:         <span class="ruby-ivar">@value_column</span> = (<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:value_column</span>] <span class="ruby-operator">||</span> (<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:aggregation</span>] <span class="ruby-operator">!=</span> <span class="ruby-identifier">:sum</span> <span class="ruby-operator">?</span> <span class="ruby-value str">'id'</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">name</span>)).<span class="ruby-identifier">to_s</span>
 28:         <span class="ruby-ivar">@aggregation</span>  = <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:aggregation</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">:count</span>
-29:         <span class="ruby-ivar">@grouping</span>     = <span class="ruby-constant">Grouping</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:grouping</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">:day</span>)
-30:         <span class="ruby-ivar">@options</span> = {
-31:           <span class="ruby-identifier">:limit</span>             =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:limit</span>] <span class="ruby-operator">||</span> <span class="ruby-value">100</span>,
-32:           <span class="ruby-identifier">:conditions</span>        =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:conditions</span>] <span class="ruby-operator">||</span> []
+29:         <span class="ruby-ivar">@options</span> = {
+30:           <span class="ruby-identifier">:limit</span>      =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:limit</span>] <span class="ruby-operator">||</span> <span class="ruby-value">100</span>,
+31:           <span class="ruby-identifier">:conditions</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:conditions</span>] <span class="ruby-operator">||</span> [],
+32:           <span class="ruby-identifier">:grouping</span>   =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">Grouping</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:grouping</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">:day</span>)
 33:         }
 34:         <span class="ruby-ivar">@options</span>.<span class="ruby-identifier">merge!</span>(<span class="ruby-identifier">options</span>)
-35:       <span class="ruby-keyword kw">end</span>
+35:         <span class="ruby-ivar">@options</span>.<span class="ruby-identifier">freeze</span>
+36:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -252,20 +253,25 @@ records that match there conditions are reported on (<b>Beware that when
 you specify conditions here, caching will be disabled</b>)
 
 </li>
+<li><tt>:grouping</tt> - The period records are grouped on (:hour, :day, :week,
+:month)
+
+</li>
 </ul>
           <p><a class="source-toggle" href="#"
             onclick="toggleCode('M000010-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000010-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/kvlr/reports_as_sparkline/report.rb, line 42</span>
-42:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">run</span>(<span class="ruby-identifier">options</span> = {})
-43:         <span class="ruby-identifier">ensure_valid_options</span>(<span class="ruby-identifier">options</span>, <span class="ruby-identifier">:run</span>)
-44:         <span class="ruby-identifier">custom_conditions</span> = <span class="ruby-identifier">options</span>.<span class="ruby-identifier">key?</span>(<span class="ruby-identifier">:conditions</span>)
-45:         <span class="ruby-identifier">options</span>.<span class="ruby-identifier">reverse_merge!</span>(<span class="ruby-ivar">@options</span>)
-46:         <span class="ruby-constant">ReportCache</span>.<span class="ruby-identifier">process</span>(<span class="ruby-keyword kw">self</span>, <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:limit</span>], <span class="ruby-identifier">custom_conditions</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">begin_at</span><span class="ruby-operator">|</span>
-47:           <span class="ruby-identifier">read_data</span>(<span class="ruby-identifier">begin_at</span>, <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:conditions</span>])
-48:         <span class="ruby-keyword kw">end</span>
-49:       <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/kvlr/reports_as_sparkline/report.rb, line 44</span>
+44:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">run</span>(<span class="ruby-identifier">options</span> = {})
+45:         <span class="ruby-identifier">ensure_valid_options</span>(<span class="ruby-identifier">options</span>, <span class="ruby-identifier">:run</span>)
+46:         <span class="ruby-identifier">custom_conditions</span> = <span class="ruby-identifier">options</span>.<span class="ruby-identifier">key?</span>(<span class="ruby-identifier">:conditions</span>)
+47:         <span class="ruby-identifier">options</span>.<span class="ruby-identifier">reverse_merge!</span>(<span class="ruby-ivar">@options</span>)
+48:         <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:grouping</span>] = <span class="ruby-constant">Grouping</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:grouping</span>]) <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:grouping</span>].<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Grouping</span>)
+49:         <span class="ruby-constant">ReportCache</span>.<span class="ruby-identifier">process</span>(<span class="ruby-keyword kw">self</span>, <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:limit</span>], <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:grouping</span>], <span class="ruby-identifier">custom_conditions</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">begin_at</span><span class="ruby-operator">|</span>
+50:           <span class="ruby-identifier">read_data</span>(<span class="ruby-identifier">begin_at</span>, <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:grouping</span>], <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:conditions</span>])
+51:         <span class="ruby-keyword kw">end</span>
+52:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>

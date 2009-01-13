@@ -56,7 +56,7 @@
     </tr>
     <tr class="top-aligned-row">
       <td><strong>Last Update:</strong></td>
-      <td>Tue Jan 13 16:35:03 +0100 2009</td>
+      <td>Tue Jan 13 16:47:15 +0100 2009</td>
     </tr>
     </table>
   </div>
@@ -81,13 +81,13 @@ This shows the basic usage. Consider the following user model, including
 </p>
 <pre>
   class User &lt; ActiveRecord::Base
-    report_as_sparkline :registrations
-    report_as_sparkline :activations,  :date_column =&gt; :activated_at
-    report_as_sparkline :total_users,  :cumulate    =&gt; true
+    reports_as_sparkline :registrations
+    reports_as_sparkline :activations,  :date_column =&gt; :activated_at
+    reports_as_sparkline :total_users,  :cumulate    =&gt; true
     end
 </pre>
 <p>
-Using <tt>report_as_sparkline</tt> like this will add the following class
+Using <tt>reports_as_sparkline</tt> like this will add the following class
 methods to your User model:
 </p>
 <pre>
@@ -125,7 +125,7 @@ If you are on Rails &amp;lt; 2.1, do this from your RAILS_ROOT
 <b>generate migration</b>
 </p>
 <pre>
-  ./script/generate report_as_sparkline_migration add_report_as_sparkline_tables
+  ./script/generate reports_as_sparkline_migration add_reports_as_sparkline_tables
 </pre>
 <p>
 <b>migrate</b>

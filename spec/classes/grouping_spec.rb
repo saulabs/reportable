@@ -10,7 +10,7 @@ describe Kvlr::ReportsAsSparkline::Grouping do
 
   end
 
-  describe '.to_sql' do
+  describe '#to_sql' do
 
     describe 'for MySQL' do
 

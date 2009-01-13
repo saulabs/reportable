@@ -6,7 +6,7 @@ describe Kvlr::ReportsAsSparkline::Report do
     @report = Kvlr::ReportsAsSparkline::Report.new(User, :registrations)
   end
 
-  describe '.run' do
+  describe '#run' do
 
     it 'should process the data with the report cache' do
       Kvlr::ReportsAsSparkline::ReportCache.should_receive(:process).once.with(@report, 100, false)
@@ -108,7 +108,7 @@ describe Kvlr::ReportsAsSparkline::Report do
 
   end
 
-  describe '.read_data' do
+  describe '#read_data' do
 
     it 'should invoke the aggregation method on the model' do
       @report = Kvlr::ReportsAsSparkline::Report.new(User, :registrations, :aggregation => :count)
@@ -125,7 +125,7 @@ describe Kvlr::ReportsAsSparkline::Report do
 
   end
 
-  describe '.setup_conditions' do
+  describe '#setup_conditions' do
 
     it 'should return conditions for date_column >= begin_at only when no custom conditions are specified' do
       begin_at = Time.now
@@ -173,7 +173,7 @@ describe Kvlr::ReportsAsSparkline::Report do
 
   end
 
-  describe '.ensure_valid_options' do
+  describe '#ensure_valid_options' do
 
     it 'should raise an error if malformed conditions are specified' do
       lambda { @report.send(:ensure_valid_options, { :conditions => 1 }) }.should raise_error(ArgumentError)

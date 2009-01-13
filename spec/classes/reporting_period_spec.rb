@@ -2,7 +2,7 @@ require File.join(File.dirname(__FILE__), '..', 'spec_helper')
 
 describe Kvlr::ReportsAsSparkline::ReportingPeriod do
 
-  describe '.date_time' do
+  describe '#date_time' do
 
     it 'should return the date and time with minutes = seconds = 0 for grouping :hour' do
       date_time = DateTime.now
@@ -59,7 +59,7 @@ describe Kvlr::ReportsAsSparkline::ReportingPeriod do
 
   end
 
-  describe '#from_db_string' do
+  describe '.from_db_string' do
 
     it 'should return a reporting period with the correct date and time and with minutes = seconds = 0 for grouping :hour' do
       grouping = Kvlr::ReportsAsSparkline::Grouping.new(:hour)
@@ -91,7 +91,7 @@ describe Kvlr::ReportsAsSparkline::ReportingPeriod do
 
   end
 
-  describe '.next' do
+  describe '#next' do
 
     it 'should return a reporting period with date and time one hour after the current period for grouping :hour' do
       now = Time.now
@@ -127,7 +127,7 @@ describe Kvlr::ReportsAsSparkline::ReportingPeriod do
 
   end
 
-  describe '.==' do
+  describe '#==' do
 
     it 'should return true for 2 reporting periods with the same date_time and grouping' do
       now = DateTime.now

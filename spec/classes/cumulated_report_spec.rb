@@ -6,7 +6,7 @@ describe Kvlr::ReportsAsSparkline::CumulatedReport do
     @report = Kvlr::ReportsAsSparkline::CumulatedReport.new(User, :cumulated_registrations)
   end
 
-  describe '.run' do
+  describe '#run' do
 
     it 'should cumulate the data' do
       @report.should_receive(:cumulate).once
@@ -102,7 +102,7 @@ describe Kvlr::ReportsAsSparkline::CumulatedReport do
 
   end
 
-  describe '.cumulate' do
+  describe '#cumulate' do
 
     it 'should correctly cumulate the given data' do
       first = (Time.now - 1.week).to_s

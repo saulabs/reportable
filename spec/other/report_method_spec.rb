@@ -12,7 +12,7 @@ describe Kvlr::ReportsAsSparkline do
 
     it 'should include all data when invoked on the base model class' do
       result = User.registrations_report.to_a
-puts result.inspect
+
       result.length.should == 10
       result[8][1].should  == 1.0
       result[7][1].should  == 2.0

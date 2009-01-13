@@ -4,11 +4,11 @@ module Kvlr #:nodoc:
 
     class ReportCache < ActiveRecord::Base #:nodoc:
 
-      def self.process(report, limit, no_cache = false, &block)
+      def self.process(report, limit, grouping, no_cache = false, &block)
         raise ArgumentError.new('A block must be given') unless block_given?
         self.transaction do
           cached_data = []
-          last_reporting_period_to_read = ReportingPeriod.first(report.grouping, limit)
+          last_reporting_period_to_read = ReportingPeriod.first(grouping, limit)
           unless no_cache
             cached_data = self.find(
               :all,
@@ -16,29 +16,29 @@ module Kvlr #:nodoc:
                 'model_name = ? AND report_name = ? AND grouping = ? AND aggregation = ? AND reporting_period >= ?',
                 report.klass.to_s,
                 report.name.to_s,
-                report.grouping.identifier.to_s,
+                grouping.identifier.to_s,
                 report.aggregation.to_s,
                 last_reporting_period_to_read.date_time
               ],
               :limit => limit,
               :order => 'reporting_period ASC'
             )
-            last_reporting_period_to_read = ReportingPeriod.new(report.grouping, cached_data.last.reporting_period).next unless cached_data.empty?
+            last_reporting_period_to_read = ReportingPeriod.new(grouping, cached_data.last.reporting_period).next unless cached_data.empty?
           end
           new_data = yield(last_reporting_period_to_read.date_time)
-          prepare_result(new_data, cached_data, last_reporting_period_to_read, report, no_cache)[0..(limit - 1)]
+          prepare_result(new_data, cached_data, last_reporting_period_to_read, report, grouping, no_cache)[0..(limit - 1)]
         end
       end
 
       private
 
-        def self.prepare_result(new_data, cached_data, last_reporting_period_to_read, report, no_cache = false)
-          new_data.map! { |data| [ReportingPeriod.from_db_string(report.grouping, data[0]), data[1]] }
+        def self.prepare_result(new_data, cached_data, last_reporting_period_to_read, report, grouping, no_cache = false)
+          new_data.map! { |data| [ReportingPeriod.from_db_string(grouping, data[0]), data[1]] }
           result = cached_data.map { |cached| [cached.reporting_period, cached.value] }
-          current_reporting_period = ReportingPeriod.new(report.grouping)
+          current_reporting_period = ReportingPeriod.new(grouping)
           reporting_period = last_reporting_period_to_read
           while reporting_period < current_reporting_period
-            cached = build_cached_data(report, reporting_period, find_value(new_data, reporting_period))
+            cached = build_cached_data(report, grouping, reporting_period, find_value(new_data, reporting_period))
             cached.save! unless no_cache
             result << [reporting_period.date_time, cached.value]
             reporting_period = reporting_period.next
@@ -52,11 +52,11 @@ module Kvlr #:nodoc:
           data ? data[1] : 0.0
         end
 
-        def self.build_cached_data(report, reporting_period, value)
+        def self.build_cached_data(report, grouping, reporting_period, value)
           self.new(
             :model_name       => report.klass.to_s,
             :report_name      => report.name.to_s,
-            :grouping         => report.grouping.identifier.to_s,
+            :grouping         => grouping.identifier.to_s,
             :aggregation      => report.aggregation.to_s,
             :reporting_period => reporting_period.date_time,
             :value            => value

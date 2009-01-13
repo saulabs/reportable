@@ -9,13 +9,13 @@ describe Kvlr::ReportsAsSparkline::Report do
   describe '#run' do
 
     it 'should process the data with the report cache' do
-      Kvlr::ReportsAsSparkline::ReportCache.should_receive(:process).once.with(@report, 100, false)
+      Kvlr::ReportsAsSparkline::ReportCache.should_receive(:process).once.with(@report, 100, @report.options[:grouping], false)
 
       @report.run
     end
 
     it 'should process the data with the report cache and specify no_cache when custom conditions are given' do
-      Kvlr::ReportsAsSparkline::ReportCache.should_receive(:process).once.with(@report, 100, true)
+      Kvlr::ReportsAsSparkline::ReportCache.should_receive(:process).once.with(@report, 100, @report.options[:grouping], true)
 
       @report.run(:conditions => { :some => :condition })
     end
@@ -24,6 +24,14 @@ describe Kvlr::ReportsAsSparkline::Report do
       @report.should_receive(:ensure_valid_options).once.with({ :limit => 3 }, :run)
 
       result = @report.run(:limit => 3)
+    end
+
+    it 'should use a custom grouping if one is specified' do
+      grouping = Kvlr::ReportsAsSparkline::Grouping.new(:month)
+      Kvlr::ReportsAsSparkline::Grouping.should_receive(:new).once.with(:month).and_return(grouping)
+      Kvlr::ReportsAsSparkline::ReportCache.should_receive(:process).once.with(@report, 100, grouping, true)
+
+      @report.run(:conditions => { :some => :condition }, :grouping => :month)
     end
 
     for grouping in [:hour, :day, :week, :month] do
@@ -114,13 +122,13 @@ describe Kvlr::ReportsAsSparkline::Report do
       @report = Kvlr::ReportsAsSparkline::Report.new(User, :registrations, :aggregation => :count)
       User.should_receive(:count).once.and_return([])
 
-      @report.send(:read_data, Time.now)
+      @report.send(:read_data, Time.now, @report.options[:grouping])
     end
 
     it 'should setup the conditions' do
       @report.should_receive(:setup_conditions).once.and_return([])
 
-      @report.send(:read_data, Time.now)
+      @report.send(:read_data, Time.now, @report.options[:grouping])
     end
 
   end
@@ -187,6 +195,10 @@ describe Kvlr::ReportsAsSparkline::Report do
       lambda { @report.send(:ensure_valid_options, { :conditions => { :first_name => 'first name' } }) }.should_not raise_error(ArgumentError)
     end
 
+    it 'should raise an error if an invalid grouping is specified' do
+      lambda { @report.send(:ensure_valid_options, { :grouping => :decade }) }.should raise_error(ArgumentError)
+    end
+
     describe 'for context :initialize' do
 
       it 'should not raise an error if valid options are specified' do
@@ -208,10 +220,6 @@ describe Kvlr::ReportsAsSparkline::Report do
       it 'should raise an error if an invalid aggregation is specified' do
         lambda { @report.send(:ensure_valid_options, { :aggregation => :invalid }) }.should raise_error(ArgumentError)
       end
-      
-      it 'should raise an error if an invalid grouping is specified' do
-        lambda { @report.send(:ensure_valid_options, { :grouping => :decade }) }.should raise_error(ArgumentError)
-      end
 
       it 'should raise an error if aggregation :sum is spesicied but no :value_column' do
         lambda { @report.send(:ensure_valid_options, { :aggregation => :sum }) }.should raise_error(ArgumentError)
@@ -222,7 +230,7 @@ describe Kvlr::ReportsAsSparkline::Report do
     describe 'for context :run' do
 
       it 'should not raise an error if valid options are specified' do
-        lambda { @report.send(:ensure_valid_options, { :limit => 100, :conditions => [] }, :run)
+        lambda { @report.send(:ensure_valid_options, { :limit => 100, :conditions => [], :grouping => :week }, :run)
         }.should_not raise_error(ArgumentError)
       end
       

@@ -5,7 +5,7 @@ module Kvlr #:nodoc:
     # The Report class that does all the data retrieval and calculations
     class Report
 
-      attr_reader :klass, :name, :date_column, :value_column, :grouping, :aggregation
+      attr_reader :klass, :name, :date_column, :value_column, :aggregation, :options
 
       # ==== Parameters
       # * <tt>klass</tt> - The model the report works on (This is the class you invoke Kvlr::ReportsAsSparkline::ClassMethods#reports_as_sparkline on)
@@ -26,12 +26,13 @@ module Kvlr #:nodoc:
         @date_column  = (options[:date_column] || 'created_at').to_s
         @value_column = (options[:value_column] || (options[:aggregation] != :sum ? 'id' : name)).to_s
         @aggregation  = options[:aggregation] || :count
-        @grouping     = Grouping.new(options[:grouping] || :day)
         @options = {
-          :limit             => options[:limit] || 100,
-          :conditions        => options[:conditions] || []
+          :limit      => options[:limit] || 100,
+          :conditions => options[:conditions] || [],
+          :grouping   => Grouping.new(options[:grouping] || :day)
         }
         @options.merge!(options)
+        @options.freeze
       end
 
       # Runs the report and returns an array of array of DateTimes and Floats
@@ -39,24 +40,26 @@ module Kvlr #:nodoc:
       # ==== Options
       # * <tt>:limit</tt> - The number of periods to get
       # * <tt>:conditions</tt> - Conditions like in ActiveRecord::Base#find; only records that match there conditions are reported on (<b>Beware that when you specify conditions here, caching will be disabled</b>)
+      # * <tt>:grouping</tt> - The period records are grouped on (:hour, :day, :week, :month)
       def run(options = {})
         ensure_valid_options(options, :run)
         custom_conditions = options.key?(:conditions)
         options.reverse_merge!(@options)
-        ReportCache.process(self, options[:limit], custom_conditions) do |begin_at|
-          read_data(begin_at, options[:conditions])
+        options[:grouping] = Grouping.new(options[:grouping]) unless options[:grouping].is_a?(Grouping)
+        ReportCache.process(self, options[:limit], options[:grouping], custom_conditions) do |begin_at|
+          read_data(begin_at, options[:grouping], options[:conditions])
         end
       end
 
       private
 
-        def read_data(begin_at, conditions = []) #:nodoc:
+        def read_data(begin_at, grouping, conditions = []) #:nodoc:
           conditions = setup_conditions(begin_at, conditions)
           @klass.send(@aggregation,
             @value_column,
             :conditions => conditions,
-            :group => @grouping.to_sql(@date_column),
-            :order => "#{@grouping.to_sql(@date_column)} ASC"
+            :group => grouping.to_sql(@date_column),
+            :order => "#{grouping.to_sql(@date_column)} ASC"
           )
         end
 
@@ -78,13 +81,13 @@ module Kvlr #:nodoc:
                 raise ArgumentError.new("Invalid option #{k}") unless [:limit, :aggregation, :grouping, :date_column, :value_column, :conditions].include?(k)
               end
               raise ArgumentError.new("Invalid aggregation #{options[:aggregation]}") if options[:aggregation] && ![:count, :sum].include?(options[:aggregation])
-              raise ArgumentError.new("Invalid grouping #{options[:grouping]}") if options[:grouping] && ![:hour, :day, :week, :month].include?(options[:grouping])
               raise ArgumentError.new('The name of the column holding the value to sum has to be specified for aggregation :sum') if options[:aggregation] == :sum && !options.key?(:value_column)
             when :run
               options.each_key do |k|
-                raise ArgumentError.new("Invalid option #{k}") unless [:limit, :conditions].include?(k)
+                raise ArgumentError.new("Invalid option #{k}") unless [:limit, :conditions, :grouping].include?(k)
               end
           end
+          raise ArgumentError.new("Invalid grouping #{options[:grouping]}") if options[:grouping] && ![:hour, :day, :week, :month].include?(options[:grouping])
           raise ArgumentError.new("Invalid conditions: #{options[:conditions].inspect}") if options[:conditions] && !options[:conditions].is_a?(Array) && !options[:conditions].is_a?(Hash)
         end
 

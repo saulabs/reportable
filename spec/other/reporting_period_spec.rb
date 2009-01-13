@@ -91,38 +91,38 @@ describe Kvlr::ReportsAsSparkline::ReportingPeriod do
 
   end
 
-  describe '.previous' do
+  describe '.next' do
 
-    it 'should return a reporting period with date and time one hour before the current period for grouping :hour' do
+    it 'should return a reporting period with date and time one hour after the current period for grouping :hour' do
       now = Time.now
       reporting_period = Kvlr::ReportsAsSparkline::ReportingPeriod.new(Kvlr::ReportsAsSparkline::Grouping.new(:hour), now)
-      expected = now - 1.hour
+      expected = now + 1.hour
 
-      reporting_period.previous.date_time.should == DateTime.new(expected.year, expected.month, expected.day, expected.hour)
+      reporting_period.next.date_time.should == DateTime.new(expected.year, expected.month, expected.day, expected.hour)
     end
 
-    it 'should return a reporting period with date one day before the current period for grouping :day' do
+    it 'should return a reporting period with date one day after the current period for grouping :day' do
       now = Time.now
       reporting_period = Kvlr::ReportsAsSparkline::ReportingPeriod.new(Kvlr::ReportsAsSparkline::Grouping.new(:day), now)
-      expected = now - 1.day
+      expected = now + 1.day
 
-      reporting_period.previous.date_time.should == Date.new(expected.year, expected.month, expected.day)
+      reporting_period.next.date_time.should == Date.new(expected.year, expected.month, expected.day)
     end
 
-    it 'should return a reporting period with date one week before the current period for grouping :week' do
+    it 'should return a reporting period with date one week after the current period for grouping :week' do
       now = DateTime.now
       reporting_period = Kvlr::ReportsAsSparkline::ReportingPeriod.new(Kvlr::ReportsAsSparkline::Grouping.new(:week), now)
-      expected = reporting_period.date_time - 1.week
+      expected = reporting_period.date_time + 1.week
 
-      reporting_period.previous.date_time.should == Date.new(expected.year, expected.month, expected.day)
+      reporting_period.next.date_time.should == Date.new(expected.year, expected.month, expected.day)
     end
 
-    it 'should return a reporting period with date of the first day in the month one month before the current period' do
+    it 'should return a reporting period with date of the first day in the month one month after the current period' do
       now = Time.now
       reporting_period = Kvlr::ReportsAsSparkline::ReportingPeriod.new(Kvlr::ReportsAsSparkline::Grouping.new(:month), now)
-      expected = reporting_period.date_time - 1.month
+      expected = reporting_period.date_time + 1.month
 
-      reporting_period.previous.date_time.should == Date.new(expected.year, expected.month, 1)
+      reporting_period.next.date_time.should == Date.new(expected.year, expected.month, 1)
     end
 
   end
@@ -161,39 +161,39 @@ describe Kvlr::ReportsAsSparkline::ReportingPeriod do
 
   end
 
-  describe '#first' do
+  describe '.first' do
 
     before do
       @now = DateTime.now
       DateTime.stub!(:now).and_return(@now)
     end
 
-    it 'should return a reporting period with the date part of (DateTime.now - limit.hours) with minutes = seconds = 0 for grouping :hour' do
+    it 'should return a reporting period with the date part of (DateTime.now - (limit - 1).hours) with minutes = seconds = 0 for grouping :hour' do
       reporting_period = Kvlr::ReportsAsSparkline::ReportingPeriod.first(Kvlr::ReportsAsSparkline::Grouping.new(:hour), 3)
-      expected = @now - 3.hours
+      expected = @now - 2.hours
 
       reporting_period.date_time.should == DateTime.new(expected.year, expected.month, expected.day, expected.hour, 0, 0)
     end
 
-    it 'should return a reporting period with the date part of (DateTime.now - limit.days) for grouping :day' do
+    it 'should return a reporting period with the date part of (DateTime.now - (limit - 1).days) for grouping :day' do
       reporting_period = Kvlr::ReportsAsSparkline::ReportingPeriod.first(Kvlr::ReportsAsSparkline::Grouping.new(:day), 3)
-      expected = @now - 3.days
+      expected = @now - 2.days
 
       reporting_period.date_time.should == Date.new(expected.year, expected.month, expected.day)
     end
 
-    it 'should return a reporting period with the date of the first day of the month at (DateTime.now - limit.weeks) for grouping :month' do
+    it 'should return a reporting period with the date of the first day of the month at (DateTime.now - (limit - 1).weeks) for grouping :month' do
       DateTime.stub!(:now).and_return(DateTime.new(2008, 12, 31, 0, 0, 0))
       reporting_period = Kvlr::ReportsAsSparkline::ReportingPeriod.first(Kvlr::ReportsAsSparkline::Grouping.new(:month), 3)
 
-      reporting_period.date_time.should == DateTime.new(2008, 9, 1)
+      reporting_period.date_time.should == DateTime.new(2008, 10, 1)
     end
 
-    it 'should return a reporting period with the date of the monday of the week at (DateTime.now - limit.weeks) for grouping :week' do
+    it 'should return a reporting period with the date of the monday of the week at (DateTime.now - (limit - 1).weeks) for grouping :week' do
       DateTime.stub!(:now).and_return(DateTime.new(2008, 12, 31, 0, 0, 0)) #wednesday
       reporting_period = Kvlr::ReportsAsSparkline::ReportingPeriod.first(Kvlr::ReportsAsSparkline::Grouping.new(:week), 3)
 
-      reporting_period.date_time.should == DateTime.new(2008, 12, 8) #the monday 3 weeks earlier
+      reporting_period.date_time.should == DateTime.new(2008, 12, 15) #the monday 2 weeks earlier
     end
 
   end

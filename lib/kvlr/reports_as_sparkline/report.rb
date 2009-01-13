@@ -56,7 +56,7 @@ module Kvlr #:nodoc:
             @value_column,
             :conditions => conditions,
             :group => @grouping.to_sql(@date_column),
-            :order => "#{@grouping.to_sql(@date_column)} DESC"
+            :order => "#{@grouping.to_sql(@date_column)} ASC"
           )
         end
 

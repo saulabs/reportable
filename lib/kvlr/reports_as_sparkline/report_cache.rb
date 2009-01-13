@@ -23,7 +23,7 @@ module Kvlr #:nodoc:
               :limit => limit,
               :order => 'reporting_period ASC'
             )
-            last_reporting_period_to_read = ReportingPeriod.new(report.grouping, cached_data.last.reporting_period) unless cached_data.empty?
+            last_reporting_period_to_read = ReportingPeriod.new(report.grouping, cached_data.last.reporting_period).next unless cached_data.empty?
           end
           new_data = yield(last_reporting_period_to_read.date_time)
           prepare_result(new_data, cached_data, last_reporting_period_to_read, report, no_cache)[0..(limit - 1)]
@@ -34,27 +34,22 @@ module Kvlr #:nodoc:
 
         def self.prepare_result(new_data, cached_data, last_reporting_period_to_read, report, no_cache = false)
           new_data.map! { |data| [ReportingPeriod.from_db_string(report.grouping, data[0]), data[1]] }
-          result = []
-          reporting_period = ReportingPeriod.new(report.grouping)
-          while reporting_period != last_reporting_period_to_read
-            data = new_data.detect { |data| data[0] == reporting_period }
-            cached = build_cached_data(report, reporting_period, data ? data[1] : 0.0)
+          result = cached_data.map { |cached| [cached.reporting_period, cached.value] }
+          current_reporting_period = ReportingPeriod.new(report.grouping)
+          reporting_period = last_reporting_period_to_read
+          while reporting_period < current_reporting_period
+            cached = build_cached_data(report, reporting_period, find_value(new_data, reporting_period))
             cached.save! unless no_cache
             result << [reporting_period.date_time, cached.value]
-            reporting_period = reporting_period.previous
+            reporting_period = reporting_period.next
           end
-          data = (new_data.first && new_data.first[0] == last_reporting_period_to_read) ? new_data.first : nil
-          unless no_cache
-            if data && cached = cached_data.last
-              cached.update_attributes!(:value => data[1])
-            else
-              cached = build_cached_data(report, last_reporting_period_to_read, data ? data[1] : 0.0)
-              cached.save!
-              result << [last_reporting_period_to_read.date_time, cached.value]
-            end
-          end
-          result += (cached_data.map { |cached| [cached.reporting_period, cached.value] }).reverse
+          result << [current_reporting_period.date_time, find_value(new_data, current_reporting_period)]
           result
+        end
+
+        def self.find_value(data, reporting_period)
+          data = data.detect { |d| d[0] == reporting_period }
+          data ? data[1] : 0.0
         end
 
         def self.build_cached_data(report, reporting_period, value)

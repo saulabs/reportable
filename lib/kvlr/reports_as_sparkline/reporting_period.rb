@@ -15,7 +15,8 @@ module Kvlr #:nodoc:
         @date_time = parse_date_time(date_time)
       end
 
-      # Returns the first reporting period for a grouping and a limit; e.g. the first reporting period for Grouping :day and limit 2 would be Time.now - 2.days
+      # Returns the first reporting period for a grouping and a limit; e.g. the first reporting period for Grouping :day and limit 2 would be Time.now - 1.days
+      # (since limit is 2, 2 reporting periods are included in the range, that is yesterday and today)
       #
       # ==== Parameters
       # * <tt>grouping</tt> - The Kvlr::ReportsAsSparkline::Grouping of the reporting period
@@ -23,13 +24,13 @@ module Kvlr #:nodoc:
       def self.first(grouping, limit)
         return case grouping.identifier
           when :hour
-            self.new(grouping, DateTime.now - limit.hours)
+            self.new(grouping, DateTime.now - (limit - 1).hours)
           when :day
-            self.new(grouping, DateTime.now - limit.days)
+            self.new(grouping, DateTime.now - (limit - 1).days)
           when :week
-            self.new(grouping, DateTime.now - limit.weeks)
+            self.new(grouping, DateTime.now - (limit - 1).weeks)
           when :month
-            date = DateTime.now - limit.months
+            date = DateTime.now - (limit - 1).months
             self.new(grouping, Date.new(date.year, date.month, 1))
         end
       end
@@ -49,17 +50,17 @@ module Kvlr #:nodoc:
         result
       end
 
-      # Returns the previous reporting period
-      def previous
+      # Returns the next reporting period (that is next hour/day/month/year)
+      def next
         return case @grouping.identifier
           when :hour
-            self.class.new(@grouping, @date_time - 1.hour)
+            self.class.new(@grouping, @date_time + 1.hour)
           when :day
-            self.class.new(@grouping, @date_time - 1.day)
+            self.class.new(@grouping, @date_time + 1.day)
           when :week
-            self.class.new(@grouping, @date_time - 1.week)
+            self.class.new(@grouping, @date_time + 1.week)
           when :month
-            self.class.new(@grouping, @date_time - 1.month)
+            self.class.new(@grouping, @date_time + 1.month)
         end
       end
 
@@ -68,6 +69,13 @@ module Kvlr #:nodoc:
           return @date_time.to_s == other.date_time.to_s && @grouping.identifier.to_s == other.grouping.identifier.to_s
         end
         false
+      end
+
+      def <(other) #:nodoc:
+        if other.class == Kvlr::ReportsAsSparkline::ReportingPeriod
+          return @date_time < other.date_time
+        end
+        raise ArgumentError.new("Can only compare instances of #{Kvlr::ReportsAsSparkline::ReportingPeriod.klass}")
       end
 
       private

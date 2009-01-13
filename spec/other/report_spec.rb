@@ -36,44 +36,62 @@ describe Kvlr::ReportsAsSparkline::Report do
           User.create!(:login => 'test 3', :created_at => Time.now - 3.send(grouping), :profile_visits => 3)
         end
 
+        describe do
+
+          before do
+            @grouping = Kvlr::ReportsAsSparkline::Grouping.new(grouping)
+            @report = Kvlr::ReportsAsSparkline::Report.new(User, :registrations, :grouping => grouping, :limit => 10)
+            @result = @report.run
+          end
+
+          it "should return an array starting reporting period (Time.now - (limit - 1).#{grouping.to_s})" do
+            @result.first[0].should == Kvlr::ReportsAsSparkline::ReportingPeriod.new(@grouping, Time.now - 9.send(grouping)).date_time
+          end
+
+          it "should return data ending with with the current reporting period" do
+            @result.last[0].should == Kvlr::ReportsAsSparkline::ReportingPeriod.new(@grouping).date_time
+          end
+
+        end
+
         it 'should return correct data for aggregation :count' do
           @report = Kvlr::ReportsAsSparkline::Report.new(User, :registrations, :aggregation => :count, :grouping => grouping, :limit => 10)
           result = @report.run.to_a
 
-          result[0][1].should == 0
-          result[1][1].should == 1
-          result[2][1].should == 0
-          result[3][1].should == 2
+          result[9][1].should == 0.0
+          result[8][1].should == 1.0
+          result[7][1].should == 0.0
+          result[6][1].should == 2.0
         end
 
         it 'should return correct data for aggregation :sum' do
           @report = Kvlr::ReportsAsSparkline::Report.new(User, :registrations, :aggregation => :sum, :grouping => grouping, :value_column => :profile_visits, :limit => 10)
           result = @report.run().to_a
 
-          result[0][1].should == 0
-          result[1][1].should == 1
-          result[2][1].should == 0
-          result[3][1].should == 5
+          result[9][1].should == 0.0
+          result[8][1].should == 1.0
+          result[7][1].should == 0.0
+          result[6][1].should == 5.0
         end
 
         it 'should return correct data for aggregation :count when custom conditions are specified' do
           @report = Kvlr::ReportsAsSparkline::Report.new(User, :registrations, :aggregation => :count, :grouping => grouping, :limit => 10)
           result = @report.run(:conditions => ['login IN (?)', ['test 1', 'test 2']]).to_a
 
-          result[0][1].should == 0
-          result[1][1].should == 1
-          result[2][1].should == 0
-          result[3][1].should == 1
+          result[9][1].should == 0.0
+          result[8][1].should == 1.0
+          result[7][1].should == 0.0
+          result[6][1].should == 1.0
         end
 
         it 'should return correct data for aggregation :sum when custom conditions are specified' do
           @report = Kvlr::ReportsAsSparkline::Report.new(User, :registrations, :aggregation => :sum, :grouping => grouping, :value_column => :profile_visits, :limit => 10)
           result = @report.run(:conditions => ['login IN (?)', ['test 1', 'test 2']]).to_a
 
-          result[0][1].should == 0
-          result[1][1].should == 1
-          result[2][1].should == 0
-          result[3][1].should == 2
+          result[9][1].should == 0.0
+          result[8][1].should == 1.0
+          result[7][1].should == 0.0
+          result[6][1].should == 2.0
         end
 
         after(:all) do
@@ -173,12 +191,12 @@ describe Kvlr::ReportsAsSparkline::Report do
 
       it 'should not raise an error if valid options are specified' do
         lambda { @report.send(:ensure_valid_options, {
-            :limit             => 100,
-            :aggregation       => :count,
-            :grouping          => :day,
+            :limit        => 100,
+            :aggregation  => :count,
+            :grouping     => :day,
             :date_column  => :created_at,
             :value_column => :id,
-            :conditions        => []
+            :conditions   => []
           })
         }.should_not raise_error(ArgumentError)
       end

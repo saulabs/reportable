@@ -38,12 +38,12 @@ describe Kvlr::ReportsAsSparkline::CumulatedReport do
             @result = @report.run
           end
 
-          it "should return data starting with the current reporting period" do
-            @result.first[0].should == Kvlr::ReportsAsSparkline::ReportingPeriod.new(@grouping).date_time
+          it "should return an array starting reporting period (Time.now - (limit - 1).#{grouping.to_s})" do
+            @result.first[0].should == Kvlr::ReportsAsSparkline::ReportingPeriod.new(@grouping, Time.now - 9.send(grouping)).date_time
           end
 
-          it "should return data ending with reporting period (Time.now - (limit - 1).#{grouping.to_s})" do
-            @result.last[0].should == Kvlr::ReportsAsSparkline::ReportingPeriod.new(@grouping, Time.now - 9.send(grouping)).date_time
+          it "should return data ending with with the current reporting period" do
+            @result.last[0].should == Kvlr::ReportsAsSparkline::ReportingPeriod.new(@grouping).date_time
           end
 
         end
@@ -52,40 +52,40 @@ describe Kvlr::ReportsAsSparkline::CumulatedReport do
           @report = Kvlr::ReportsAsSparkline::CumulatedReport.new(User, :registrations, :aggregation => :count, :grouping => grouping, :limit => 10)
           result = @report.run
 
-          result[0][1].should == 3
-          result[1][1].should == 3
-          result[2][1].should == 2
-          result[3][1].should == 2
+          result[9][1].should == 3.0
+          result[8][1].should == 3.0
+          result[7][1].should == 2.0
+          result[6][1].should == 2.0
         end
 
         it 'should return correct data for aggregation :sum' do
           @report = Kvlr::ReportsAsSparkline::CumulatedReport.new(User, :registrations, :aggregation => :sum, :grouping => grouping, :value_column => :profile_visits, :limit => 10)
           result = @report.run()
 
-          result[0][1].should == 6
-          result[1][1].should == 6
-          result[2][1].should == 5
-          result[3][1].should == 5
+          result[9][1].should == 6.0
+          result[8][1].should == 6.0
+          result[7][1].should == 5.0
+          result[6][1].should == 5.0
         end
 
         it 'should return correct data for aggregation :count when custom conditions are specified' do
           @report = Kvlr::ReportsAsSparkline::CumulatedReport.new(User, :registrations, :aggregation => :count, :grouping => grouping, :limit => 10)
           result = @report.run(:conditions => ['login IN (?)', ['test 1', 'test 2']])
 
-          result[0][1].should == 2
-          result[1][1].should == 2
-          result[2][1].should == 1
-          result[3][1].should == 1
+          result[9][1].should == 2.0
+          result[8][1].should == 2.0
+          result[7][1].should == 1.0
+          result[6][1].should == 1.0
         end
 
         it 'should return correct data for aggregation :sum when custom conditions are specified' do
           @report = Kvlr::ReportsAsSparkline::CumulatedReport.new(User, :registrations, :aggregation => :sum, :grouping => grouping, :value_column => :profile_visits, :limit => 10)
           result = @report.run(:conditions => ['login IN (?)', ['test 1', 'test 2']])
 
-          result[0][1].should == 3
-          result[1][1].should == 3
-          result[2][1].should == 2
-          result[3][1].should == 2
+          result[9][1].should == 3.0
+          result[8][1].should == 3.0
+          result[7][1].should == 2.0
+          result[6][1].should == 2.0
         end
 
         after(:all) do
@@ -105,11 +105,11 @@ describe Kvlr::ReportsAsSparkline::CumulatedReport do
   describe '.cumulate' do
 
     it 'should correctly cumulate the given data' do
-      first = Time.now.to_s
-      second = (Time.now - 1.week).to_s
+      first = (Time.now - 1.week).to_s
+      second = Time.now.to_s
       data = [[first, 1], [second, 2]]
 
-      @report.send(:cumulate, data).should == [[first, 3.0], [second, 2.0]]
+      @report.send(:cumulate, data).should == [[first, 1.0], [second, 3.0]]
     end
 
   end

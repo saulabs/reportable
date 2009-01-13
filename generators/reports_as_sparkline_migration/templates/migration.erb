@@ -1,27 +1,36 @@
 class <%= class_name %> < ActiveRecord::Migration
 
-  create_table :report_caches, :force => true do |t|
-    t.string   :model_name,       :null => false
-    t.string   :report_name,      :null => false
-    t.string   :grouping,         :null => false
-    t.string   :aggregation,      :null => false
-    t.float    :value,            :null => false, :default => 0
-    t.datetime :reporting_period, :null => false
+  def self.up
+    create_table :report_caches, :force => true do |t|
+      t.string   :model_name,       :null => false
+      t.string   :report_name,      :null => false
+      t.string   :grouping,         :null => false
+      t.string   :aggregation,      :null => false
+      t.float    :value,            :null => false, :default => 0
+      t.datetime :reporting_period, :null => false
 
-    t.timestamps
+      t.timestamps
+    end
+    add_index :report_caches, [
+      :model_name,
+      :report_name,
+      :grouping,
+      :aggregation
+    ], :name => :name_model_grouping_agregation
+    add_index :report_caches, [
+      :model_name,
+      :report_name,
+      :grouping,
+      :aggregation,
+      :reporting_period
+    ], :unique => true, :name => :name_model_grouping_aggregation_period
   end
-  add_index :report_caches, [
-    :model_name,
-    :report_name,
-    :grouping,
-    :aggregation
-  ], :name => 'name_model_grouping_agregation'
-  add_index :report_caches, [
-    :model_name,
-    :report_name,
-    :grouping,
-    :aggregation,
-    :reporting_period
-  ], :unique => true, :name => 'name_model_grouping_aggregation_period'
+
+  def self.down
+    remove_index :name_model_grouping_agregation
+    remove_index :name_model_grouping_aggregation_period
+
+    drop_table :report_caches
+  end
 
 end

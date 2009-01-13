@@ -23,13 +23,13 @@ ActiveRecord::Schema.define(:version => 1) do
     :report_name,
     :grouping,
     :aggregation
-  ], :name => 'name_model_grouping_agregation'
+  ], :name => :name_model_grouping_agregation
   add_index :report_caches, [
     :model_name,
     :report_name,
     :grouping,
     :aggregation,
     :reporting_period
-  ], :unique => true, :name => 'name_model_grouping_aggregation_period'
+  ], :unique => true, :name => :name_model_grouping_aggregation_period
 
 end

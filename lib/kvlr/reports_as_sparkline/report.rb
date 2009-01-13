@@ -21,12 +21,12 @@ module Kvlr #:nodoc:
       # * <tt>:conditions</tt> - Conditions like in ActiveRecord::Base#find; only records that match there conditions are reported on
       def initialize(klass, name, options = {})
         ensure_valid_options(options)
-        @klass             = klass
-        @name              = name
+        @klass        = klass
+        @name         = name
         @date_column  = (options[:date_column] || 'created_at').to_s
         @value_column = (options[:value_column] || (options[:aggregation] != :sum ? 'id' : name)).to_s
-        @aggregation       = options[:aggregation] || :count
-        @grouping          = Grouping.new(options[:grouping] || :day)
+        @aggregation  = options[:aggregation] || :count
+        @grouping     = Grouping.new(options[:grouping] || :day)
         @options = {
           :limit             => options[:limit] || 100,
           :conditions        => options[:conditions] || []

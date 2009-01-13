@@ -34,12 +34,14 @@ describe Kvlr::ReportsAsSparkline::ReportCache do
     it 'should read existing data for the report from cache' do
       Kvlr::ReportsAsSparkline::ReportCache.should_receive(:find).once.with(
         :all,
-        :conditions => {
-          :model_name => @report.klass.to_s,
-          :report_name => @report.name.to_s,
-          :grouping => @report.grouping.identifier.to_s,
-          :aggregation => @report.aggregation.to_s
-        },
+        :conditions => [
+          'model_name = ? AND report_name = ? AND grouping = ? AND aggregation = ? AND reporting_period >= ?',
+          @report.klass.to_s,
+          @report.name.to_s,
+          @report.grouping.identifier.to_s,
+          @report.aggregation.to_s,
+          Kvlr::ReportsAsSparkline::ReportingPeriod.first(@report.grouping, 10).date_time
+        ],
         :limit => 10,
         :order => 'reporting_period ASC'
       )

@@ -12,12 +12,14 @@ module Kvlr #:nodoc:
           unless no_cache
             cached_data = self.find(
               :all,
-              :conditions => {
-                :model_name  => report.klass.to_s,
-                :report_name => report.name.to_s,
-                :grouping    => report.grouping.identifier.to_s,
-                :aggregation => report.aggregation.to_s
-              },
+              :conditions => [
+                'model_name = ? AND report_name = ? AND grouping = ? AND aggregation = ? AND reporting_period >= ?',
+                report.klass.to_s,
+                report.name.to_s,
+                report.grouping.identifier.to_s,
+                report.aggregation.to_s,
+                last_reporting_period_to_read.date_time
+              ],
               :limit => limit,
               :order => 'reporting_period ASC'
             )

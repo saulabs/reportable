@@ -11,6 +11,7 @@ class <%= class_name %> < ActiveRecord::Migration
 
       t.timestamps
     end
+
     add_index :report_caches, [
       :model_name,
       :report_name,

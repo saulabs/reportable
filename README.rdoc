@@ -7,12 +7,12 @@ ReportsAsSparkline enables you to generate reports and sparklines from your mode
 This shows the basic usage. Consider the following user model, including +created_at+ and +activated_at+ timestamp fields.
 
   class User < ActiveRecord::Base
-    report_as_sparkline :registrations
-    report_as_sparkline :activations,  :date_column => :activated_at
-    report_as_sparkline :total_users,  :cumulate    => true
+    reports_as_sparkline :registrations
+    reports_as_sparkline :activations,  :date_column => :activated_at
+    reports_as_sparkline :total_users,  :cumulate    => true
     end
 
-Using +report_as_sparkline+ like this will add the following class methods to your User model:
+Using +reports_as_sparkline+ like this will add the following class methods to your User model:
 
   User.registrations_report
   User.activations_report
@@ -38,7 +38,7 @@ If you are on Rails &lt; 2.1, do this from your RAILS_ROOT
 
 <b>generate migration</b>
 
-  ./script/generate report_as_sparkline_migration add_report_as_sparkline_tables
+  ./script/generate reports_as_sparkline_migration add_reports_as_sparkline_tables
 
 <b>migrate</b>
 

@@ -39,55 +39,55 @@ module Kvlr #:nodoc:
         end
       end
 
-      def to_sql(date_column_name) #:nodoc:
+      def to_sql(date_column) #:nodoc:
         return case ActiveRecord::Base.connection.class.to_s
           when 'ActiveRecord::ConnectionAdapters::MysqlAdapter'
-            mysql_format(date_column_name)
+            mysql_format(date_column)
           when 'ActiveRecord::ConnectionAdapters::SQLite3Adapter'
-            sqlite_format(date_column_name)
+            sqlite_format(date_column)
           when 'ActiveRecord::ConnectionAdapters::PostgreSQLAdapter'
-            postgresql_format(date_column_name)
+            postgresql_format(date_column)
         end
       end
 
       private
 
-        def mysql_format(date_column_name)
+        def mysql_format(date_column)
           return case @identifier
             when :hour
-              "DATE_FORMAT(#{date_column_name}, '%Y/%m/%d/%H')"
+              "DATE_FORMAT(#{date_column}, '%Y/%m/%d/%H')"
             when :day
-              "DATE_FORMAT(#{date_column_name}, '%Y/%m/%d')"
+              "DATE_FORMAT(#{date_column}, '%Y/%m/%d')"
             when :week
-              "DATE_FORMAT(#{date_column_name}, '%Y/%u')"
+              "DATE_FORMAT(#{date_column}, '%Y/%u')"
             when :month
-              "DATE_FORMAT(#{date_column_name}, '%Y/%m')"
+              "DATE_FORMAT(#{date_column}, '%Y/%m')"
           end
         end
 
-        def sqlite_format(date_column_name)
+        def sqlite_format(date_column)
           return case @identifier
             when :hour
-              "strftime('%Y/%m/%d/%H', #{date_column_name})"
+              "strftime('%Y/%m/%d/%H', #{date_column})"
             when :day
-              "strftime('%Y/%m/%d', #{date_column_name})"
+              "strftime('%Y/%m/%d', #{date_column})"
             when :week
-              "strftime('%Y/%W', #{date_column_name})"
+              "strftime('%Y/%W', #{date_column})"
             when :month
-              "strftime('%Y/%m', #{date_column_name})"
+              "strftime('%Y/%m', #{date_column})"
           end
         end
 
-        def postgresql_format(date_column_name)
+        def postgresql_format(date_column)
           return case @identifier
             when :hour
-              "date_trunc('hour', #{date_column_name})"
+              "date_trunc('hour', #{date_column})"
             when :day
-              "date_trunc('day', #{date_column_name})"
+              "date_trunc('day', #{date_column})"
             when :week
-              "date_trunc('week', #{date_column_name})"
+              "date_trunc('week', #{date_column})"
             when :month
-              "date_trunc('month', #{date_column_name})"
+              "date_trunc('month', #{date_column})"
           end
         end
 

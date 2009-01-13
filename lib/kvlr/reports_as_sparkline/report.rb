@@ -5,7 +5,7 @@ module Kvlr #:nodoc:
     # The Report class that does all the data retrieval and calculations
     class Report
 
-      attr_reader :klass, :name, :date_column_name, :value_column_name, :grouping, :aggregation
+      attr_reader :klass, :name, :date_column, :value_column, :grouping, :aggregation
 
       # ==== Parameters
       # * <tt>klass</tt> - The model the report works on (This is the class you invoke Kvlr::ReportsAsSparkline::ClassMethods#reports_as_sparkline on)
@@ -13,9 +13,9 @@ module Kvlr #:nodoc:
       #
       # ==== Options
       #
-      # * <tt>:date_column_name</tt> - The name of the date column on that the records are aggregated
-      # * <tt>:value_column_name</tt> - The name of the column that holds the value to sum for aggregation :sum
-      # * <tt>:aggregation</tt> - The aggregation to use (either :count or :sum); when using :sum, :value_column_name must also be specified
+      # * <tt>:date_column</tt> - The name of the date column on that the records are aggregated
+      # * <tt>:value_column</tt> - The name of the column that holds the value to sum for aggregation :sum
+      # * <tt>:aggregation</tt> - The aggregation to use (either :count or :sum); when using :sum, :value_column must also be specified
       # * <tt>:grouping</tt> - The period records are grouped on (:hour, :day, :week, :month)
       # * <tt>:limit</tt> - The number of periods to get (see :grouping)
       # * <tt>:conditions</tt> - Conditions like in ActiveRecord::Base#find; only records that match there conditions are reported on
@@ -23,8 +23,8 @@ module Kvlr #:nodoc:
         ensure_valid_options(options)
         @klass             = klass
         @name              = name
-        @date_column_name  = (options[:date_column_name] || 'created_at').to_s
-        @value_column_name = (options[:value_column_name] || (options[:aggregation] != :sum ? 'id' : name)).to_s
+        @date_column  = (options[:date_column] || 'created_at').to_s
+        @value_column = (options[:value_column] || (options[:aggregation] != :sum ? 'id' : name)).to_s
         @aggregation       = options[:aggregation] || :count
         @grouping          = Grouping.new(options[:grouping] || :day)
         @options = {
@@ -53,10 +53,10 @@ module Kvlr #:nodoc:
         def read_data(begin_at, conditions = []) #:nodoc:
           conditions = setup_conditions(begin_at, conditions)
           @klass.send(@aggregation,
-            @value_column_name,
+            @value_column,
             :conditions => conditions,
-            :group => @grouping.to_sql(@date_column_name),
-            :order => "#{@grouping.to_sql(@date_column_name)} DESC"
+            :group => @grouping.to_sql(@date_column),
+            :order => "#{@grouping.to_sql(@date_column)} DESC"
           )
         end
 
@@ -67,7 +67,7 @@ module Kvlr #:nodoc:
           elsif custom_conditions.size > 0
             conditions = [(custom_conditions[0] || ''), *custom_conditions[1..-1]]
           end
-          conditions[0] += "#{(conditions[0].blank? ? '' : ' AND ') + @date_column_name.to_s} >= ?"
+          conditions[0] += "#{(conditions[0].blank? ? '' : ' AND ') + @date_column.to_s} >= ?"
           conditions << begin_at
         end
 
@@ -75,11 +75,11 @@ module Kvlr #:nodoc:
           case context
             when :initialize
               options.each_key do |k|
-                raise ArgumentError.new("Invalid option #{k}") unless [:limit, :aggregation, :grouping, :date_column_name, :value_column_name, :conditions].include?(k)
+                raise ArgumentError.new("Invalid option #{k}") unless [:limit, :aggregation, :grouping, :date_column, :value_column, :conditions].include?(k)
               end
               raise ArgumentError.new("Invalid aggregation #{options[:aggregation]}") if options[:aggregation] && ![:count, :sum].include?(options[:aggregation])
               raise ArgumentError.new("Invalid grouping #{options[:grouping]}") if options[:grouping] && ![:hour, :day, :week, :month].include?(options[:grouping])
-              raise ArgumentError.new('The name of the column holding the value to sum has to be specified for aggregation :sum') if options[:aggregation] == :sum && !options.key?(:value_column_name)
+              raise ArgumentError.new('The name of the column holding the value to sum has to be specified for aggregation :sum') if options[:aggregation] == :sum && !options.key?(:value_column)
             when :run
               options.each_key do |k|
                 raise ArgumentError.new("Invalid option #{k}") unless [:limit, :conditions].include?(k)

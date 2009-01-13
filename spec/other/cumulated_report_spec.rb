@@ -59,7 +59,7 @@ describe Kvlr::ReportsAsSparkline::CumulatedReport do
         end
 
         it 'should return correct data for aggregation :sum' do
-          @report = Kvlr::ReportsAsSparkline::CumulatedReport.new(User, :registrations, :aggregation => :sum, :grouping => grouping, :value_column_name => :profile_visits, :limit => 10)
+          @report = Kvlr::ReportsAsSparkline::CumulatedReport.new(User, :registrations, :aggregation => :sum, :grouping => grouping, :value_column => :profile_visits, :limit => 10)
           result = @report.run()
 
           result[0][1].should == 6
@@ -79,7 +79,7 @@ describe Kvlr::ReportsAsSparkline::CumulatedReport do
         end
 
         it 'should return correct data for aggregation :sum when custom conditions are specified' do
-          @report = Kvlr::ReportsAsSparkline::CumulatedReport.new(User, :registrations, :aggregation => :sum, :grouping => grouping, :value_column_name => :profile_visits, :limit => 10)
+          @report = Kvlr::ReportsAsSparkline::CumulatedReport.new(User, :registrations, :aggregation => :sum, :grouping => grouping, :value_column => :profile_visits, :limit => 10)
           result = @report.run(:conditions => ['login IN (?)', ['test 1', 'test 2']])
 
           result[0][1].should == 3

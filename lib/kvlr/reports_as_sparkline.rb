@@ -16,9 +16,9 @@ module Kvlr #:nodoc:
       #
       # ==== Options
       #
-      # * <tt>:date_column_name</tt> - The name of the date column on that the records are aggregated
-      # * <tt>:value_column_name</tt> - The name of the column that holds the value to sum for aggregation :sum
-      # * <tt>:aggregation</tt> - The aggregation to use (either :count or :sum); when using :sum, :value_column_name must also be specified
+      # * <tt>:date_column</tt> - The name of the date column on that the records are aggregated
+      # * <tt>:value_column</tt> - The name of the column that holds the value to sum for aggregation :sum
+      # * <tt>:aggregation</tt> - The aggregation to use (either :count or :sum); when using :sum, :value_column must also be specified
       # * <tt>:grouping</tt> - The period records are grouped on (:hour, :day, :week, :month)
       # * <tt>:limit</tt> - The number of periods to get (see :grouping)
       # * <tt>:conditions</tt> - Conditions like in ActiveRecord::Base#find; only records that match there conditions are reported on
@@ -31,9 +31,9 @@ module Kvlr #:nodoc:
       #  end
       #  class User < ActiveRecord::Base
       #    reports_as_sparkline :registrations, :operation => :count
-      #    reports_as_sparkline :activations, :date_column_name => :activated_at, :operation => :count
+      #    reports_as_sparkline :activations, :date_column => :activated_at, :operation => :count
       #    reports_as_sparkline :total_users_report, :cumulate => true
-      #    reports_as_sparkline :rake, :aggregation => :sum, :value_column_name => :profile_visits
+      #    reports_as_sparkline :rake, :aggregation => :sum, :value_column => :profile_visits
       #  end
       def reports_as_sparkline(name, options = {})
         (class << self; self; end).instance_eval do

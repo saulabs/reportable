@@ -23,7 +23,7 @@ module Kvlr #:nodoc:
               :limit => limit,
               :order => 'reporting_period ASC'
             )
-            last_reporting_period_to_read = ReportingPeriod.new(grouping, cached_data.last.reporting_period).next unless cached_data.empty?
+            last_reporting_period_to_read = cached_data.last.reporting_period.next.to_reporting_period(grouping) unless cached_data.empty?
           end
           new_data = yield(last_reporting_period_to_read.date_time)
           prepare_result(new_data, cached_data, last_reporting_period_to_read, report, grouping, no_cache)[0..(limit - 1)]

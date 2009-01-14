@@ -86,7 +86,7 @@ describe Kvlr::ReportsAsSparkline::Grouping do
         ActiveRecord::Base.connection.stub!(:class).and_return(ActiveRecord::ConnectionAdapters::SQLite3Adapter)
       end
 
-      for grouping in [[:hour, '2008/12/31/12'], [:day, '2008/12/31'], [:month, '2008/12'], [:week, '2008/2']] do
+      for grouping in [[:hour, '2008/12/31/12'], [:day, '2008/12/31'], [:month, '2008/12']] do
 
         it "should split the string with '/' for grouping :#{grouping[0].to_s}" do
           Kvlr::ReportsAsSparkline::Grouping.new(grouping[0]).date_parts_from_db_string(grouping[1]).should == grouping[1].split('/').map(&:to_i)
@@ -94,9 +94,9 @@ describe Kvlr::ReportsAsSparkline::Grouping do
 
       end
 
-      it 'should split the string with "/", set the week to 1 and increment the year by 1 if the week is above 52' do
-        db_string = '2008/53'
-        expected = [2009, 1]
+      it 'should split the string with "/" and increment the week by 1 for grouping :week' do
+        db_string = '2008/2'
+        expected = [2008, 3]
 
         Kvlr::ReportsAsSparkline::Grouping.new(:week).date_parts_from_db_string(db_string).should == expected
       end
@@ -117,7 +117,7 @@ describe Kvlr::ReportsAsSparkline::Grouping do
         Kvlr::ReportsAsSparkline::Grouping.new(:day).date_parts_from_db_string('2008-12-03 00:00:00').should == [2008, 12, 03]
       end
 
-      it 'should split the date part of the string with "-" for grouping :week' do
+      it 'should split the date part of the string with "-" and calculate the calendar week for grouping :week' do
         Kvlr::ReportsAsSparkline::Grouping.new(:week).date_parts_from_db_string('2008-12-01 00:00:00').should == [2008, 49]
       end
 
@@ -139,6 +139,13 @@ describe Kvlr::ReportsAsSparkline::Grouping do
           Kvlr::ReportsAsSparkline::Grouping.new(grouping[0]).date_parts_from_db_string(grouping[1]).should == grouping[1].split('/').map(&:to_i)
         end
 
+      end
+
+      it 'should split the string with "/", set the week to 1 and increment the year by 1 if the week is greater than 52 for grouping :week' do
+        db_string = '2008/53'
+        expected = [2009, 1]
+
+        Kvlr::ReportsAsSparkline::Grouping.new(:week).date_parts_from_db_string(db_string).should == expected
       end
 
     end

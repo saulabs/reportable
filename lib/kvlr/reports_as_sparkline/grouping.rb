@@ -33,11 +33,14 @@ module Kvlr #:nodoc:
           end
         else
           parts = db_string.split('/').map(&:to_i)
-          return parts if ActiveRecord::Base.connection.class.to_s == 'ActiveRecord::ConnectionAdapters::MysqlAdapter'
-          if @identifier == :week && parts[1] > 52
-            parts[0] += 1
-            parts[1] = 1
+          if ActiveRecord::Base.connection.class.to_s == 'ActiveRecord::ConnectionAdapters::MysqlAdapter'
+            if @identifier == :week && parts[1] > 52
+              parts[0] += 1
+              parts[1] = 1
+            end
+            return parts
           end
+          parts[1] += 1 if @identifier == :week
           parts
         end
       end

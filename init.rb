@@ -1,5 +1,4 @@
 require 'kvlr/reports_as_sparkline'
-require 'kvlr/core_extensions/date'
 
 ActiveRecord::Base.class_eval do
   include Kvlr::ReportsAsSparkline

@@ -43,7 +43,7 @@ module Kvlr #:nodoc:
           when :day
             self.new(grouping, Date.new(parts[0], parts[1], parts[2]))
           when :week
-            self.new(grouping, Date.commercial(parts[0], parts[1]))
+            self.new(grouping, Date.commercial(parts[0], parts[1], 1))
           when :month
             self.new(grouping, Date.new(parts[0], parts[1], 1))
         end

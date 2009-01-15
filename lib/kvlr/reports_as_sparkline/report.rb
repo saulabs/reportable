@@ -47,19 +47,19 @@ module Kvlr #:nodoc:
         options.reverse_merge!(@options)
         options[:grouping] = Grouping.new(options[:grouping]) unless options[:grouping].is_a?(Grouping)
         ReportCache.process(self, options, !custom_conditions) do |begin_at|
-          read_data(begin_at, options[:grouping], options[:conditions])
+          read_data(begin_at, options)
         end
       end
 
       private
 
-        def read_data(begin_at, grouping, conditions = []) #:nodoc:
-          conditions = setup_conditions(begin_at, conditions)
+        def read_data(begin_at, options) #:nodoc:
+          conditions = setup_conditions(begin_at, options[:conditions])
           @klass.send(@aggregation,
             @value_column,
             :conditions => conditions,
-            :group => grouping.to_sql(@date_column),
-            :order => "#{grouping.to_sql(@date_column)} ASC"
+            :group => options[:grouping].to_sql(@date_column),
+            :order => "#{options[:grouping].to_sql(@date_column)} ASC"
           )
         end
 

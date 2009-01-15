@@ -134,13 +134,13 @@ describe Kvlr::ReportsAsSparkline::Report do
       @report = Kvlr::ReportsAsSparkline::Report.new(User, :registrations, :aggregation => :count)
       User.should_receive(:count).once.and_return([])
 
-      @report.send(:read_data, Time.now, @report.options[:grouping])
+      @report.send(:read_data, Time.now, { :grouping => @report.options[:grouping], :conditions => [] })
     end
 
     it 'should setup the conditions' do
       @report.should_receive(:setup_conditions).once.and_return([])
 
-      @report.send(:read_data, Time.now, @report.options[:grouping])
+      @report.send(:read_data, Time.now, { :grouping => @report.options[:grouping], :conditions => [] })
     end
 
   end

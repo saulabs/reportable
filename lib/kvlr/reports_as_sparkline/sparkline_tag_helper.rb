@@ -16,7 +16,7 @@ module Kvlr #:nodoc:
       # * <tt>height</tt> - The height of the generated image
       # * <tt>line_color</tt> - The line color of the sparkline (hex code)
       # * <tt>fill_color</tt> - The color to fill the area below the sparkline with (hex code)
-      # * <tt>labes</tt> - The axes to render lables for (Array of :x, :y, :r, :t; this is x axis, y axis, right, top)
+      # * <tt>labels</tt> - The axes to render lables for (Array of :x, :y, :r, :t; this is x axis, y axis, right, top)
       #
       # ==== Example
       # <%= sparkline_tag(User.registrations_report, :width => 200, :height => 100, :color => '000') %>

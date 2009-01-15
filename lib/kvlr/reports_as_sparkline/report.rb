@@ -29,7 +29,8 @@ module Kvlr #:nodoc:
         @options = {
           :limit      => options[:limit] || 100,
           :conditions => options[:conditions] || [],
-          :grouping   => Grouping.new(options[:grouping] || :day)
+          :grouping   => Grouping.new(options[:grouping] || :day),
+          :live_data  => options[:live_data] || false
         }
         @options.merge!(options)
         @options.freeze
@@ -53,7 +54,7 @@ module Kvlr #:nodoc:
 
       private
 
-        def read_data(begin_at, options) #:nodoc:
+        def read_data(begin_at, options)
           conditions = setup_conditions(begin_at, options[:conditions])
           @klass.send(@aggregation,
             @value_column,
@@ -63,7 +64,7 @@ module Kvlr #:nodoc:
           )
         end
 
-        def setup_conditions(begin_at, custom_conditions = []) #:nodoc:
+        def setup_conditions(begin_at, custom_conditions = [])
           conditions = ['']
           if custom_conditions.is_a?(Hash)
             conditions = [custom_conditions.map{ |k, v| "#{k.to_s} = ?" }.join(' AND '), *custom_conditions.map{ |k, v| v }]
@@ -74,7 +75,7 @@ module Kvlr #:nodoc:
           conditions << begin_at
         end
 
-        def ensure_valid_options(options, context = :initialize) #:nodoc:
+        def ensure_valid_options(options, context = :initialize)
           case context
             when :initialize
               options.each_key do |k|

@@ -46,6 +46,14 @@ You can than render sparklines for these reports with sparkline_tag in your view
 
   <%= sparkline_tag(User.registrations_report) %>
 
+The +sparkline_tag+ helper takes the following parameters:
+
+* width - The width of the generated image
+* height - The height of the generated image
+* line_color - The line color of the sparkline (hex code)
+* fill_color - The color to fill the area below the sparkline with (hex code)
+* labes - The axes to render lables for (Array of :x, :y, :r, :t; this is x axis, y axis, right, top)
+
 == Installation
 
 Installation requires 3 simple steps:

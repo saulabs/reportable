@@ -56,7 +56,7 @@
     </tr>
     <tr class="top-aligned-row">
       <td><strong>Last Update:</strong></td>
-      <td>Thu Jan 15 11:59:48 +0100 2009</td>
+      <td>Thu Jan 15 16:53:21 +0100 2009</td>
     </tr>
     </table>
   </div>
@@ -160,6 +160,27 @@ view:
 <pre>
   &lt;%= sparkline_tag(User.registrations_report) %&gt;
 </pre>
+<p>
+The <tt>sparkline_tag</tt> helper takes the following parameters:
+</p>
+<ul>
+<li>width - The width of the generated image
+
+</li>
+<li>height - The height of the generated image
+
+</li>
+<li>line_color - The line color of the sparkline (hex code)
+
+</li>
+<li>fill_color - The color to fill the area below the sparkline with (hex code)
+
+</li>
+<li>labes - The axes to render lables for (Array of :x, :y, :r, :t; this is x
+axis, y axis, right, top)
+
+</li>
+</ul>
 <h2>Installation</h2>
 <p>
 Installation requires 3 simple steps:

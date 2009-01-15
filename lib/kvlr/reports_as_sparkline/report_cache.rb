@@ -10,19 +10,7 @@ module Kvlr #:nodoc:
           cached_data = []
           last_reporting_period_to_read = ReportingPeriod.first(options[:grouping], options[:limit])
           if cache
-            cached_data = self.find(
-              :all,
-              :conditions => [
-                'model_name = ? AND report_name = ? AND grouping = ? AND aggregation = ? AND reporting_period >= ?',
-                report.klass.to_s,
-                report.name.to_s,
-                options[:grouping].identifier.to_s,
-                report.aggregation.to_s,
-                last_reporting_period_to_read.date_time
-              ],
-              :limit => options[:limit],
-              :order => 'reporting_period ASC'
-            )
+            cached_data = find_cached_data(report, options, last_reporting_period_to_read)
             last_reporting_period_to_read = ReportingPeriod.new(options[:grouping], cached_data.last.reporting_period).next unless cached_data.empty?
           end
           new_data = yield(last_reporting_period_to_read.date_time)
@@ -60,6 +48,22 @@ module Kvlr #:nodoc:
             :aggregation      => report.aggregation.to_s,
             :reporting_period => reporting_period.date_time,
             :value            => value
+          )
+        end
+
+        def self.find_cached_data(report, options, last_reporting_period_to_read)
+          self.find(
+            :all,
+            :conditions => [
+              'model_name = ? AND report_name = ? AND grouping = ? AND aggregation = ? AND reporting_period >= ?',
+              report.klass.to_s,
+              report.name.to_s,
+              options[:grouping].identifier.to_s,
+              report.aggregation.to_s,
+              last_reporting_period_to_read.date_time
+            ],
+            :limit => options[:limit],
+            :order => 'reporting_period ASC'
           )
         end
 

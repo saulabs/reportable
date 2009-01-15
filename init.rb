@@ -5,5 +5,5 @@ ActiveRecord::Base.class_eval do
 end
 
 ActionView::Base.class_eval do
-  include Kvlr::ReportsAsSparkline::AssetTagHelper
+  include Kvlr::ReportsAsSparkline::SparklineTagHelper
 end

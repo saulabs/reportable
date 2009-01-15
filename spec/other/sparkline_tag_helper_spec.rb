@@ -1,6 +1,6 @@
 require File.join(File.dirname(__FILE__), '..', 'spec_helper')
 
-describe Kvlr::ReportsAsSparkline::AssetTagHelper do
+describe Kvlr::ReportsAsSparkline::SparklineTagHelper do
 
   before do
     @helper = TestHelper.new
@@ -22,6 +22,6 @@ end
 
 class TestHelper
 
-  include Kvlr::ReportsAsSparkline::AssetTagHelper
+  include Kvlr::ReportsAsSparkline::SparklineTagHelper
 
 end

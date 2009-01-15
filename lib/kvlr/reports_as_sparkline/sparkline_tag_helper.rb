@@ -2,7 +2,7 @@ module Kvlr #:nodoc:
 
   module ReportsAsSparkline #:nodoc:
 
-    module AssetTagHelper
+    module SparklineTagHelper
 
       # Renders a sparkline with the given data.
       #

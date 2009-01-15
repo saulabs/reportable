@@ -29,8 +29,7 @@ module Kvlr #:nodoc:
         @options = {
           :limit      => options[:limit] || 100,
           :conditions => options[:conditions] || [],
-          :grouping   => Grouping.new(options[:grouping] || :day),
-          :live_data  => options[:live_data] || false
+          :grouping   => Grouping.new(options[:grouping] || :day)
         }
         @options.merge!(options)
         @options.freeze

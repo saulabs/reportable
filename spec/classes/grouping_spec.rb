@@ -15,7 +15,7 @@ describe Kvlr::ReportsAsSparkline::Grouping do
     describe 'for MySQL' do
 
       before do
-        ActiveRecord::Base.connection.stub!(:class).and_return(ActiveRecord::ConnectionAdapters::MysqlAdapter)
+        ActiveRecord::Base.connection.stub!(:adapter_name).and_return('MySQL')
       end
 
       it 'should use DATE_FORMAT with format string "%Y/%m/%d/%H" for grouping :hour' do
@@ -39,7 +39,7 @@ describe Kvlr::ReportsAsSparkline::Grouping do
     describe 'for PostgreSQL' do
 
       before do
-        ActiveRecord::Base.connection.stub!(:class).and_return(ActiveRecord::ConnectionAdapters::PostgreSQLAdapter)
+        ActiveRecord::Base.connection.stub!(:adapter_name).and_return('PostgreSQL')
       end
 
       for grouping in [:hour, :day, :week, :month] do
@@ -55,7 +55,7 @@ describe Kvlr::ReportsAsSparkline::Grouping do
     describe 'for SQLite3' do
 
       before do
-        ActiveRecord::Base.connection.stub!(:class).and_return(ActiveRecord::ConnectionAdapters::SQLite3Adapter)
+        ActiveRecord::Base.connection.stub!(:adapter_name).and_return('SQLite')
       end
 
       it 'should use strftime with format string "%Y/%m/%d/%H" for grouping :hour' do
@@ -83,7 +83,7 @@ describe Kvlr::ReportsAsSparkline::Grouping do
     describe 'for SQLite3' do
 
       before do
-        ActiveRecord::Base.connection.stub!(:class).and_return(ActiveRecord::ConnectionAdapters::SQLite3Adapter)
+        ActiveRecord::Base.connection.stub!(:adapter_name).and_return('SQLite')
       end
 
       for grouping in [[:hour, '2008/12/31/12'], [:day, '2008/12/31'], [:month, '2008/12']] do
@@ -106,7 +106,7 @@ describe Kvlr::ReportsAsSparkline::Grouping do
     describe 'for PostgreSQL' do
 
       before do
-        ActiveRecord::Base.connection.stub!(:class).and_return(ActiveRecord::ConnectionAdapters::PostgreSQLAdapter)
+        ActiveRecord::Base.connection.stub!(:adapter_name).and_return('PostgreSQL')
       end
 
       it 'should split the date part of the string with "-" and read out the hour for grouping :hour' do
@@ -130,7 +130,7 @@ describe Kvlr::ReportsAsSparkline::Grouping do
     describe 'for MySQL' do
 
       before do
-        ActiveRecord::Base.connection.stub!(:class).and_return(ActiveRecord::ConnectionAdapters::MysqlAdapter)
+        ActiveRecord::Base.connection.stub!(:adapter_name).and_return('MySQL')
       end
 
       for grouping in [[:hour, '2008/12/31/12'], [:day, '2008/12/31'], [:week, '2008/40'], [:month, '2008/12']] do
@@ -153,7 +153,3 @@ describe Kvlr::ReportsAsSparkline::Grouping do
   end
 
 end
-
-class ActiveRecord::ConnectionAdapters::MysqlAdapter; end
-class ActiveRecord::ConnectionAdapters::SQLite3Adapter; end
-class ActiveRecord::ConnectionAdapters::PostgreSQLAdapter; end

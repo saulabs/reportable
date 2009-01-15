@@ -18,7 +18,7 @@ module Kvlr #:nodoc:
       end
 
       def date_parts_from_db_string(db_string) #:nodoc:
-        if ActiveRecord::Base.connection.class.to_s == 'ActiveRecord::ConnectionAdapters::PostgreSQLAdapter'
+        if ActiveRecord::Base.connection.adapter_name =~ /postgres/i
           case @identifier
             when :hour
               return (db_string[0..9].split('-') + [db_string[11..12]]).map(&:to_i)
@@ -33,7 +33,7 @@ module Kvlr #:nodoc:
           end
         else
           parts = db_string.split('/').map(&:to_i)
-          if ActiveRecord::Base.connection.class.to_s == 'ActiveRecord::ConnectionAdapters::MysqlAdapter'
+          if ActiveRecord::Base.connection.adapter_name =~ /mysql/i
             if @identifier == :week && parts[1] > 52
               parts[0] += 1
               parts[1] = 1
@@ -46,12 +46,12 @@ module Kvlr #:nodoc:
       end
 
       def to_sql(date_column) #:nodoc:
-        return case ActiveRecord::Base.connection.class.to_s
-          when 'ActiveRecord::ConnectionAdapters::MysqlAdapter'
+        return case ActiveRecord::Base.connection.adapter_name
+          when /mysql/i
             mysql_format(date_column)
-          when 'ActiveRecord::ConnectionAdapters::SQLite3Adapter'
+          when /sqlite/i
             sqlite_format(date_column)
-          when 'ActiveRecord::ConnectionAdapters::PostgreSQLAdapter'
+          when /postgres/i
             postgresql_format(date_column)
         end
       end

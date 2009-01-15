@@ -68,6 +68,20 @@ If you are on Rails &lt; 2.1, do this from your RAILS_ROOT
 
   rake db:migrate
 
+== Performance
+
+To achieve best performance, you should add indices to your tables on the date columns that are
+used for grouping the records (see Kvlr::ReportsAsSparkline::ClassMethods.reports_as_sparkline):
+
+  add_index :[table], :[date_column]
+
+If you are on PostgreSQL, you should add functional indices:
+
+  add_index :[table], :[date_column], :functional => "date_trunc('hour', [date_column])"
+  add_index :[table], :[date_column], :functional => "date_trunc('day',  [date_column])"
+  add_index :[table], :[date_column], :functional => "date_trunc('week', [date_column])"
+  add_index :[table], :[date_column], :functional => "date_trunc('year', [date_column])"
+
 == TODOs/ future plans
 
 * support for Oracle and DB2 (and others?) missing

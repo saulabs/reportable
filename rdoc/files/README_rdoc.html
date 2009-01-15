@@ -56,7 +56,7 @@
     </tr>
     <tr class="top-aligned-row">
       <td><strong>Last Update:</strong></td>
-      <td>Thu Jan 15 11:33:40 +0100 2009</td>
+      <td>Thu Jan 15 11:59:48 +0100 2009</td>
     </tr>
     </table>
   </div>
@@ -190,6 +190,24 @@ If you are on Rails &amp;lt; 2.1, do this from your RAILS_ROOT
 </p>
 <pre>
   rake db:migrate
+</pre>
+<h2>Performance</h2>
+<p>
+To achieve best performance, you should add indices to your tables on the
+date columns that are used for grouping the records (see
+Kvlr::ReportsAsSparkline::ClassMethods.reports_as_sparkline):
+</p>
+<pre>
+  add_index :[table], :[date_column]
+</pre>
+<p>
+If you are on PostgreSQL, you should add functional indices:
+</p>
+<pre>
+  add_index :[table], :[date_column], :functional =&gt; &quot;date_trunc('hour', [date_column])&quot;
+  add_index :[table], :[date_column], :functional =&gt; &quot;date_trunc('day',  [date_column])&quot;
+  add_index :[table], :[date_column], :functional =&gt; &quot;date_trunc('week', [date_column])&quot;
+  add_index :[table], :[date_column], :functional =&gt; &quot;date_trunc('year', [date_column])&quot;
 </pre>
 <h2>TODOs/ future plans</h2>
 <ul>

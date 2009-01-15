@@ -9,13 +9,21 @@ describe Kvlr::ReportsAsSparkline::Report do
   describe '#run' do
 
     it 'should process the data with the report cache' do
-      Kvlr::ReportsAsSparkline::ReportCache.should_receive(:process).once.with(@report, 100, @report.options[:grouping], false)
+      Kvlr::ReportsAsSparkline::ReportCache.should_receive(:process).once.with(
+        @report,
+        { :limit => 100, :grouping => @report.options[:grouping], :conditions => [] },
+        true
+      )
 
       @report.run
     end
 
-    it 'should process the data with the report cache and specify no_cache when custom conditions are given' do
-      Kvlr::ReportsAsSparkline::ReportCache.should_receive(:process).once.with(@report, 100, @report.options[:grouping], true)
+    it 'should process the data with the report cache and specify cache = false when custom conditions are given' do
+      Kvlr::ReportsAsSparkline::ReportCache.should_receive(:process).once.with(
+        @report,
+        { :limit => 100, :grouping => @report.options[:grouping], :conditions => { :some => :condition } },
+        false
+      )
 
       @report.run(:conditions => { :some => :condition })
     end
@@ -29,9 +37,13 @@ describe Kvlr::ReportsAsSparkline::Report do
     it 'should use a custom grouping if one is specified' do
       grouping = Kvlr::ReportsAsSparkline::Grouping.new(:month)
       Kvlr::ReportsAsSparkline::Grouping.should_receive(:new).once.with(:month).and_return(grouping)
-      Kvlr::ReportsAsSparkline::ReportCache.should_receive(:process).once.with(@report, 100, grouping, true)
+      Kvlr::ReportsAsSparkline::ReportCache.should_receive(:process).once.with(
+        @report,
+        { :limit => 100, :grouping => grouping, :conditions => [] },
+        true
+      )
 
-      @report.run(:conditions => { :some => :condition }, :grouping => :month)
+      @report.run(:grouping => :month)
     end
 
     for grouping in [:hour, :day, :week, :month] do

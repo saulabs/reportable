@@ -15,19 +15,19 @@ describe Kvlr::ReportsAsSparkline::ReportCache do
 
     it 'should raise an ArgumentError if no block is given' do
       lambda do
-        Kvlr::ReportsAsSparkline::ReportCache.process(@report, 10, @report.options[:grouping])
+        Kvlr::ReportsAsSparkline::ReportCache.process(@report, { :limit => 10, :grouping => @report.options[:grouping] })
       end.should raise_error(ArgumentError)
     end
 
     it 'sould start a transaction' do
       Kvlr::ReportsAsSparkline::ReportCache.should_receive(:transaction)
 
-      Kvlr::ReportsAsSparkline::ReportCache.process(@report, 10, @report.options[:grouping]) {}
+      Kvlr::ReportsAsSparkline::ReportCache.process(@report, { :limit => 10, :grouping => @report.options[:grouping] }) {}
     end
 
     it 'should yield to the given block' do
       lambda {
-        Kvlr::ReportsAsSparkline::ReportCache.process(@report, 10, @report.options[:grouping]) { raise YieldMatchException.new }
+        Kvlr::ReportsAsSparkline::ReportCache.process(@report, { :limit => 10, :grouping => @report.options[:grouping] }) { raise YieldMatchException.new }
       }.should raise_error(YieldMatchException)
     end
 
@@ -46,7 +46,7 @@ describe Kvlr::ReportsAsSparkline::ReportCache do
         :order => 'reporting_period ASC'
       )
 
-      Kvlr::ReportsAsSparkline::ReportCache.process(@report, 10, @report.options[:grouping]) { [] }
+      Kvlr::ReportsAsSparkline::ReportCache.process(@report, { :limit => 10, :grouping => @report.options[:grouping] }) { [] }
     end
 
     it "should read existing data from the cache for the correct grouping if one other than the report's default grouping is specified" do
@@ -65,7 +65,7 @@ describe Kvlr::ReportsAsSparkline::ReportCache do
         :order => 'reporting_period ASC'
       )
 
-      Kvlr::ReportsAsSparkline::ReportCache.process(@report, 10, grouping) { [] }
+      Kvlr::ReportsAsSparkline::ReportCache.process(@report, { :limit => 10, :grouping => grouping }) { [] }
     end
 
     it 'should prepare the results before it returns them' do
@@ -73,13 +73,13 @@ describe Kvlr::ReportsAsSparkline::ReportCache do
       cached_data = []
       Kvlr::ReportsAsSparkline::ReportCache.stub!(:find).and_return(cached_data)
       last_reporting_period_to_read = Kvlr::ReportsAsSparkline::ReportingPeriod.first(@report.options[:grouping], 10)
-      Kvlr::ReportsAsSparkline::ReportCache.should_receive(:prepare_result).once.with(new_data, cached_data, last_reporting_period_to_read, @report, @report.options[:grouping], false)
+      Kvlr::ReportsAsSparkline::ReportCache.should_receive(:prepare_result).once.with(new_data, cached_data, last_reporting_period_to_read, @report, @report.options[:grouping], true)
 
-      Kvlr::ReportsAsSparkline::ReportCache.process(@report, 10, @report.options[:grouping]) { new_data }
+      Kvlr::ReportsAsSparkline::ReportCache.process(@report, { :limit => 10, :grouping => @report.options[:grouping] }) { new_data }
     end
 
     it 'should yield the first reporting period if the cache is empty' do
-      Kvlr::ReportsAsSparkline::ReportCache.process(@report, 10, @report.options[:grouping]) do |begin_at|
+      Kvlr::ReportsAsSparkline::ReportCache.process(@report, { :limit => 10, :grouping => @report.options[:grouping] }) do |begin_at|
         begin_at.should == Kvlr::ReportsAsSparkline::ReportingPeriod.first(@report.options[:grouping], 10).date_time
         []
       end
@@ -97,22 +97,22 @@ describe Kvlr::ReportsAsSparkline::ReportCache do
       })
       Kvlr::ReportsAsSparkline::ReportCache.stub!(:find).and_return([cached])
 
-      Kvlr::ReportsAsSparkline::ReportCache.process(@report, 10, @report.options[:grouping]) do |begin_at|
+      Kvlr::ReportsAsSparkline::ReportCache.process(@report, { :limit => 10, :grouping => @report.options[:grouping] }) do |begin_at|
         begin_at.should == reporting_period.next.date_time
         []
       end
     end
 
-    describe 'with no_cache = true' do
+    describe 'with cache = false' do
 
       it 'should not read any data from cache' do
         Kvlr::ReportsAsSparkline::ReportCache.should_not_receive(:find)
 
-        Kvlr::ReportsAsSparkline::ReportCache.process(@report, 10, @report.options[:grouping], true) {}
+        Kvlr::ReportsAsSparkline::ReportCache.process(@report, { :limit => 10, :grouping => @report.options[:grouping] }, false) {}
       end
 
       it 'should yield the first reporting period' do
-        Kvlr::ReportsAsSparkline::ReportCache.process(@report, 10, @report.options[:grouping], true) do |begin_at|
+        Kvlr::ReportsAsSparkline::ReportCache.process(@report, { :limit => 10, :grouping => @report.options[:grouping] }, false) do |begin_at|
           begin_at.should == Kvlr::ReportsAsSparkline::ReportingPeriod.first(@report.options[:grouping], 10).date_time
           []
         end
@@ -182,19 +182,19 @@ describe Kvlr::ReportsAsSparkline::ReportCache do
       result[0][1].should be_kind_of(Float)
     end
 
-    describe 'with no_cache = true' do
+    describe 'with cache = false' do
 
       it 'should not save the created Kvlr::ReportsAsSparkline::ReportCache' do
         @cached.should_not_receive(:save!)
 
-        Kvlr::ReportsAsSparkline::ReportCache.send(:prepare_result, @new_data, [], @last_reporting_period_to_read, @report, @report.options[:grouping], true)
+        Kvlr::ReportsAsSparkline::ReportCache.send(:prepare_result, @new_data, [], @last_reporting_period_to_read, @report, @report.options[:grouping], false)
       end
 
       it 'should not update the last cached record if new data has been read for the last reporting period to read' do
         Kvlr::ReportsAsSparkline::ReportingPeriod.stub!(:from_db_string).and_return(@last_reporting_period_to_read)
         @cached.should_not_receive(:update_attributes!)
 
-        Kvlr::ReportsAsSparkline::ReportCache.send(:prepare_result, @new_data, [@cached], @last_reporting_period_to_read, @report, @report.options[:grouping], true)
+        Kvlr::ReportsAsSparkline::ReportCache.send(:prepare_result, @new_data, [@cached], @last_reporting_period_to_read, @report, @report.options[:grouping], false)
       end
 
     end

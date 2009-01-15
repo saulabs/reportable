@@ -46,7 +46,7 @@ module Kvlr #:nodoc:
         custom_conditions = options.key?(:conditions)
         options.reverse_merge!(@options)
         options[:grouping] = Grouping.new(options[:grouping]) unless options[:grouping].is_a?(Grouping)
-        ReportCache.process(self, options[:limit], options[:grouping], custom_conditions) do |begin_at|
+        ReportCache.process(self, options, !custom_conditions) do |begin_at|
           read_data(begin_at, options[:grouping], options[:conditions])
         end
       end

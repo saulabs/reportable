@@ -2,7 +2,7 @@ module Kvlr #:nodoc:
 
   module ReportsAsSparkline #:nodoc:
 
-    # A ReportingPeriod is  - depending on the Grouping - either a specific hour, a day, a month or a year. All records falling into this period will be grouped.
+    # A ReportingPeriod is  - depending on the Grouping - either a specific hour, a day, a month or a year. All records falling into this period will be grouped together.
     class ReportingPeriod
 
       attr_reader :date_time, :grouping

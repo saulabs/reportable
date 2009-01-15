@@ -56,7 +56,7 @@
     </tr>
     <tr class="top-aligned-row">
       <td><strong>Last Update:</strong></td>
-      <td>Tue Jan 13 16:47:15 +0100 2009</td>
+      <td>Thu Jan 15 11:33:40 +0100 2009</td>
     </tr>
     </table>
   </div>
@@ -74,27 +74,85 @@
 ReportsAsSparkline enables you to generate reports and sparklines from your
 model&#8216;s data with very little effort.
 </p>
-<h2>Example</h2>
+<h2>Usage</h2>
 <p>
-This shows the basic usage. Consider the following user model, including
-<tt>created_at</tt> and <tt>activated_at</tt> timestamp fields.
+If you hace a <tt>User</tt> model with <tt>created_at</tt> and
+<tt>activated_at</tt> columns, you can just add
+<tt>reports_as_sparkline</tt> to it with the following options:
+</p>
+<ul>
+<li>:date_column - The name of the date column on that the records are
+aggregated
+
+</li>
+<li>:value_column - The name of the column that holds the value to sum for
+aggregation :sum
+
+</li>
+<li>:aggregation - The aggregation to use (either :count or :sum); when using
+:sum, :value_column must also be specified
+
+</li>
+<li>:grouping - The period records are grouped on (:hour, :day, :week, :month)
+
+</li>
+<li>:limit - The number of periods to get (see :grouping)
+
+</li>
+<li>:conditions - Conditions like in ActiveRecord::Base#find; only records that
+match there conditions are reported on
+
+</li>
+<li>:cumulate - Sets whether to cumulate the numbers (instead of [1, 2, 3]
+returns [1, 3, 6])
+
+</li>
+</ul>
+<p>
+<b>Example:</b>
 </p>
 <pre>
   class User &lt; ActiveRecord::Base
     reports_as_sparkline :registrations
     reports_as_sparkline :activations,  :date_column =&gt; :activated_at
     reports_as_sparkline :total_users,  :cumulate    =&gt; true
-    end
+  end
 </pre>
 <p>
-Using <tt>reports_as_sparkline</tt> like this will add the following class
-methods to your User model:
+This will add the following class methods to your User model:
 </p>
 <pre>
   User.registrations_report
   User.activations_report
   User.total_users_report
 </pre>
+<p>
+When invoking the report, you can override some of the options you
+specified for <tt>reports_as_sparkline</tt>:
+</p>
+<ul>
+<li>:grouping - The period records are grouped on (:hour, :day, :week, :month)
+
+</li>
+<li>:limit - The number of periods to get (see :grouping)
+
+</li>
+<li>:conditions - Conditions like in ActiveRecord::Base#find; only records that
+match there conditions are reported on
+
+</li>
+</ul>
+<p>
+<b>Example:</b>
+</p>
+<pre>
+  User.registrations_report(:conditions =&gt; ['last_name LIKE 'A%'])
+  User.activations_report(:grouping =&gt; :week, :limit =&gt; 5)
+</pre>
+<p>
+<b>Beware that when specifying conditions on invocation of the report, the
+cache will not be used!</b>
+</p>
 <p>
 You can than render sparklines for these reports with sparkline_tag in your
 view:

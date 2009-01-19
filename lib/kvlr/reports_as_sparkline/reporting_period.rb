@@ -64,6 +64,20 @@ module Kvlr #:nodoc:
         end
       end
 
+      # Returns the previous reporting period (that is next hour/day/month/year)
+      def previous
+        return case @grouping.identifier
+          when :hour
+            self.class.new(@grouping, @date_time - 1.hour)
+          when :day
+            self.class.new(@grouping, @date_time - 1.day)
+          when :week
+            self.class.new(@grouping, @date_time - 1.week)
+          when :month
+            self.class.new(@grouping, @date_time - 1.month)
+        end
+      end
+
       def ==(other) #:nodoc:
         if other.class == Kvlr::ReportsAsSparkline::ReportingPeriod
           return @date_time.to_s == other.date_time.to_s && @grouping.identifier.to_s == other.grouping.identifier.to_s

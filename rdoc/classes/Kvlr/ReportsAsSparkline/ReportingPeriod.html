@@ -98,6 +98,7 @@ together.
       <a href="#M000007">first</a>&nbsp;&nbsp;
       <a href="#M000006">new</a>&nbsp;&nbsp;
       <a href="#M000008">next</a>&nbsp;&nbsp;
+      <a href="#M000009">previous</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -259,6 +260,43 @@ hour/day/month/year)
 63:             <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@grouping</span>, <span class="ruby-ivar">@date_time</span> <span class="ruby-operator">+</span> <span class="ruby-value">1</span>.<span class="ruby-identifier">month</span>)
 64:         <span class="ruby-keyword kw">end</span>
 65:       <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000009" class="method-detail">
+        <a name="M000009"></a>
+
+        <div class="method-heading">
+          <a href="#M000009" class="method-signature">
+          <span class="method-name">previous</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Returns the <a href="ReportingPeriod.html#M000009">previous</a> reporting
+period (that is <a href="ReportingPeriod.html#M000008">next</a>
+hour/day/month/year)
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000009-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000009-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/kvlr/reports_as_sparkline/reporting_period.rb, line 68</span>
+68:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">previous</span>
+69:         <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">case</span> <span class="ruby-ivar">@grouping</span>.<span class="ruby-identifier">identifier</span>
+70:           <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:hour</span>
+71:             <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@grouping</span>, <span class="ruby-ivar">@date_time</span> <span class="ruby-operator">-</span> <span class="ruby-value">1</span>.<span class="ruby-identifier">hour</span>)
+72:           <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:day</span>
+73:             <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@grouping</span>, <span class="ruby-ivar">@date_time</span> <span class="ruby-operator">-</span> <span class="ruby-value">1</span>.<span class="ruby-identifier">day</span>)
+74:           <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:week</span>
+75:             <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@grouping</span>, <span class="ruby-ivar">@date_time</span> <span class="ruby-operator">-</span> <span class="ruby-value">1</span>.<span class="ruby-identifier">week</span>)
+76:           <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:month</span>
+77:             <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@grouping</span>, <span class="ruby-ivar">@date_time</span> <span class="ruby-operator">-</span> <span class="ruby-value">1</span>.<span class="ruby-identifier">month</span>)
+78:         <span class="ruby-keyword kw">end</span>
+79:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>

@@ -127,6 +127,42 @@ describe Kvlr::ReportsAsSparkline::ReportingPeriod do
 
   end
 
+  describe '#previous' do
+
+    it 'should return a reporting period with date and time one hour before the current period for grouping :hour' do
+      now = Time.now
+      reporting_period = Kvlr::ReportsAsSparkline::ReportingPeriod.new(Kvlr::ReportsAsSparkline::Grouping.new(:hour), now)
+      expected = now - 1.hour
+
+      reporting_period.previous.date_time.should == DateTime.new(expected.year, expected.month, expected.day, expected.hour)
+    end
+
+    it 'should return a reporting period with date one day before the current period for grouping :day' do
+      now = Time.now
+      reporting_period = Kvlr::ReportsAsSparkline::ReportingPeriod.new(Kvlr::ReportsAsSparkline::Grouping.new(:day), now)
+      expected = now - 1.day
+
+      reporting_period.previous.date_time.should == Date.new(expected.year, expected.month, expected.day)
+    end
+
+    it 'should return a reporting period with date one week before the current period for grouping :week' do
+      now = DateTime.now
+      reporting_period = Kvlr::ReportsAsSparkline::ReportingPeriod.new(Kvlr::ReportsAsSparkline::Grouping.new(:week), now)
+      expected = reporting_period.date_time - 1.week
+
+      reporting_period.previous.date_time.should == Date.new(expected.year, expected.month, expected.day)
+    end
+
+    it 'should return a reporting period with date of the first day in the month one month before the current period' do
+      now = Time.now
+      reporting_period = Kvlr::ReportsAsSparkline::ReportingPeriod.new(Kvlr::ReportsAsSparkline::Grouping.new(:month), now)
+      expected = reporting_period.date_time - 1.month
+
+      reporting_period.previous.date_time.should == Date.new(expected.year, expected.month, 1)
+    end
+
+  end
+
   describe '#==' do
 
     it 'should return true for 2 reporting periods with the same date_time and grouping' do

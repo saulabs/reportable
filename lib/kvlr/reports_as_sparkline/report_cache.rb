@@ -14,19 +14,19 @@ module Kvlr #:nodoc:
             last_reporting_period_to_read = ReportingPeriod.new(options[:grouping], cached_data.last.reporting_period).next unless cached_data.empty?
           end
           new_data = yield(last_reporting_period_to_read.date_time)
-          prepare_result(new_data, cached_data, last_reporting_period_to_read, report, options[:grouping], cache)[0..(options[:limit] - 1)]
+          prepare_result(new_data, cached_data, last_reporting_period_to_read, report, options, cache)[0..(options[:limit] - 1)]
         end
       end
 
       private
 
-        def self.prepare_result(new_data, cached_data, last_reporting_period_to_read, report, grouping, cache = true)
-          new_data.map! { |data| [ReportingPeriod.from_db_string(grouping, data[0]), data[1]] }
+        def self.prepare_result(new_data, cached_data, last_reporting_period_to_read, report, options, cache = true)
+          new_data.map! { |data| [ReportingPeriod.from_db_string(options[:grouping], data[0]), data[1]] }
           result = cached_data.map { |cached| [cached.reporting_period, cached.value] }
-          current_reporting_period = ReportingPeriod.new(grouping)
+          current_reporting_period = ReportingPeriod.new(options[:grouping])
           reporting_period = last_reporting_period_to_read
           while reporting_period < current_reporting_period
-            cached = build_cached_data(report, grouping, reporting_period, find_value(new_data, reporting_period))
+            cached = build_cached_data(report, options[:grouping], reporting_period, find_value(new_data, reporting_period))
             cached.save! if cache
             result << [reporting_period.date_time, cached.value]
             reporting_period = reporting_period.next

@@ -19,6 +19,7 @@ module Kvlr #:nodoc:
       # * <tt>:grouping</tt> - The period records are grouped on (:hour, :day, :week, :month)
       # * <tt>:limit</tt> - The number of periods to get (see :grouping)
       # * <tt>:conditions</tt> - Conditions like in ActiveRecord::Base#find; only records that match there conditions are reported on
+      # * <tt>:live_data</tt> - Specified whether data for the current reporting period is read; if :live_data is true, you will experience a performance hit since the request cannot be satisfied from the cache only (defaults to false)
       def initialize(klass, name, options = {})
         ensure_valid_options(options)
         @klass        = klass
@@ -29,7 +30,8 @@ module Kvlr #:nodoc:
         @options = {
           :limit      => options[:limit] || 100,
           :conditions => options[:conditions] || [],
-          :grouping   => Grouping.new(options[:grouping] || :day)
+          :grouping   => Grouping.new(options[:grouping] || :day),
+          :live_data  => options[:live_data] || false
         }
         @options.merge!(options)
         @options.freeze
@@ -41,6 +43,7 @@ module Kvlr #:nodoc:
       # * <tt>:limit</tt> - The number of periods to get
       # * <tt>:conditions</tt> - Conditions like in ActiveRecord::Base#find; only records that match there conditions are reported on (<b>Beware that when you specify conditions here, caching will be disabled</b>)
       # * <tt>:grouping</tt> - The period records are grouped on (:hour, :day, :week, :month)
+      # * <tt>:live_data</tt> - Specified whether data for the current reporting period is read; if :live_data is true, you will experience a performance hit since the request cannot be satisfied from the cache only (defaults to false)
       def run(options = {})
         ensure_valid_options(options, :run)
         custom_conditions = options.key?(:conditions)
@@ -84,7 +87,7 @@ module Kvlr #:nodoc:
               raise ArgumentError.new('The name of the column holding the value to sum has to be specified for aggregation :sum') if options[:aggregation] == :sum && !options.key?(:value_column)
             when :run
               options.each_key do |k|
-                raise ArgumentError.new("Invalid option #{k}") unless [:limit, :conditions, :grouping].include?(k)
+                raise ArgumentError.new("Invalid option #{k}") unless [:limit, :conditions, :grouping, :live_data].include?(k)
               end
           end
           raise ArgumentError.new("Invalid grouping #{options[:grouping]}") if options[:grouping] && ![:hour, :day, :week, :month].include?(options[:grouping])

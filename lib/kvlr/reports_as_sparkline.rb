@@ -22,6 +22,7 @@ module Kvlr #:nodoc:
       # * <tt>:grouping</tt> - The period records are grouped on (:hour, :day, :week, :month)
       # * <tt>:limit</tt> - The number of periods to get (see :grouping)
       # * <tt>:conditions</tt> - Conditions like in ActiveRecord::Base#find; only records that match there conditions are reported on
+      # * <tt>:live_data</tt> - Specified whether data for the current reporting period is read; if :live_data is true, you will experience a performance hit since the request cannot be satisfied from the cache only (defaults to false)
       #
       # ==== Examples
       #

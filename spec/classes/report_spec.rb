@@ -11,7 +11,7 @@ describe Kvlr::ReportsAsSparkline::Report do
     it 'should process the data with the report cache' do
       Kvlr::ReportsAsSparkline::ReportCache.should_receive(:process).once.with(
         @report,
-        { :limit => 100, :grouping => @report.options[:grouping], :conditions => [] },
+        { :limit => 100, :grouping => @report.options[:grouping], :conditions => [], :live_data => false },
         true
       )
 
@@ -21,7 +21,7 @@ describe Kvlr::ReportsAsSparkline::Report do
     it 'should process the data with the report cache and specify cache = false when custom conditions are given' do
       Kvlr::ReportsAsSparkline::ReportCache.should_receive(:process).once.with(
         @report,
-        { :limit => 100, :grouping => @report.options[:grouping], :conditions => { :some => :condition } },
+        { :limit => 100, :grouping => @report.options[:grouping], :conditions => { :some => :condition }, :live_data => false },
         false
       )
 
@@ -39,7 +39,7 @@ describe Kvlr::ReportsAsSparkline::Report do
       Kvlr::ReportsAsSparkline::Grouping.should_receive(:new).once.with(:month).and_return(grouping)
       Kvlr::ReportsAsSparkline::ReportCache.should_receive(:process).once.with(
         @report,
-        { :limit => 100, :grouping => grouping, :conditions => [] },
+        { :limit => 100, :grouping => grouping, :conditions => [], :live_data => false },
         true
       )
 
@@ -242,7 +242,7 @@ describe Kvlr::ReportsAsSparkline::Report do
     describe 'for context :run' do
 
       it 'should not raise an error if valid options are specified' do
-        lambda { @report.send(:ensure_valid_options, { :limit => 100, :conditions => [], :grouping => :week }, :run)
+        lambda { @report.send(:ensure_valid_options, { :limit => 100, :conditions => [], :grouping => :week, :live_data => true }, :run)
         }.should_not raise_error(ArgumentError)
       end
       

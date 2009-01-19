@@ -6,6 +6,14 @@ describe Kvlr::ReportsAsSparkline::Report do
     @report = Kvlr::ReportsAsSparkline::Report.new(User, :registrations)
   end
 
+  describe '#options' do
+
+    it 'should be frozen' do
+      @report.options.should be_frozen
+    end
+
+  end
+
   describe '#run' do
 
     it 'should process the data with the report cache' do

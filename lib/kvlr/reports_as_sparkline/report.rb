@@ -81,7 +81,7 @@ module Kvlr #:nodoc:
           case context
             when :initialize
               options.each_key do |k|
-                raise ArgumentError.new("Invalid option #{k}") unless [:limit, :aggregation, :grouping, :date_column, :value_column, :conditions].include?(k)
+                raise ArgumentError.new("Invalid option #{k}") unless [:limit, :aggregation, :grouping, :date_column, :value_column, :conditions, :live_data].include?(k)
               end
               raise ArgumentError.new("Invalid aggregation #{options[:aggregation]}") if options[:aggregation] && ![:count, :sum].include?(options[:aggregation])
               raise ArgumentError.new('The name of the column holding the value to sum has to be specified for aggregation :sum') if options[:aggregation] == :sum && !options.key?(:value_column)

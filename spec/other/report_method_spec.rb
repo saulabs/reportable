@@ -13,16 +13,15 @@ describe Kvlr::ReportsAsSparkline do
     it 'should include all data when invoked on the base model class' do
       result = User.registrations_report.to_a
 
-      result.length.should == 10
-      result[8][1].should  == 1.0
-      result[7][1].should  == 2.0
+      result[9][1].should == 1.0
+      result[8][1].should == 2.0
     end
 
     it 'should include only data for instances of the inherited model when invoked on the inherited model class' do
       result = SpecialUser.registrations_report.to_a
 
-      result.length.should == 10
-      result[7][1].should  == 1.0
+      result[9][1].should == 0.0
+      result[8][1].should == 1.0
     end
 
     after(:all) do

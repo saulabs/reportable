@@ -100,7 +100,7 @@ module Kvlr #:nodoc:
             when :day
               date_time.to_date
             when :week
-              date_time = (date_time - date_time.wday.days) + 1
+              date_time = (date_time - date_time.wday.days) + 1.day
               Date.new(date_time.year, date_time.month, date_time.day)
             when :month
               Date.new(date_time.year, date_time.month, 1)

@@ -43,7 +43,7 @@ describe Kvlr::ReportsAsSparkline::ReportCache do
           Time.now - 3.send(@report.options[:grouping].identifier)
         )
         cached = Kvlr::ReportsAsSparkline::ReportCache.new
-        cached.stub!(:reporting_period).and_return(reporting_period)
+        cached.stub!(:reporting_period).and_return(reporting_period.date_time)
         Kvlr::ReportsAsSparkline::ReportCache.stub!(:find).and_return([cached])
 
         Kvlr::ReportsAsSparkline::ReportCache.process(@report, @options) do |begin_at|
@@ -77,7 +77,7 @@ describe Kvlr::ReportsAsSparkline::ReportCache do
           Time.now - 3.send(@report.options[:grouping].identifier)
         )
         cached = Kvlr::ReportsAsSparkline::ReportCache.new
-        cached.stub!(:reporting_period).and_return(reporting_period)
+        cached.stub!(:reporting_period).and_return(reporting_period.date_time)
         Kvlr::ReportsAsSparkline::ReportCache.stub!(:find).and_return([cached])
 
         Kvlr::ReportsAsSparkline::ReportCache.process(@report, @report.options) do |begin_at|

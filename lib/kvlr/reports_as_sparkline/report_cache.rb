@@ -11,7 +11,7 @@ module Kvlr #:nodoc:
           first_reporting_period = ReportingPeriod.first(options[:grouping], options[:limit])
           if cache
             cached_data = find_cached_data(report, options, first_reporting_period)
-            last_cached_reporting_period = (ReportingPeriod.new(options[:grouping], cached_data.last.reporting_period.date_time) rescue nil)
+            last_cached_reporting_period = cached_data.empty? ? nil : ReportingPeriod.new(options[:grouping], cached_data.last.reporting_period)
           end
           new_data = if !options[:live_data] && last_cached_reporting_period == ReportingPeriod.new(options[:grouping]).previous
             []
@@ -28,7 +28,7 @@ module Kvlr #:nodoc:
           new_data.map! { |data| [ReportingPeriod.from_db_string(options[:grouping], data[0]), data[1]] }
           result = cached_data.map { |cached| [cached.reporting_period, cached.value] }
           current_reporting_period = ReportingPeriod.new(options[:grouping])
-          reporting_period = (cached_data.last.reporting_period.next rescue ReportingPeriod.first(options[:grouping], options[:limit]))
+          reporting_period = cached_data.empty? ? ReportingPeriod.first(options[:grouping], options[:limit]) : ReportingPeriod.new(options[:grouping], cached_data.last.reporting_period).next
           while reporting_period < current_reporting_period
             cached = build_cached_data(report, options[:grouping], reporting_period, find_value(new_data, reporting_period))
             cached.save! if cache

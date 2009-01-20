@@ -14,6 +14,7 @@ to it with the following options:
 * :limit - The number of periods to get (see :grouping)
 * :conditions - Conditions like in ActiveRecord::Base#find; only records that match there conditions are reported on
 * :cumulate - Sets whether to cumulate the numbers (instead of [1, 2, 3] returns [1, 3, 6])
+* :live_data - Specified whether data for the current reporting period is read; if :live_data is true, you will experience a performance hit since the request cannot be satisfied from the cache only (defaults to false)
 
 <b>Example:</b>
 
@@ -34,6 +35,7 @@ When invoking the report, you can override some of the options you specified for
 * :grouping - The period records are grouped on (:hour, :day, :week, :month)
 * :limit - The number of periods to get (see :grouping)
 * :conditions - Conditions like in ActiveRecord::Base#find; only records that match there conditions are reported on
+* :live_data - Specified whether data for the current reporting period is read; if :live_data is true, you will experience a performance hit since the request cannot be satisfied from the cache only (defaults to false)
 
 <b>Example:</b>
 

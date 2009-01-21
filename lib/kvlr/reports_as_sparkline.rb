@@ -31,10 +31,10 @@ module Kvlr #:nodoc:
       #    reports_as_sparkline :games_played_total, :cumulate => true
       #  end
       #  class User < ActiveRecord::Base
-      #    reports_as_sparkline :registrations, :operation => :count
-      #    reports_as_sparkline :activations, :date_column => :activated_at, :operation => :count
-      #    reports_as_sparkline :total_users_report, :cumulate => true
-      #    reports_as_sparkline :rake, :aggregation => :sum, :value_column => :profile_visits
+      #    reports_as_sparkline :registrations, :aggregation => :count
+      #    reports_as_sparkline :activations,   :aggregation => :count, :date_column => :activated_at
+      #    reports_as_sparkline :total_users,   :cumulate => true
+      #    reports_as_sparkline :rake,          :aggregation => :sum,   :value_column => :profile_visits
       #  end
       def reports_as_sparkline(name, options = {})
         (class << self; self; end).instance_eval do

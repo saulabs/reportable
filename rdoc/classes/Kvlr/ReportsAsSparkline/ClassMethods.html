@@ -163,10 +163,10 @@ false)
    reports_as_sparkline :games_played_total, :cumulate =&gt; true
  end
  class User &lt; ActiveRecord::Base
-   reports_as_sparkline :registrations, :operation =&gt; :count
-   reports_as_sparkline :activations, :date_column =&gt; :activated_at, :operation =&gt; :count
-   reports_as_sparkline :total_users_report, :cumulate =&gt; true
-   reports_as_sparkline :rake, :aggregation =&gt; :sum, :value_column =&gt; :profile_visits
+   reports_as_sparkline :registrations, :aggregation =&gt; :count
+   reports_as_sparkline :activations,   :aggregation =&gt; :count, :date_column =&gt; :activated_at
+   reports_as_sparkline :total_users,   :cumulate =&gt; true
+   reports_as_sparkline :rake,          :aggregation =&gt; :sum,   :value_column =&gt; :profile_visits
  end
 </pre>
           <p><a class="source-toggle" href="#"

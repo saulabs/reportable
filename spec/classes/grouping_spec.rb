@@ -26,8 +26,8 @@ describe Kvlr::ReportsAsSparkline::Grouping do
         Kvlr::ReportsAsSparkline::Grouping.new(:day).send(:to_sql, 'created_at').should == "DATE_FORMAT(created_at, '%Y/%m/%d')"
       end
 
-      it 'should use DATE_FORMAT with format string "%Y/%u" for grouping :week' do
-        Kvlr::ReportsAsSparkline::Grouping.new(:week).send(:to_sql, 'created_at').should == "DATE_FORMAT(created_at, '%Y/%u')"
+      it 'should use YEARWEEK with mode 3 for grouping :week' do
+        Kvlr::ReportsAsSparkline::Grouping.new(:week).send(:to_sql, 'created_at').should == "YEARWEEK(created_at, 3)"
       end
 
       it 'should use DATE_FORMAT with format string "%Y/%m" for grouping :month' do
@@ -66,8 +66,8 @@ describe Kvlr::ReportsAsSparkline::Grouping do
         Kvlr::ReportsAsSparkline::Grouping.new(:day).send(:to_sql, 'created_at').should == "strftime('%Y/%m/%d', created_at)"
       end
 
-      it 'should use strftime with format string "%Y/%W" for grouping :week' do
-        Kvlr::ReportsAsSparkline::Grouping.new(:week).send(:to_sql, 'created_at').should == "strftime('%Y/%W', created_at)"
+      it 'should use date with mode "weekday 0" for grouping :week' do
+        Kvlr::ReportsAsSparkline::Grouping.new(:week).send(:to_sql, 'created_at').should == "date(created_at, 'weekday 0')"
       end
 
       it 'should use strftime with format string "%Y/%m" for grouping :month' do
@@ -94,9 +94,9 @@ describe Kvlr::ReportsAsSparkline::Grouping do
 
       end
 
-      it 'should split the string with "/" and increment the week by 1 for grouping :week' do
-        db_string = '2008/2'
-        expected = [2008, 3]
+      it 'should split the string with "-" and return teh calendar year and week for grouping :week' do
+        db_string = '2008-2-1'
+        expected = [2008, 5]
 
         Kvlr::ReportsAsSparkline::Grouping.new(:week).date_parts_from_db_string(db_string).should == expected
       end
@@ -133,7 +133,7 @@ describe Kvlr::ReportsAsSparkline::Grouping do
         ActiveRecord::Base.connection.stub!(:adapter_name).and_return('MySQL')
       end
 
-      for grouping in [[:hour, '2008/12/31/12'], [:day, '2008/12/31'], [:week, '2008/40'], [:month, '2008/12']] do
+      for grouping in [[:hour, '2008/12/31/12'], [:day, '2008/12/31'], [:month, '2008/12']] do
 
         it "should split the string with '/' for grouping :#{grouping[0].to_s}" do
           Kvlr::ReportsAsSparkline::Grouping.new(grouping[0]).date_parts_from_db_string(grouping[1]).should == grouping[1].split('/').map(&:to_i)
@@ -141,9 +141,9 @@ describe Kvlr::ReportsAsSparkline::Grouping do
 
       end
 
-      it 'should split the string with "/", set the week to 1 and increment the year by 1 if the week is greater than 52 for grouping :week' do
-        db_string = '2008/53'
-        expected = [2009, 1]
+      it 'should use the first 4 numbers for the year and the last 2 numbers for the week for grouping :week' do
+        db_string = '200852'
+        expected = [2008, 52]
 
         Kvlr::ReportsAsSparkline::Grouping.new(:week).date_parts_from_db_string(db_string).should == expected
       end

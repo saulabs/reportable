@@ -70,30 +70,6 @@ describe Kvlr::ReportsAsSparkline::Report do
 
       describe "for grouping #{grouping.to_s}" do
 
-        before(:all) do
-          
-        end
-
-        
-
-        
-
-        after(:all) do
-          User.destroy_all
-        end
-
-        after(:each) do
-          Kvlr::ReportsAsSparkline::ReportCache.destroy_all
-        end
-
-      end
-
-    end
-
-    for grouping in [:hour, :day, :week, :month] do
-
-      describe "for grouping #{grouping.to_s}" do
-
         [true, false].each do |live_data|
 
           describe "with :live_data = #{live_data}" do
@@ -211,7 +187,69 @@ describe Kvlr::ReportsAsSparkline::Report do
 
     end
 
-    after(:each) do
+    describe 'for grouping week with data ranging over two years' do
+
+      describe 'with the first week of the second year belonging to the first year' do
+
+        before(:all) do
+          User.create!(:login => 'test 1', :created_at => DateTime.new(2008, 12, 22))
+          User.create!(:login => 'test 2', :created_at => DateTime.new(2008, 12, 29))
+          User.create!(:login => 'test 3', :created_at => DateTime.new(2009, 1, 4))
+          User.create!(:login => 'test 4', :created_at => DateTime.new(2009, 1, 5))
+          User.create!(:login => 'test 5', :created_at => DateTime.new(2009, 1, 12))
+
+          Time.stub!(:now).and_return(DateTime.new(2009, 1, 25))
+        end
+
+        it 'should return correct data for aggregation :count' do
+          @report = Kvlr::ReportsAsSparkline::Report.new(User, :registrations,
+            :aggregation => :count,
+            :grouping    => :week,
+            :limit       => 10
+          )
+          result = @report.run.to_a
+
+          result[9][1].should  == 0.0
+          result[8][1].should  == 1.0
+          result[7][1].should  == 1.0
+          result[6][1].should  == 2.0
+          result[5][1].should  == 1.0
+        end
+
+      end
+
+      describe 'with the first week of the second year belonging to the second year' do
+
+        before(:all) do
+          User.create!(:login => 'test 1', :created_at => DateTime.new(2009, 12, 21))
+          User.create!(:login => 'test 2', :created_at => DateTime.new(2009, 12, 28))
+          User.create!(:login => 'test 3', :created_at => DateTime.new(2010, 1, 3))
+          User.create!(:login => 'test 4', :created_at => DateTime.new(2010, 1, 4))
+          User.create!(:login => 'test 5', :created_at => DateTime.new(2010, 1, 11))
+
+          Time.stub!(:now).and_return(DateTime.new(2010, 1, 25))
+        end
+
+        it 'should return correct data for aggregation :count' do
+          @report = Kvlr::ReportsAsSparkline::Report.new(User, :registrations,
+            :aggregation => :count,
+            :grouping    => :week,
+            :limit       => 10
+          )
+          result = @report.run.to_a
+
+          result[9][1].should  == 0.0
+          result[8][1].should  == 1.0
+          result[7][1].should  == 1.0
+          result[6][1].should  == 2.0
+          result[5][1].should  == 1.0
+        end
+
+      end
+
+    end
+
+    after do
       Kvlr::ReportsAsSparkline::ReportCache.destroy_all
     end
 

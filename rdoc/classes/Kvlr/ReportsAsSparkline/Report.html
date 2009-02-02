@@ -192,7 +192,8 @@ when using :sum, :value_column must also be specified
 
 </li>
 <li><tt>:grouping</tt> - The period records are grouped on (:hour, :day, :week,
-:month)
+:month); <b>Beware that reports_as_sparkline treats weeks as starting on
+monday!</b>
 
 </li>
 <li><tt>:limit</tt> - The number of periods to get (see :grouping)
@@ -261,7 +262,8 @@ you specify conditions here, caching will be disabled</b>)
 
 </li>
 <li><tt>:grouping</tt> - The period records are grouped on (:hour, :day, :week,
-:month)
+:month); <b>Beware that reports_as_sparkline treats weeks as starting on
+monday!</b>
 
 </li>
 <li><tt>:live_data</tt> - Specified whether data for the current reporting

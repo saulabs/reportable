@@ -56,7 +56,7 @@
     </tr>
     <tr class="top-aligned-row">
       <td><strong>Last Update:</strong></td>
-      <td>Tue Jan 20 19:59:51 +0100 2009</td>
+      <td>Mon Feb 02 11:51:38 +0100 2009</td>
     </tr>
     </table>
   </div>
@@ -93,7 +93,8 @@ aggregation :sum
 :sum, :value_column must also be specified
 
 </li>
-<li>:grouping - The period records are grouped on (:hour, :day, :week, :month)
+<li>:grouping - The period records are grouped on (:hour, :day, :week, :month);
+<b>Beware that reports_as_sparkline treats weeks as starting on monday!</b>
 
 </li>
 <li>:limit - The number of periods to get (see :grouping)

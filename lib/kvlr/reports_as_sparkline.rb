@@ -19,7 +19,7 @@ module Kvlr #:nodoc:
       # * <tt>:date_column</tt> - The name of the date column on that the records are aggregated
       # * <tt>:value_column</tt> - The name of the column that holds the value to sum for aggregation :sum
       # * <tt>:aggregation</tt> - The aggregation to use (either :count or :sum); when using :sum, :value_column must also be specified
-      # * <tt>:grouping</tt> - The period records are grouped on (:hour, :day, :week, :month)
+      # * <tt>:grouping</tt> - The period records are grouped on (:hour, :day, :week, :month); <b>Beware that reports_as_sparkline treats weeks as starting on monday!</b>
       # * <tt>:limit</tt> - The number of periods to get (see :grouping)
       # * <tt>:conditions</tt> - Conditions like in ActiveRecord::Base#find; only records that match there conditions are reported on
       # * <tt>:live_data</tt> - Specified whether data for the current reporting period is read; if :live_data is true, you will experience a performance hit since the request cannot be satisfied from the cache only (defaults to false)

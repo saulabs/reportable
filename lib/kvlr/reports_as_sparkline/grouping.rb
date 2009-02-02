@@ -18,30 +18,13 @@ module Kvlr #:nodoc:
       end
 
       def date_parts_from_db_string(db_string) #:nodoc:
-        if ActiveRecord::Base.connection.adapter_name =~ /postgres/i
-          case @identifier
-            when :hour
-              return (db_string[0..9].split('-') + [db_string[11..12]]).map(&:to_i)
-            when :day
-              return db_string[0..9].split('-').map(&:to_i)
-            when :week
-              parts = db_string[0..9].split('-').map(&:to_i)
-              date = Date.new(parts[0], parts[1], parts[2])
-              return [date.year, date.cweek]
-            when :month
-              return db_string[0..6].split('-')[0..1].map(&:to_i)
-          end
-        else
-          parts = db_string.split('/').map(&:to_i)
-          if ActiveRecord::Base.connection.adapter_name =~ /mysql/i
-            if @identifier == :week && parts[1] > 52
-              parts[0] += 1
-              parts[1] = 1
-            end
-            return parts
-          end
-          parts[1] += 1 if @identifier == :week
-          parts
+        return case ActiveRecord::Base.connection.adapter_name
+          when /mysql/i
+            from_mysql_db_string(db_string)
+          when /sqlite/i
+            from_sqlite_db_string(db_string)
+          when /postgres/i
+            from_postgresql_db_string(db_string)
         end
       end
 
@@ -58,6 +41,38 @@ module Kvlr #:nodoc:
 
       private
 
+        def from_mysql_db_string(db_string)
+          if @identifier == :week
+            parts = [db_string[0..3], db_string[4..5]].map(&:to_i)
+          else
+            db_string.split('/').map(&:to_i)
+          end
+        end
+
+        def from_sqlite_db_string(db_string)
+          if @identifier == :week
+            parts = db_string.split('-').map(&:to_i)
+            date = Date.new(parts[0], parts[1], parts[2])
+            return [date.cwyear, date.cweek]
+          end
+          db_string.split('/').map(&:to_i)
+        end
+
+        def from_postgresql_db_string(db_string)
+          case @identifier
+            when :hour
+              return (db_string[0..9].split('-') + [db_string[11..12]]).map(&:to_i)
+            when :day
+              return db_string[0..9].split('-').map(&:to_i)
+            when :week
+              parts = db_string[0..9].split('-').map(&:to_i)
+              date = Date.new(parts[0], parts[1], parts[2])
+              return [date.cwyear, date.cweek]
+            when :month
+              return db_string[0..6].split('-')[0..1].map(&:to_i)
+          end
+        end
+
         def mysql_format(date_column)
           return case @identifier
             when :hour
@@ -65,7 +80,7 @@ module Kvlr #:nodoc:
             when :day
               "DATE_FORMAT(#{date_column}, '%Y/%m/%d')"
             when :week
-              "DATE_FORMAT(#{date_column}, '%Y/%u')"
+              "YEARWEEK(#{date_column}, 3)"
             when :month
               "DATE_FORMAT(#{date_column}, '%Y/%m')"
           end
@@ -78,7 +93,7 @@ module Kvlr #:nodoc:
             when :day
               "strftime('%Y/%m/%d', #{date_column})"
             when :week
-              "strftime('%Y/%W', #{date_column})"
+              "date(#{date_column}, 'weekday 0')"
             when :month
               "strftime('%Y/%m', #{date_column})"
           end

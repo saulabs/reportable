@@ -253,6 +253,10 @@ describe Kvlr::ReportsAsSparkline::Report do
       Kvlr::ReportsAsSparkline::ReportCache.destroy_all
     end
 
+    after(:all) do
+      User.destroy_all
+    end
+
   end
 
   describe '#read_data' do

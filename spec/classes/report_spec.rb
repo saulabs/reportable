@@ -142,6 +142,57 @@ describe Kvlr::ReportsAsSparkline::Report do
               result[6][1].should  == 0.0
             end
 
+            it 'should return correct data for aggregation :maximum' do
+              @report = Kvlr::ReportsAsSparkline::Report.new(User, :registrations,
+                :aggregation  => :maximum,
+                :grouping     => grouping,
+                :value_column => :profile_visits,
+                :limit        => 10,
+                :live_data    => live_data
+              )
+              result = @report.run().to_a
+
+              result[10][1].should == 2.0 if live_data
+              result[9][1].should  == 1.0
+              result[8][1].should  == 0.0
+              result[7][1].should  == 3.0
+              result[6][1].should  == 0.0
+            end
+
+            it 'should return correct data for aggregation :minimum' do
+              @report = Kvlr::ReportsAsSparkline::Report.new(User, :registrations,
+                :aggregation  => :minimum,
+                :grouping     => grouping,
+                :value_column => :profile_visits,
+                :limit        => 10,
+                :live_data    => live_data
+              )
+              result = @report.run().to_a
+
+              result[10][1].should == 2.0 if live_data
+              result[9][1].should  == 1.0
+              result[8][1].should  == 0.0
+              result[7][1].should  == 2.0
+              result[6][1].should  == 0.0
+            end
+
+            it 'should return correct data for aggregation :average' do
+              @report = Kvlr::ReportsAsSparkline::Report.new(User, :registrations,
+                :aggregation  => :average,
+                :grouping     => grouping,
+                :value_column => :profile_visits,
+                :limit        => 10,
+                :live_data    => live_data
+              )
+              result = @report.run().to_a
+
+              result[10][1].should == 2.0 if live_data
+              result[9][1].should  == 1.0
+              result[8][1].should  == 0.0
+              result[7][1].should  == 2.5
+              result[6][1].should  == 0.0
+            end
+
             it 'should return correct data for aggregation :count when custom conditions are specified' do
               @report = Kvlr::ReportsAsSparkline::Report.new(User, :registrations,
                 :aggregation => :count,
@@ -278,47 +329,55 @@ describe Kvlr::ReportsAsSparkline::Report do
 
   describe '#setup_conditions' do
 
-    it 'should return conditions for date_column >= begin_at only when no custom conditions are specified' do
-      begin_at = Time.now
+    before do
+      @begin_at = Time.now
+    end
 
-      @report.send(:setup_conditions, begin_at).should == ['created_at >= ?', begin_at]
+    it 'should return conditions for date_column >= begin_at only when no custom conditions are specified' do
+      @report.send(:setup_conditions, @begin_at).should == ['created_at >= ?', @begin_at]
     end
 
     it 'should return conditions for date_column >= begin_at only when an empty Hash of custom conditions is specified' do
-      begin_at = Time.now
-
-      @report.send(:setup_conditions, begin_at, {}).should == ['created_at >= ?', begin_at]
+      @report.send(:setup_conditions, @begin_at, {}).should == ['created_at >= ?', @begin_at]
     end
 
     it 'should return conditions for date_column >= begin_at only when an empty Array of custom conditions is specified' do
-      begin_at = Time.now
-
-      @report.send(:setup_conditions, begin_at, []).should == ['created_at >= ?', begin_at]
+      @report.send(:setup_conditions, @begin_at, []).should == ['created_at >= ?', @begin_at]
     end
 
     it 'should correctly include custom conditions if they are specified as a Hash' do
-      begin_at = Time.now
       custom_conditions = { :first_name => 'first name', :last_name => 'last name' }
 
-      conditions = @report.send(:setup_conditions, begin_at, custom_conditions)
+      conditions = @report.send(:setup_conditions, @begin_at, custom_conditions)
       #cannot check for equality of complete conditions array since hashes are not ordered (thus it is unknown whether first_name or last_name comes first)
       conditions[0].should include('first_name = ?')
       conditions[0].should include('last_name = ?')
       conditions[0].should include('created_at >= ?')
       conditions.should include('first name')
       conditions.should include('last name')
-      conditions.should include(begin_at)
+      conditions.should include(@begin_at)
+    end
+
+    it 'should correctly translate { :column => nil }' do
+      @report.send(:setup_conditions, @begin_at, { :column => nil }).should == ['column IS NULL AND created_at >= ?', @begin_at]
+    end
+
+    it 'should correctly translate { :column => [1, 2] }' do
+      @report.send(:setup_conditions, @begin_at, { :column => [1, 2] }).should == ['column IN (?) AND created_at >= ?', [1, 2], @begin_at]
+    end
+
+    it 'should correctly translate { :column => (1..3) }' do
+      @report.send(:setup_conditions, @begin_at, { :column => (1..3) }).should == ['column IN (?) AND created_at >= ?', (1..3), @begin_at]
     end
 
     it 'should correctly include custom conditions if they are specified as an Array' do
-      begin_at = Time.now
       custom_conditions = ['first_name = ? AND last_name = ?', 'first name', 'last name']
 
-      @report.send(:setup_conditions, begin_at, custom_conditions).should == [
+      @report.send(:setup_conditions, @begin_at, custom_conditions).should == [
         'first_name = ? AND last_name = ? AND created_at >= ?',
         'first name',
         'last name',
-        begin_at
+        @begin_at
       ]
     end
 

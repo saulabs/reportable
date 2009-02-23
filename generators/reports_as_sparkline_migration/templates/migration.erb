@@ -28,8 +28,8 @@ class <%= class_name %> < ActiveRecord::Migration
   end
 
   def self.down
-    remove_index :name_model_grouping_agregation
-    remove_index :name_model_grouping_aggregation_period
+    remove_index :report_caches, :name => :name_model_grouping_agregation
+    remove_index :report_caches, :name => :name_model_grouping_aggregation_period
 
     drop_table :report_caches
   end

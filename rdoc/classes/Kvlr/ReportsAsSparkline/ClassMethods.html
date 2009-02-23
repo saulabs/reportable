@@ -134,8 +134,10 @@ aggregated
 for aggregation :sum
 
 </li>
-<li><tt>:aggregation</tt> - The aggregation to use (either :count or :sum);
-when using :sum, :value_column must also be specified
+<li><tt>:aggregation</tt> - The aggregation to use (one of :count, :sum,
+:minimum, :maximum or :average); when using anything other than :count,
+:value_column must also be specified (<b>If you really want to e.g. sumon
+the &#8216;id&#8217; column, you have to explicitely say so.</b>)
 
 </li>
 <li><tt>:grouping</tt> - The period records are grouped on (:hour, :day, :week,

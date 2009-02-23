@@ -15,7 +15,7 @@ module Kvlr #:nodoc:
       #
       # * <tt>:date_column</tt> - The name of the date column on that the records are aggregated
       # * <tt>:value_column</tt> - The name of the column that holds the value to sum for aggregation :sum
-      # * <tt>:aggregation</tt> - The aggregation to use (either :count or :sum); when using :sum, :value_column must also be specified
+      # * <tt>:aggregation</tt> - The aggregation to use (one of :count, :sum, :minimum, :maximum or :average); when using anything other than :count, :value_column must also be specified (<b>If you really want to e.g. sumon the 'id' column, you have to explicitely say so.</b>)
       # * <tt>:grouping</tt> - The period records are grouped on (:hour, :day, :week, :month); <b>Beware that reports_as_sparkline treats weeks as starting on monday!</b>
       # * <tt>:limit</tt> - The number of periods to get (see :grouping)
       # * <tt>:conditions</tt> - Conditions like in ActiveRecord::Base#find; only records that match there conditions are reported on
@@ -25,8 +25,8 @@ module Kvlr #:nodoc:
         @klass        = klass
         @name         = name
         @date_column  = (options[:date_column] || 'created_at').to_s
-        @value_column = (options[:value_column] || (options[:aggregation] != :sum ? 'id' : name)).to_s
         @aggregation  = options[:aggregation] || :count
+        @value_column = (options[:value_column] || (@aggregation == :count ? 'id' : name)).to_s
         @options = {
           :limit      => options[:limit] || 100,
           :conditions => options[:conditions] || [],
@@ -69,7 +69,15 @@ module Kvlr #:nodoc:
         def setup_conditions(begin_at, custom_conditions = [])
           conditions = ['']
           if custom_conditions.is_a?(Hash)
-            conditions = [custom_conditions.map{ |k, v| "#{k.to_s} = ?" }.join(' AND '), *custom_conditions.map{ |k, v| v }]
+            conditions = [custom_conditions.map do |k, v|
+              if v.nil?
+                "#{k.to_s} IS NULL"
+              elsif v.is_a?(Array) || v.is_a?(Range)
+                "#{k.to_s} IN (?)"
+              else
+                "#{k.to_s} = ?"
+              end
+            end.join(' AND '), *custom_conditions.map { |k, v| v }.compact]
           elsif custom_conditions.size > 0
             conditions = [(custom_conditions[0] || ''), *custom_conditions[1..-1]]
           end
@@ -83,8 +91,8 @@ module Kvlr #:nodoc:
               options.each_key do |k|
                 raise ArgumentError.new("Invalid option #{k}") unless [:limit, :aggregation, :grouping, :date_column, :value_column, :conditions, :live_data].include?(k)
               end
-              raise ArgumentError.new("Invalid aggregation #{options[:aggregation]}") if options[:aggregation] && ![:count, :sum].include?(options[:aggregation])
-              raise ArgumentError.new('The name of the column holding the value to sum has to be specified for aggregation :sum') if options[:aggregation] == :sum && !options.key?(:value_column)
+              raise ArgumentError.new("Invalid aggregation #{options[:aggregation]}") if options[:aggregation] && ![:count, :sum, :maximum, :minimum, :average].include?(options[:aggregation])
+              raise ArgumentError.new('The name of the column holding the value to sum has to be specified for aggregation :sum') if [:sum, :maximum, :minimum, :average].include?(options[:aggregation]) && !options.key?(:value_column)
             when :run
               options.each_key do |k|
                 raise ArgumentError.new("Invalid option #{k}") unless [:limit, :conditions, :grouping, :live_data].include?(k)

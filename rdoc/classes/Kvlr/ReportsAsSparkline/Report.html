@@ -187,8 +187,10 @@ aggregated
 for aggregation :sum
 
 </li>
-<li><tt>:aggregation</tt> - The aggregation to use (either :count or :sum);
-when using :sum, :value_column must also be specified
+<li><tt>:aggregation</tt> - The aggregation to use (one of :count, :sum,
+:minimum, :maximum or :average); when using anything other than :count,
+:value_column must also be specified (<b>If you really want to e.g. sumon
+the &#8216;id&#8217; column, you have to explicitely say so.</b>)
 
 </li>
 <li><tt>:grouping</tt> - The period records are grouped on (:hour, :day, :week,
@@ -220,8 +222,8 @@ false)
 25:         <span class="ruby-ivar">@klass</span>        = <span class="ruby-identifier">klass</span>
 26:         <span class="ruby-ivar">@name</span>         = <span class="ruby-identifier">name</span>
 27:         <span class="ruby-ivar">@date_column</span>  = (<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:date_column</span>] <span class="ruby-operator">||</span> <span class="ruby-value str">'created_at'</span>).<span class="ruby-identifier">to_s</span>
-28:         <span class="ruby-ivar">@value_column</span> = (<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:value_column</span>] <span class="ruby-operator">||</span> (<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:aggregation</span>] <span class="ruby-operator">!=</span> <span class="ruby-identifier">:sum</span> <span class="ruby-operator">?</span> <span class="ruby-value str">'id'</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">name</span>)).<span class="ruby-identifier">to_s</span>
-29:         <span class="ruby-ivar">@aggregation</span>  = <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:aggregation</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">:count</span>
+28:         <span class="ruby-ivar">@aggregation</span>  = <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:aggregation</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">:count</span>
+29:         <span class="ruby-ivar">@value_column</span> = (<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:value_column</span>] <span class="ruby-operator">||</span> (<span class="ruby-ivar">@aggregation</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:count</span> <span class="ruby-operator">?</span> <span class="ruby-value str">'id'</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">name</span>)).<span class="ruby-identifier">to_s</span>
 30:         <span class="ruby-ivar">@options</span> = {
 31:           <span class="ruby-identifier">:limit</span>      =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:limit</span>] <span class="ruby-operator">||</span> <span class="ruby-value">100</span>,
 32:           <span class="ruby-identifier">:conditions</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:conditions</span>] <span class="ruby-operator">||</span> [],

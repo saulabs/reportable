@@ -9,7 +9,7 @@ to it with the following options:
 
 * :date_column - The name of the date column on that the records are aggregated
 * :value_column - The name of the column that holds the value to sum for aggregation :sum
-* :aggregation - The aggregation to use (either :count or :sum); when using :sum, :value_column must also be specified
+* :aggregation - The aggregation to use (one of :count, :sum, :minimum, :maximum or :average); when using anything other than :count, :value_column must also be specified (<b>If you really want to e.g. sumon the 'id' column, you have to explicitely say so.</b>)
 * :grouping - The period records are grouped on (:hour, :day, :week, :month); <b>Beware that reports_as_sparkline treats weeks as starting on monday!</b>
 * :limit - The number of periods to get (see :grouping)
 * :conditions - Conditions like in ActiveRecord::Base#find; only records that match there conditions are reported on
@@ -101,4 +101,4 @@ If you are on PostgreSQL, you should add functional indices:
 
 If you want ot suggest any new features or report bugs, do so at http://simplabs.lighthouseapp.com/projects/21060-reportsassparkline/overview.
 
-© 2008-2009 Martin Kavalar, Marco Otte-Witte (http://simplabs.com/#open-source), released under the MIT license
+© 2008-2009 Martin Kavalar, Marco Otte-Witte (http://simplabs.com/#projects), released under the MIT license

@@ -25,7 +25,7 @@ module Kvlr #:nodoc:
       private
 
         def self.prepare_result(new_data, cached_data, report, options, cache = true)
-          new_data.map! { |data| [ReportingPeriod.from_db_string(options[:grouping], data[0]), data[1]] }
+          new_data = new_data.map { |data| [ReportingPeriod.from_db_string(options[:grouping], data[0]), data[1]] }
           result = cached_data.map { |cached| [cached.reporting_period, cached.value] }
           current_reporting_period = ReportingPeriod.new(options[:grouping])
           reporting_period = cached_data.empty? ? ReportingPeriod.first(options[:grouping], options[:limit]) : ReportingPeriod.new(options[:grouping], cached_data.last.reporting_period).next

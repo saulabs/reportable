@@ -232,6 +232,12 @@ describe Kvlr::ReportsAsSparkline::ReportingPeriod do
       reporting_period.date_time.should == DateTime.new(2008, 12, 8) #the monday 3 weeks earlier
     end
 
+    it 'should return a reporting period that is offset from the end date by the limit' do
+      date = DateTime.new(2009, 3, 31)
+      reporting_period = Kvlr::ReportsAsSparkline::ReportingPeriod.first(Kvlr::ReportsAsSparkline::Grouping.new(:day), 3, date)
+      reporting_period.date_time.should == DateTime.new(2009, 3, 28)
+    end
+
   end
 
 end

@@ -3,6 +3,8 @@ require File.join(File.dirname(__FILE__), '..', 'spec_helper')
 describe Kvlr::ReportsAsSparkline::Report do
 
   before do
+    @now = DateTime.now
+    DateTime.stub!(:now).and_return(@now)
     @report = Kvlr::ReportsAsSparkline::Report.new(User, :registrations)
   end
 
@@ -19,7 +21,7 @@ describe Kvlr::ReportsAsSparkline::Report do
     it 'should process the data with the report cache' do
       Kvlr::ReportsAsSparkline::ReportCache.should_receive(:process).once.with(
         @report,
-        { :limit => 100, :grouping => @report.options[:grouping], :conditions => [], :live_data => false },
+        { :limit => 100, :grouping => @report.options[:grouping], :conditions => [], :live_data => false, :end_date => nil },
         true
       )
 
@@ -29,7 +31,7 @@ describe Kvlr::ReportsAsSparkline::Report do
     it 'should process the data with the report cache and specify cache = false when custom conditions are given' do
       Kvlr::ReportsAsSparkline::ReportCache.should_receive(:process).once.with(
         @report,
-        { :limit => 100, :grouping => @report.options[:grouping], :conditions => { :some => :condition }, :live_data => false },
+        { :limit => 100, :grouping => @report.options[:grouping], :conditions => { :some => :condition }, :live_data => false, :end_date => nil },
         false
       )
 
@@ -47,7 +49,7 @@ describe Kvlr::ReportsAsSparkline::Report do
       Kvlr::ReportsAsSparkline::Grouping.should_receive(:new).once.with(:month).and_return(grouping)
       Kvlr::ReportsAsSparkline::ReportCache.should_receive(:process).once.with(
         @report,
-        { :limit => 100, :grouping => grouping, :conditions => [], :live_data => false },
+        { :limit => 100, :grouping => grouping, :conditions => [], :live_data => false, :end_date => nil },
         true
       )
 
@@ -64,6 +66,44 @@ describe Kvlr::ReportsAsSparkline::Report do
       @report = Kvlr::ReportsAsSparkline::Report.new(User, :cumulated_registrations, :limit => 10, :live_data => true)
 
       @report.run.length.should == 11
+    end
+
+    describe "a month report with a limit of 2" do
+      before(:all) do
+        User.create!(:login => 'test 1', :created_at => Time.now,           :profile_visits => 2)
+        User.create!(:login => 'test 2', :created_at => Time.now - 1.month, :profile_visits => 1)
+        User.create!(:login => 'test 3', :created_at => Time.now - 3.month, :profile_visits => 2)
+        User.create!(:login => 'test 4', :created_at => Time.now - 3.month, :profile_visits => 3)
+
+        @report2 = Kvlr::ReportsAsSparkline::Report.new(User, :registrations,
+          :grouping => :month,
+          :limit => 2
+        )
+
+        @one_month_ago    = Date.new(DateTime.now.year, DateTime.now.month, 1) - 1.month
+        @two_months_ago   = Date.new(DateTime.now.year, DateTime.now.month, 1) - 2.months
+        @three_months_ago = Date.new(DateTime.now.year, DateTime.now.month, 1) - 3.months
+      end
+
+      it "should return data for the last two months when there is no end date" do
+        @report2.run.should == [[@two_months_ago, 0.0], [@one_month_ago, 1.0]]
+      end
+
+      it "should return data for two months prior to the end date" do
+        @report2.run(:end_date => 1.month.ago).should == [[@three_months_ago, 2.0], [@two_months_ago, 0.0]]
+      end
+
+      it "should return data for the two months prior to the end date, and also the end date's month when live_date = true" do
+        @report2.run(:end_date => 1.month.ago, :live_data => true).should == [[@three_months_ago, 2.0], [@two_months_ago, 0.0], [@one_month_ago, 1.0]]
+      end
+
+      it "should return data for the two months prior to the end date, and also the end date's month when live_date = true, when getting the data from the cache" do
+        # run it once to get from the database...
+        @report2.run(:end_date => 1.month.ago, :live_data => true)
+
+        # and then again from the cache...
+        @report2.run(:end_date => 1.month.ago, :live_data => true).should == [[@three_months_ago.to_time, 2.0], [@two_months_ago.to_time, 0.0], [@one_month_ago, 1.0]]
+      end
     end
 
     for grouping in [:hour, :day, :week, :month] do
@@ -316,13 +356,13 @@ describe Kvlr::ReportsAsSparkline::Report do
       @report = Kvlr::ReportsAsSparkline::Report.new(User, :registrations, :aggregation => :count)
       User.should_receive(:count).once.and_return([])
 
-      @report.send(:read_data, Time.now, { :grouping => @report.options[:grouping], :conditions => [] })
+      @report.send(:read_data, Time.now, 5.days.from_now, { :grouping => @report.options[:grouping], :conditions => [] })
     end
 
     it 'should setup the conditions' do
       @report.should_receive(:setup_conditions).once.and_return([])
 
-      @report.send(:read_data, Time.now, { :grouping => @report.options[:grouping], :conditions => [] })
+      @report.send(:read_data, Time.now, 5.days.from_now, { :grouping => @report.options[:grouping], :conditions => [] })
     end
 
   end
@@ -331,53 +371,60 @@ describe Kvlr::ReportsAsSparkline::Report do
 
     before do
       @begin_at = Time.now
+      @end_at = 5.days.from_now
     end
 
-    it 'should return conditions for date_column >= begin_at only when no custom conditions are specified' do
-      @report.send(:setup_conditions, @begin_at).should == ['created_at >= ?', @begin_at]
+    it 'should return conditions for date_column BETWEEN begin_at and end_at only when no custom conditions are specified and both begin and end date are specified' do
+      @report.send(:setup_conditions, @begin_at, @end_at).should == ['created_at BETWEEN ? AND ?', @begin_at, @end_at]
     end
 
-    it 'should return conditions for date_column >= begin_at only when an empty Hash of custom conditions is specified' do
-      @report.send(:setup_conditions, @begin_at, {}).should == ['created_at >= ?', @begin_at]
+    it 'should return conditions for date_column >= begin_at when no custom conditions and a begin_at are specified' do
+      @report.send(:setup_conditions, @begin_at, nil).should == ['created_at >= ?', @begin_at]
     end
 
-    it 'should return conditions for date_column >= begin_at only when an empty Array of custom conditions is specified' do
-      @report.send(:setup_conditions, @begin_at, []).should == ['created_at >= ?', @begin_at]
+    it 'should return conditions for date_column BETWEEN begin_at and end_date only when an empty Hash of custom conditions is specified' do
+      @report.send(:setup_conditions, @begin_at, @end_at, {}).should == ['created_at BETWEEN ? AND ?', @begin_at, @end_at]
+    end
+
+    it 'should return conditions for date_column BETWEEN begin_at and end_date only when an empty Array of custom conditions is specified' do
+      @report.send(:setup_conditions, @begin_at, @end_at, []).should == ['created_at BETWEEN ? AND ?', @begin_at, @end_at]
     end
 
     it 'should correctly include custom conditions if they are specified as a Hash' do
       custom_conditions = { :first_name => 'first name', :last_name => 'last name' }
 
-      conditions = @report.send(:setup_conditions, @begin_at, custom_conditions)
+      conditions = @report.send(:setup_conditions, @begin_at, @end_at, custom_conditions)
       #cannot check for equality of complete conditions array since hashes are not ordered (thus it is unknown whether first_name or last_name comes first)
       conditions[0].should include('first_name = ?')
       conditions[0].should include('last_name = ?')
-      conditions[0].should include('created_at >= ?')
+      conditions[0].should include('created_at BETWEEN ? AND ?')
       conditions.should include('first name')
       conditions.should include('last name')
       conditions.should include(@begin_at)
+      conditions.should include(@end_at)
     end
 
     it 'should correctly translate { :column => nil }' do
-      @report.send(:setup_conditions, @begin_at, { :column => nil }).should == ['column IS NULL AND created_at >= ?', @begin_at]
+      @report.send(:setup_conditions, @begin_at, @end_at, { :column => nil }).should == ['column IS NULL AND created_at BETWEEN ? AND ?', @begin_at, @end_at]
     end
 
     it 'should correctly translate { :column => [1, 2] }' do
-      @report.send(:setup_conditions, @begin_at, { :column => [1, 2] }).should == ['column IN (?) AND created_at >= ?', [1, 2], @begin_at]
+      @report.send(:setup_conditions, @begin_at, @end_at, { :column => [1, 2] }).should == ['column IN (?) AND created_at BETWEEN ? AND ?', [1, 2], @begin_at, @end_at]
     end
 
     it 'should correctly translate { :column => (1..3) }' do
-      @report.send(:setup_conditions, @begin_at, { :column => (1..3) }).should == ['column IN (?) AND created_at >= ?', (1..3), @begin_at]
+      @report.send(:setup_conditions, @begin_at, @end_at, { :column => (1..3) }).should == ['column IN (?) AND created_at BETWEEN ? AND ?', (1..3), @begin_at, @end_at]
     end
 
     it 'should correctly include custom conditions if they are specified as an Array' do
       custom_conditions = ['first_name = ? AND last_name = ?', 'first name', 'last name']
 
-      @report.send(:setup_conditions, @begin_at, custom_conditions).should == [
-        'first_name = ? AND last_name = ? AND created_at >= ?',
+      @report.send(:setup_conditions, @begin_at, @end_at, custom_conditions).should == [
+        'first_name = ? AND last_name = ? AND created_at BETWEEN ? AND ?',
         'first name',
         'last name',
-        @begin_at
+        @begin_at,
+        @end_at
       ]
     end
 
@@ -415,11 +462,11 @@ describe Kvlr::ReportsAsSparkline::Report do
           })
         }.should_not raise_error(ArgumentError)
       end
-      
+
       it 'should raise an error if an unsupported option is specified' do
         lambda { @report.send(:ensure_valid_options, { :invalid => :option }) }.should raise_error(ArgumentError)
       end
-      
+
       it 'should raise an error if an invalid aggregation is specified' do
         lambda { @report.send(:ensure_valid_options, { :aggregation => :invalid }) }.should raise_error(ArgumentError)
       end
@@ -436,13 +483,13 @@ describe Kvlr::ReportsAsSparkline::Report do
         lambda { @report.send(:ensure_valid_options, { :limit => 100, :conditions => [], :grouping => :week, :live_data => true }, :run)
         }.should_not raise_error(ArgumentError)
       end
-      
+
       it 'should raise an error if an unsupported option is specified' do
         lambda { @report.send(:ensure_valid_options, { :aggregation => :sum }, :run) }.should raise_error(ArgumentError)
       end
 
     end
-  
+
   end
 
 end

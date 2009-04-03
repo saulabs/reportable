@@ -10,9 +10,9 @@ module Kvlr #:nodoc:
       # ==== Parameters
       # * <tt>grouping</tt> - The Kvlr::ReportsAsSparkline::Grouping of the reporting period
       # * <tt>date_time</tt> - The DateTime that reporting period is created for
-      def initialize(grouping, date_time = DateTime.now)
+      def initialize(grouping, date_time = nil)
         @grouping  = grouping
-        @date_time = parse_date_time(date_time)
+        @date_time = parse_date_time(date_time || DateTime.now)
       end
 
       # Returns the first reporting period for a grouping and a limit; e.g. the first reporting period for Grouping :day and limit 2 would be Time.now - 2.days
@@ -20,8 +20,8 @@ module Kvlr #:nodoc:
       # ==== Parameters
       # * <tt>grouping</tt> - The Kvlr::ReportsAsSparkline::Grouping of the reporting period
       # * <tt>limit</tt> - The number of reporting periods until the first one
-      def self.first(grouping, limit)
-        self.new(grouping, DateTime.now).offset(-limit)
+      def self.first(grouping, limit, end_date = nil)
+        self.new(grouping, end_date).offset(-limit)
       end
 
       def self.from_db_string(grouping, db_string) #:nodoc:

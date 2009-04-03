@@ -46,8 +46,9 @@ describe Kvlr::ReportsAsSparkline::ReportCache do
         cached.stub!(:reporting_period).and_return(reporting_period.date_time)
         Kvlr::ReportsAsSparkline::ReportCache.stub!(:find).and_return([cached])
 
-        Kvlr::ReportsAsSparkline::ReportCache.process(@report, @options) do |begin_at|
+        Kvlr::ReportsAsSparkline::ReportCache.process(@report, @options) do |begin_at, end_at|
           begin_at.should == reporting_period.next.date_time
+          end_at.should == nil
           []
         end
       end
@@ -80,8 +81,9 @@ describe Kvlr::ReportsAsSparkline::ReportCache do
         cached.stub!(:reporting_period).and_return(reporting_period.date_time)
         Kvlr::ReportsAsSparkline::ReportCache.stub!(:find).and_return([cached])
 
-        Kvlr::ReportsAsSparkline::ReportCache.process(@report, @report.options) do |begin_at|
+        Kvlr::ReportsAsSparkline::ReportCache.process(@report, @report.options) do |begin_at, end_at|
           begin_at.should == reporting_period.next.date_time
+          end_at.should == nil
           []
         end
       end
@@ -104,6 +106,26 @@ describe Kvlr::ReportsAsSparkline::ReportCache do
       )
 
       Kvlr::ReportsAsSparkline::ReportCache.process(@report, @report.options) { [] }
+    end
+
+    it 'should utilize the end_date in the conditions' do
+      end_date = Time.now
+      Kvlr::ReportsAsSparkline::ReportCache.should_receive(:find).once.with(
+        :all,
+        :conditions => [
+          'model_name = ? AND report_name = ? AND grouping = ? AND aggregation = ? AND reporting_period BETWEEN ? AND ?',
+          @report.klass.to_s,
+          @report.name.to_s,
+          @report.options[:grouping].identifier.to_s,
+          @report.aggregation.to_s,
+          Kvlr::ReportsAsSparkline::ReportingPeriod.first(@report.options[:grouping], 10).date_time,
+          Kvlr::ReportsAsSparkline::ReportingPeriod.new(@report.options[:grouping], end_date).date_time
+        ],
+        :limit => 10,
+        :order => 'reporting_period ASC'
+      )
+
+      Kvlr::ReportsAsSparkline::ReportCache.process(@report, @report.options.merge(:end_date => end_date)) { [] }
     end
 
     it "should read existing data from the cache for the correct grouping if one other than the report's default grouping is specified" do
@@ -135,8 +157,9 @@ describe Kvlr::ReportsAsSparkline::ReportCache do
     end
 
     it 'should yield the first reporting period if the cache is empty' do
-      Kvlr::ReportsAsSparkline::ReportCache.process(@report, @report.options) do |begin_at|
+      Kvlr::ReportsAsSparkline::ReportCache.process(@report, @report.options) do |begin_at, end_at|
         begin_at.should == Kvlr::ReportsAsSparkline::ReportingPeriod.first(@report.options[:grouping], 10).date_time
+        end_at.should == nil
         []
       end
     end
@@ -150,8 +173,9 @@ describe Kvlr::ReportsAsSparkline::ReportCache do
       end
 
       it 'should yield the first reporting period' do
-        Kvlr::ReportsAsSparkline::ReportCache.process(@report, @report.options, false) do |begin_at|
+        Kvlr::ReportsAsSparkline::ReportCache.process(@report, @report.options, false) do |begin_at, end_at|
           begin_at.should == Kvlr::ReportsAsSparkline::ReportingPeriod.first(@report.options[:grouping], 10).date_time
+          end_at.should == nil
           []
         end
       end

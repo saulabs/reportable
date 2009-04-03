@@ -20,6 +20,7 @@ module Kvlr #:nodoc:
       # * <tt>:limit</tt> - The number of periods to get (see :grouping)
       # * <tt>:conditions</tt> - Conditions like in ActiveRecord::Base#find; only records that match there conditions are reported on
       # * <tt>:live_data</tt> - Specified whether data for the current reporting period is read; if :live_data is true, you will experience a performance hit since the request cannot be satisfied from the cache only (defaults to false)
+      # * <tt>:end_date</tt> - When specified, the report will be for the periods before this date.
       def initialize(klass, name, options = {})
         ensure_valid_options(options)
         @klass        = klass
@@ -31,7 +32,8 @@ module Kvlr #:nodoc:
           :limit      => options[:limit] || 100,
           :conditions => options[:conditions] || [],
           :grouping   => Grouping.new(options[:grouping] || :day),
-          :live_data  => options[:live_data] || false
+          :live_data  => options[:live_data] || false,
+          :end_date   => options[:end_date]
         }
         @options.merge!(options)
         @options.freeze
@@ -44,20 +46,22 @@ module Kvlr #:nodoc:
       # * <tt>:conditions</tt> - Conditions like in ActiveRecord::Base#find; only records that match there conditions are reported on (<b>Beware that when you specify conditions here, caching will be disabled</b>)
       # * <tt>:grouping</tt> - The period records are grouped on (:hour, :day, :week, :month); <b>Beware that reports_as_sparkline treats weeks as starting on monday!</b>
       # * <tt>:live_data</tt> - Specified whether data for the current reporting period is read; if :live_data is true, you will experience a performance hit since the request cannot be satisfied from the cache only (defaults to false)
+      # * <tt>:end_date</tt> - When specified, the report will be for the periods before this date.
       def run(options = {})
+        options = options.dup
         ensure_valid_options(options, :run)
         custom_conditions = options.key?(:conditions)
         options.reverse_merge!(@options)
         options[:grouping] = Grouping.new(options[:grouping]) unless options[:grouping].is_a?(Grouping)
-        ReportCache.process(self, options, !custom_conditions) do |begin_at|
-          read_data(begin_at, options)
+        ReportCache.process(self, options, !custom_conditions) do |begin_at, end_at|
+          read_data(begin_at, end_at, options)
         end
       end
 
       private
 
-        def read_data(begin_at, options)
-          conditions = setup_conditions(begin_at, options[:conditions])
+        def read_data(begin_at, end_at, options)
+          conditions = setup_conditions(begin_at, end_at, options[:conditions])
           @klass.send(@aggregation,
             @value_column,
             :conditions => conditions,
@@ -66,7 +70,7 @@ module Kvlr #:nodoc:
           )
         end
 
-        def setup_conditions(begin_at, custom_conditions = [])
+        def setup_conditions(begin_at, end_at, custom_conditions = [])
           conditions = ['']
           if custom_conditions.is_a?(Hash)
             conditions = [custom_conditions.map do |k, v|
@@ -83,19 +87,26 @@ module Kvlr #:nodoc:
           end
           conditions[0] += "#{(conditions[0].blank? ? '' : ' AND ') + @date_column.to_s} >= ?"
           conditions << begin_at
+
+          if end_at
+            conditions[0].sub!(/>= \?\z/, 'BETWEEN ? AND ?')
+            conditions << end_at
+          end
+
+          conditions
         end
 
         def ensure_valid_options(options, context = :initialize)
           case context
             when :initialize
               options.each_key do |k|
-                raise ArgumentError.new("Invalid option #{k}") unless [:limit, :aggregation, :grouping, :date_column, :value_column, :conditions, :live_data].include?(k)
+                raise ArgumentError.new("Invalid option #{k}") unless [:limit, :aggregation, :grouping, :date_column, :value_column, :conditions, :live_data, :end_date].include?(k)
               end
               raise ArgumentError.new("Invalid aggregation #{options[:aggregation]}") if options[:aggregation] && ![:count, :sum, :maximum, :minimum, :average].include?(options[:aggregation])
               raise ArgumentError.new('The name of the column holding the value to sum has to be specified for aggregation :sum') if [:sum, :maximum, :minimum, :average].include?(options[:aggregation]) && !options.key?(:value_column)
             when :run
               options.each_key do |k|
-                raise ArgumentError.new("Invalid option #{k}") unless [:limit, :conditions, :grouping, :live_data].include?(k)
+                raise ArgumentError.new("Invalid option #{k}") unless [:limit, :conditions, :grouping, :live_data, :end_date].include?(k)
               end
           end
           raise ArgumentError.new("Invalid grouping #{options[:grouping]}") if options[:grouping] && ![:hour, :day, :week, :month].include?(options[:grouping])

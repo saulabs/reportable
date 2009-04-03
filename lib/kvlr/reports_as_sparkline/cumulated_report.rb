@@ -17,19 +17,25 @@ module Kvlr #:nodoc:
 
       # Runs the report (see Kvlr::ReportsAsSparkline::Report#run)
       def run(options = {})
-        cumulate(super)
+        cumulate(super, options_for_run(options))
       end
 
       protected
 
-        def cumulate(data) #:nodoc:
-          acc = 0.0
+        def cumulate(data, options) #:nodoc:
+          first_reporting_period = ReportingPeriod.first(options[:grouping], options[:limit], options[:end_date])
+          acc = initial_cumulative_value(first_reporting_period.date_time, options)
           result = []
           data.each do |element|
             acc += element[1].to_f
             result << [element[0], acc]
           end
           result
+        end
+
+        def initial_cumulative_value(date, options)
+          conditions = setup_conditions(nil, date, options[:conditions])
+          @klass.send(@aggregation, @value_column, :conditions => conditions)
         end
 
     end

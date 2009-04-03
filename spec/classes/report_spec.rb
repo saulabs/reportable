@@ -386,6 +386,14 @@ describe Kvlr::ReportsAsSparkline::Report do
     it 'should return conditions for date_column >= begin_at when no custom conditions and a begin_at are specified' do
       @report.send(:setup_conditions, @begin_at, nil).should == ['created_at >= ?', @begin_at]
     end
+    
+    it 'should return conditions for date_column <= end_at when no custom conditions and a end_at are specified' do
+      @report.send(:setup_conditions, nil, @end_at).should == ['created_at <= ?', @end_at]
+    end
+    
+    it 'should raise an argument error when neither begin_at or end_at are specified' do
+      lambda {@report.send(:setup_conditions, nil, nil)}.should raise_error(ArgumentError)
+    end
 
     it 'should return conditions for date_column BETWEEN begin_at and end_date only when an empty Hash of custom conditions is specified' do
       @report.send(:setup_conditions, @begin_at, @end_at, {}).should == ['created_at BETWEEN ? AND ?', @begin_at, @end_at]

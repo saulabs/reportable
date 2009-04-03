@@ -48,17 +48,22 @@ module Kvlr #:nodoc:
       # * <tt>:live_data</tt> - Specified whether data for the current reporting period is read; if :live_data is true, you will experience a performance hit since the request cannot be satisfied from the cache only (defaults to false)
       # * <tt>:end_date</tt> - When specified, the report will be for the periods before this date.
       def run(options = {})
-        options = options.dup
-        ensure_valid_options(options, :run)
         custom_conditions = options.key?(:conditions)
-        options.reverse_merge!(@options)
-        options[:grouping] = Grouping.new(options[:grouping]) unless options[:grouping].is_a?(Grouping)
+        options = options_for_run(options)
         ReportCache.process(self, options, !custom_conditions) do |begin_at, end_at|
           read_data(begin_at, end_at, options)
         end
       end
 
       private
+
+        def options_for_run(options = {})
+          options = options.dup
+          ensure_valid_options(options, :run)
+          options.reverse_merge!(@options)
+          options[:grouping] = Grouping.new(options[:grouping]) unless options[:grouping].is_a?(Grouping)
+          return options
+        end
 
         def read_data(begin_at, end_at, options)
           conditions = setup_conditions(begin_at, end_at, options[:conditions])
@@ -85,14 +90,20 @@ module Kvlr #:nodoc:
           elsif custom_conditions.size > 0
             conditions = [(custom_conditions[0] || ''), *custom_conditions[1..-1]]
           end
-          conditions[0] += "#{(conditions[0].blank? ? '' : ' AND ') + @date_column.to_s} >= ?"
-          conditions << begin_at
+          conditions[0] += "#{(conditions[0].blank? ? '' : ' AND ') + @date_column.to_s} "
 
-          if end_at
-            conditions[0].sub!(/>= \?\z/, 'BETWEEN ? AND ?')
-            conditions << end_at
+          conditions[0] += if begin_at && end_at
+            'BETWEEN ? AND ?'
+          elsif begin_at
+            '>= ?'
+          elsif end_at
+            '<= ?'
+          else
+            raise ArgumentError.new('You must pass either begin_at, end_at or both to setup_conditions.')
           end
 
+          conditions << begin_at if begin_at
+          conditions << end_at if end_at
           conditions
         end
 

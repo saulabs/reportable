@@ -21,17 +21,7 @@ module Kvlr #:nodoc:
       # * <tt>grouping</tt> - The Kvlr::ReportsAsSparkline::Grouping of the reporting period
       # * <tt>limit</tt> - The number of reporting periods until the first one
       def self.first(grouping, limit)
-        return case grouping.identifier
-          when :hour
-            self.new(grouping, DateTime.now - limit.hours)
-          when :day
-            self.new(grouping, DateTime.now - limit.days)
-          when :week
-            self.new(grouping, DateTime.now - limit.weeks)
-          when :month
-            date = DateTime.now - limit.months
-            self.new(grouping, Date.new(date.year, date.month, 1))
-        end
+        self.new(grouping, DateTime.now).offset(-limit)
       end
 
       def self.from_db_string(grouping, db_string) #:nodoc:
@@ -51,30 +41,16 @@ module Kvlr #:nodoc:
 
       # Returns the next reporting period (that is next hour/day/month/year)
       def next
-        return case @grouping.identifier
-          when :hour
-            self.class.new(@grouping, @date_time + 1.hour)
-          when :day
-            self.class.new(@grouping, @date_time + 1.day)
-          when :week
-            self.class.new(@grouping, @date_time + 1.week)
-          when :month
-            self.class.new(@grouping, @date_time + 1.month)
-        end
+        self.offset(1)
       end
 
       # Returns the previous reporting period (that is next hour/day/month/year)
       def previous
-        return case @grouping.identifier
-          when :hour
-            self.class.new(@grouping, @date_time - 1.hour)
-          when :day
-            self.class.new(@grouping, @date_time - 1.day)
-          when :week
-            self.class.new(@grouping, @date_time - 1.week)
-          when :month
-            self.class.new(@grouping, @date_time - 1.month)
-        end
+        self.offset(-1)
+      end
+      
+      def offset(val)
+        self.class.new(@grouping, @date_time + val.send(@grouping.identifier))
       end
 
       def ==(other) #:nodoc:

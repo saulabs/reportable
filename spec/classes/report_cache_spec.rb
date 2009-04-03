@@ -37,7 +37,7 @@ describe Kvlr::ReportsAsSparkline::ReportCache do
         }.should raise_error(YieldMatchException)
       end
 
-      it 'should yield the reporting period after the last one in the cache if data was read from cache' do
+      it 'should yield the reporting period after the last one in the cache, and before the first one in the cache if data was read from cache' do
         reporting_period = Kvlr::ReportsAsSparkline::ReportingPeriod.new(
           @report.options[:grouping],
           Time.now - 3.send(@report.options[:grouping].identifier)
@@ -46,11 +46,15 @@ describe Kvlr::ReportsAsSparkline::ReportCache do
         cached.stub!(:reporting_period).and_return(reporting_period.date_time)
         Kvlr::ReportsAsSparkline::ReportCache.stub!(:find).and_return([cached])
 
+        expected_dates = [[reporting_period.next.date_time, nil], [reporting_period.offset(-7).date_time, reporting_period.date_time]]
+        yield_count = 0
         Kvlr::ReportsAsSparkline::ReportCache.process(@report, @options) do |begin_at, end_at|
-          begin_at.should == reporting_period.next.date_time
-          end_at.should == nil
+          [begin_at, end_at].should == expected_dates[yield_count]
+          yield_count += 1
           []
         end
+
+        yield_count.should == 2
       end
 
     end
@@ -72,7 +76,7 @@ describe Kvlr::ReportsAsSparkline::ReportCache do
         }.should raise_error(YieldMatchException)
       end
 
-      it 'should yield the reporting period after the last one in the cache if data was read from cache' do
+      it 'should yield the reporting period after the last one in the cache, and before the first one in the cache if data was read from cache' do
         reporting_period = Kvlr::ReportsAsSparkline::ReportingPeriod.new(
           @report.options[:grouping],
           Time.now - 3.send(@report.options[:grouping].identifier)
@@ -81,11 +85,15 @@ describe Kvlr::ReportsAsSparkline::ReportCache do
         cached.stub!(:reporting_period).and_return(reporting_period.date_time)
         Kvlr::ReportsAsSparkline::ReportCache.stub!(:find).and_return([cached])
 
+        expected_dates = [[reporting_period.next.date_time, nil], [reporting_period.offset(-7).date_time, reporting_period.date_time]]
+        yield_count = 0
         Kvlr::ReportsAsSparkline::ReportCache.process(@report, @report.options) do |begin_at, end_at|
-          begin_at.should == reporting_period.next.date_time
-          end_at.should == nil
+          [begin_at, end_at].should == expected_dates[yield_count]
+          yield_count += 1
           []
         end
+
+        yield_count.should == 2
       end
 
     end
@@ -148,12 +156,13 @@ describe Kvlr::ReportsAsSparkline::ReportCache do
     end
 
     it 'should prepare the results before it returns them' do
-      new_data = []
+      new_after_cache_data = []
+      new_before_cache_data = []
       cached_data = []
       Kvlr::ReportsAsSparkline::ReportCache.stub!(:find).and_return(cached_data)
-      Kvlr::ReportsAsSparkline::ReportCache.should_receive(:prepare_result).once.with(new_data, cached_data, @report, @report.options, true)
+      Kvlr::ReportsAsSparkline::ReportCache.should_receive(:prepare_result).once.with(new_before_cache_data, new_after_cache_data, cached_data, @report, @report.options, true)
 
-      Kvlr::ReportsAsSparkline::ReportCache.process(@report, @report.options) { new_data }
+      Kvlr::ReportsAsSparkline::ReportCache.process(@report, @report.options) { new_after_cache_data }
     end
 
     it 'should yield the first reporting period if the cache is empty' do
@@ -188,7 +197,7 @@ describe Kvlr::ReportsAsSparkline::ReportCache do
 
     before do
       @current_reporting_period = Kvlr::ReportsAsSparkline::ReportingPeriod.new(@report.options[:grouping])
-      @new_data = [[@current_reporting_period.previous.date_time, 1.0]]
+      @new_after_cache_data = [[@current_reporting_period.previous.date_time, 1.0]]
       Kvlr::ReportsAsSparkline::ReportingPeriod.stub!(:from_db_string).and_return(@current_reporting_period.previous)
       @cached = Kvlr::ReportsAsSparkline::ReportCache.new
       @cached.stub!(:save!)
@@ -196,9 +205,9 @@ describe Kvlr::ReportsAsSparkline::ReportCache do
     end
 
     it 'should convert the date strings from the newly read data to reporting periods' do
-      Kvlr::ReportsAsSparkline::ReportingPeriod.should_receive(:from_db_string).once.with(@report.options[:grouping], @new_data[0][0]).and_return(Kvlr::ReportsAsSparkline::ReportingPeriod.new(@report.options[:grouping]))
+      Kvlr::ReportsAsSparkline::ReportingPeriod.should_receive(:from_db_string).once.with(@report.options[:grouping], @new_after_cache_data[0][0]).and_return(Kvlr::ReportsAsSparkline::ReportingPeriod.new(@report.options[:grouping]))
 
-      Kvlr::ReportsAsSparkline::ReportCache.send(:prepare_result, @new_data, [], @report, @report.options)
+      Kvlr::ReportsAsSparkline::ReportCache.send(:prepare_result, [], @new_after_cache_data, [], @report, @report.options)
     end
 
     it 'should create :limit instances of Kvlr::ReportsAsSparkline::ReportCache with value 0.0 if no new data has been read and nothing was cached' do
@@ -209,7 +218,7 @@ describe Kvlr::ReportsAsSparkline::ReportCache do
         0.0
       ).and_return(@cached)
 
-      Kvlr::ReportsAsSparkline::ReportCache.send(:prepare_result, [], [], @report, @report.options)
+      Kvlr::ReportsAsSparkline::ReportCache.send(:prepare_result, [], [], [], @report, @report.options)
     end
 
     it 'should create a new Kvlr::ReportsAsSparkline::ReportCache with the correct value if new data has been read' do
@@ -226,17 +235,17 @@ describe Kvlr::ReportsAsSparkline::ReportCache do
         1.0
       ).and_return(@cached)
 
-      Kvlr::ReportsAsSparkline::ReportCache.send(:prepare_result, @new_data, [], @report, @report.options)
+      Kvlr::ReportsAsSparkline::ReportCache.send(:prepare_result, [], @new_after_cache_data, [], @report, @report.options)
     end
 
     it 'should save the created Kvlr::ReportsAsSparkline::ReportCache' do
       @cached.should_receive(:save!).once
 
-      Kvlr::ReportsAsSparkline::ReportCache.send(:prepare_result, @new_data, [], @report, @report.options)
+      Kvlr::ReportsAsSparkline::ReportCache.send(:prepare_result, [], @new_after_cache_data, [], @report, @report.options)
     end
 
     it 'should return an array of arrays of Dates and Floats' do
-      result = Kvlr::ReportsAsSparkline::ReportCache.send(:prepare_result, @new_data, [], @report, @report.options, true)
+      result = Kvlr::ReportsAsSparkline::ReportCache.send(:prepare_result, [], @new_after_cache_data, [], @report, @report.options, true)
 
       result.should be_kind_of(Array)
       result[0].should be_kind_of(Array)
@@ -247,7 +256,7 @@ describe Kvlr::ReportsAsSparkline::ReportCache do
     describe 'with :live_data = false' do
 
       before do
-        @result = Kvlr::ReportsAsSparkline::ReportCache.send(:prepare_result, @new_data, [], @report, @report.options, true)
+        @result = Kvlr::ReportsAsSparkline::ReportCache.send(:prepare_result, [], @new_after_cache_data, [], @report, @report.options, true)
       end
 
       it 'should return an array of length :limit' do
@@ -264,7 +273,7 @@ describe Kvlr::ReportsAsSparkline::ReportCache do
 
       before do
         options = @report.options.merge(:live_data => true)
-        @result = Kvlr::ReportsAsSparkline::ReportCache.send(:prepare_result, @new_data, [], @report, options, true)
+        @result = Kvlr::ReportsAsSparkline::ReportCache.send(:prepare_result, [], @new_after_cache_data, [], @report, options, true)
       end
 
       it 'should return an array of length (:limit + 1)' do
@@ -282,7 +291,7 @@ describe Kvlr::ReportsAsSparkline::ReportCache do
       it 'should not save the created Kvlr::ReportsAsSparkline::ReportCache' do
         @cached.should_not_receive(:save!)
 
-        Kvlr::ReportsAsSparkline::ReportCache.send(:prepare_result, @new_data, [], @report, @report.options, false)
+        Kvlr::ReportsAsSparkline::ReportCache.send(:prepare_result, [], @new_after_cache_data, [], @report, @report.options, false)
       end
 
     end

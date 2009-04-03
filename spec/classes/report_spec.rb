@@ -89,6 +89,11 @@ describe Kvlr::ReportsAsSparkline::Report do
         @report2.run.should == [[@two_months_ago, 0.0], [@one_month_ago, 1.0]]
       end
 
+      it "should go back further into history on a second report run if the limit is higher" do
+        @report2.run(:limit => 2)
+        @report2.run(:limit => 3).should == [[@three_months_ago, 2.0], [@two_months_ago.to_time, 0.0], [@one_month_ago.to_time, 1.0]]
+      end
+
       it "should return data for two months prior to the end date" do
         @report2.run(:end_date => 1.month.ago).should == [[@three_months_ago, 2.0], [@two_months_ago, 0.0]]
       end

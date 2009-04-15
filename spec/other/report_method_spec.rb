@@ -1,6 +1,6 @@
 require File.join(File.dirname(__FILE__), '..', 'spec_helper')
 
-describe Kvlr::ReportsAsSparkline do
+describe Simplabs::ReportsAsSparkline do
 
   describe 'for inherited models' do
 
@@ -32,7 +32,7 @@ describe Kvlr::ReportsAsSparkline do
   end
 
   after do
-    Kvlr::ReportsAsSparkline::ReportCache.destroy_all
+    Simplabs::ReportsAsSparkline::ReportCache.destroy_all
   end
 
 end

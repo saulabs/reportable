@@ -1,9 +1,9 @@
-require 'kvlr/reports_as_sparkline'
+require 'simplabs/reports_as_sparkline'
 
 ActiveRecord::Base.class_eval do
-  include Kvlr::ReportsAsSparkline
+  include Simplabs::ReportsAsSparkline
 end
 
 ActionView::Base.class_eval do
-  include Kvlr::ReportsAsSparkline::SparklineTagHelper
+  include Simplabs::ReportsAsSparkline::SparklineTagHelper
 end

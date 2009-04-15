@@ -1,4 +1,4 @@
-module Kvlr #:nodoc:
+module Simplabs #:nodoc:
 
   module ReportsAsSparkline
 
@@ -8,7 +8,7 @@ module Kvlr #:nodoc:
 
     module ClassMethods
 
-      # Generates a report on a model. That report can then be executed via the new method <name>_report (see documentation of Kvlr::ReportsAsSparkline::Report#run).
+      # Generates a report on a model. That report can then be executed via the new method <name>_report (see documentation of Simplabs::ReportsAsSparkline::Report#run).
       # 
       # ==== Parameters
       #
@@ -23,6 +23,7 @@ module Kvlr #:nodoc:
       # * <tt>:limit</tt> - The number of periods to get (see :grouping)
       # * <tt>:conditions</tt> - Conditions like in ActiveRecord::Base#find; only records that match there conditions are reported on
       # * <tt>:live_data</tt> - Specified whether data for the current reporting period is read; if :live_data is true, you will experience a performance hit since the request cannot be satisfied from the cache only (defaults to false)
+      # * <tt>:end_date</tt> - When specified, the report will only include data for the periods before this date.
       #
       # ==== Examples
       #
@@ -40,9 +41,9 @@ module Kvlr #:nodoc:
         (class << self; self; end).instance_eval do
           define_method "#{name.to_s}_report".to_sym do |*args|
             if options.delete(:cumulate)
-              report = Kvlr::ReportsAsSparkline::CumulatedReport.new(self, name, options)
+              report = Simplabs::ReportsAsSparkline::CumulatedReport.new(self, name, options)
             else
-              report = Kvlr::ReportsAsSparkline::Report.new(self, name, options)
+              report = Simplabs::ReportsAsSparkline::Report.new(self, name, options)
             end
             raise ArgumentError.new unless args.length == 0 || (args.length == 1 && args[0].is_a?(Hash))
             report.run(args.length == 0 ? {} : args[0])

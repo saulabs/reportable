@@ -5,7 +5,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-  <title>Class: Kvlr::ReportsAsSparkline::ReportingPeriod</title>
+  <title>Class: Simplabs::ReportsAsSparkline::ReportingPeriod</title>
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
   <meta http-equiv="Content-Script-Type" content="text/javascript" />
   <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
@@ -50,13 +50,13 @@
         <table class="header-table">
         <tr class="top-aligned-row">
           <td><strong>Class</strong></td>
-          <td class="class-name-in-header">Kvlr::ReportsAsSparkline::ReportingPeriod</td>
+          <td class="class-name-in-header">Simplabs::ReportsAsSparkline::ReportingPeriod</td>
         </tr>
         <tr class="top-aligned-row">
             <td><strong>In:</strong></td>
             <td>
-                <a href="../../../files/lib/kvlr/reports_as_sparkline/reporting_period_rb.html">
-                lib/kvlr/reports_as_sparkline/reporting_period.rb
+                <a href="../../../files/lib/simplabs/reports_as_sparkline/reporting_period_rb.html">
+                lib/simplabs/reports_as_sparkline/reporting_period.rb
                 </a>
         <br />
             </td>
@@ -158,7 +158,7 @@ href="Grouping.html">Grouping</a> :day and limit 2 would be Time.now -
 <h4>Parameters</h4>
 <ul>
 <li><tt>grouping</tt> - The <a
-href="Grouping.html">Kvlr::ReportsAsSparkline::Grouping</a> of the
+href="Grouping.html">Simplabs::ReportsAsSparkline::Grouping</a> of the
 reporting period
 
 </li>
@@ -171,7 +171,7 @@ href="ReportingPeriod.html#M000007">first</a> one
             onclick="toggleCode('M000007-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000007-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/kvlr/reports_as_sparkline/reporting_period.rb, line 23</span>
+    <span class="ruby-comment cmt"># File lib/simplabs/reports_as_sparkline/reporting_period.rb, line 23</span>
 23:       <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">first</span>(<span class="ruby-identifier">grouping</span>, <span class="ruby-identifier">limit</span>)
 24:         <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">grouping</span>.<span class="ruby-identifier">identifier</span>
 25:           <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:hour</span>
@@ -203,7 +203,7 @@ href="ReportingPeriod.html#M000007">first</a> one
           <h4>Parameters</h4>
 <ul>
 <li><tt>grouping</tt> - The <a
-href="Grouping.html">Kvlr::ReportsAsSparkline::Grouping</a> of the
+href="Grouping.html">Simplabs::ReportsAsSparkline::Grouping</a> of the
 reporting period
 
 </li>
@@ -215,7 +215,7 @@ reporting period
             onclick="toggleCode('M000006-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000006-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/kvlr/reports_as_sparkline/reporting_period.rb, line 13</span>
+    <span class="ruby-comment cmt"># File lib/simplabs/reports_as_sparkline/reporting_period.rb, line 13</span>
 13:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">grouping</span>, <span class="ruby-identifier">date_time</span> = <span class="ruby-constant">DateTime</span>.<span class="ruby-identifier">now</span>)
 14:         <span class="ruby-ivar">@grouping</span>  = <span class="ruby-identifier">grouping</span>
 15:         <span class="ruby-ivar">@date_time</span> = <span class="ruby-identifier">parse_date_time</span>(<span class="ruby-identifier">date_time</span>)
@@ -246,7 +246,7 @@ hour/day/month/year)
             onclick="toggleCode('M000008-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000008-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/kvlr/reports_as_sparkline/reporting_period.rb, line 53</span>
+    <span class="ruby-comment cmt"># File lib/simplabs/reports_as_sparkline/reporting_period.rb, line 53</span>
 53:       <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">next</span>
 54:         <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">case</span> <span class="ruby-ivar">@grouping</span>.<span class="ruby-identifier">identifier</span>
 55:           <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:hour</span>
@@ -283,7 +283,7 @@ hour/day/month/year)
             onclick="toggleCode('M000009-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000009-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/kvlr/reports_as_sparkline/reporting_period.rb, line 67</span>
+    <span class="ruby-comment cmt"># File lib/simplabs/reports_as_sparkline/reporting_period.rb, line 67</span>
 67:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">previous</span>
 68:         <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">case</span> <span class="ruby-ivar">@grouping</span>.<span class="ruby-identifier">identifier</span>
 69:           <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:hour</span>

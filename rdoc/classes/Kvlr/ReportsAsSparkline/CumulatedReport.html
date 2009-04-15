@@ -5,7 +5,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-  <title>Class: Kvlr::ReportsAsSparkline::CumulatedReport</title>
+  <title>Class: Simplabs::ReportsAsSparkline::CumulatedReport</title>
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
   <meta http-equiv="Content-Script-Type" content="text/javascript" />
   <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
@@ -50,13 +50,13 @@
         <table class="header-table">
         <tr class="top-aligned-row">
           <td><strong>Class</strong></td>
-          <td class="class-name-in-header">Kvlr::ReportsAsSparkline::CumulatedReport</td>
+          <td class="class-name-in-header">Simplabs::ReportsAsSparkline::CumulatedReport</td>
         </tr>
         <tr class="top-aligned-row">
             <td><strong>In:</strong></td>
             <td>
-                <a href="../../../files/lib/kvlr/reports_as_sparkline/cumulated_report_rb.html">
-                lib/kvlr/reports_as_sparkline/cumulated_report.rb
+                <a href="../../../files/lib/simplabs/reports_as_sparkline/cumulated_report_rb.html">
+                lib/simplabs/reports_as_sparkline/cumulated_report.rb
                 </a>
         <br />
             </td>
@@ -83,15 +83,15 @@
     <div id="description">
       <p>
 A special report class that cumulates all data (see <a
-href="Report.html">Kvlr::ReportsAsSparkline::Report</a>)
+href="Report.html">Simplabs::ReportsAsSparkline::Report</a>)
 </p>
 <h4>Examples</h4>
 <pre>
- When Kvlr::ReportsAsSparkline::Report returns
+ When Simplabs::ReportsAsSparkline::Report returns
 
    [[&lt;DateTime today&gt;, 1], [&lt;DateTime yesterday&gt;, 2], etc.]
 
- Kvlr::ReportsAsSparkline::CumulatedReport returns
+ Simplabs::ReportsAsSparkline::CumulatedReport returns
 
    [[&lt;DateTime today&gt;, 3], [&lt;DateTime yesterday&gt;, 2], etc.]
 </pre>
@@ -139,13 +139,13 @@ href="Report.html">Kvlr::ReportsAsSparkline::Report</a>)
         <div class="method-description">
           <p>
 Runs the report (see <a
-href="Report.html#M000011">Kvlr::ReportsAsSparkline::Report#run</a>)
+href="Report.html#M000011">Simplabs::ReportsAsSparkline::Report#run</a>)
 </p>
           <p><a class="source-toggle" href="#"
             onclick="toggleCode('M000003-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000003-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/kvlr/reports_as_sparkline/cumulated_report.rb, line 19</span>
+    <span class="ruby-comment cmt"># File lib/simplabs/reports_as_sparkline/cumulated_report.rb, line 19</span>
 19:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">run</span>(<span class="ruby-identifier">options</span> = {})
 20:         <span class="ruby-identifier">cumulate</span>(<span class="ruby-keyword kw">super</span>)
 21:       <span class="ruby-keyword kw">end</span>

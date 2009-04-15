@@ -1,11 +1,11 @@
 require File.join(File.dirname(__FILE__), '..', 'spec_helper')
 
-describe Kvlr::ReportsAsSparkline::Report do
+describe Simplabs::ReportsAsSparkline::Report do
 
   before do
     @now = DateTime.now
     DateTime.stub!(:now).and_return(@now)
-    @report = Kvlr::ReportsAsSparkline::Report.new(User, :registrations)
+    @report = Simplabs::ReportsAsSparkline::Report.new(User, :registrations)
   end
 
   describe '#options' do
@@ -19,9 +19,9 @@ describe Kvlr::ReportsAsSparkline::Report do
   describe '#run' do
 
     it 'should process the data with the report cache' do
-      Kvlr::ReportsAsSparkline::ReportCache.should_receive(:process).once.with(
+      Simplabs::ReportsAsSparkline::ReportCache.should_receive(:process).once.with(
         @report,
-        { :limit => 100, :grouping => @report.options[:grouping], :conditions => [], :live_data => false, :end_date => nil },
+        { :limit => 100, :grouping => @report.options[:grouping], :conditions => [], :live_data => false, :end_date => false },
         true
       )
 
@@ -29,9 +29,9 @@ describe Kvlr::ReportsAsSparkline::Report do
     end
 
     it 'should process the data with the report cache and specify cache = false when custom conditions are given' do
-      Kvlr::ReportsAsSparkline::ReportCache.should_receive(:process).once.with(
+      Simplabs::ReportsAsSparkline::ReportCache.should_receive(:process).once.with(
         @report,
-        { :limit => 100, :grouping => @report.options[:grouping], :conditions => { :some => :condition }, :live_data => false, :end_date => nil },
+        { :limit => 100, :grouping => @report.options[:grouping], :conditions => { :some => :condition }, :live_data => false, :end_date => false },
         false
       )
 
@@ -45,11 +45,11 @@ describe Kvlr::ReportsAsSparkline::Report do
     end
 
     it 'should use a custom grouping if one is specified' do
-      grouping = Kvlr::ReportsAsSparkline::Grouping.new(:month)
-      Kvlr::ReportsAsSparkline::Grouping.should_receive(:new).once.with(:month).and_return(grouping)
-      Kvlr::ReportsAsSparkline::ReportCache.should_receive(:process).once.with(
+      grouping = Simplabs::ReportsAsSparkline::Grouping.new(:month)
+      Simplabs::ReportsAsSparkline::Grouping.should_receive(:new).once.with(:month).and_return(grouping)
+      Simplabs::ReportsAsSparkline::ReportCache.should_receive(:process).once.with(
         @report,
-        { :limit => 100, :grouping => grouping, :conditions => [], :live_data => false, :end_date => nil },
+        { :limit => 100, :grouping => grouping, :conditions => [], :live_data => false, :end_date => false },
         true
       )
 
@@ -57,13 +57,13 @@ describe Kvlr::ReportsAsSparkline::Report do
     end
 
     it 'should return an array of the same length as the specified limit when :live_data is false' do
-      @report = Kvlr::ReportsAsSparkline::Report.new(User, :cumulated_registrations, :limit => 10, :live_data => false)
+      @report = Simplabs::ReportsAsSparkline::Report.new(User, :cumulated_registrations, :limit => 10, :live_data => false)
 
       @report.run.length.should == 10
     end
 
     it 'should return an array of the same length as the specified limit + 1 when :live_data is true' do
-      @report = Kvlr::ReportsAsSparkline::Report.new(User, :cumulated_registrations, :limit => 10, :live_data => true)
+      @report = Simplabs::ReportsAsSparkline::Report.new(User, :cumulated_registrations, :limit => 10, :live_data => true)
 
       @report.run.length.should == 11
     end
@@ -75,7 +75,7 @@ describe Kvlr::ReportsAsSparkline::Report do
         User.create!(:login => 'test 3', :created_at => Time.now - 3.month, :profile_visits => 2)
         User.create!(:login => 'test 4', :created_at => Time.now - 3.month, :profile_visits => 3)
 
-        @report2 = Kvlr::ReportsAsSparkline::Report.new(User, :registrations,
+        @report2 = Simplabs::ReportsAsSparkline::Report.new(User, :registrations,
           :grouping => :month,
           :limit => 2
         )
@@ -126,11 +126,11 @@ describe Kvlr::ReportsAsSparkline::Report do
               User.create!(:login => 'test 4', :created_at => Time.now - 3.send(grouping), :profile_visits => 3)
             end
 
-            describe do
+            describe 'the returned result' do
 
               before do
-                @grouping = Kvlr::ReportsAsSparkline::Grouping.new(grouping)
-                @report = Kvlr::ReportsAsSparkline::Report.new(User, :registrations,
+                @grouping = Simplabs::ReportsAsSparkline::Grouping.new(grouping)
+                @report = Simplabs::ReportsAsSparkline::Report.new(User, :registrations,
                   :grouping => grouping,
                   :limit => 10,
                   :live_data => live_data
@@ -138,24 +138,24 @@ describe Kvlr::ReportsAsSparkline::Report do
                 @result = @report.run
               end
 
-              it "should return an array starting reporting period (Time.now - limit.#{grouping.to_s})" do
-                @result.first[0].should == Kvlr::ReportsAsSparkline::ReportingPeriod.new(@grouping, Time.now - 10.send(grouping)).date_time
+              it "should be an array starting reporting period (Time.now - limit.#{grouping.to_s})" do
+                @result.first[0].should == Simplabs::ReportsAsSparkline::ReportingPeriod.new(@grouping, Time.now - 10.send(grouping)).date_time
               end
 
               if live_data
-                it "should return data ending with the current reporting period" do
-                  @result.last[0].should == Kvlr::ReportsAsSparkline::ReportingPeriod.new(@grouping).date_time
+                it "should be data ending with the current reporting period" do
+                  @result.last[0].should == Simplabs::ReportsAsSparkline::ReportingPeriod.new(@grouping).date_time
                 end
               else
-                it "should return data ending with the reporting period before the current" do
-                  @result.last[0].should == Kvlr::ReportsAsSparkline::ReportingPeriod.new(@grouping).previous.date_time
+                it "should be data ending with the reporting period before the current" do
+                  @result.last[0].should == Simplabs::ReportsAsSparkline::ReportingPeriod.new(@grouping).previous.date_time
                 end
               end
 
             end
 
             it 'should return correct data for aggregation :count' do
-              @report = Kvlr::ReportsAsSparkline::Report.new(User, :registrations,
+              @report = Simplabs::ReportsAsSparkline::Report.new(User, :registrations,
                 :aggregation => :count,
                 :grouping    => grouping,
                 :limit       => 10,
@@ -171,7 +171,7 @@ describe Kvlr::ReportsAsSparkline::Report do
             end
 
             it 'should return correct data for aggregation :sum' do
-              @report = Kvlr::ReportsAsSparkline::Report.new(User, :registrations,
+              @report = Simplabs::ReportsAsSparkline::Report.new(User, :registrations,
                 :aggregation  => :sum,
                 :grouping     => grouping,
                 :value_column => :profile_visits,
@@ -188,7 +188,7 @@ describe Kvlr::ReportsAsSparkline::Report do
             end
 
             it 'should return correct data for aggregation :maximum' do
-              @report = Kvlr::ReportsAsSparkline::Report.new(User, :registrations,
+              @report = Simplabs::ReportsAsSparkline::Report.new(User, :registrations,
                 :aggregation  => :maximum,
                 :grouping     => grouping,
                 :value_column => :profile_visits,
@@ -205,7 +205,7 @@ describe Kvlr::ReportsAsSparkline::Report do
             end
 
             it 'should return correct data for aggregation :minimum' do
-              @report = Kvlr::ReportsAsSparkline::Report.new(User, :registrations,
+              @report = Simplabs::ReportsAsSparkline::Report.new(User, :registrations,
                 :aggregation  => :minimum,
                 :grouping     => grouping,
                 :value_column => :profile_visits,
@@ -222,7 +222,7 @@ describe Kvlr::ReportsAsSparkline::Report do
             end
 
             it 'should return correct data for aggregation :average' do
-              @report = Kvlr::ReportsAsSparkline::Report.new(User, :registrations,
+              @report = Simplabs::ReportsAsSparkline::Report.new(User, :registrations,
                 :aggregation  => :average,
                 :grouping     => grouping,
                 :value_column => :profile_visits,
@@ -239,7 +239,7 @@ describe Kvlr::ReportsAsSparkline::Report do
             end
 
             it 'should return correct data for aggregation :count when custom conditions are specified' do
-              @report = Kvlr::ReportsAsSparkline::Report.new(User, :registrations,
+              @report = Simplabs::ReportsAsSparkline::Report.new(User, :registrations,
                 :aggregation => :count,
                 :grouping    => grouping,
                 :limit       => 10,
@@ -255,7 +255,7 @@ describe Kvlr::ReportsAsSparkline::Report do
             end
 
             it 'should return correct data for aggregation :sum when custom conditions are specified' do
-              @report = Kvlr::ReportsAsSparkline::Report.new(User, :registrations,
+              @report = Simplabs::ReportsAsSparkline::Report.new(User, :registrations,
                 :aggregation  => :sum,
                 :grouping     => grouping,
                 :value_column => :profile_visits,
@@ -298,7 +298,7 @@ describe Kvlr::ReportsAsSparkline::Report do
         end
 
         it 'should return correct data for aggregation :count' do
-          @report = Kvlr::ReportsAsSparkline::Report.new(User, :registrations,
+          @report = Simplabs::ReportsAsSparkline::Report.new(User, :registrations,
             :aggregation => :count,
             :grouping    => :week,
             :limit       => 10
@@ -327,7 +327,7 @@ describe Kvlr::ReportsAsSparkline::Report do
         end
 
         it 'should return correct data for aggregation :count' do
-          @report = Kvlr::ReportsAsSparkline::Report.new(User, :registrations,
+          @report = Simplabs::ReportsAsSparkline::Report.new(User, :registrations,
             :aggregation => :count,
             :grouping    => :week,
             :limit       => 10
@@ -346,7 +346,7 @@ describe Kvlr::ReportsAsSparkline::Report do
     end
 
     after do
-      Kvlr::ReportsAsSparkline::ReportCache.destroy_all
+      Simplabs::ReportsAsSparkline::ReportCache.destroy_all
     end
 
     after(:all) do
@@ -358,7 +358,7 @@ describe Kvlr::ReportsAsSparkline::Report do
   describe '#read_data' do
 
     it 'should invoke the aggregation method on the model' do
-      @report = Kvlr::ReportsAsSparkline::Report.new(User, :registrations, :aggregation => :count)
+      @report = Simplabs::ReportsAsSparkline::Report.new(User, :registrations, :aggregation => :count)
       User.should_receive(:count).once.and_return([])
 
       @report.send(:read_data, Time.now, 5.days.from_now, { :grouping => @report.options[:grouping], :conditions => [] })

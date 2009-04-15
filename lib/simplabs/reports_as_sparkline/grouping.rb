@@ -1,4 +1,4 @@
-module Kvlr #:nodoc:
+module Simplabs #:nodoc:
 
   module ReportsAsSparkline #:nodoc:
 

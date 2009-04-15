@@ -5,7 +5,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-  <title>Module: Kvlr::ReportsAsSparkline::SparklineTagHelper</title>
+  <title>Module: Simplabs::ReportsAsSparkline::SparklineTagHelper</title>
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
   <meta http-equiv="Content-Script-Type" content="text/javascript" />
   <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
@@ -50,13 +50,13 @@
         <table class="header-table">
         <tr class="top-aligned-row">
           <td><strong>Module</strong></td>
-          <td class="class-name-in-header">Kvlr::ReportsAsSparkline::SparklineTagHelper</td>
+          <td class="class-name-in-header">Simplabs::ReportsAsSparkline::SparklineTagHelper</td>
         </tr>
         <tr class="top-aligned-row">
             <td><strong>In:</strong></td>
             <td>
-                <a href="../../../files/lib/kvlr/reports_as_sparkline/sparkline_tag_helper_rb.html">
-                lib/kvlr/reports_as_sparkline/sparkline_tag_helper.rb
+                <a href="../../../files/lib/simplabs/reports_as_sparkline/sparkline_tag_helper_rb.html">
+                lib/simplabs/reports_as_sparkline/sparkline_tag_helper.rb
                 </a>
         <br />
             </td>
@@ -151,7 +151,7 @@ href="SparklineTagHelper.html#M000001">sparkline_tag</a>(User.registrations_repo
             onclick="toggleCode('M000001-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000001-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/kvlr/reports_as_sparkline/sparkline_tag_helper.rb, line 23</span>
+    <span class="ruby-comment cmt"># File lib/simplabs/reports_as_sparkline/sparkline_tag_helper.rb, line 23</span>
 23:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">sparkline_tag</span>(<span class="ruby-identifier">data</span>, <span class="ruby-identifier">options</span> = {})
 24:         <span class="ruby-identifier">options</span>.<span class="ruby-identifier">reverse_merge!</span>({ <span class="ruby-identifier">:width</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">300</span>, <span class="ruby-identifier">:height</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">34</span>, <span class="ruby-identifier">:line_color</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'0077cc'</span>, <span class="ruby-identifier">:fill_color</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'e6f2fa'</span>, <span class="ruby-identifier">:labels</span> =<span class="ruby-operator">&gt;</span> [] })
 25:         <span class="ruby-identifier">data</span> = <span class="ruby-identifier">data</span>.<span class="ruby-identifier">collect</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">d</span><span class="ruby-operator">|</span> <span class="ruby-identifier">d</span>[<span class="ruby-value">1</span>] }

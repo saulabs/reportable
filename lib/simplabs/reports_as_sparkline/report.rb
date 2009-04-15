@@ -1,4 +1,4 @@
-module Kvlr #:nodoc:
+module Simplabs #:nodoc:
 
   module ReportsAsSparkline #:nodoc:
 
@@ -8,8 +8,8 @@ module Kvlr #:nodoc:
       attr_reader :klass, :name, :date_column, :value_column, :aggregation, :options
 
       # ==== Parameters
-      # * <tt>klass</tt> - The model the report works on (This is the class you invoke Kvlr::ReportsAsSparkline::ClassMethods#reports_as_sparkline on)
-      # * <tt>name</tt> - The name of the report (as in Kvlr::ReportsAsSparkline::ClassMethods#reports_as_sparkline)
+      # * <tt>klass</tt> - The model the report works on (This is the class you invoke Simplabs::ReportsAsSparkline::ClassMethods#reports_as_sparkline on)
+      # * <tt>name</tt> - The name of the report (as in Simplabs::ReportsAsSparkline::ClassMethods#reports_as_sparkline)
       #
       # ==== Options
       #
@@ -20,7 +20,7 @@ module Kvlr #:nodoc:
       # * <tt>:limit</tt> - The number of periods to get (see :grouping)
       # * <tt>:conditions</tt> - Conditions like in ActiveRecord::Base#find; only records that match there conditions are reported on
       # * <tt>:live_data</tt> - Specified whether data for the current reporting period is read; if :live_data is true, you will experience a performance hit since the request cannot be satisfied from the cache only (defaults to false)
-      # * <tt>:end_date</tt> - When specified, the report will be for the periods before this date.
+      # * <tt>:end_date</tt> - When specified, the report will only include data for the periods before this date.
       def initialize(klass, name, options = {})
         ensure_valid_options(options)
         @klass        = klass
@@ -33,7 +33,7 @@ module Kvlr #:nodoc:
           :conditions => options[:conditions] || [],
           :grouping   => Grouping.new(options[:grouping] || :day),
           :live_data  => options[:live_data] || false,
-          :end_date   => options[:end_date]
+          :end_date   => options[:end_date] || false
         }
         @options.merge!(options)
         @options.freeze
@@ -46,7 +46,7 @@ module Kvlr #:nodoc:
       # * <tt>:conditions</tt> - Conditions like in ActiveRecord::Base#find; only records that match there conditions are reported on (<b>Beware that when you specify conditions here, caching will be disabled</b>)
       # * <tt>:grouping</tt> - The period records are grouped on (:hour, :day, :week, :month); <b>Beware that reports_as_sparkline treats weeks as starting on monday!</b>
       # * <tt>:live_data</tt> - Specified whether data for the current reporting period is read; if :live_data is true, you will experience a performance hit since the request cannot be satisfied from the cache only (defaults to false)
-      # * <tt>:end_date</tt> - When specified, the report will be for the periods before this date.
+      # * <tt>:end_date</tt> - When specified, the report will only include data for the periods before this date.
       def run(options = {})
         custom_conditions = options.key?(:conditions)
         options = options_for_run(options)
@@ -91,7 +91,6 @@ module Kvlr #:nodoc:
             conditions = [(custom_conditions[0] || ''), *custom_conditions[1..-1]]
           end
           conditions[0] += "#{(conditions[0].blank? ? '' : ' AND ') + @date_column.to_s} "
-
           conditions[0] += if begin_at && end_at
             'BETWEEN ? AND ?'
           elsif begin_at
@@ -101,7 +100,6 @@ module Kvlr #:nodoc:
           else
             raise ArgumentError.new('You must pass either begin_at, end_at or both to setup_conditions.')
           end
-
           conditions << begin_at if begin_at
           conditions << end_at if end_at
           conditions

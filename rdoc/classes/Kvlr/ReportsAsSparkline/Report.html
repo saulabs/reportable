@@ -5,7 +5,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-  <title>Class: Kvlr::ReportsAsSparkline::Report</title>
+  <title>Class: Simplabs::ReportsAsSparkline::Report</title>
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
   <meta http-equiv="Content-Script-Type" content="text/javascript" />
   <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
@@ -50,13 +50,13 @@
         <table class="header-table">
         <tr class="top-aligned-row">
           <td><strong>Class</strong></td>
-          <td class="class-name-in-header">Kvlr::ReportsAsSparkline::Report</td>
+          <td class="class-name-in-header">Simplabs::ReportsAsSparkline::Report</td>
         </tr>
         <tr class="top-aligned-row">
             <td><strong>In:</strong></td>
             <td>
-                <a href="../../../files/lib/kvlr/reports_as_sparkline/report_rb.html">
-                lib/kvlr/reports_as_sparkline/report.rb
+                <a href="../../../files/lib/simplabs/reports_as_sparkline/report_rb.html">
+                lib/simplabs/reports_as_sparkline/report.rb
                 </a>
         <br />
             </td>
@@ -168,12 +168,12 @@ and calculations
 <ul>
 <li><tt>klass</tt> - The model the report works on (This is the class you
 invoke <a
-href="ClassMethods.html#M000002">Kvlr::ReportsAsSparkline::ClassMethods#reports_as_sparkline</a>
+href="ClassMethods.html#M000002">Simplabs::ReportsAsSparkline::ClassMethods#reports_as_sparkline</a>
 on)
 
 </li>
 <li><tt>name</tt> - The name of the report (as in <a
-href="ClassMethods.html#M000002">Kvlr::ReportsAsSparkline::ClassMethods#reports_as_sparkline</a>)
+href="ClassMethods.html#M000002">Simplabs::ReportsAsSparkline::ClassMethods#reports_as_sparkline</a>)
 
 </li>
 </ul>
@@ -216,7 +216,7 @@ false)
             onclick="toggleCode('M000010-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000010-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/kvlr/reports_as_sparkline/report.rb, line 23</span>
+    <span class="ruby-comment cmt"># File lib/simplabs/reports_as_sparkline/report.rb, line 23</span>
 23:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">klass</span>, <span class="ruby-identifier">name</span>, <span class="ruby-identifier">options</span> = {})
 24:         <span class="ruby-identifier">ensure_valid_options</span>(<span class="ruby-identifier">options</span>)
 25:         <span class="ruby-ivar">@klass</span>        = <span class="ruby-identifier">klass</span>
@@ -279,7 +279,7 @@ false)
             onclick="toggleCode('M000011-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000011-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/kvlr/reports_as_sparkline/report.rb, line 47</span>
+    <span class="ruby-comment cmt"># File lib/simplabs/reports_as_sparkline/report.rb, line 47</span>
 47:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">run</span>(<span class="ruby-identifier">options</span> = {})
 48:         <span class="ruby-identifier">ensure_valid_options</span>(<span class="ruby-identifier">options</span>, <span class="ruby-identifier">:run</span>)
 49:         <span class="ruby-identifier">custom_conditions</span> = <span class="ruby-identifier">options</span>.<span class="ruby-identifier">key?</span>(<span class="ruby-identifier">:conditions</span>)

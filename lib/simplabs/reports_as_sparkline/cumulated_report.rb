@@ -1,21 +1,21 @@
-module Kvlr #:nodoc:
+module Simplabs #:nodoc:
 
   module ReportsAsSparkline #:nodoc:
 
-    # A special report class that cumulates all data (see Kvlr::ReportsAsSparkline::Report)
+    # A special report class that cumulates all data (see Simplabs::ReportsAsSparkline::Report)
     #
     # ==== Examples
     #
-    #  When Kvlr::ReportsAsSparkline::Report returns
+    #  When Simplabs::ReportsAsSparkline::Report returns
     #
     #    [[<DateTime today>, 1], [<DateTime yesterday>, 2], etc.]
     #
-    #  Kvlr::ReportsAsSparkline::CumulatedReport returns
+    #  Simplabs::ReportsAsSparkline::CumulatedReport returns
     #
     #    [[<DateTime today>, 3], [<DateTime yesterday>, 2], etc.]
     class CumulatedReport < Report
 
-      # Runs the report (see Kvlr::ReportsAsSparkline::Report#run)
+      # Runs the report (see Simplabs::ReportsAsSparkline::Report#run)
       def run(options = {})
         cumulate(super, options_for_run(options))
       end

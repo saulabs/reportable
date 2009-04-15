@@ -1,4 +1,4 @@
-module Kvlr #:nodoc:
+module Simplabs #:nodoc:
 
   module ReportsAsSparkline #:nodoc:
 
@@ -8,7 +8,7 @@ module Kvlr #:nodoc:
       attr_reader :date_time, :grouping
 
       # ==== Parameters
-      # * <tt>grouping</tt> - The Kvlr::ReportsAsSparkline::Grouping of the reporting period
+      # * <tt>grouping</tt> - The Simplabs::ReportsAsSparkline::Grouping of the reporting period
       # * <tt>date_time</tt> - The DateTime that reporting period is created for
       def initialize(grouping, date_time = nil)
         @grouping  = grouping
@@ -18,7 +18,7 @@ module Kvlr #:nodoc:
       # Returns the first reporting period for a grouping and a limit; e.g. the first reporting period for Grouping :day and limit 2 would be Time.now - 2.days
       #
       # ==== Parameters
-      # * <tt>grouping</tt> - The Kvlr::ReportsAsSparkline::Grouping of the reporting period
+      # * <tt>grouping</tt> - The Simplabs::ReportsAsSparkline::Grouping of the reporting period
       # * <tt>limit</tt> - The number of reporting periods until the first one
       def self.first(grouping, limit, end_date = nil)
         self.new(grouping, end_date).offset(-limit)
@@ -48,23 +48,27 @@ module Kvlr #:nodoc:
       def previous
         self.offset(-1)
       end
-      
-      def offset(val)
-        self.class.new(@grouping, @date_time + val.send(@grouping.identifier))
+
+      # Returns the reporting period with the specified offset from the current
+      #
+      # ==== Parameters
+      # * <tt>offset</tt> - The offset to return the reporting period for (specifies the offset in hours/days/months/years), depending on the reporting period's grouping
+      def offset(offset)
+        self.class.new(@grouping, @date_time + offset.send(@grouping.identifier))
       end
 
       def ==(other) #:nodoc:
-        if other.class == Kvlr::ReportsAsSparkline::ReportingPeriod
+        if other.class == Simplabs::ReportsAsSparkline::ReportingPeriod
           return @date_time.to_s == other.date_time.to_s && @grouping.identifier.to_s == other.grouping.identifier.to_s
         end
         false
       end
 
       def <(other) #:nodoc:
-        if other.class == Kvlr::ReportsAsSparkline::ReportingPeriod
+        if other.class == Simplabs::ReportsAsSparkline::ReportingPeriod
           return @date_time < other.date_time
         end
-        raise ArgumentError.new("Can only compare instances of #{Kvlr::ReportsAsSparkline::ReportingPeriod.klass}")
+        raise ArgumentError.new("Can only compare instances of #{Simplabs::ReportsAsSparkline::ReportingPeriod.klass}")
       end
 
       private

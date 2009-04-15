@@ -1,4 +1,4 @@
-module Kvlr #:nodoc:
+module Simplabs #:nodoc:
 
   module ReportsAsSparkline #:nodoc:
 
@@ -10,29 +10,22 @@ module Kvlr #:nodoc:
           cached_data = []
           first_reporting_period = ReportingPeriod.first(options[:grouping], options[:limit], options[:end_date])
           last_reporting_period = options[:end_date] ? ReportingPeriod.new(options[:grouping], options[:end_date]) : nil
-
           if cache
             cached_data = find_cached_data(report, options, first_reporting_period, last_reporting_period)
             first_cached_reporting_period = cached_data.empty? ? nil : ReportingPeriod.new(options[:grouping], cached_data.first.reporting_period)
             last_cached_reporting_period = cached_data.empty? ? nil : ReportingPeriod.new(options[:grouping], cached_data.last.reporting_period)
           end
-
-          # Get any missing data that comes after our cached data...
           new_after_cache_data = if !options[:live_data] && last_cached_reporting_period == ReportingPeriod.new(options[:grouping]).previous
             []
           else
             end_date = options[:live_data] ? nil : last_reporting_period && last_reporting_period.date_time
             yield((last_cached_reporting_period.next rescue first_reporting_period).date_time, end_date)
           end
-
-          # Get any mising data that comes before our cached data....
-          new_before_cache_data = if cached_data.empty? || # after_cache_data will contain all the data if the cache was empty.
-            first_cached_reporting_period.date_time == first_reporting_period.date_time
+          new_before_cache_data = if cached_data.empty? || first_cached_reporting_period.date_time == first_reporting_period.date_time
             []
           else
             yield(first_reporting_period.date_time, first_cached_reporting_period.date_time)
           end
-
           prepare_result(new_before_cache_data, new_after_cache_data, cached_data, report, options, cache)
         end
       end
@@ -94,19 +87,20 @@ module Kvlr #:nodoc:
 
         def self.find_cached_data(report, options, first_reporting_period, last_reporting_period)
           conditions = [
-            'model_name = ? AND report_name = ? AND grouping = ? AND aggregation = ? AND reporting_period >= ?',
+            'model_name = ? AND report_name = ? AND grouping = ? AND aggregation = ?',
             report.klass.to_s,
             report.name.to_s,
             options[:grouping].identifier.to_s,
-            report.aggregation.to_s,
-            first_reporting_period.date_time
+            report.aggregation.to_s
           ]
-
           if last_reporting_period
-            conditions.first.sub!(/>= \?\z/, 'BETWEEN ? AND ?')
+            conditions.first << ' AND reporting_period BETWEEN ? AND ?'
+            conditions << first_reporting_period.date_time
             conditions << last_reporting_period.date_time
+          else
+            conditions.first << ' AND reporting_period >= ?'
+            conditions << first_reporting_period.date_time
           end
-
           self.find(
             :all,
             :conditions => conditions,

@@ -5,7 +5,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-  <title>Class: Kvlr::ReportsAsSparkline::Grouping</title>
+  <title>Class: Simplabs::ReportsAsSparkline::Grouping</title>
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
   <meta http-equiv="Content-Script-Type" content="text/javascript" />
   <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
@@ -50,13 +50,13 @@
         <table class="header-table">
         <tr class="top-aligned-row">
           <td><strong>Class</strong></td>
-          <td class="class-name-in-header">Kvlr::ReportsAsSparkline::Grouping</td>
+          <td class="class-name-in-header">Simplabs::ReportsAsSparkline::Grouping</td>
         </tr>
         <tr class="top-aligned-row">
             <td><strong>In:</strong></td>
             <td>
-                <a href="../../../files/lib/kvlr/reports_as_sparkline/grouping_rb.html">
-                lib/kvlr/reports_as_sparkline/grouping.rb
+                <a href="../../../files/lib/simplabs/reports_as_sparkline/grouping_rb.html">
+                lib/simplabs/reports_as_sparkline/grouping.rb
                 </a>
         <br />
             </td>
@@ -137,7 +137,7 @@ href="Grouping.html#M000005">identifier</a> of the grouping - one of :hour,
             onclick="toggleCode('M000004-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000004-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/kvlr/reports_as_sparkline/grouping.rb, line 10</span>
+    <span class="ruby-comment cmt"># File lib/simplabs/reports_as_sparkline/grouping.rb, line 10</span>
 10:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">identifier</span>)
 11:         <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>.<span class="ruby-identifier">new</span>(<span class="ruby-node">&quot;Invalid grouping #{identifier}&quot;</span>) <span class="ruby-keyword kw">unless</span> [<span class="ruby-identifier">:hour</span>, <span class="ruby-identifier">:day</span>, <span class="ruby-identifier">:week</span>, <span class="ruby-identifier">:month</span>].<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">identifier</span>)
 12:         <span class="ruby-ivar">@identifier</span> = <span class="ruby-identifier">identifier</span>
@@ -167,7 +167,7 @@ href="Grouping.html#M000005">identifier</a>
             onclick="toggleCode('M000005-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000005-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/kvlr/reports_as_sparkline/grouping.rb, line 16</span>
+    <span class="ruby-comment cmt"># File lib/simplabs/reports_as_sparkline/grouping.rb, line 16</span>
 16:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">identifier</span>
 17:         <span class="ruby-ivar">@identifier</span>
 18:       <span class="ruby-keyword kw">end</span>

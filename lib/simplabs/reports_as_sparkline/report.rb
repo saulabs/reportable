@@ -76,21 +76,8 @@ module Simplabs #:nodoc:
         end
 
         def setup_conditions(begin_at, end_at, custom_conditions = [])
-          conditions = ['']
-          if custom_conditions.is_a?(Hash)
-            conditions = [custom_conditions.map do |k, v|
-              if v.nil?
-                "#{k.to_s} IS NULL"
-              elsif v.is_a?(Array) || v.is_a?(Range)
-                "#{k.to_s} IN (?)"
-              else
-                "#{k.to_s} = ?"
-              end
-            end.join(' AND '), *custom_conditions.map { |k, v| v }.compact]
-          elsif custom_conditions.size > 0
-            conditions = [(custom_conditions[0] || ''), *custom_conditions[1..-1]]
-          end
-          conditions[0] += "#{(conditions[0].blank? ? '' : ' AND ') + @date_column.to_s} "
+          conditions = [@klass.send(:sanitize_sql_for_conditions, custom_conditions) || '']
+          conditions[0] += "#{(conditions[0].blank? ? '' : ' AND ')}\"#{@klass.table_name}\".\"#{@date_column.to_s}\" "
           conditions[0] += if begin_at && end_at
             'BETWEEN ? AND ?'
           elsif begin_at

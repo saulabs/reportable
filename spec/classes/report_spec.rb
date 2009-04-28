@@ -407,7 +407,12 @@ describe Simplabs::ReportsAsSparkline::Report do
       custom_conditions = { :first_name => 'first name', :last_name => 'last name' }
 
       conditions = @report.send(:setup_conditions, @begin_at, @end_at, custom_conditions)
-      conditions.should == ['"users"."first_name" = \'first name\' AND "users"."last_name" = \'last name\' AND "users"."created_at" BETWEEN ? AND ?', @begin_at, @end_at]
+      # cannot directly check for string equqlity here since hashes are not ordered and so there is no way to now in which order the conditions are added to the SQL clause
+      conditions[0].should =~ (/"users"."first_name" = \'first name\'/)
+      conditions[0].should =~ (/"users"."last_name" = \'last name\'/)
+      conditions[0].should =~ (/"users"."created_at" BETWEEN \? AND \?/)
+      conditions[1].should == @begin_at
+      conditions[2].should == @end_at
     end
 
     it 'should correctly translate { :column => nil }' do

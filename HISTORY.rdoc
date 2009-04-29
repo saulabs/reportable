@@ -1,7 +1,9 @@
-== v1.1
+=== v1.1
+
 * new :end_date option: if specified, only data for the reporting periods for (end date - (limit - 1)) until (end date) will be included in the result set (thanks to myronmarston (http://github.com/myronmarston) for the great work)
 * added rcov report and spec report
 
 
-== prior to v1.1
+=== prior to v1.1
+
 * cannot remember, should habe started a history file right from the beginning...

@@ -12,7 +12,7 @@ module Simplabs #:nodoc:
         raise ArgumentError.new('A block must be given') unless block_given?
         self.transaction do
           cached_data = []
-          first_reporting_period = ReportingPeriod.first(options[:grouping], (options[:end_date] ? options[:limit] - 1 : options[:limit]), options[:end_date])
+          first_reporting_period = get_first_reporting_period(options)
           last_reporting_period = options[:end_date] ? ReportingPeriod.new(options[:grouping], options[:end_date]) : nil
 
           if cache
@@ -20,13 +20,7 @@ module Simplabs #:nodoc:
             first_cached_reporting_period = cached_data.empty? ? nil : ReportingPeriod.new(options[:grouping], cached_data.first.reporting_period)
             last_cached_reporting_period = cached_data.empty? ? nil : ReportingPeriod.new(options[:grouping], cached_data.last.reporting_period)
           end
-
-          new_data = if !options[:live_data] && last_cached_reporting_period == ReportingPeriod.new(options[:grouping]).previous
-            []
-          else
-            end_date = options[:live_data] ? nil : (options[:end_date] ? last_reporting_period.last_date_time : nil)
-            yield((last_cached_reporting_period.next rescue first_reporting_period).date_time, end_date)
-          end
+          new_data = read_new_data(first_reporting_period, last_reporting_period, last_cached_reporting_period, options, &block)
 
           prepare_result(new_data, cached_data, report, options, cache)
         end
@@ -38,7 +32,7 @@ module Simplabs #:nodoc:
           new_data = new_data.map { |data| [ReportingPeriod.from_db_string(options[:grouping], data[0]), data[1]] }
           result = cached_data.map { |cached| [cached.reporting_period, cached.value] }
           last_reporting_period = ReportingPeriod.new(options[:grouping])
-          reporting_period = cached_data.empty? ? ReportingPeriod.first(options[:grouping], (options[:end_date] ? options[:limit] - 1 : options[:limit]), options[:end_date]) : ReportingPeriod.new(options[:grouping], cached_data.last.reporting_period).next
+          reporting_period = cached_data.empty? ? get_first_reporting_period(options) : ReportingPeriod.new(options[:grouping], cached_data.last.reporting_period).next
           while reporting_period < (options[:end_date] ? ReportingPeriod.new(options[:grouping], options[:end_date]).next : last_reporting_period)
             cached = build_cached_data(report, options[:grouping], options[:limit], reporting_period, find_value(new_data, reporting_period))
             cached.save! if cache
@@ -85,12 +79,28 @@ module Simplabs #:nodoc:
             conditions.first << ' AND reporting_period >= ?'
             conditions << first_reporting_period.date_time
           end
-          self.find(
-            :all,
+          self.all(
             :conditions => conditions,
             :limit => options[:limit],
             :order => 'reporting_period ASC'
           )
+        end
+
+        def self.read_new_data(first_reporting_period, last_reporting_period, last_cached_reporting_period, options, &block)
+          if !options[:live_data] && last_cached_reporting_period == ReportingPeriod.new(options[:grouping]).previous
+            []
+          else
+            end_date = options[:live_data] ? nil : (options[:end_date] ? last_reporting_period.last_date_time : nil)
+            yield((last_cached_reporting_period.next rescue first_reporting_period).date_time, end_date)
+          end
+        end
+
+        def self.get_first_reporting_period(options)
+          if options[:end_date]
+            ReportingPeriod.first(options[:grouping], options[:limit] - 1, options[:end_date])
+          else
+            ReportingPeriod.first(options[:grouping], options[:limit])
+          end
         end
 
     end

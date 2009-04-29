@@ -553,7 +553,7 @@ span.run100 {
 </style>
     </head>
   <body><h3>C0 code coverage information</h3>
-    <p>Generated on Wed Apr 29 18:53:07 +0200 2009 with <a href='http://eigenclass.org/hiki/rcov'>rcov 0.8.1.2</a>
+    <p>Generated on Wed Apr 29 19:33:53 +0200 2009 with <a href='http://eigenclass.org/hiki/rcov'>rcov 0.8.1.2</a>
       </p>
     <hr/>
     <pre><span class='marked0'>Code reported as executed by Ruby looks like this...
@@ -571,7 +571,7 @@ span.run100 {
     </thead>
   <tbody><tr class='light'><td><a href='lib-simplabs-reports_as_sparkline-grouping_rb.html'>lib/simplabs/reports_as_sparkline/grouping.rb</a>
         </td>
-      <td class='lines_total'><tt>119</tt>
+      <td class='lines_total'><tt>115</tt>
         </td>
       <td class='lines_code'><tt>99</tt>
         </td>
@@ -598,125 +598,121 @@ span.run100 {
       </tr>
     </tbody>
   </table>
-<pre><span class="marked0"><a name="line1"></a>  1 module Simplabs #:nodoc:
-</span><span class="inferred1"><a name="line2"></a>  2 
-</span><span class="marked0"><a name="line3"></a>  3   module ReportsAsSparkline #:nodoc:
-</span><span class="inferred1"><a name="line4"></a>  4 
-</span><span class="inferred0"><a name="line5"></a>  5     # This is the grouping a report uses to group records in the database
-</span><span class="marked1"><a name="line6"></a>  6     class Grouping
-</span><span class="inferred0"><a name="line7"></a>  7 
-</span><span class="inferred1"><a name="line8"></a>  8       # ==== Parameters
-</span><span class="inferred0"><a name="line9"></a>  9       # * &lt;tt&gt;identifier&lt;/tt&gt; - The identifier of the grouping - one of :hour, :day, :week or :month
-</span><span class="marked1"><a name="line10"></a> 10       def initialize(identifier)
-</span><span class="marked0"><a name="line11"></a> 11         raise ArgumentError.new(&quot;Invalid grouping #{identifier}&quot;) unless [:hour, :day, :week, :month].include?(identifier)
-</span><span class="marked1"><a name="line12"></a> 12         @identifier = identifier
-</span><span class="inferred0"><a name="line13"></a> 13       end
-</span><span class="inferred1"><a name="line14"></a> 14 
-</span><span class="inferred0"><a name="line15"></a> 15       # Returns the Grouping's identifier
-</span><span class="marked1"><a name="line16"></a> 16       def identifier
-</span><span class="marked0"><a name="line17"></a> 17         @identifier
-</span><span class="marked1"><a name="line18"></a> 18       end
-</span><span class="inferred0"><a name="line19"></a> 19 
-</span><span class="marked1"><a name="line20"></a> 20       def date_parts_from_db_string(db_string) #:nodoc:
-</span><span class="marked0"><a name="line21"></a> 21         return case ActiveRecord::Base.connection.adapter_name
-</span><span class="marked1"><a name="line22"></a> 22           when /mysql/i
-</span><span class="marked0"><a name="line23"></a> 23             from_mysql_db_string(db_string)
-</span><span class="marked1"><a name="line24"></a> 24           when /sqlite/i
-</span><span class="marked0"><a name="line25"></a> 25             from_sqlite_db_string(db_string)
-</span><span class="marked1"><a name="line26"></a> 26           when /postgres/i
-</span><span class="marked0"><a name="line27"></a> 27             from_postgresql_db_string(db_string)
-</span><span class="marked1"><a name="line28"></a> 28         end
-</span><span class="marked0"><a name="line29"></a> 29       end
-</span><span class="inferred1"><a name="line30"></a> 30 
-</span><span class="marked0"><a name="line31"></a> 31       def to_sql(date_column) #:nodoc:
-</span><span class="marked1"><a name="line32"></a> 32         return case ActiveRecord::Base.connection.adapter_name
-</span><span class="marked0"><a name="line33"></a> 33           when /mysql/i
-</span><span class="marked1"><a name="line34"></a> 34             mysql_format(date_column)
-</span><span class="marked0"><a name="line35"></a> 35           when /sqlite/i
-</span><span class="marked1"><a name="line36"></a> 36             sqlite_format(date_column)
-</span><span class="marked0"><a name="line37"></a> 37           when /postgres/i
-</span><span class="marked1"><a name="line38"></a> 38             postgresql_format(date_column)
-</span><span class="marked0"><a name="line39"></a> 39         end
-</span><span class="marked1"><a name="line40"></a> 40       end
-</span><span class="inferred0"><a name="line41"></a> 41 
-</span><span class="marked1"><a name="line42"></a> 42       private
-</span><span class="inferred0"><a name="line43"></a> 43 
-</span><span class="marked1"><a name="line44"></a> 44         def from_mysql_db_string(db_string)
-</span><span class="marked0"><a name="line45"></a> 45           if @identifier == :week
-</span><span class="marked1"><a name="line46"></a> 46             parts = [db_string[0..3], db_string[4..5]].map(&amp;:to_i)
-</span><span class="inferred0"><a name="line47"></a> 47           else
-</span><span class="marked1"><a name="line48"></a> 48             db_string.split('/').map(&amp;:to_i)
-</span><span class="inferred0"><a name="line49"></a> 49           end
-</span><span class="marked1"><a name="line50"></a> 50         end
-</span><span class="inferred0"><a name="line51"></a> 51 
-</span><span class="marked1"><a name="line52"></a> 52         def from_sqlite_db_string(db_string)
-</span><span class="marked0"><a name="line53"></a> 53           if @identifier == :week
-</span><span class="marked1"><a name="line54"></a> 54             parts = db_string.split('-').map(&amp;:to_i)
-</span><span class="marked0"><a name="line55"></a> 55             date = Date.new(parts[0], parts[1], parts[2])
-</span><span class="marked1"><a name="line56"></a> 56             return [date.cwyear, date.cweek]
-</span><span class="inferred0"><a name="line57"></a> 57           end
-</span><span class="marked1"><a name="line58"></a> 58           db_string.split('/').map(&amp;:to_i)
-</span><span class="inferred0"><a name="line59"></a> 59         end
-</span><span class="inferred1"><a name="line60"></a> 60 
-</span><span class="marked0"><a name="line61"></a> 61         def from_postgresql_db_string(db_string)
-</span><span class="marked1"><a name="line62"></a> 62           case @identifier
-</span><span class="marked0"><a name="line63"></a> 63             when :hour
-</span><span class="marked1"><a name="line64"></a> 64               return (db_string[0..9].split('-') + [db_string[11..12]]).map(&amp;:to_i)
-</span><span class="marked0"><a name="line65"></a> 65             when :day
-</span><span class="marked1"><a name="line66"></a> 66               return db_string[0..9].split('-').map(&amp;:to_i)
-</span><span class="marked0"><a name="line67"></a> 67             when :week
-</span><span class="marked1"><a name="line68"></a> 68               parts = db_string[0..9].split('-').map(&amp;:to_i)
-</span><span class="marked0"><a name="line69"></a> 69               date = Date.new(parts[0], parts[1], parts[2])
-</span><span class="marked1"><a name="line70"></a> 70               return [date.cwyear, date.cweek]
-</span><span class="marked0"><a name="line71"></a> 71             when :month
-</span><span class="marked1"><a name="line72"></a> 72               return db_string[0..6].split('-')[0..1].map(&amp;:to_i)
-</span><span class="inferred0"><a name="line73"></a> 73           end
-</span><span class="marked1"><a name="line74"></a> 74         end
-</span><span class="inferred0"><a name="line75"></a> 75 
-</span><span class="marked1"><a name="line76"></a> 76         def mysql_format(date_column)
-</span><span class="uncovered0"><a name="line77"></a> 77           return case @identifier
-</span><span class="marked1"><a name="line78"></a> 78             when :hour
-</span><span class="marked0"><a name="line79"></a> 79               &quot;DATE_FORMAT(#{date_column}, '%Y/%m/%d/%H')&quot;
-</span><span class="marked1"><a name="line80"></a> 80             when :day
-</span><span class="marked0"><a name="line81"></a> 81               &quot;DATE_FORMAT(#{date_column}, '%Y/%m/%d')&quot;
-</span><span class="marked1"><a name="line82"></a> 82             when :week
-</span><span class="marked0"><a name="line83"></a> 83               &quot;YEARWEEK(#{date_column}, 3)&quot;
-</span><span class="marked1"><a name="line84"></a> 84             when :month
-</span><span class="marked0"><a name="line85"></a> 85               &quot;DATE_FORMAT(#{date_column}, '%Y/%m')&quot;
-</span><span class="marked1"><a name="line86"></a> 86           end
-</span><span class="marked0"><a name="line87"></a> 87         end
-</span><span class="inferred1"><a name="line88"></a> 88 
-</span><span class="marked0"><a name="line89"></a> 89         def sqlite_format(date_column)
-</span><span class="uncovered1"><a name="line90"></a> 90           return case @identifier
-</span><span class="marked0"><a name="line91"></a> 91             when :hour
-</span><span class="marked1"><a name="line92"></a> 92               &quot;strftime('%Y/%m/%d/%H', #{date_column})&quot;
-</span><span class="marked0"><a name="line93"></a> 93             when :day
-</span><span class="marked1"><a name="line94"></a> 94               &quot;strftime('%Y/%m/%d', #{date_column})&quot;
-</span><span class="marked0"><a name="line95"></a> 95             when :week
-</span><span class="marked1"><a name="line96"></a> 96               &quot;date(#{date_column}, 'weekday 0')&quot;
-</span><span class="marked0"><a name="line97"></a> 97             when :month
-</span><span class="marked1"><a name="line98"></a> 98               &quot;strftime('%Y/%m', #{date_column})&quot;
-</span><span class="marked0"><a name="line99"></a> 99           end
-</span><span class="marked1"><a name="line100"></a>100         end
-</span><span class="inferred0"><a name="line101"></a>101 
-</span><span class="marked1"><a name="line102"></a>102         def postgresql_format(date_column)
-</span><span class="inferred0"><a name="line103"></a>103           return case @identifier
-</span><span class="marked1"><a name="line104"></a>104             when :hour
-</span><span class="inferred0"><a name="line105"></a>105               &quot;date_trunc('hour', #{date_column})&quot;
-</span><span class="marked1"><a name="line106"></a>106             when :day
-</span><span class="inferred0"><a name="line107"></a>107               &quot;date_trunc('day', #{date_column})&quot;
-</span><span class="marked1"><a name="line108"></a>108             when :week
-</span><span class="inferred0"><a name="line109"></a>109               &quot;date_trunc('week', #{date_column})&quot;
-</span><span class="marked1"><a name="line110"></a>110             when :month
-</span><span class="marked0"><a name="line111"></a>111               &quot;date_trunc('month', #{date_column})&quot;
-</span><span class="marked1"><a name="line112"></a>112           end
-</span><span class="marked0"><a name="line113"></a>113         end
-</span><span class="inferred1"><a name="line114"></a>114 
-</span><span class="inferred0"><a name="line115"></a>115     end
-</span><span class="inferred1"><a name="line116"></a>116 
-</span><span class="inferred0"><a name="line117"></a>117   end
-</span><span class="inferred1"><a name="line118"></a>118 
-</span><span class="inferred0"><a name="line119"></a>119 end
+<pre><span class="marked1"><a name="line1"></a>  1 module Simplabs #:nodoc:
+</span><span class="inferred0"><a name="line2"></a>  2 
+</span><span class="marked1"><a name="line3"></a>  3   module ReportsAsSparkline #:nodoc:
+</span><span class="inferred0"><a name="line4"></a>  4 
+</span><span class="marked1"><a name="line5"></a>  5     class Grouping #:nodoc:
+</span><span class="inferred0"><a name="line6"></a>  6 
+</span><span class="marked1"><a name="line7"></a>  7       def initialize(identifier)
+</span><span class="marked0"><a name="line8"></a>  8         raise ArgumentError.new(&quot;Invalid grouping #{identifier}&quot;) unless [:hour, :day, :week, :month].include?(identifier)
+</span><span class="marked1"><a name="line9"></a>  9         @identifier = identifier
+</span><span class="inferred0"><a name="line10"></a> 10       end
+</span><span class="inferred1"><a name="line11"></a> 11 
+</span><span class="marked0"><a name="line12"></a> 12       def identifier
+</span><span class="marked1"><a name="line13"></a> 13         @identifier
+</span><span class="marked0"><a name="line14"></a> 14       end
+</span><span class="inferred1"><a name="line15"></a> 15 
+</span><span class="marked0"><a name="line16"></a> 16       def date_parts_from_db_string(db_string)
+</span><span class="marked1"><a name="line17"></a> 17         return case ActiveRecord::Base.connection.adapter_name
+</span><span class="marked0"><a name="line18"></a> 18           when /mysql/i
+</span><span class="marked1"><a name="line19"></a> 19             from_mysql_db_string(db_string)
+</span><span class="marked0"><a name="line20"></a> 20           when /sqlite/i
+</span><span class="marked1"><a name="line21"></a> 21             from_sqlite_db_string(db_string)
+</span><span class="marked0"><a name="line22"></a> 22           when /postgres/i
+</span><span class="marked1"><a name="line23"></a> 23             from_postgresql_db_string(db_string)
+</span><span class="marked0"><a name="line24"></a> 24         end
+</span><span class="marked1"><a name="line25"></a> 25       end
+</span><span class="inferred0"><a name="line26"></a> 26 
+</span><span class="marked1"><a name="line27"></a> 27       def to_sql(date_column) #:nodoc:
+</span><span class="marked0"><a name="line28"></a> 28         return case ActiveRecord::Base.connection.adapter_name
+</span><span class="marked1"><a name="line29"></a> 29           when /mysql/i
+</span><span class="marked0"><a name="line30"></a> 30             mysql_format(date_column)
+</span><span class="marked1"><a name="line31"></a> 31           when /sqlite/i
+</span><span class="marked0"><a name="line32"></a> 32             sqlite_format(date_column)
+</span><span class="marked1"><a name="line33"></a> 33           when /postgres/i
+</span><span class="marked0"><a name="line34"></a> 34             postgresql_format(date_column)
+</span><span class="marked1"><a name="line35"></a> 35         end
+</span><span class="marked0"><a name="line36"></a> 36       end
+</span><span class="inferred1"><a name="line37"></a> 37 
+</span><span class="marked0"><a name="line38"></a> 38       private
+</span><span class="inferred1"><a name="line39"></a> 39 
+</span><span class="marked0"><a name="line40"></a> 40         def from_mysql_db_string(db_string)
+</span><span class="marked1"><a name="line41"></a> 41           if @identifier == :week
+</span><span class="marked0"><a name="line42"></a> 42             parts = [db_string[0..3], db_string[4..5]].map(&amp;:to_i)
+</span><span class="inferred1"><a name="line43"></a> 43           else
+</span><span class="marked0"><a name="line44"></a> 44             db_string.split('/').map(&amp;:to_i)
+</span><span class="inferred1"><a name="line45"></a> 45           end
+</span><span class="marked0"><a name="line46"></a> 46         end
+</span><span class="inferred1"><a name="line47"></a> 47 
+</span><span class="marked0"><a name="line48"></a> 48         def from_sqlite_db_string(db_string)
+</span><span class="marked1"><a name="line49"></a> 49           if @identifier == :week
+</span><span class="marked0"><a name="line50"></a> 50             parts = db_string.split('-').map(&amp;:to_i)
+</span><span class="marked1"><a name="line51"></a> 51             date = Date.new(parts[0], parts[1], parts[2])
+</span><span class="marked0"><a name="line52"></a> 52             return [date.cwyear, date.cweek]
+</span><span class="inferred1"><a name="line53"></a> 53           end
+</span><span class="marked0"><a name="line54"></a> 54           db_string.split('/').map(&amp;:to_i)
+</span><span class="inferred1"><a name="line55"></a> 55         end
+</span><span class="inferred0"><a name="line56"></a> 56 
+</span><span class="marked1"><a name="line57"></a> 57         def from_postgresql_db_string(db_string)
+</span><span class="marked0"><a name="line58"></a> 58           case @identifier
+</span><span class="marked1"><a name="line59"></a> 59             when :hour
+</span><span class="marked0"><a name="line60"></a> 60               return (db_string[0..9].split('-') + [db_string[11..12]]).map(&amp;:to_i)
+</span><span class="marked1"><a name="line61"></a> 61             when :day
+</span><span class="marked0"><a name="line62"></a> 62               return db_string[0..9].split('-').map(&amp;:to_i)
+</span><span class="marked1"><a name="line63"></a> 63             when :week
+</span><span class="marked0"><a name="line64"></a> 64               parts = db_string[0..9].split('-').map(&amp;:to_i)
+</span><span class="marked1"><a name="line65"></a> 65               date = Date.new(parts[0], parts[1], parts[2])
+</span><span class="marked0"><a name="line66"></a> 66               return [date.cwyear, date.cweek]
+</span><span class="marked1"><a name="line67"></a> 67             when :month
+</span><span class="marked0"><a name="line68"></a> 68               return db_string[0..6].split('-')[0..1].map(&amp;:to_i)
+</span><span class="inferred1"><a name="line69"></a> 69           end
+</span><span class="marked0"><a name="line70"></a> 70         end
+</span><span class="inferred1"><a name="line71"></a> 71 
+</span><span class="marked0"><a name="line72"></a> 72         def mysql_format(date_column)
+</span><span class="uncovered1"><a name="line73"></a> 73           return case @identifier
+</span><span class="marked0"><a name="line74"></a> 74             when :hour
+</span><span class="marked1"><a name="line75"></a> 75               &quot;DATE_FORMAT(#{date_column}, '%Y/%m/%d/%H')&quot;
+</span><span class="marked0"><a name="line76"></a> 76             when :day
+</span><span class="marked1"><a name="line77"></a> 77               &quot;DATE_FORMAT(#{date_column}, '%Y/%m/%d')&quot;
+</span><span class="marked0"><a name="line78"></a> 78             when :week
+</span><span class="marked1"><a name="line79"></a> 79               &quot;YEARWEEK(#{date_column}, 3)&quot;
+</span><span class="marked0"><a name="line80"></a> 80             when :month
+</span><span class="marked1"><a name="line81"></a> 81               &quot;DATE_FORMAT(#{date_column}, '%Y/%m')&quot;
+</span><span class="marked0"><a name="line82"></a> 82           end
+</span><span class="marked1"><a name="line83"></a> 83         end
+</span><span class="inferred0"><a name="line84"></a> 84 
+</span><span class="marked1"><a name="line85"></a> 85         def sqlite_format(date_column)
+</span><span class="uncovered0"><a name="line86"></a> 86           return case @identifier
+</span><span class="marked1"><a name="line87"></a> 87             when :hour
+</span><span class="marked0"><a name="line88"></a> 88               &quot;strftime('%Y/%m/%d/%H', #{date_column})&quot;
+</span><span class="marked1"><a name="line89"></a> 89             when :day
+</span><span class="marked0"><a name="line90"></a> 90               &quot;strftime('%Y/%m/%d', #{date_column})&quot;
+</span><span class="marked1"><a name="line91"></a> 91             when :week
+</span><span class="marked0"><a name="line92"></a> 92               &quot;date(#{date_column}, 'weekday 0')&quot;
+</span><span class="marked1"><a name="line93"></a> 93             when :month
+</span><span class="marked0"><a name="line94"></a> 94               &quot;strftime('%Y/%m', #{date_column})&quot;
+</span><span class="marked1"><a name="line95"></a> 95           end
+</span><span class="marked0"><a name="line96"></a> 96         end
+</span><span class="inferred1"><a name="line97"></a> 97 
+</span><span class="marked0"><a name="line98"></a> 98         def postgresql_format(date_column)
+</span><span class="inferred1"><a name="line99"></a> 99           return case @identifier
+</span><span class="marked0"><a name="line100"></a>100             when :hour
+</span><span class="inferred1"><a name="line101"></a>101               &quot;date_trunc('hour', #{date_column})&quot;
+</span><span class="marked0"><a name="line102"></a>102             when :day
+</span><span class="inferred1"><a name="line103"></a>103               &quot;date_trunc('day', #{date_column})&quot;
+</span><span class="marked0"><a name="line104"></a>104             when :week
+</span><span class="inferred1"><a name="line105"></a>105               &quot;date_trunc('week', #{date_column})&quot;
+</span><span class="marked0"><a name="line106"></a>106             when :month
+</span><span class="marked1"><a name="line107"></a>107               &quot;date_trunc('month', #{date_column})&quot;
+</span><span class="marked0"><a name="line108"></a>108           end
+</span><span class="marked1"><a name="line109"></a>109         end
+</span><span class="inferred0"><a name="line110"></a>110 
+</span><span class="inferred1"><a name="line111"></a>111     end
+</span><span class="inferred0"><a name="line112"></a>112 
+</span><span class="inferred1"><a name="line113"></a>113   end
+</span><span class="inferred0"><a name="line114"></a>114 
+</span><span class="inferred1"><a name="line115"></a>115 end
 </span></pre><hr/>
     <p>Generated using the <a href='http://eigenclass.org/hiki.rb?rcov'>rcov code coverage analysis tool for Ruby</a>
    version 0.8.1.2.</p>

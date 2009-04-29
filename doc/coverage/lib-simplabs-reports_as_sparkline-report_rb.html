@@ -553,7 +553,7 @@ span.run100 {
 </style>
     </head>
   <body><h3>C0 code coverage information</h3>
-    <p>Generated on Wed Apr 29 18:53:07 +0200 2009 with <a href='http://eigenclass.org/hiki/rcov'>rcov 0.8.1.2</a>
+    <p>Generated on Wed Apr 29 19:33:53 +0200 2009 with <a href='http://eigenclass.org/hiki/rcov'>rcov 0.8.1.2</a>
       </p>
     <hr/>
     <pre><span class='marked0'>Code reported as executed by Ruby looks like this...
@@ -598,125 +598,125 @@ span.run100 {
       </tr>
     </tbody>
   </table>
-<pre><span class="marked1"><a name="line1"></a>  1 module Simplabs #:nodoc:
-</span><span class="inferred0"><a name="line2"></a>  2 
-</span><span class="marked1"><a name="line3"></a>  3   module ReportsAsSparkline #:nodoc:
-</span><span class="inferred0"><a name="line4"></a>  4 
-</span><span class="inferred1"><a name="line5"></a>  5     # The Report class that does all the data retrieval and calculations
-</span><span class="marked0"><a name="line6"></a>  6     class Report
-</span><span class="inferred1"><a name="line7"></a>  7 
-</span><span class="marked0"><a name="line8"></a>  8       attr_reader :klass, :name, :date_column, :value_column, :aggregation, :options
-</span><span class="inferred1"><a name="line9"></a>  9 
-</span><span class="inferred0"><a name="line10"></a> 10       # ==== Parameters
-</span><span class="inferred1"><a name="line11"></a> 11       # * &lt;tt&gt;klass&lt;/tt&gt; - The model the report works on (This is the class you invoke Simplabs::ReportsAsSparkline::ClassMethods#reports_as_sparkline on)
-</span><span class="inferred0"><a name="line12"></a> 12       # * &lt;tt&gt;name&lt;/tt&gt; - The name of the report (as in Simplabs::ReportsAsSparkline::ClassMethods#reports_as_sparkline)
-</span><span class="inferred1"><a name="line13"></a> 13       #
-</span><span class="inferred0"><a name="line14"></a> 14       # ==== Options
-</span><span class="inferred1"><a name="line15"></a> 15       #
-</span><span class="inferred0"><a name="line16"></a> 16       # * &lt;tt&gt;:date_column&lt;/tt&gt; - The name of the date column on that the records are aggregated
-</span><span class="inferred1"><a name="line17"></a> 17       # * &lt;tt&gt;:value_column&lt;/tt&gt; - The name of the column that holds the value to sum for aggregation :sum
-</span><span class="inferred0"><a name="line18"></a> 18       # * &lt;tt&gt;:aggregation&lt;/tt&gt; - The aggregation to use (one of :count, :sum, :minimum, :maximum or :average); when using anything other than :count, :value_column must also be specified (&lt;b&gt;If you really want to e.g. sumon the 'id' column, you have to explicitely say so.&lt;/b&gt;)
-</span><span class="inferred1"><a name="line19"></a> 19       # * &lt;tt&gt;:grouping&lt;/tt&gt; - The period records are grouped on (:hour, :day, :week, :month); &lt;b&gt;Beware that reports_as_sparkline treats weeks as starting on monday!&lt;/b&gt;
-</span><span class="inferred0"><a name="line20"></a> 20       # * &lt;tt&gt;:limit&lt;/tt&gt; - The number of periods to get (see :grouping)
-</span><span class="inferred1"><a name="line21"></a> 21       # * &lt;tt&gt;:conditions&lt;/tt&gt; - Conditions like in ActiveRecord::Base#find; only records that match there conditions are reported on
-</span><span class="inferred0"><a name="line22"></a> 22       # * &lt;tt&gt;:live_data&lt;/tt&gt; - Specified whether data for the current reporting period is read; if :live_data is true, you will experience a performance hit since the request cannot be satisfied from the cache only (defaults to false)
-</span><span class="inferred1"><a name="line23"></a> 23       # * &lt;tt&gt;:end_date&lt;/tt&gt; - When specified, the report will only include data for the periods before this date.
-</span><span class="marked0"><a name="line24"></a> 24       def initialize(klass, name, options = {})
-</span><span class="marked1"><a name="line25"></a> 25         ensure_valid_options(options)
-</span><span class="marked0"><a name="line26"></a> 26         @klass        = klass
-</span><span class="marked1"><a name="line27"></a> 27         @name         = name
-</span><span class="marked0"><a name="line28"></a> 28         @date_column  = (options[:date_column] || 'created_at').to_s
-</span><span class="marked1"><a name="line29"></a> 29         @aggregation  = options[:aggregation] || :count
-</span><span class="marked0"><a name="line30"></a> 30         @value_column = (options[:value_column] || (@aggregation == :count ? 'id' : name)).to_s
-</span><span class="marked1"><a name="line31"></a> 31         @options = {
-</span><span class="inferred0"><a name="line32"></a> 32           :limit      =&gt; options[:limit] || 100,
-</span><span class="inferred1"><a name="line33"></a> 33           :conditions =&gt; options[:conditions] || [],
-</span><span class="marked0"><a name="line34"></a> 34           :grouping   =&gt; Grouping.new(options[:grouping] || :day),
-</span><span class="inferred1"><a name="line35"></a> 35           :live_data  =&gt; options[:live_data] || false,
-</span><span class="inferred0"><a name="line36"></a> 36           :end_date   =&gt; options[:end_date] || false
-</span><span class="inferred1"><a name="line37"></a> 37         }
-</span><span class="marked0"><a name="line38"></a> 38         @options.merge!(options)
-</span><span class="marked1"><a name="line39"></a> 39         @options.freeze
-</span><span class="inferred0"><a name="line40"></a> 40       end
-</span><span class="inferred1"><a name="line41"></a> 41 
-</span><span class="inferred0"><a name="line42"></a> 42       # Runs the report and returns an array of array of DateTimes and Floats
-</span><span class="inferred1"><a name="line43"></a> 43       #
-</span><span class="inferred0"><a name="line44"></a> 44       # ==== Options
-</span><span class="inferred1"><a name="line45"></a> 45       # * &lt;tt&gt;:limit&lt;/tt&gt; - The number of periods to get
-</span><span class="inferred0"><a name="line46"></a> 46       # * &lt;tt&gt;:conditions&lt;/tt&gt; - Conditions like in ActiveRecord::Base#find; only records that match there conditions are reported on (&lt;b&gt;Beware that when you specify conditions here, caching will be disabled&lt;/b&gt;)
-</span><span class="inferred1"><a name="line47"></a> 47       # * &lt;tt&gt;:grouping&lt;/tt&gt; - The period records are grouped on (:hour, :day, :week, :month); &lt;b&gt;Beware that reports_as_sparkline treats weeks as starting on monday!&lt;/b&gt;
-</span><span class="inferred0"><a name="line48"></a> 48       # * &lt;tt&gt;:live_data&lt;/tt&gt; - Specified whether data for the current reporting period is read; if :live_data is true, you will experience a performance hit since the request cannot be satisfied from the cache only (defaults to false)
-</span><span class="inferred1"><a name="line49"></a> 49       # * &lt;tt&gt;:end_date&lt;/tt&gt; - When specified, the report will only include data for the periods before this date.
-</span><span class="marked0"><a name="line50"></a> 50       def run(options = {})
-</span><span class="marked1"><a name="line51"></a> 51         custom_conditions = options.key?(:conditions)
-</span><span class="marked0"><a name="line52"></a> 52         options = options_for_run(options)
-</span><span class="marked1"><a name="line53"></a> 53         ReportCache.process(self, options, !custom_conditions) do |begin_at, end_at|
-</span><span class="marked0"><a name="line54"></a> 54           read_data(begin_at, end_at, options)
-</span><span class="inferred1"><a name="line55"></a> 55         end
-</span><span class="inferred0"><a name="line56"></a> 56       end
-</span><span class="inferred1"><a name="line57"></a> 57 
-</span><span class="marked0"><a name="line58"></a> 58       private
-</span><span class="inferred1"><a name="line59"></a> 59 
-</span><span class="marked0"><a name="line60"></a> 60         def options_for_run(options = {})
-</span><span class="marked1"><a name="line61"></a> 61           options = options.dup
-</span><span class="marked0"><a name="line62"></a> 62           ensure_valid_options(options, :run)
-</span><span class="marked1"><a name="line63"></a> 63           options.reverse_merge!(@options)
-</span><span class="marked0"><a name="line64"></a> 64           options[:grouping] = Grouping.new(options[:grouping]) unless options[:grouping].is_a?(Grouping)
-</span><span class="marked1"><a name="line65"></a> 65           return options
-</span><span class="inferred0"><a name="line66"></a> 66         end
-</span><span class="inferred1"><a name="line67"></a> 67 
-</span><span class="marked0"><a name="line68"></a> 68         def read_data(begin_at, end_at, options)
-</span><span class="marked1"><a name="line69"></a> 69           conditions = setup_conditions(begin_at, end_at, options[:conditions])
-</span><span class="marked0"><a name="line70"></a> 70           @klass.send(@aggregation,
-</span><span class="inferred1"><a name="line71"></a> 71             @value_column,
-</span><span class="inferred0"><a name="line72"></a> 72             :conditions =&gt; conditions,
-</span><span class="marked1"><a name="line73"></a> 73             :group =&gt; options[:grouping].to_sql(@date_column),
-</span><span class="marked0"><a name="line74"></a> 74             :order =&gt; &quot;#{options[:grouping].to_sql(@date_column)} ASC&quot;
-</span><span class="inferred1"><a name="line75"></a> 75           )
-</span><span class="inferred0"><a name="line76"></a> 76         end
-</span><span class="inferred1"><a name="line77"></a> 77 
-</span><span class="marked0"><a name="line78"></a> 78         def setup_conditions(begin_at, end_at, custom_conditions = [])
-</span><span class="marked1"><a name="line79"></a> 79           conditions = [@klass.send(:sanitize_sql_for_conditions, custom_conditions) || '']
-</span><span class="marked0"><a name="line80"></a> 80           conditions[0] += &quot;#{(conditions[0].blank? ? '' : ' AND ')}#{ActiveRecord::Base.connection.quote_table_name(@klass.table_name)}.#{ActiveRecord::Base.connection.quote_column_name(@date_column.to_s)} &quot;
-</span><span class="marked1"><a name="line81"></a> 81           conditions[0] += if begin_at &amp;&amp; end_at
-</span><span class="marked0"><a name="line82"></a> 82             'BETWEEN ? AND ?'
-</span><span class="marked1"><a name="line83"></a> 83           elsif begin_at
-</span><span class="marked0"><a name="line84"></a> 84             '&gt;= ?'
-</span><span class="marked1"><a name="line85"></a> 85           elsif end_at
-</span><span class="marked0"><a name="line86"></a> 86             '&lt;= ?'
-</span><span class="inferred1"><a name="line87"></a> 87           else
-</span><span class="marked0"><a name="line88"></a> 88             raise ArgumentError.new('You must pass either begin_at, end_at or both to setup_conditions.')
-</span><span class="inferred1"><a name="line89"></a> 89           end
-</span><span class="marked0"><a name="line90"></a> 90           conditions &lt;&lt; begin_at if begin_at
-</span><span class="marked1"><a name="line91"></a> 91           conditions &lt;&lt; end_at if end_at
-</span><span class="marked0"><a name="line92"></a> 92           conditions
-</span><span class="inferred1"><a name="line93"></a> 93         end
-</span><span class="inferred0"><a name="line94"></a> 94 
-</span><span class="marked1"><a name="line95"></a> 95         def ensure_valid_options(options, context = :initialize)
-</span><span class="marked0"><a name="line96"></a> 96           case context
-</span><span class="marked1"><a name="line97"></a> 97             when :initialize
-</span><span class="marked0"><a name="line98"></a> 98               options.each_key do |k|
-</span><span class="marked1"><a name="line99"></a> 99                 raise ArgumentError.new(&quot;Invalid option #{k}!&quot;) unless [:limit, :aggregation, :grouping, :date_column, :value_column, :conditions, :live_data, :end_date].include?(k)
-</span><span class="inferred0"><a name="line100"></a>100               end
-</span><span class="marked1"><a name="line101"></a>101               raise ArgumentError.new(&quot;Invalid aggregation #{options[:aggregation]}!&quot;) if options[:aggregation] &amp;&amp; ![:count, :sum, :maximum, :minimum, :average].include?(options[:aggregation])
-</span><span class="marked0"><a name="line102"></a>102               raise ArgumentError.new('The name of the column holding the value to sum has to be specified for aggregation :sum!') if [:sum, :maximum, :minimum, :average].include?(options[:aggregation]) &amp;&amp; !options.key?(:value_column)
-</span><span class="marked1"><a name="line103"></a>103             when :run
-</span><span class="marked0"><a name="line104"></a>104               options.each_key do |k|
-</span><span class="marked1"><a name="line105"></a>105                 raise ArgumentError.new(&quot;Invalid option #{k}!&quot;) unless [:limit, :conditions, :grouping, :live_data, :end_date].include?(k)
-</span><span class="inferred0"><a name="line106"></a>106               end
-</span><span class="inferred1"><a name="line107"></a>107           end
-</span><span class="marked0"><a name="line108"></a>108           raise ArgumentError.new('Options :live_data and :end_date may not both be specified!') if options[:live_data] &amp;&amp; options[:end_date]
-</span><span class="marked1"><a name="line109"></a>109           raise ArgumentError.new(&quot;Invalid grouping #{options[:grouping]}!&quot;) if options[:grouping] &amp;&amp; ![:hour, :day, :week, :month].include?(options[:grouping])
-</span><span class="marked0"><a name="line110"></a>110           raise ArgumentError.new(&quot;Invalid conditions: #{options[:conditions].inspect}!&quot;) if options[:conditions] &amp;&amp; !options[:conditions].is_a?(Array) &amp;&amp; !options[:conditions].is_a?(Hash)
-</span><span class="marked1"><a name="line111"></a>111           raise ArgumentError.new(&quot;Invalid end date: #{options[:end_date].inspect}; must be a DateTime!&quot;) if options[:end_date] &amp;&amp; !options[:end_date].is_a?(DateTime) &amp;&amp; !options[:end_date].is_a?(Time)
-</span><span class="marked0"><a name="line112"></a>112           raise ArgumentError.new('End date may not be in the future!') if options[:end_date] &amp;&amp; options[:end_date] &gt; DateTime.now
-</span><span class="inferred1"><a name="line113"></a>113         end
-</span><span class="inferred0"><a name="line114"></a>114 
-</span><span class="inferred1"><a name="line115"></a>115     end
-</span><span class="inferred0"><a name="line116"></a>116 
-</span><span class="inferred1"><a name="line117"></a>117   end
-</span><span class="inferred0"><a name="line118"></a>118 
-</span><span class="inferred1"><a name="line119"></a>119 end
+<pre><span class="marked0"><a name="line1"></a>  1 module Simplabs #:nodoc:
+</span><span class="inferred1"><a name="line2"></a>  2 
+</span><span class="marked0"><a name="line3"></a>  3   module ReportsAsSparkline #:nodoc:
+</span><span class="inferred1"><a name="line4"></a>  4 
+</span><span class="inferred0"><a name="line5"></a>  5     # The Report class that does all the data retrieval and calculations
+</span><span class="marked1"><a name="line6"></a>  6     class Report
+</span><span class="inferred0"><a name="line7"></a>  7 
+</span><span class="marked1"><a name="line8"></a>  8       attr_reader :klass, :name, :date_column, :value_column, :aggregation, :options
+</span><span class="inferred0"><a name="line9"></a>  9 
+</span><span class="inferred1"><a name="line10"></a> 10       # ==== Parameters
+</span><span class="inferred0"><a name="line11"></a> 11       # * &lt;tt&gt;klass&lt;/tt&gt; - The model the report works on (This is the class you invoke Simplabs::ReportsAsSparkline::ClassMethods#reports_as_sparkline on)
+</span><span class="inferred1"><a name="line12"></a> 12       # * &lt;tt&gt;name&lt;/tt&gt; - The name of the report (as in Simplabs::ReportsAsSparkline::ClassMethods#reports_as_sparkline)
+</span><span class="inferred0"><a name="line13"></a> 13       #
+</span><span class="inferred1"><a name="line14"></a> 14       # ==== Options
+</span><span class="inferred0"><a name="line15"></a> 15       #
+</span><span class="inferred1"><a name="line16"></a> 16       # * &lt;tt&gt;:date_column&lt;/tt&gt; - The name of the date column over that the records are aggregated (defaults to &lt;tt&gt;created_at&lt;/tt&gt;)
+</span><span class="inferred0"><a name="line17"></a> 17       # * &lt;tt&gt;:value_column&lt;/tt&gt; - The name of the column that holds the values to sum up when using aggregation &lt;tt&gt;:sum&lt;/tt&gt;
+</span><span class="inferred1"><a name="line18"></a> 18       # * &lt;tt&gt;:aggregation&lt;/tt&gt; - The aggregation to use (one of &lt;tt&gt;:count&lt;/tt&gt;, &lt;tt&gt;:sum&lt;/tt&gt;, &lt;tt&gt;:minimum&lt;/tt&gt;, &lt;tt&gt;:maximum&lt;/tt&gt; or &lt;tt&gt;:average&lt;/tt&gt;); when using anything other than &lt;tt&gt;:count&lt;/tt&gt;, &lt;tt&gt;:value_column&lt;/tt&gt; must also be specified (&lt;b&gt;If you really want to e.g. sum up the values in the &lt;tt&gt;id&lt;/tt&gt; column, you have to explicitely say so.&lt;/b&gt;); (defaults to &lt;tt&gt;:count&lt;/tt&gt;)
+</span><span class="inferred0"><a name="line19"></a> 19       # * &lt;tt&gt;:grouping&lt;/tt&gt; - The period records are grouped on (&lt;tt&gt;:hour&lt;/tt&gt;, &lt;tt&gt;:day&lt;/tt&gt;, &lt;tt&gt;:week&lt;/tt&gt;, &lt;tt&gt;:month&lt;/tt&gt;); &lt;b&gt;Beware that &lt;tt&gt;reports_as_sparkline&lt;/tt&gt; treats weeks as starting on monday!&lt;/b&gt;
+</span><span class="inferred1"><a name="line20"></a> 20       # * &lt;tt&gt;:limit&lt;/tt&gt; - The number of reporting periods to get (see &lt;tt&gt;:grouping&lt;/tt&gt;), (defaults to 100)
+</span><span class="inferred0"><a name="line21"></a> 21       # * &lt;tt&gt;:conditions&lt;/tt&gt; - Conditions like in &lt;tt&gt;ActiveRecord::Base#find&lt;/tt&gt;; only records that match the conditions are reported; &lt;b&gt;Beware that when conditions are specified, caching is disabled!&lt;/b&gt;
+</span><span class="inferred1"><a name="line22"></a> 22       # * &lt;tt&gt;:live_data&lt;/tt&gt; - Specifies whether data for the current reporting period is to be read; &lt;b&gt;if &lt;tt&gt;:live_data&lt;/tt&gt; is &lt;tt&gt;true&lt;/tt&gt;, you will experience a performance hit since the request cannot be satisfied from the cache only (defaults to &lt;tt&gt;false&lt;/tt&gt;)&lt;/b&gt;
+</span><span class="inferred0"><a name="line23"></a> 23       # * &lt;tt&gt;:end_date&lt;/tt&gt; - When specified, the report will only include data for the &lt;tt&gt;:limit&lt;/tt&gt; reporting periods until this date.
+</span><span class="marked1"><a name="line24"></a> 24       def initialize(klass, name, options = {})
+</span><span class="marked0"><a name="line25"></a> 25         ensure_valid_options(options)
+</span><span class="marked1"><a name="line26"></a> 26         @klass        = klass
+</span><span class="marked0"><a name="line27"></a> 27         @name         = name
+</span><span class="marked1"><a name="line28"></a> 28         @date_column  = (options[:date_column] || 'created_at').to_s
+</span><span class="marked0"><a name="line29"></a> 29         @aggregation  = options[:aggregation] || :count
+</span><span class="marked1"><a name="line30"></a> 30         @value_column = (options[:value_column] || (@aggregation == :count ? 'id' : name)).to_s
+</span><span class="marked0"><a name="line31"></a> 31         @options = {
+</span><span class="inferred1"><a name="line32"></a> 32           :limit      =&gt; options[:limit] || 100,
+</span><span class="inferred0"><a name="line33"></a> 33           :conditions =&gt; options[:conditions] || [],
+</span><span class="marked1"><a name="line34"></a> 34           :grouping   =&gt; Grouping.new(options[:grouping] || :day),
+</span><span class="inferred0"><a name="line35"></a> 35           :live_data  =&gt; options[:live_data] || false,
+</span><span class="inferred1"><a name="line36"></a> 36           :end_date   =&gt; options[:end_date] || false
+</span><span class="inferred0"><a name="line37"></a> 37         }
+</span><span class="marked1"><a name="line38"></a> 38         @options.merge!(options)
+</span><span class="marked0"><a name="line39"></a> 39         @options.freeze
+</span><span class="inferred1"><a name="line40"></a> 40       end
+</span><span class="inferred0"><a name="line41"></a> 41 
+</span><span class="inferred1"><a name="line42"></a> 42       # Runs the report and returns an array of array of DateTimes and Floats
+</span><span class="inferred0"><a name="line43"></a> 43       #
+</span><span class="inferred1"><a name="line44"></a> 44       # ==== Options
+</span><span class="inferred0"><a name="line45"></a> 45       # * &lt;tt&gt;:grouping&lt;/tt&gt; - The period records are grouped on (&lt;tt&gt;:hour&lt;/tt&gt;, &lt;tt&gt;:day&lt;/tt&gt;, &lt;tt&gt;:week&lt;/tt&gt;, &lt;tt&gt;:month&lt;/tt&gt;); &lt;b&gt;Beware that &lt;tt&gt;reports_as_sparkline&lt;/tt&gt; treats weeks as starting on monday!&lt;/b&gt;
+</span><span class="inferred1"><a name="line46"></a> 46       # * &lt;tt&gt;:limit&lt;/tt&gt; - The number of reporting periods to get (see &lt;tt&gt;:grouping&lt;/tt&gt;), (defaults to 100)
+</span><span class="inferred0"><a name="line47"></a> 47       # * &lt;tt&gt;:conditions&lt;/tt&gt; - Conditions like in &lt;tt&gt;ActiveRecord::Base#find&lt;/tt&gt;; only records that match the conditions are reported; &lt;b&gt;Beware that when conditions are specified, caching is disabled!&lt;/b&gt;
+</span><span class="inferred1"><a name="line48"></a> 48       # * &lt;tt&gt;:live_data&lt;/tt&gt; - Specifies whether data for the current reporting period is to be read; &lt;b&gt;if &lt;tt&gt;:live_data&lt;/tt&gt; is &lt;tt&gt;true&lt;/tt&gt;, you will experience a performance hit since the request cannot be satisfied from the cache only (defaults to &lt;tt&gt;false&lt;/tt&gt;)&lt;/b&gt;
+</span><span class="inferred0"><a name="line49"></a> 49       # * &lt;tt&gt;:end_date&lt;/tt&gt; - When specified, the report will only include data for the &lt;tt&gt;:limit&lt;/tt&gt; reporting periods until this date.
+</span><span class="marked1"><a name="line50"></a> 50       def run(options = {})
+</span><span class="marked0"><a name="line51"></a> 51         custom_conditions = options.key?(:conditions)
+</span><span class="marked1"><a name="line52"></a> 52         options = options_for_run(options)
+</span><span class="marked0"><a name="line53"></a> 53         ReportCache.process(self, options, !custom_conditions) do |begin_at, end_at|
+</span><span class="marked1"><a name="line54"></a> 54           read_data(begin_at, end_at, options)
+</span><span class="inferred0"><a name="line55"></a> 55         end
+</span><span class="inferred1"><a name="line56"></a> 56       end
+</span><span class="inferred0"><a name="line57"></a> 57 
+</span><span class="marked1"><a name="line58"></a> 58       private
+</span><span class="inferred0"><a name="line59"></a> 59 
+</span><span class="marked1"><a name="line60"></a> 60         def options_for_run(options = {})
+</span><span class="marked0"><a name="line61"></a> 61           options = options.dup
+</span><span class="marked1"><a name="line62"></a> 62           ensure_valid_options(options, :run)
+</span><span class="marked0"><a name="line63"></a> 63           options.reverse_merge!(@options)
+</span><span class="marked1"><a name="line64"></a> 64           options[:grouping] = Grouping.new(options[:grouping]) unless options[:grouping].is_a?(Grouping)
+</span><span class="marked0"><a name="line65"></a> 65           return options
+</span><span class="inferred1"><a name="line66"></a> 66         end
+</span><span class="inferred0"><a name="line67"></a> 67 
+</span><span class="marked1"><a name="line68"></a> 68         def read_data(begin_at, end_at, options)
+</span><span class="marked0"><a name="line69"></a> 69           conditions = setup_conditions(begin_at, end_at, options[:conditions])
+</span><span class="marked1"><a name="line70"></a> 70           @klass.send(@aggregation,
+</span><span class="inferred0"><a name="line71"></a> 71             @value_column,
+</span><span class="inferred1"><a name="line72"></a> 72             :conditions =&gt; conditions,
+</span><span class="marked0"><a name="line73"></a> 73             :group =&gt; options[:grouping].to_sql(@date_column),
+</span><span class="marked1"><a name="line74"></a> 74             :order =&gt; &quot;#{options[:grouping].to_sql(@date_column)} ASC&quot;
+</span><span class="inferred0"><a name="line75"></a> 75           )
+</span><span class="inferred1"><a name="line76"></a> 76         end
+</span><span class="inferred0"><a name="line77"></a> 77 
+</span><span class="marked1"><a name="line78"></a> 78         def setup_conditions(begin_at, end_at, custom_conditions = [])
+</span><span class="marked0"><a name="line79"></a> 79           conditions = [@klass.send(:sanitize_sql_for_conditions, custom_conditions) || '']
+</span><span class="marked1"><a name="line80"></a> 80           conditions[0] += &quot;#{(conditions[0].blank? ? '' : ' AND ')}#{ActiveRecord::Base.connection.quote_table_name(@klass.table_name)}.#{ActiveRecord::Base.connection.quote_column_name(@date_column.to_s)} &quot;
+</span><span class="marked0"><a name="line81"></a> 81           conditions[0] += if begin_at &amp;&amp; end_at
+</span><span class="marked1"><a name="line82"></a> 82             'BETWEEN ? AND ?'
+</span><span class="marked0"><a name="line83"></a> 83           elsif begin_at
+</span><span class="marked1"><a name="line84"></a> 84             '&gt;= ?'
+</span><span class="marked0"><a name="line85"></a> 85           elsif end_at
+</span><span class="marked1"><a name="line86"></a> 86             '&lt;= ?'
+</span><span class="inferred0"><a name="line87"></a> 87           else
+</span><span class="marked1"><a name="line88"></a> 88             raise ArgumentError.new('You must pass either begin_at, end_at or both to setup_conditions.')
+</span><span class="inferred0"><a name="line89"></a> 89           end
+</span><span class="marked1"><a name="line90"></a> 90           conditions &lt;&lt; begin_at if begin_at
+</span><span class="marked0"><a name="line91"></a> 91           conditions &lt;&lt; end_at if end_at
+</span><span class="marked1"><a name="line92"></a> 92           conditions
+</span><span class="inferred0"><a name="line93"></a> 93         end
+</span><span class="inferred1"><a name="line94"></a> 94 
+</span><span class="marked0"><a name="line95"></a> 95         def ensure_valid_options(options, context = :initialize)
+</span><span class="marked1"><a name="line96"></a> 96           case context
+</span><span class="marked0"><a name="line97"></a> 97             when :initialize
+</span><span class="marked1"><a name="line98"></a> 98               options.each_key do |k|
+</span><span class="marked0"><a name="line99"></a> 99                 raise ArgumentError.new(&quot;Invalid option #{k}!&quot;) unless [:limit, :aggregation, :grouping, :date_column, :value_column, :conditions, :live_data, :end_date].include?(k)
+</span><span class="inferred1"><a name="line100"></a>100               end
+</span><span class="marked0"><a name="line101"></a>101               raise ArgumentError.new(&quot;Invalid aggregation #{options[:aggregation]}!&quot;) if options[:aggregation] &amp;&amp; ![:count, :sum, :maximum, :minimum, :average].include?(options[:aggregation])
+</span><span class="marked1"><a name="line102"></a>102               raise ArgumentError.new('The name of the column holding the value to sum has to be specified for aggregation :sum!') if [:sum, :maximum, :minimum, :average].include?(options[:aggregation]) &amp;&amp; !options.key?(:value_column)
+</span><span class="marked0"><a name="line103"></a>103             when :run
+</span><span class="marked1"><a name="line104"></a>104               options.each_key do |k|
+</span><span class="marked0"><a name="line105"></a>105                 raise ArgumentError.new(&quot;Invalid option #{k}!&quot;) unless [:limit, :conditions, :grouping, :live_data, :end_date].include?(k)
+</span><span class="inferred1"><a name="line106"></a>106               end
+</span><span class="inferred0"><a name="line107"></a>107           end
+</span><span class="marked1"><a name="line108"></a>108           raise ArgumentError.new('Options :live_data and :end_date may not both be specified!') if options[:live_data] &amp;&amp; options[:end_date]
+</span><span class="marked0"><a name="line109"></a>109           raise ArgumentError.new(&quot;Invalid grouping #{options[:grouping]}!&quot;) if options[:grouping] &amp;&amp; ![:hour, :day, :week, :month].include?(options[:grouping])
+</span><span class="marked1"><a name="line110"></a>110           raise ArgumentError.new(&quot;Invalid conditions: #{options[:conditions].inspect}!&quot;) if options[:conditions] &amp;&amp; !options[:conditions].is_a?(Array) &amp;&amp; !options[:conditions].is_a?(Hash)
+</span><span class="marked0"><a name="line111"></a>111           raise ArgumentError.new(&quot;Invalid end date: #{options[:end_date].inspect}; must be a DateTime!&quot;) if options[:end_date] &amp;&amp; !options[:end_date].is_a?(DateTime) &amp;&amp; !options[:end_date].is_a?(Time)
+</span><span class="marked1"><a name="line112"></a>112           raise ArgumentError.new('End date may not be in the future!') if options[:end_date] &amp;&amp; options[:end_date] &gt; DateTime.now
+</span><span class="inferred0"><a name="line113"></a>113         end
+</span><span class="inferred1"><a name="line114"></a>114 
+</span><span class="inferred0"><a name="line115"></a>115     end
+</span><span class="inferred1"><a name="line116"></a>116 
+</span><span class="inferred0"><a name="line117"></a>117   end
+</span><span class="inferred1"><a name="line118"></a>118 
+</span><span class="inferred0"><a name="line119"></a>119 end
 </span></pre><hr/>
     <p>Generated using the <a href='http://eigenclass.org/hiki.rb?rcov'>rcov code coverage analysis tool for Ruby</a>
    version 0.8.1.2.</p>

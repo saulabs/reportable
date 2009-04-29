@@ -2,11 +2,13 @@ module Simplabs #:nodoc:
 
   module ReportsAsSparkline #:nodoc:
 
-    class ReportCache < ActiveRecord::Base #:nodoc:
+    # The ReportCache class is a regular +ActiveRecord+ model and represents cached results for single reporting periods (table name is +reports_as_sparkline_cache+)
+    # ReportCache instances are identified by the combination of +model_name+, +report_name+, +grouping+, +aggregation+, +reporting_period+, +run_limit+
+    class ReportCache < ActiveRecord::Base
 
       set_table_name :reports_as_sparkline_cache
 
-      def self.process(report, options, cache = true, &block)
+      def self.process(report, options, cache = true, &block) #:nodoc:
         raise ArgumentError.new('A block must be given') unless block_given?
         self.transaction do
           cached_data = []

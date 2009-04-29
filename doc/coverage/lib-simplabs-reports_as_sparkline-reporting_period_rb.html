@@ -553,7 +553,7 @@ span.run100 {
 </style>
     </head>
   <body><h3>C0 code coverage information</h3>
-    <p>Generated on Wed Apr 29 18:53:08 +0200 2009 with <a href='http://eigenclass.org/hiki/rcov'>rcov 0.8.1.2</a>
+    <p>Generated on Wed Apr 29 19:33:53 +0200 2009 with <a href='http://eigenclass.org/hiki/rcov'>rcov 0.8.1.2</a>
       </p>
     <hr/>
     <pre><span class='marked0'>Code reported as executed by Ruby looks like this...
@@ -571,11 +571,11 @@ span.run100 {
     </thead>
   <tbody><tr class='light'><td><a href='lib-simplabs-reports_as_sparkline-reporting_period_rb.html'>lib/simplabs/reports_as_sparkline/reporting_period.rb</a>
         </td>
-      <td class='lines_total'><tt>108</tt>
+      <td class='lines_total'><tt>93</tt>
         </td>
       <td class='lines_code'><tt>76</tt>
         </td>
-      <td><table cellspacing='0' cellpadding='0' align='right'><tr><td><tt class='coverage_total'>96.3%</tt>
+      <td><table cellspacing='0' cellpadding='0' align='right'><tr><td><tt class='coverage_total'>95.7%</tt>
               &nbsp;</td>
             <td><table cellspacing='0' class='percent_graph' cellpadding='0' width='100'><tr><td class='covered' width='96'/>
                   <td class='uncovered' width='4'/>
@@ -598,114 +598,99 @@ span.run100 {
       </tr>
     </tbody>
   </table>
-<pre><span class="marked0"><a name="line1"></a>  1 module Simplabs #:nodoc:
-</span><span class="inferred1"><a name="line2"></a>  2 
-</span><span class="marked0"><a name="line3"></a>  3   module ReportsAsSparkline #:nodoc:
-</span><span class="inferred1"><a name="line4"></a>  4 
-</span><span class="inferred0"><a name="line5"></a>  5     # A ReportingPeriod is  - depending on the Grouping - either a specific hour, a day, a month or a year. All records falling into this period will be grouped together.
-</span><span class="marked1"><a name="line6"></a>  6     class ReportingPeriod
-</span><span class="inferred0"><a name="line7"></a>  7 
-</span><span class="marked1"><a name="line8"></a>  8       attr_reader :date_time, :grouping
-</span><span class="inferred0"><a name="line9"></a>  9 
-</span><span class="inferred1"><a name="line10"></a> 10       # ==== Parameters
-</span><span class="inferred0"><a name="line11"></a> 11       # * &lt;tt&gt;grouping&lt;/tt&gt; - The Simplabs::ReportsAsSparkline::Grouping of the reporting period
-</span><span class="inferred1"><a name="line12"></a> 12       # * &lt;tt&gt;date_time&lt;/tt&gt; - The DateTime that reporting period is created for
-</span><span class="marked0"><a name="line13"></a> 13       def initialize(grouping, date_time = nil)
-</span><span class="marked1"><a name="line14"></a> 14         @grouping  = grouping
-</span><span class="marked0"><a name="line15"></a> 15         @date_time = parse_date_time(date_time || DateTime.now)
-</span><span class="inferred1"><a name="line16"></a> 16       end
-</span><span class="inferred0"><a name="line17"></a> 17 
-</span><span class="inferred1"><a name="line18"></a> 18       # Returns the first reporting period for a grouping and a limit; e.g. the first reporting period for Grouping :day and limit 2 would be Time.now - 2.days
-</span><span class="inferred0"><a name="line19"></a> 19       #
-</span><span class="inferred1"><a name="line20"></a> 20       # ==== Parameters
-</span><span class="inferred0"><a name="line21"></a> 21       # * &lt;tt&gt;grouping&lt;/tt&gt; - The Simplabs::ReportsAsSparkline::Grouping of the reporting period
-</span><span class="inferred1"><a name="line22"></a> 22       # * &lt;tt&gt;limit&lt;/tt&gt; - The number of reporting periods until the first one
-</span><span class="marked0"><a name="line23"></a> 23       def self.first(grouping, limit, end_date = nil)
-</span><span class="marked1"><a name="line24"></a> 24         self.new(grouping, end_date).offset(-limit)
-</span><span class="marked0"><a name="line25"></a> 25       end
-</span><span class="inferred1"><a name="line26"></a> 26 
-</span><span class="marked0"><a name="line27"></a> 27       def self.from_db_string(grouping, db_string) #:nodoc:
-</span><span class="marked1"><a name="line28"></a> 28         parts = grouping.date_parts_from_db_string(db_string)
-</span><span class="marked0"><a name="line29"></a> 29         result = case grouping.identifier
-</span><span class="marked1"><a name="line30"></a> 30           when :hour
-</span><span class="marked0"><a name="line31"></a> 31             self.new(grouping, DateTime.new(parts[0], parts[1], parts[2], parts[3], 0, 0))
-</span><span class="marked1"><a name="line32"></a> 32           when :day
-</span><span class="marked0"><a name="line33"></a> 33             self.new(grouping, Date.new(parts[0], parts[1], parts[2]))
-</span><span class="marked1"><a name="line34"></a> 34           when :week
-</span><span class="marked0"><a name="line35"></a> 35             self.new(grouping, Date.commercial(parts[0], parts[1], 1))
-</span><span class="marked1"><a name="line36"></a> 36           when :month
-</span><span class="marked0"><a name="line37"></a> 37             self.new(grouping, Date.new(parts[0], parts[1], 1))
-</span><span class="inferred1"><a name="line38"></a> 38         end
-</span><span class="marked0"><a name="line39"></a> 39         result
-</span><span class="inferred1"><a name="line40"></a> 40       end
-</span><span class="inferred0"><a name="line41"></a> 41 
-</span><span class="inferred1"><a name="line42"></a> 42       # Returns the next reporting period (that is next hour/day/month/year)
-</span><span class="marked0"><a name="line43"></a> 43       def next
-</span><span class="marked1"><a name="line44"></a> 44         self.offset(1)
-</span><span class="marked0"><a name="line45"></a> 45       end
-</span><span class="inferred1"><a name="line46"></a> 46 
-</span><span class="inferred0"><a name="line47"></a> 47       # Returns the previous reporting period (that is next hour/day/month/year)
-</span><span class="marked1"><a name="line48"></a> 48       def previous
-</span><span class="marked0"><a name="line49"></a> 49         self.offset(-1)
-</span><span class="marked1"><a name="line50"></a> 50       end
-</span><span class="inferred0"><a name="line51"></a> 51 
-</span><span class="inferred1"><a name="line52"></a> 52       # Returns the reporting period with the specified offset from the current
-</span><span class="inferred0"><a name="line53"></a> 53       #
-</span><span class="inferred1"><a name="line54"></a> 54       # ==== Parameters
-</span><span class="inferred0"><a name="line55"></a> 55       # * &lt;tt&gt;offset&lt;/tt&gt; - The offset to return the reporting period for (specifies the offset in hours/days/months/years), depending on the reporting period's grouping
-</span><span class="marked1"><a name="line56"></a> 56       def offset(offset)
-</span><span class="marked0"><a name="line57"></a> 57         self.class.new(@grouping, @date_time + offset.send(@grouping.identifier))
-</span><span class="marked1"><a name="line58"></a> 58       end
-</span><span class="inferred0"><a name="line59"></a> 59 
-</span><span class="marked1"><a name="line60"></a> 60       def ==(other) #:nodoc:
-</span><span class="marked0"><a name="line61"></a> 61         if other.class == Simplabs::ReportsAsSparkline::ReportingPeriod
-</span><span class="marked1"><a name="line62"></a> 62           return @date_time.to_s == other.date_time.to_s &amp;&amp; @grouping.identifier.to_s == other.grouping.identifier.to_s
-</span><span class="inferred0"><a name="line63"></a> 63         end
-</span><span class="uncovered1"><a name="line64"></a> 64         false
-</span><span class="uncovered0"><a name="line65"></a> 65       end
-</span><span class="inferred1"><a name="line66"></a> 66 
-</span><span class="marked0"><a name="line67"></a> 67       def &lt;(other) #:nodoc:
-</span><span class="marked1"><a name="line68"></a> 68         if other.class == Simplabs::ReportsAsSparkline::ReportingPeriod
-</span><span class="marked0"><a name="line69"></a> 69           return @date_time &lt; other.date_time
-</span><span class="inferred1"><a name="line70"></a> 70         end
-</span><span class="uncovered0"><a name="line71"></a> 71         raise ArgumentError.new(&quot;Can only compare instances of #{Simplabs::ReportsAsSparkline::ReportingPeriod.klass}&quot;)
-</span><span class="uncovered1"><a name="line72"></a> 72       end
-</span><span class="inferred0"><a name="line73"></a> 73 
-</span><span class="marked1"><a name="line74"></a> 74       def last_date_time #:nodoc:
-</span><span class="marked0"><a name="line75"></a> 75         case @grouping.identifier
-</span><span class="marked1"><a name="line76"></a> 76           when :hour
-</span><span class="marked0"><a name="line77"></a> 77             DateTime.new(@date_time.year, @date_time.month, @date_time.day, @date_time.hour, 59, 59)
-</span><span class="marked1"><a name="line78"></a> 78           when :day
-</span><span class="marked0"><a name="line79"></a> 79             DateTime.new(@date_time.year, @date_time.month, @date_time.day, 23, 59, 59)
-</span><span class="marked1"><a name="line80"></a> 80           when :week
-</span><span class="marked0"><a name="line81"></a> 81             date_time = (@date_time - @date_time.wday.days) + 7.days
-</span><span class="marked1"><a name="line82"></a> 82             Date.new(date_time.year, date_time.month, date_time.day)
-</span><span class="marked0"><a name="line83"></a> 83           when :month
-</span><span class="marked1"><a name="line84"></a> 84             Date.new(@date_time.year, @date_time.month, (Date.new(@date_time.year, 12, 31) &lt;&lt; (12 - @date_time.month)).day)
-</span><span class="inferred0"><a name="line85"></a> 85         end
-</span><span class="marked1"><a name="line86"></a> 86       end
-</span><span class="inferred0"><a name="line87"></a> 87 
-</span><span class="marked1"><a name="line88"></a> 88       private
-</span><span class="inferred0"><a name="line89"></a> 89 
-</span><span class="marked1"><a name="line90"></a> 90         def parse_date_time(date_time)
-</span><span class="marked0"><a name="line91"></a> 91           case @grouping.identifier
-</span><span class="marked1"><a name="line92"></a> 92             when :hour
-</span><span class="marked0"><a name="line93"></a> 93               DateTime.new(date_time.year, date_time.month, date_time.day, date_time.hour)
-</span><span class="marked1"><a name="line94"></a> 94             when :day
-</span><span class="marked0"><a name="line95"></a> 95               date_time.to_date
-</span><span class="marked1"><a name="line96"></a> 96             when :week
-</span><span class="marked0"><a name="line97"></a> 97               date_time = (date_time - date_time.wday.days) + 1.day
-</span><span class="marked1"><a name="line98"></a> 98               Date.new(date_time.year, date_time.month, date_time.day)
-</span><span class="marked0"><a name="line99"></a> 99             when :month
-</span><span class="marked1"><a name="line100"></a>100               Date.new(date_time.year, date_time.month, 1)
-</span><span class="inferred0"><a name="line101"></a>101           end
-</span><span class="marked1"><a name="line102"></a>102         end
-</span><span class="inferred0"><a name="line103"></a>103 
-</span><span class="inferred1"><a name="line104"></a>104     end
-</span><span class="inferred0"><a name="line105"></a>105 
-</span><span class="inferred1"><a name="line106"></a>106   end
-</span><span class="inferred0"><a name="line107"></a>107 
-</span><span class="inferred1"><a name="line108"></a>108 end
+<pre><span class="marked1"><a name="line1"></a> 1 module Simplabs #:nodoc:
+</span><span class="inferred0"><a name="line2"></a> 2 
+</span><span class="marked1"><a name="line3"></a> 3   module ReportsAsSparkline #:nodoc:
+</span><span class="inferred0"><a name="line4"></a> 4 
+</span><span class="marked1"><a name="line5"></a> 5     class ReportingPeriod #:nodoc:
+</span><span class="inferred0"><a name="line6"></a> 6 
+</span><span class="marked1"><a name="line7"></a> 7       attr_reader :date_time, :grouping
+</span><span class="inferred0"><a name="line8"></a> 8 
+</span><span class="marked1"><a name="line9"></a> 9       def initialize(grouping, date_time = nil)
+</span><span class="marked0"><a name="line10"></a>10         @grouping  = grouping
+</span><span class="marked1"><a name="line11"></a>11         @date_time = parse_date_time(date_time || DateTime.now)
+</span><span class="inferred0"><a name="line12"></a>12       end
+</span><span class="inferred1"><a name="line13"></a>13 
+</span><span class="marked0"><a name="line14"></a>14       def self.first(grouping, limit, end_date = nil)
+</span><span class="marked1"><a name="line15"></a>15         self.new(grouping, end_date).offset(-limit)
+</span><span class="marked0"><a name="line16"></a>16       end
+</span><span class="inferred1"><a name="line17"></a>17 
+</span><span class="marked0"><a name="line18"></a>18       def self.from_db_string(grouping, db_string)
+</span><span class="marked1"><a name="line19"></a>19         parts = grouping.date_parts_from_db_string(db_string)
+</span><span class="marked0"><a name="line20"></a>20         result = case grouping.identifier
+</span><span class="marked1"><a name="line21"></a>21           when :hour
+</span><span class="marked0"><a name="line22"></a>22             self.new(grouping, DateTime.new(parts[0], parts[1], parts[2], parts[3], 0, 0))
+</span><span class="marked1"><a name="line23"></a>23           when :day
+</span><span class="marked0"><a name="line24"></a>24             self.new(grouping, Date.new(parts[0], parts[1], parts[2]))
+</span><span class="marked1"><a name="line25"></a>25           when :week
+</span><span class="marked0"><a name="line26"></a>26             self.new(grouping, Date.commercial(parts[0], parts[1], 1))
+</span><span class="marked1"><a name="line27"></a>27           when :month
+</span><span class="marked0"><a name="line28"></a>28             self.new(grouping, Date.new(parts[0], parts[1], 1))
+</span><span class="inferred1"><a name="line29"></a>29         end
+</span><span class="marked0"><a name="line30"></a>30         result
+</span><span class="inferred1"><a name="line31"></a>31       end
+</span><span class="inferred0"><a name="line32"></a>32 
+</span><span class="marked1"><a name="line33"></a>33       def next
+</span><span class="marked0"><a name="line34"></a>34         self.offset(1)
+</span><span class="marked1"><a name="line35"></a>35       end
+</span><span class="inferred0"><a name="line36"></a>36 
+</span><span class="marked1"><a name="line37"></a>37       def previous
+</span><span class="marked0"><a name="line38"></a>38         self.offset(-1)
+</span><span class="marked1"><a name="line39"></a>39       end
+</span><span class="inferred0"><a name="line40"></a>40 
+</span><span class="marked1"><a name="line41"></a>41       def offset(offset)
+</span><span class="marked0"><a name="line42"></a>42         self.class.new(@grouping, @date_time + offset.send(@grouping.identifier))
+</span><span class="marked1"><a name="line43"></a>43       end
+</span><span class="inferred0"><a name="line44"></a>44 
+</span><span class="marked1"><a name="line45"></a>45       def ==(other)
+</span><span class="marked0"><a name="line46"></a>46         if other.class == Simplabs::ReportsAsSparkline::ReportingPeriod
+</span><span class="marked1"><a name="line47"></a>47           return @date_time.to_s == other.date_time.to_s &amp;&amp; @grouping.identifier.to_s == other.grouping.identifier.to_s
+</span><span class="inferred0"><a name="line48"></a>48         end
+</span><span class="uncovered1"><a name="line49"></a>49         false
+</span><span class="uncovered0"><a name="line50"></a>50       end
+</span><span class="inferred1"><a name="line51"></a>51 
+</span><span class="marked0"><a name="line52"></a>52       def &lt;(other)
+</span><span class="marked1"><a name="line53"></a>53         if other.class == Simplabs::ReportsAsSparkline::ReportingPeriod
+</span><span class="marked0"><a name="line54"></a>54           return @date_time &lt; other.date_time
+</span><span class="inferred1"><a name="line55"></a>55         end
+</span><span class="uncovered0"><a name="line56"></a>56         raise ArgumentError.new(&quot;Can only compare instances of #{Simplabs::ReportsAsSparkline::ReportingPeriod.klass}&quot;)
+</span><span class="uncovered1"><a name="line57"></a>57       end
+</span><span class="inferred0"><a name="line58"></a>58 
+</span><span class="marked1"><a name="line59"></a>59       def last_date_time
+</span><span class="marked0"><a name="line60"></a>60         case @grouping.identifier
+</span><span class="marked1"><a name="line61"></a>61           when :hour
+</span><span class="marked0"><a name="line62"></a>62             DateTime.new(@date_time.year, @date_time.month, @date_time.day, @date_time.hour, 59, 59)
+</span><span class="marked1"><a name="line63"></a>63           when :day
+</span><span class="marked0"><a name="line64"></a>64             DateTime.new(@date_time.year, @date_time.month, @date_time.day, 23, 59, 59)
+</span><span class="marked1"><a name="line65"></a>65           when :week
+</span><span class="marked0"><a name="line66"></a>66             date_time = (@date_time - @date_time.wday.days) + 7.days
+</span><span class="marked1"><a name="line67"></a>67             Date.new(date_time.year, date_time.month, date_time.day)
+</span><span class="marked0"><a name="line68"></a>68           when :month
+</span><span class="marked1"><a name="line69"></a>69             Date.new(@date_time.year, @date_time.month, (Date.new(@date_time.year, 12, 31) &lt;&lt; (12 - @date_time.month)).day)
+</span><span class="inferred0"><a name="line70"></a>70         end
+</span><span class="marked1"><a name="line71"></a>71       end
+</span><span class="inferred0"><a name="line72"></a>72 
+</span><span class="marked1"><a name="line73"></a>73       private
+</span><span class="inferred0"><a name="line74"></a>74 
+</span><span class="marked1"><a name="line75"></a>75         def parse_date_time(date_time)
+</span><span class="marked0"><a name="line76"></a>76           case @grouping.identifier
+</span><span class="marked1"><a name="line77"></a>77             when :hour
+</span><span class="marked0"><a name="line78"></a>78               DateTime.new(date_time.year, date_time.month, date_time.day, date_time.hour)
+</span><span class="marked1"><a name="line79"></a>79             when :day
+</span><span class="marked0"><a name="line80"></a>80               date_time.to_date
+</span><span class="marked1"><a name="line81"></a>81             when :week
+</span><span class="marked0"><a name="line82"></a>82               date_time = (date_time - date_time.wday.days) + 1.day
+</span><span class="marked1"><a name="line83"></a>83               Date.new(date_time.year, date_time.month, date_time.day)
+</span><span class="marked0"><a name="line84"></a>84             when :month
+</span><span class="marked1"><a name="line85"></a>85               Date.new(date_time.year, date_time.month, 1)
+</span><span class="inferred0"><a name="line86"></a>86           end
+</span><span class="marked1"><a name="line87"></a>87         end
+</span><span class="inferred0"><a name="line88"></a>88 
+</span><span class="inferred1"><a name="line89"></a>89     end
+</span><span class="inferred0"><a name="line90"></a>90 
+</span><span class="inferred1"><a name="line91"></a>91   end
+</span><span class="inferred0"><a name="line92"></a>92 
+</span><span class="inferred1"><a name="line93"></a>93 end
 </span></pre><hr/>
     <p>Generated using the <a href='http://eigenclass.org/hiki.rb?rcov'>rcov code coverage analysis tool for Ruby</a>
    version 0.8.1.2.</p>

@@ -93,8 +93,8 @@ and calculations
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000013">new</a>&nbsp;&nbsp;
-      <a href="#M000014">run</a>&nbsp;&nbsp;
+      <a href="#M000006">new</a>&nbsp;&nbsp;
+      <a href="#M000007">run</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -154,11 +154,11 @@ and calculations
     <div id="methods">
       <h3 class="section-bar">Public Class methods</h3>
 
-      <div id="method-M000013" class="method-detail">
-        <a name="M000013"></a>
+      <div id="method-M000006" class="method-detail">
+        <a name="M000006"></a>
 
         <div class="method-heading">
-          <a href="#M000013" class="method-signature">
+          <a href="#M000006" class="method-signature">
           <span class="method-name">new</span><span class="method-args">(klass, name, options = {})</span>
           </a>
         </div>
@@ -179,46 +179,50 @@ href="ClassMethods.html#M000002">Simplabs::ReportsAsSparkline::ClassMethods#repo
 </ul>
 <h4>Options</h4>
 <ul>
-<li><tt>:date_column</tt> - The name of the date column on that the records are
-aggregated
+<li><tt>:date_column</tt> - The name of the date column over that the records
+are aggregated (defaults to <tt>created_at</tt>)
 
 </li>
-<li><tt>:value_column</tt> - The name of the column that holds the value to sum
-for aggregation :sum
+<li><tt>:value_column</tt> - The name of the column that holds the values to
+sum up when using aggregation <tt>:sum</tt>
 
 </li>
-<li><tt>:aggregation</tt> - The aggregation to use (one of :count, :sum,
-:minimum, :maximum or :average); when using anything other than :count,
-:value_column must also be specified (<b>If you really want to e.g. sumon
-the &#8216;id&#8217; column, you have to explicitely say so.</b>)
+<li><tt>:aggregation</tt> - The aggregation to use (one of <tt>:count</tt>,
+<tt>:sum</tt>, <tt>:minimum</tt>, <tt>:maximum</tt> or <tt>:average</tt>);
+when using anything other than <tt>:count</tt>, <tt>:value_column</tt> must
+also be specified (<b>If you really want to e.g. sum up the values in the
+<tt>id</tt> column, you have to explicitely say so.</b>); (defaults to
+<tt>:count</tt>)
 
 </li>
-<li><tt>:grouping</tt> - The period records are grouped on (:hour, :day, :week,
-:month); <b>Beware that reports_as_sparkline treats weeks as starting on
-monday!</b>
+<li><tt>:grouping</tt> - The period records are grouped on (<tt>:hour</tt>,
+<tt>:day</tt>, <tt>:week</tt>, <tt>:month</tt>); <b>Beware that
+<tt>reports_as_sparkline</tt> treats weeks as starting on monday!</b>
 
 </li>
-<li><tt>:limit</tt> - The number of periods to get (see :grouping)
+<li><tt>:limit</tt> - The number of reporting periods to get (see
+<tt>:grouping</tt>), (defaults to 100)
 
 </li>
-<li><tt>:conditions</tt> - Conditions like in ActiveRecord::Base#find; only
-records that match there conditions are reported on
+<li><tt>:conditions</tt> - Conditions like in <tt>ActiveRecord::Base#find</tt>;
+only records that match the conditions are reported; <b>Beware that when
+conditions are specified, caching is disabled!</b>
 
 </li>
-<li><tt>:live_data</tt> - Specified whether data for the current reporting
-period is read; if :live_data is true, you will experience a performance
-hit since the request cannot be satisfied from the cache only (defaults to
-false)
+<li><tt>:live_data</tt> - Specifies whether data for the current reporting
+period is to be read; <b>if <tt>:live_data</tt> is <tt>true</tt>, you will
+experience a performance hit since the request cannot be satisfied from the
+cache only (defaults to <tt>false</tt>)</b>
 
 </li>
 <li><tt>:end_date</tt> - When specified, the report will only include data for
-the periods before this date.
+the <tt>:limit</tt> reporting periods until this date.
 
 </li>
 </ul>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000013-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000013-source">
+            onclick="toggleCode('M000006-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000006-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/simplabs/reports_as_sparkline/report.rb, line 24</span>
 24:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">klass</span>, <span class="ruby-identifier">name</span>, <span class="ruby-identifier">options</span> = {})
@@ -245,11 +249,11 @@ the periods before this date.
 
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000014" class="method-detail">
-        <a name="M000014"></a>
+      <div id="method-M000007" class="method-detail">
+        <a name="M000007"></a>
 
         <div class="method-heading">
-          <a href="#M000014" class="method-signature">
+          <a href="#M000007" class="method-signature">
           <span class="method-name">run</span><span class="method-args">(options = {})</span>
           </a>
         </div>
@@ -260,33 +264,34 @@ Runs the report and returns an array of array of DateTimes and Floats
 </p>
 <h4>Options</h4>
 <ul>
-<li><tt>:limit</tt> - The number of periods to get
+<li><tt>:grouping</tt> - The period records are grouped on (<tt>:hour</tt>,
+<tt>:day</tt>, <tt>:week</tt>, <tt>:month</tt>); <b>Beware that
+<tt>reports_as_sparkline</tt> treats weeks as starting on monday!</b>
 
 </li>
-<li><tt>:conditions</tt> - Conditions like in ActiveRecord::Base#find; only
-records that match there conditions are reported on (<b>Beware that when
-you specify conditions here, caching will be disabled</b>)
+<li><tt>:limit</tt> - The number of reporting periods to get (see
+<tt>:grouping</tt>), (defaults to 100)
 
 </li>
-<li><tt>:grouping</tt> - The period records are grouped on (:hour, :day, :week,
-:month); <b>Beware that reports_as_sparkline treats weeks as starting on
-monday!</b>
+<li><tt>:conditions</tt> - Conditions like in <tt>ActiveRecord::Base#find</tt>;
+only records that match the conditions are reported; <b>Beware that when
+conditions are specified, caching is disabled!</b>
 
 </li>
-<li><tt>:live_data</tt> - Specified whether data for the current reporting
-period is read; if :live_data is true, you will experience a performance
-hit since the request cannot be satisfied from the cache only (defaults to
-false)
+<li><tt>:live_data</tt> - Specifies whether data for the current reporting
+period is to be read; <b>if <tt>:live_data</tt> is <tt>true</tt>, you will
+experience a performance hit since the request cannot be satisfied from the
+cache only (defaults to <tt>false</tt>)</b>
 
 </li>
 <li><tt>:end_date</tt> - When specified, the report will only include data for
-the periods before this date.
+the <tt>:limit</tt> reporting periods until this date.
 
 </li>
 </ul>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000014-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000014-source">
+            onclick="toggleCode('M000007-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000007-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/simplabs/reports_as_sparkline/report.rb, line 50</span>
 50:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">run</span>(<span class="ruby-identifier">options</span> = {})

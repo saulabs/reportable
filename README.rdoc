@@ -1,21 +1,20 @@
 = ReportsAsSparkline
 
-ReportsAsSparkline enables you to generate reports and sparklines from your model's data with very little effort.
+ReportsAsSparkline enables you to generate sparkline reports from your model's data with very little effort.
 
 == Usage
 
 If you hace a +User+ model with +created_at+ and +activated_at+ columns, you can just add +reports_as_sparkline+
 to it with the following options:
 
-* :date_column - The name of the date column on that the records are aggregated
-* :value_column - The name of the column that holds the value to sum for aggregation :sum
-* :aggregation - The aggregation to use (one of :count, :sum, :minimum, :maximum or :average); when using anything other than :count, :value_column must also be specified (<b>If you really want to e.g. sumon the 'id' column, you have to explicitely say so.</b>)
-* :grouping - The period records are grouped on (:hour, :day, :week, :month); <b>Beware that reports_as_sparkline treats weeks as starting on monday!</b>
-* :limit - The number of periods to get (see :grouping)
-* :conditions - Conditions like in ActiveRecord::Base#find; only records that match there conditions are reported on
-* :cumulate - Sets whether to cumulate the numbers (instead of [1, 2, 3] returns [1, 3, 6])
-* :live_data - Specified whether data for the current reporting period is read; if :live_data is true, you will experience a performance hit since the request cannot be satisfied from the cache only (defaults to false)
-* :end_date - When specified, the report will only include data for the periods before this date.
+* <tt>:date_column</tt> - The name of the date column over that the records are aggregated (defaults to <tt>created_at</tt>)
+* <tt>:value_column</tt> - The name of the column that holds the values to sum up when using aggregation <tt>:sum</tt>
+* <tt>:aggregation</tt> - The aggregation to use (one of <tt>:count</tt>, <tt>:sum</tt>, <tt>:minimum</tt>, <tt>:maximum</tt> or <tt>:average</tt>); when using anything other than <tt>:count</tt>, <tt>:value_column</tt> must also be specified (<b>If you really want to e.g. sum up the values in the <tt>id</tt> column, you have to explicitely say so.</b>); (defaults to <tt>:count</tt>)
+* <tt>:grouping</tt> - The period records are grouped on (<tt>:hour</tt>, <tt>:day</tt>, <tt>:week</tt>, <tt>:month</tt>); <b>Beware that <tt>reports_as_sparkline</tt> treats weeks as starting on monday!</b>
+* <tt>:limit</tt> - The number of reporting periods to get (see <tt>:grouping</tt>), (defaults to 100)
+* <tt>:conditions</tt> - Conditions like in <tt>ActiveRecord::Base#find</tt>; only records that match the conditions are reported; <b>Beware that when conditions are specified, caching is disabled!</b>
+* <tt>:live_data</tt> - Specifies whether data for the current reporting period is to be read; <b>if <tt>:live_data</tt> is <tt>true</tt>, you will experience a performance hit since the request cannot be satisfied from the cache only (defaults to <tt>false</tt>)</b>
+* <tt>:end_date</tt> - When specified, the report will only include data for the <tt>:limit</tt> reporting periods until this date.
 
 <b>Example:</b>
 
@@ -33,18 +32,16 @@ This will add the following class methods to your User model:
 
 When invoking the report, you can override some of the options you specified for +reports_as_sparkline+:
 
-* :grouping - The period records are grouped on (:hour, :day, :week, :month)
-* :limit - The number of periods to get (see :grouping)
-* :conditions - Conditions like in ActiveRecord::Base#find; only records that match there conditions are reported on
-* :live_data - Specified whether data for the current reporting period is read; if :live_data is true, you will experience a performance hit since the request cannot be satisfied from the cache only (defaults to false)
-* :end_date - When specified, the report will be for the periods before this date.
+* <tt>:grouping</tt> - The period records are grouped on (<tt>:hour</tt>, <tt>:day</tt>, <tt>:week</tt>, <tt>:month</tt>); <b>Beware that <tt>reports_as_sparkline</tt> treats weeks as starting on monday!</b>
+* <tt>:limit</tt> - The number of reporting periods to get (see <tt>:grouping</tt>), (defaults to 100)
+* <tt>:conditions</tt> - Conditions like in <tt>ActiveRecord::Base#find</tt>; only records that match the conditions are reported; <b>Beware that when conditions are specified, caching is disabled!</b>
+* <tt>:live_data</tt> - Specifies whether data for the current reporting period is to be read; <b>if <tt>:live_data</tt> is <tt>true</tt>, you will experience a performance hit since the request cannot be satisfied from the cache only (defaults to <tt>false</tt>)</b>
+* <tt>:end_date</tt> - When specified, the report will only include data for the <tt>:limit</tt> reporting periods until this date.
 
 <b>Example:</b>
 
   User.registrations_report(:conditions => ['last_name LIKE 'A%'])
   User.activations_report(:grouping => :week, :limit => 5)
-
-<b>Beware that when specifying conditions on invocation of the report, the cache will not be used!</b>
 
 You can than render sparklines for these reports with sparkline_tag in your view:
 
@@ -52,11 +49,11 @@ You can than render sparklines for these reports with sparkline_tag in your view
 
 The +sparkline_tag+ helper takes the following parameters:
 
-* width - The width of the generated image
-* height - The height of the generated image
-* line_color - The line color of the sparkline (hex code)
-* fill_color - The color to fill the area below the sparkline with (hex code)
-* labes - The axes to render lables for (Array of :x, :y, :r, :t; this is x axis, y axis, right, top)
+* <tt>width</tt> - The width of the generated image
+* <tt>height</tt> - The height of the generated image
+* <tt>line_color</tt> - The line color of the sparkline (hex code)
+* <tt>fill_color</tt> - The color to fill the area below the sparkline with (hex code)
+* <tt>labels</tt> - The axes to render lables for (Array of <tt>:x</tt>, <tt>:y+</tt>, <tt>:r</tt>, <tt>:t</tt>; this is x axis, y axis, right, top)
 
 == Installation
 
@@ -64,11 +61,11 @@ Installation requires 3 simple steps:
 
 <b>get the plugin</b>
 
-From your RAILS_ROOT in Rails &gt;= 2.1, do
+From your RAILS_ROOT in Rails >= 2.1, do
 
   ./script/plugin install git://github.com/marcoow/reports_as_sparkline.git
 
-If you are on Rails &lt; 2.1, do this from your RAILS_ROOT
+If you are on Rails < 2.1, do this from your RAILS_ROOT
 
   git clone git://github.com/marcoow/reports_as_sparkline.git vendor/plugins/reports_as_sparkline
 
@@ -97,7 +94,6 @@ If you are on PostgreSQL, you should add functional indices:
 == TODOs/ future plans
 
 * support for Oracle and DB2 (and others?) missing
-* Implement data ranges in arguments
 * Limit number of data points to maximum that the google chart api allows
 * Make graph styling configurable
 
@@ -109,4 +105,4 @@ If you want to suggest any new features or report bugs, do so at http://github.c
 
 == Author
 
-© 2008-2009 Marco Otte-Witte (http://simplabs.com/#projects), Martin Kavalar, released under the MIT license
+© 2008-2009 Marco Otte-Witte (http://simplabs.com), Martin Kavalar, released under the MIT license

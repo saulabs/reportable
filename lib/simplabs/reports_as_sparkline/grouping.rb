@@ -2,22 +2,18 @@ module Simplabs #:nodoc:
 
   module ReportsAsSparkline #:nodoc:
 
-    # This is the grouping a report uses to group records in the database
-    class Grouping
+    class Grouping #:nodoc:
 
-      # ==== Parameters
-      # * <tt>identifier</tt> - The identifier of the grouping - one of :hour, :day, :week or :month
       def initialize(identifier)
         raise ArgumentError.new("Invalid grouping #{identifier}") unless [:hour, :day, :week, :month].include?(identifier)
         @identifier = identifier
       end
 
-      # Returns the Grouping's identifier
       def identifier
         @identifier
       end
 
-      def date_parts_from_db_string(db_string) #:nodoc:
+      def date_parts_from_db_string(db_string)
         return case ActiveRecord::Base.connection.adapter_name
           when /mysql/i
             from_mysql_db_string(db_string)

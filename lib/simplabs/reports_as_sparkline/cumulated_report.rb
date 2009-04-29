@@ -6,13 +6,13 @@ module Simplabs #:nodoc:
     #
     # ==== Examples
     #
-    #  When Simplabs::ReportsAsSparkline::Report returns
+    # When Simplabs::ReportsAsSparkline::Report returns
     #
-    #    [[<DateTime today>, 1], [<DateTime yesterday>, 2], etc.]
+    #  [[<DateTime today>, 1], [<DateTime yesterday>, 2], etc.]
     #
-    #  Simplabs::ReportsAsSparkline::CumulatedReport returns
+    # Simplabs::ReportsAsSparkline::CumulatedReport returns
     #
-    #    [[<DateTime today>, 3], [<DateTime yesterday>, 2], etc.]
+    #  [[<DateTime today>, 3], [<DateTime yesterday>, 2], etc.]
     class CumulatedReport < Report
 
       # Runs the report (see Simplabs::ReportsAsSparkline::Report#run)

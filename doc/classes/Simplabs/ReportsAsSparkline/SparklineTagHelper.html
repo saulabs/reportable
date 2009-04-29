@@ -117,7 +117,8 @@ Renders a sparkline with the given data.
 </p>
 <h4>Parameters</h4>
 <ul>
-<li><tt>data</tt> - The data to render the sparkline for
+<li><tt>data</tt> - The data to render the sparkline for, is retrieved from a
+report like <tt>User.registration_report</tt>
 
 </li>
 </ul>
@@ -136,16 +137,17 @@ Renders a sparkline with the given data.
 (hex code)
 
 </li>
-<li><tt>labels</tt> - The axes to render lables for (Array of :x, :y, :r, :t;
-this is x axis, y axis, right, top)
+<li><tt>labels</tt> - The axes to render lables for (Array of <tt>:x</tt>,
+<tt>:y+</tt>, <tt>:r</tt>, <tt>:t</tt>; this is x axis, y axis, right, top)
 
 </li>
 </ul>
 <h4>Example</h4>
 <p>
-&lt;%= <a
+<tt>&lt;%= <a
 href="SparklineTagHelper.html#M000001">sparkline_tag</a>(User.registrations_report,
-:width =&gt; 200, :height =&gt; 100, :color =&gt; &#8216;000&#8217;) %&gt;
+:width =&gt; 200, :height =&gt; 100, :color =&gt; &#8216;000&#8217;)
+%&gt;</tt>
 </p>
           <p><a class="source-toggle" href="#"
             onclick="toggleCode('M000001-source');return false;">[Source]</a></p>

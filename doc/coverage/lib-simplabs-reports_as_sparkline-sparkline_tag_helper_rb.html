@@ -553,7 +553,7 @@ span.run100 {
 </style>
     </head>
   <body><h3>C0 code coverage information</h3>
-    <p>Generated on Wed Apr 29 18:53:08 +0200 2009 with <a href='http://eigenclass.org/hiki/rcov'>rcov 0.8.1.2</a>
+    <p>Generated on Wed Apr 29 19:33:53 +0200 2009 with <a href='http://eigenclass.org/hiki/rcov'>rcov 0.8.1.2</a>
       </p>
     <hr/>
     <pre><span class='marked0'>Code reported as executed by Ruby looks like this...
@@ -608,7 +608,7 @@ span.run100 {
 </span><span class="inferred1"><a name="line8"></a> 8       #
 </span><span class="inferred0"><a name="line9"></a> 9       # ==== Parameters
 </span><span class="inferred1"><a name="line10"></a>10       #
-</span><span class="inferred0"><a name="line11"></a>11       # * &lt;tt&gt;data&lt;/tt&gt; - The data to render the sparkline for
+</span><span class="inferred0"><a name="line11"></a>11       # * &lt;tt&gt;data&lt;/tt&gt; - The data to render the sparkline for, is retrieved from a report like &lt;tt&gt;User.registration_report&lt;/tt&gt;
 </span><span class="inferred1"><a name="line12"></a>12       #
 </span><span class="inferred0"><a name="line13"></a>13       # ==== Options
 </span><span class="inferred1"><a name="line14"></a>14       #
@@ -616,10 +616,10 @@ span.run100 {
 </span><span class="inferred1"><a name="line16"></a>16       # * &lt;tt&gt;height&lt;/tt&gt; - The height of the generated image
 </span><span class="inferred0"><a name="line17"></a>17       # * &lt;tt&gt;line_color&lt;/tt&gt; - The line color of the sparkline (hex code)
 </span><span class="inferred1"><a name="line18"></a>18       # * &lt;tt&gt;fill_color&lt;/tt&gt; - The color to fill the area below the sparkline with (hex code)
-</span><span class="inferred0"><a name="line19"></a>19       # * &lt;tt&gt;labels&lt;/tt&gt; - The axes to render lables for (Array of :x, :y, :r, :t; this is x axis, y axis, right, top)
+</span><span class="inferred0"><a name="line19"></a>19       # * &lt;tt&gt;labels&lt;/tt&gt; - The axes to render lables for (Array of &lt;tt&gt;:x&lt;/tt&gt;, &lt;tt&gt;:y+&lt;/tt&gt;, &lt;tt&gt;:r&lt;/tt&gt;, &lt;tt&gt;:t&lt;/tt&gt;; this is x axis, y axis, right, top)
 </span><span class="inferred1"><a name="line20"></a>20       #
 </span><span class="inferred0"><a name="line21"></a>21       # ==== Example
-</span><span class="inferred1"><a name="line22"></a>22       # &lt;%= sparkline_tag(User.registrations_report, :width =&gt; 200, :height =&gt; 100, :color =&gt; '000') %&gt;
+</span><span class="inferred1"><a name="line22"></a>22       # &lt;tt&gt;&lt;%= sparkline_tag(User.registrations_report, :width =&gt; 200, :height =&gt; 100, :color =&gt; '000') %&gt;&lt;/tt&gt;
 </span><span class="marked0"><a name="line23"></a>23       def sparkline_tag(data, options = {})
 </span><span class="marked1"><a name="line24"></a>24         options.reverse_merge!({ :width =&gt; 300, :height =&gt; 34, :line_color =&gt; '0077cc', :fill_color =&gt; 'e6f2fa', :labels =&gt; [] })
 </span><span class="marked0"><a name="line25"></a>25         data = data.collect { |d| d[1] }

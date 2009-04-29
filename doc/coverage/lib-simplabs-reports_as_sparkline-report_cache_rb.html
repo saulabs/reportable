@@ -553,7 +553,7 @@ span.run100 {
 </style>
     </head>
   <body><h3>C0 code coverage information</h3>
-    <p>Generated on Wed Apr 29 18:53:08 +0200 2009 with <a href='http://eigenclass.org/hiki/rcov'>rcov 0.8.1.2</a>
+    <p>Generated on Wed Apr 29 19:33:53 +0200 2009 with <a href='http://eigenclass.org/hiki/rcov'>rcov 0.8.1.2</a>
       </p>
     <hr/>
     <pre><span class='marked0'>Code reported as executed by Ruby looks like this...
@@ -571,7 +571,7 @@ span.run100 {
     </thead>
   <tbody><tr class='light'><td><a href='lib-simplabs-reports_as_sparkline-report_cache_rb.html'>lib/simplabs/reports_as_sparkline/report_cache.rb</a>
         </td>
-      <td class='lines_total'><tt>98</tt>
+      <td class='lines_total'><tt>100</tt>
         </td>
       <td class='lines_code'><tt>83</tt>
         </td>
@@ -598,104 +598,106 @@ span.run100 {
       </tr>
     </tbody>
   </table>
-<pre><span class="marked0"><a name="line1"></a> 1 module Simplabs #:nodoc:
-</span><span class="inferred1"><a name="line2"></a> 2 
-</span><span class="marked0"><a name="line3"></a> 3   module ReportsAsSparkline #:nodoc:
-</span><span class="inferred1"><a name="line4"></a> 4 
-</span><span class="marked0"><a name="line5"></a> 5     class ReportCache &lt; ActiveRecord::Base #:nodoc:
-</span><span class="inferred1"><a name="line6"></a> 6 
-</span><span class="marked0"><a name="line7"></a> 7       set_table_name :reports_as_sparkline_cache
-</span><span class="inferred1"><a name="line8"></a> 8 
-</span><span class="marked0"><a name="line9"></a> 9       def self.process(report, options, cache = true, &amp;block)
-</span><span class="marked1"><a name="line10"></a>10         raise ArgumentError.new('A block must be given') unless block_given?
-</span><span class="marked0"><a name="line11"></a>11         self.transaction do
-</span><span class="marked1"><a name="line12"></a>12           cached_data = []
-</span><span class="marked0"><a name="line13"></a>13           first_reporting_period = ReportingPeriod.first(options[:grouping], (options[:end_date] ? options[:limit] - 1 : options[:limit]), options[:end_date])
-</span><span class="marked1"><a name="line14"></a>14           last_reporting_period = options[:end_date] ? ReportingPeriod.new(options[:grouping], options[:end_date]) : nil
-</span><span class="inferred0"><a name="line15"></a>15 
-</span><span class="marked1"><a name="line16"></a>16           if cache
-</span><span class="marked0"><a name="line17"></a>17             cached_data = find_cached_data(report, options, first_reporting_period, last_reporting_period)
-</span><span class="marked1"><a name="line18"></a>18             first_cached_reporting_period = cached_data.empty? ? nil : ReportingPeriod.new(options[:grouping], cached_data.first.reporting_period)
-</span><span class="marked0"><a name="line19"></a>19             last_cached_reporting_period = cached_data.empty? ? nil : ReportingPeriod.new(options[:grouping], cached_data.last.reporting_period)
-</span><span class="inferred1"><a name="line20"></a>20           end
-</span><span class="inferred0"><a name="line21"></a>21 
-</span><span class="marked1"><a name="line22"></a>22           new_data = if !options[:live_data] &amp;&amp; last_cached_reporting_period == ReportingPeriod.new(options[:grouping]).previous
-</span><span class="uncovered0"><a name="line23"></a>23             []
-</span><span class="inferred1"><a name="line24"></a>24           else
-</span><span class="marked0"><a name="line25"></a>25             end_date = options[:live_data] ? nil : (options[:end_date] ? last_reporting_period.last_date_time : nil)
-</span><span class="marked1"><a name="line26"></a>26             yield((last_cached_reporting_period.next rescue first_reporting_period).date_time, end_date)
-</span><span class="inferred0"><a name="line27"></a>27           end
-</span><span class="inferred1"><a name="line28"></a>28 
-</span><span class="marked0"><a name="line29"></a>29           prepare_result(new_data, cached_data, report, options, cache)
-</span><span class="inferred1"><a name="line30"></a>30         end
-</span><span class="inferred0"><a name="line31"></a>31       end
-</span><span class="inferred1"><a name="line32"></a>32 
-</span><span class="marked0"><a name="line33"></a>33       private
-</span><span class="inferred1"><a name="line34"></a>34 
-</span><span class="marked0"><a name="line35"></a>35         def self.prepare_result(new_data, cached_data, report, options, cache = true)
-</span><span class="marked1"><a name="line36"></a>36           new_data = new_data.map { |data| [ReportingPeriod.from_db_string(options[:grouping], data[0]), data[1]] }
-</span><span class="marked0"><a name="line37"></a>37           result = cached_data.map { |cached| [cached.reporting_period, cached.value] }
-</span><span class="marked1"><a name="line38"></a>38           last_reporting_period = ReportingPeriod.new(options[:grouping])
-</span><span class="marked0"><a name="line39"></a>39           reporting_period = cached_data.empty? ? ReportingPeriod.first(options[:grouping], (options[:end_date] ? options[:limit] - 1 : options[:limit]), options[:end_date]) : ReportingPeriod.new(options[:grouping], cached_data.last.reporting_period).next
-</span><span class="marked1"><a name="line40"></a>40           while reporting_period &lt; (options[:end_date] ? ReportingPeriod.new(options[:grouping], options[:end_date]).next : last_reporting_period)
-</span><span class="marked0"><a name="line41"></a>41             cached = build_cached_data(report, options[:grouping], options[:limit], reporting_period, find_value(new_data, reporting_period))
-</span><span class="marked1"><a name="line42"></a>42             cached.save! if cache
-</span><span class="marked0"><a name="line43"></a>43             result &lt;&lt; [reporting_period.date_time, cached.value]
-</span><span class="marked1"><a name="line44"></a>44             reporting_period = reporting_period.next
-</span><span class="inferred0"><a name="line45"></a>45           end
-</span><span class="marked1"><a name="line46"></a>46           if options[:live_data]
-</span><span class="marked0"><a name="line47"></a>47             result &lt;&lt; [last_reporting_period.date_time, find_value(new_data, last_reporting_period)]
-</span><span class="inferred1"><a name="line48"></a>48           end
-</span><span class="marked0"><a name="line49"></a>49           result
-</span><span class="inferred1"><a name="line50"></a>50         end
-</span><span class="inferred0"><a name="line51"></a>51 
-</span><span class="marked1"><a name="line52"></a>52         def self.find_value(data, reporting_period)
-</span><span class="marked0"><a name="line53"></a>53           data = data.detect { |d| d[0] == reporting_period }
-</span><span class="marked1"><a name="line54"></a>54           data ? data[1] : 0.0
-</span><span class="inferred0"><a name="line55"></a>55         end
-</span><span class="inferred1"><a name="line56"></a>56 
-</span><span class="marked0"><a name="line57"></a>57         def self.build_cached_data(report, grouping, limit, reporting_period, value)
-</span><span class="marked1"><a name="line58"></a>58           self.new(
-</span><span class="inferred0"><a name="line59"></a>59             :model_name       =&gt; report.klass.to_s,
-</span><span class="inferred1"><a name="line60"></a>60             :report_name      =&gt; report.name.to_s,
-</span><span class="marked0"><a name="line61"></a>61             :grouping         =&gt; grouping.identifier.to_s,
-</span><span class="inferred1"><a name="line62"></a>62             :aggregation      =&gt; report.aggregation.to_s,
-</span><span class="inferred0"><a name="line63"></a>63             :reporting_period =&gt; reporting_period.date_time,
-</span><span class="inferred1"><a name="line64"></a>64             :value            =&gt; value,
-</span><span class="inferred0"><a name="line65"></a>65             :run_limit        =&gt; limit
-</span><span class="inferred1"><a name="line66"></a>66           )
-</span><span class="marked0"><a name="line67"></a>67         end
-</span><span class="inferred1"><a name="line68"></a>68 
-</span><span class="marked0"><a name="line69"></a>69         def self.find_cached_data(report, options, first_reporting_period, last_reporting_period)
-</span><span class="marked1"><a name="line70"></a>70           conditions = [
-</span><span class="inferred0"><a name="line71"></a>71             'model_name = ? AND report_name = ? AND grouping = ? AND aggregation = ? AND run_limit = ?',
-</span><span class="inferred1"><a name="line72"></a>72             report.klass.to_s,
-</span><span class="inferred0"><a name="line73"></a>73             report.name.to_s,
-</span><span class="marked1"><a name="line74"></a>74             options[:grouping].identifier.to_s,
-</span><span class="inferred0"><a name="line75"></a>75             report.aggregation.to_s,
-</span><span class="inferred1"><a name="line76"></a>76             options[:limit]
-</span><span class="inferred0"><a name="line77"></a>77           ]
-</span><span class="marked1"><a name="line78"></a>78           if last_reporting_period
-</span><span class="marked0"><a name="line79"></a>79             conditions.first &lt;&lt; ' AND reporting_period BETWEEN ? AND ?'
-</span><span class="marked1"><a name="line80"></a>80             conditions &lt;&lt; first_reporting_period.date_time
-</span><span class="marked0"><a name="line81"></a>81             conditions &lt;&lt; last_reporting_period.date_time
-</span><span class="inferred1"><a name="line82"></a>82           else
-</span><span class="marked0"><a name="line83"></a>83             conditions.first &lt;&lt; ' AND reporting_period &gt;= ?'
-</span><span class="marked1"><a name="line84"></a>84             conditions &lt;&lt; first_reporting_period.date_time
-</span><span class="inferred0"><a name="line85"></a>85           end
-</span><span class="marked1"><a name="line86"></a>86           self.find(
-</span><span class="inferred0"><a name="line87"></a>87             :all,
-</span><span class="inferred1"><a name="line88"></a>88             :conditions =&gt; conditions,
-</span><span class="inferred0"><a name="line89"></a>89             :limit =&gt; options[:limit],
-</span><span class="inferred1"><a name="line90"></a>90             :order =&gt; 'reporting_period ASC'
-</span><span class="inferred0"><a name="line91"></a>91           )
-</span><span class="inferred1"><a name="line92"></a>92         end
-</span><span class="inferred0"><a name="line93"></a>93 
-</span><span class="inferred1"><a name="line94"></a>94     end
-</span><span class="inferred0"><a name="line95"></a>95 
-</span><span class="inferred1"><a name="line96"></a>96   end
-</span><span class="inferred0"><a name="line97"></a>97 
-</span><span class="inferred1"><a name="line98"></a>98 end
+<pre><span class="marked1"><a name="line1"></a>  1 module Simplabs #:nodoc:
+</span><span class="inferred0"><a name="line2"></a>  2 
+</span><span class="marked1"><a name="line3"></a>  3   module ReportsAsSparkline #:nodoc:
+</span><span class="inferred0"><a name="line4"></a>  4 
+</span><span class="inferred1"><a name="line5"></a>  5     # The ReportCache class is a regular +ActiveRecord+ model and represents cached results for single reporting periods (table name is +reports_as_sparkline_cache+)
+</span><span class="inferred0"><a name="line6"></a>  6     # ReportCache instances are identified by the combination of +model_name+, +report_name+, +grouping+, +aggregation+, +reporting_period+, +run_limit+
+</span><span class="marked1"><a name="line7"></a>  7     class ReportCache &lt; ActiveRecord::Base
+</span><span class="inferred0"><a name="line8"></a>  8 
+</span><span class="marked1"><a name="line9"></a>  9       set_table_name :reports_as_sparkline_cache
+</span><span class="inferred0"><a name="line10"></a> 10 
+</span><span class="marked1"><a name="line11"></a> 11       def self.process(report, options, cache = true, &amp;block) #:nodoc:
+</span><span class="marked0"><a name="line12"></a> 12         raise ArgumentError.new('A block must be given') unless block_given?
+</span><span class="marked1"><a name="line13"></a> 13         self.transaction do
+</span><span class="marked0"><a name="line14"></a> 14           cached_data = []
+</span><span class="marked1"><a name="line15"></a> 15           first_reporting_period = ReportingPeriod.first(options[:grouping], (options[:end_date] ? options[:limit] - 1 : options[:limit]), options[:end_date])
+</span><span class="marked0"><a name="line16"></a> 16           last_reporting_period = options[:end_date] ? ReportingPeriod.new(options[:grouping], options[:end_date]) : nil
+</span><span class="inferred1"><a name="line17"></a> 17 
+</span><span class="marked0"><a name="line18"></a> 18           if cache
+</span><span class="marked1"><a name="line19"></a> 19             cached_data = find_cached_data(report, options, first_reporting_period, last_reporting_period)
+</span><span class="marked0"><a name="line20"></a> 20             first_cached_reporting_period = cached_data.empty? ? nil : ReportingPeriod.new(options[:grouping], cached_data.first.reporting_period)
+</span><span class="marked1"><a name="line21"></a> 21             last_cached_reporting_period = cached_data.empty? ? nil : ReportingPeriod.new(options[:grouping], cached_data.last.reporting_period)
+</span><span class="inferred0"><a name="line22"></a> 22           end
+</span><span class="inferred1"><a name="line23"></a> 23 
+</span><span class="marked0"><a name="line24"></a> 24           new_data = if !options[:live_data] &amp;&amp; last_cached_reporting_period == ReportingPeriod.new(options[:grouping]).previous
+</span><span class="uncovered1"><a name="line25"></a> 25             []
+</span><span class="inferred0"><a name="line26"></a> 26           else
+</span><span class="marked1"><a name="line27"></a> 27             end_date = options[:live_data] ? nil : (options[:end_date] ? last_reporting_period.last_date_time : nil)
+</span><span class="marked0"><a name="line28"></a> 28             yield((last_cached_reporting_period.next rescue first_reporting_period).date_time, end_date)
+</span><span class="inferred1"><a name="line29"></a> 29           end
+</span><span class="inferred0"><a name="line30"></a> 30 
+</span><span class="marked1"><a name="line31"></a> 31           prepare_result(new_data, cached_data, report, options, cache)
+</span><span class="inferred0"><a name="line32"></a> 32         end
+</span><span class="inferred1"><a name="line33"></a> 33       end
+</span><span class="inferred0"><a name="line34"></a> 34 
+</span><span class="marked1"><a name="line35"></a> 35       private
+</span><span class="inferred0"><a name="line36"></a> 36 
+</span><span class="marked1"><a name="line37"></a> 37         def self.prepare_result(new_data, cached_data, report, options, cache = true)
+</span><span class="marked0"><a name="line38"></a> 38           new_data = new_data.map { |data| [ReportingPeriod.from_db_string(options[:grouping], data[0]), data[1]] }
+</span><span class="marked1"><a name="line39"></a> 39           result = cached_data.map { |cached| [cached.reporting_period, cached.value] }
+</span><span class="marked0"><a name="line40"></a> 40           last_reporting_period = ReportingPeriod.new(options[:grouping])
+</span><span class="marked1"><a name="line41"></a> 41           reporting_period = cached_data.empty? ? ReportingPeriod.first(options[:grouping], (options[:end_date] ? options[:limit] - 1 : options[:limit]), options[:end_date]) : ReportingPeriod.new(options[:grouping], cached_data.last.reporting_period).next
+</span><span class="marked0"><a name="line42"></a> 42           while reporting_period &lt; (options[:end_date] ? ReportingPeriod.new(options[:grouping], options[:end_date]).next : last_reporting_period)
+</span><span class="marked1"><a name="line43"></a> 43             cached = build_cached_data(report, options[:grouping], options[:limit], reporting_period, find_value(new_data, reporting_period))
+</span><span class="marked0"><a name="line44"></a> 44             cached.save! if cache
+</span><span class="marked1"><a name="line45"></a> 45             result &lt;&lt; [reporting_period.date_time, cached.value]
+</span><span class="marked0"><a name="line46"></a> 46             reporting_period = reporting_period.next
+</span><span class="inferred1"><a name="line47"></a> 47           end
+</span><span class="marked0"><a name="line48"></a> 48           if options[:live_data]
+</span><span class="marked1"><a name="line49"></a> 49             result &lt;&lt; [last_reporting_period.date_time, find_value(new_data, last_reporting_period)]
+</span><span class="inferred0"><a name="line50"></a> 50           end
+</span><span class="marked1"><a name="line51"></a> 51           result
+</span><span class="inferred0"><a name="line52"></a> 52         end
+</span><span class="inferred1"><a name="line53"></a> 53 
+</span><span class="marked0"><a name="line54"></a> 54         def self.find_value(data, reporting_period)
+</span><span class="marked1"><a name="line55"></a> 55           data = data.detect { |d| d[0] == reporting_period }
+</span><span class="marked0"><a name="line56"></a> 56           data ? data[1] : 0.0
+</span><span class="inferred1"><a name="line57"></a> 57         end
+</span><span class="inferred0"><a name="line58"></a> 58 
+</span><span class="marked1"><a name="line59"></a> 59         def self.build_cached_data(report, grouping, limit, reporting_period, value)
+</span><span class="marked0"><a name="line60"></a> 60           self.new(
+</span><span class="inferred1"><a name="line61"></a> 61             :model_name       =&gt; report.klass.to_s,
+</span><span class="inferred0"><a name="line62"></a> 62             :report_name      =&gt; report.name.to_s,
+</span><span class="marked1"><a name="line63"></a> 63             :grouping         =&gt; grouping.identifier.to_s,
+</span><span class="inferred0"><a name="line64"></a> 64             :aggregation      =&gt; report.aggregation.to_s,
+</span><span class="inferred1"><a name="line65"></a> 65             :reporting_period =&gt; reporting_period.date_time,
+</span><span class="inferred0"><a name="line66"></a> 66             :value            =&gt; value,
+</span><span class="inferred1"><a name="line67"></a> 67             :run_limit        =&gt; limit
+</span><span class="inferred0"><a name="line68"></a> 68           )
+</span><span class="marked1"><a name="line69"></a> 69         end
+</span><span class="inferred0"><a name="line70"></a> 70 
+</span><span class="marked1"><a name="line71"></a> 71         def self.find_cached_data(report, options, first_reporting_period, last_reporting_period)
+</span><span class="marked0"><a name="line72"></a> 72           conditions = [
+</span><span class="inferred1"><a name="line73"></a> 73             'model_name = ? AND report_name = ? AND grouping = ? AND aggregation = ? AND run_limit = ?',
+</span><span class="inferred0"><a name="line74"></a> 74             report.klass.to_s,
+</span><span class="inferred1"><a name="line75"></a> 75             report.name.to_s,
+</span><span class="marked0"><a name="line76"></a> 76             options[:grouping].identifier.to_s,
+</span><span class="inferred1"><a name="line77"></a> 77             report.aggregation.to_s,
+</span><span class="inferred0"><a name="line78"></a> 78             options[:limit]
+</span><span class="inferred1"><a name="line79"></a> 79           ]
+</span><span class="marked0"><a name="line80"></a> 80           if last_reporting_period
+</span><span class="marked1"><a name="line81"></a> 81             conditions.first &lt;&lt; ' AND reporting_period BETWEEN ? AND ?'
+</span><span class="marked0"><a name="line82"></a> 82             conditions &lt;&lt; first_reporting_period.date_time
+</span><span class="marked1"><a name="line83"></a> 83             conditions &lt;&lt; last_reporting_period.date_time
+</span><span class="inferred0"><a name="line84"></a> 84           else
+</span><span class="marked1"><a name="line85"></a> 85             conditions.first &lt;&lt; ' AND reporting_period &gt;= ?'
+</span><span class="marked0"><a name="line86"></a> 86             conditions &lt;&lt; first_reporting_period.date_time
+</span><span class="inferred1"><a name="line87"></a> 87           end
+</span><span class="marked0"><a name="line88"></a> 88           self.find(
+</span><span class="inferred1"><a name="line89"></a> 89             :all,
+</span><span class="inferred0"><a name="line90"></a> 90             :conditions =&gt; conditions,
+</span><span class="inferred1"><a name="line91"></a> 91             :limit =&gt; options[:limit],
+</span><span class="inferred0"><a name="line92"></a> 92             :order =&gt; 'reporting_period ASC'
+</span><span class="inferred1"><a name="line93"></a> 93           )
+</span><span class="inferred0"><a name="line94"></a> 94         end
+</span><span class="inferred1"><a name="line95"></a> 95 
+</span><span class="inferred0"><a name="line96"></a> 96     end
+</span><span class="inferred1"><a name="line97"></a> 97 
+</span><span class="inferred0"><a name="line98"></a> 98   end
+</span><span class="inferred1"><a name="line99"></a> 99 
+</span><span class="inferred0"><a name="line100"></a>100 end
 </span></pre><hr/>
     <p>Generated using the <a href='http://eigenclass.org/hiki.rb?rcov'>rcov code coverage analysis tool for Ruby</a>
    version 0.8.1.2.</p>

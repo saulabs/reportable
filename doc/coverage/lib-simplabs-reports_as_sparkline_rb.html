@@ -553,7 +553,7 @@ span.run100 {
 </style>
     </head>
   <body><h3>C0 code coverage information</h3>
-    <p>Generated on Wed Apr 29 18:53:07 +0200 2009 with <a href='http://eigenclass.org/hiki/rcov'>rcov 0.8.1.2</a>
+    <p>Generated on Wed Apr 29 19:33:53 +0200 2009 with <a href='http://eigenclass.org/hiki/rcov'>rcov 0.8.1.2</a>
       </p>
     <hr/>
     <pre><span class='marked0'>Code reported as executed by Ruby looks like this...
@@ -571,7 +571,7 @@ span.run100 {
     </thead>
   <tbody><tr class='light'><td><a href='lib-simplabs-reports_as_sparkline_rb.html'>lib/simplabs/reports_as_sparkline.rb</a>
         </td>
-      <td class='lines_total'><tt>58</tt>
+      <td class='lines_total'><tt>59</tt>
         </td>
       <td class='lines_code'><tt>22</tt>
         </td>
@@ -608,22 +608,22 @@ span.run100 {
 </span><span class="inferred0"><a name="line8"></a> 8 
 </span><span class="marked1"><a name="line9"></a> 9     module ClassMethods
 </span><span class="inferred0"><a name="line10"></a>10 
-</span><span class="inferred1"><a name="line11"></a>11       # Generates a report on a model. That report can then be executed via the new method &lt;name&gt;_report (see documentation of Simplabs::ReportsAsSparkline::Report#run).
+</span><span class="inferred1"><a name="line11"></a>11       # Generates a report on a model. That report can then be executed via the new method &lt;tt&gt;&lt;name&gt;_report&lt;/tt&gt; (see documentation of Simplabs::ReportsAsSparkline::Report#run).
 </span><span class="inferred0"><a name="line12"></a>12       # 
 </span><span class="inferred1"><a name="line13"></a>13       # ==== Parameters
 </span><span class="inferred0"><a name="line14"></a>14       #
-</span><span class="inferred1"><a name="line15"></a>15       # * &lt;tt&gt;name&lt;/tt&gt; - The name of the report, defines the name of the generated report method (&lt;name&gt;_report)
+</span><span class="inferred1"><a name="line15"></a>15       # * &lt;tt&gt;name&lt;/tt&gt; - The name of the report, defines the name of the generated report method (&lt;tt&gt;&lt;name&gt;_report&lt;/tt&gt;)
 </span><span class="inferred0"><a name="line16"></a>16       #
 </span><span class="inferred1"><a name="line17"></a>17       # ==== Options
 </span><span class="inferred0"><a name="line18"></a>18       #
-</span><span class="inferred1"><a name="line19"></a>19       # * &lt;tt&gt;:date_column&lt;/tt&gt; - The name of the date column on that the records are aggregated
-</span><span class="inferred0"><a name="line20"></a>20       # * &lt;tt&gt;:value_column&lt;/tt&gt; - The name of the column that holds the value to sum for aggregation :sum
-</span><span class="inferred1"><a name="line21"></a>21       # * &lt;tt&gt;:aggregation&lt;/tt&gt; - The aggregation to use (one of :count, :sum, :minimum, :maximum or :average); when using anything other than :count, :value_column must also be specified (&lt;b&gt;If you really want to e.g. sumon the 'id' column, you have to explicitely say so.&lt;/b&gt;)
-</span><span class="inferred0"><a name="line22"></a>22       # * &lt;tt&gt;:grouping&lt;/tt&gt; - The period records are grouped on (:hour, :day, :week, :month); &lt;b&gt;Beware that reports_as_sparkline treats weeks as starting on monday!&lt;/b&gt;
-</span><span class="inferred1"><a name="line23"></a>23       # * &lt;tt&gt;:limit&lt;/tt&gt; - The number of periods to get (see :grouping)
-</span><span class="inferred0"><a name="line24"></a>24       # * &lt;tt&gt;:conditions&lt;/tt&gt; - Conditions like in ActiveRecord::Base#find; only records that match there conditions are reported on
-</span><span class="inferred1"><a name="line25"></a>25       # * &lt;tt&gt;:live_data&lt;/tt&gt; - Specified whether data for the current reporting period is read; if :live_data is true, you will experience a performance hit since the request cannot be satisfied from the cache only (defaults to false)
-</span><span class="inferred0"><a name="line26"></a>26       # * &lt;tt&gt;:end_date&lt;/tt&gt; - When specified, the report will only include data for the periods before this date.
+</span><span class="inferred1"><a name="line19"></a>19       # * &lt;tt&gt;:date_column&lt;/tt&gt; - The name of the date column over that the records are aggregated (defaults to &lt;tt&gt;created_at&lt;/tt&gt;)
+</span><span class="inferred0"><a name="line20"></a>20       # * &lt;tt&gt;:value_column&lt;/tt&gt; - The name of the column that holds the values to sum up when using aggregation &lt;tt&gt;:sum&lt;/tt&gt;
+</span><span class="inferred1"><a name="line21"></a>21       # * &lt;tt&gt;:aggregation&lt;/tt&gt; - The aggregation to use (one of &lt;tt&gt;:count&lt;/tt&gt;, &lt;tt&gt;:sum&lt;/tt&gt;, &lt;tt&gt;:minimum&lt;/tt&gt;, &lt;tt&gt;:maximum&lt;/tt&gt; or &lt;tt&gt;:average&lt;/tt&gt;); when using anything other than &lt;tt&gt;:count&lt;/tt&gt;, &lt;tt&gt;:value_column&lt;/tt&gt; must also be specified (&lt;b&gt;If you really want to e.g. sum up the values in the &lt;tt&gt;id&lt;/tt&gt; column, you have to explicitely say so.&lt;/b&gt;); (defaults to &lt;tt&gt;:count&lt;/tt&gt;)
+</span><span class="inferred0"><a name="line22"></a>22       # * &lt;tt&gt;:grouping&lt;/tt&gt; - The period records are grouped on (&lt;tt&gt;:hour&lt;/tt&gt;, &lt;tt&gt;:day&lt;/tt&gt;, &lt;tt&gt;:week&lt;/tt&gt;, &lt;tt&gt;:month&lt;/tt&gt;); &lt;b&gt;Beware that &lt;tt&gt;reports_as_sparkline&lt;/tt&gt; treats weeks as starting on monday!&lt;/b&gt;
+</span><span class="inferred1"><a name="line23"></a>23       # * &lt;tt&gt;:limit&lt;/tt&gt; - The number of reporting periods to get (see &lt;tt&gt;:grouping&lt;/tt&gt;), (defaults to 100)
+</span><span class="inferred0"><a name="line24"></a>24       # * &lt;tt&gt;:conditions&lt;/tt&gt; - Conditions like in &lt;tt&gt;ActiveRecord::Base#find&lt;/tt&gt;; only records that match the conditions are reported; &lt;b&gt;Beware that when conditions are specified, caching is disabled!&lt;/b&gt;
+</span><span class="inferred1"><a name="line25"></a>25       # * &lt;tt&gt;:live_data&lt;/tt&gt; - Specifies whether data for the current reporting period is to be read; &lt;b&gt;if &lt;tt&gt;:live_data&lt;/tt&gt; is &lt;tt&gt;true&lt;/tt&gt;, you will experience a performance hit since the request cannot be satisfied from the cache only (defaults to &lt;tt&gt;false&lt;/tt&gt;)&lt;/b&gt;
+</span><span class="inferred0"><a name="line26"></a>26       # * &lt;tt&gt;:end_date&lt;/tt&gt; - When specified, the report will only include data for the &lt;tt&gt;:limit&lt;/tt&gt; reporting periods until this date.
 </span><span class="inferred1"><a name="line27"></a>27       #
 </span><span class="inferred0"><a name="line28"></a>28       # ==== Examples
 </span><span class="inferred1"><a name="line29"></a>29       #
@@ -631,31 +631,32 @@ span.run100 {
 </span><span class="inferred1"><a name="line31"></a>31       #    reports_as_sparkline :games_per_day
 </span><span class="inferred0"><a name="line32"></a>32       #    reports_as_sparkline :games_played_total, :cumulate =&gt; true
 </span><span class="inferred1"><a name="line33"></a>33       #  end
-</span><span class="inferred0"><a name="line34"></a>34       #  class User &lt; ActiveRecord::Base
-</span><span class="inferred1"><a name="line35"></a>35       #    reports_as_sparkline :registrations, :aggregation =&gt; :count
-</span><span class="inferred0"><a name="line36"></a>36       #    reports_as_sparkline :activations,   :aggregation =&gt; :count, :date_column =&gt; :activated_at
-</span><span class="inferred1"><a name="line37"></a>37       #    reports_as_sparkline :total_users,   :cumulate =&gt; true
-</span><span class="inferred0"><a name="line38"></a>38       #    reports_as_sparkline :rake,          :aggregation =&gt; :sum,   :value_column =&gt; :profile_visits
-</span><span class="inferred1"><a name="line39"></a>39       #  end
-</span><span class="marked0"><a name="line40"></a>40       def reports_as_sparkline(name, options = {})
-</span><span class="marked1"><a name="line41"></a>41         (class &lt;&lt; self; self; end).instance_eval do
-</span><span class="marked0"><a name="line42"></a>42           define_method &quot;#{name.to_s}_report&quot;.to_sym do |*args|
-</span><span class="marked1"><a name="line43"></a>43             if options.delete(:cumulate)
-</span><span class="uncovered0"><a name="line44"></a>44               report = Simplabs::ReportsAsSparkline::CumulatedReport.new(self, name, options)
-</span><span class="inferred1"><a name="line45"></a>45             else
-</span><span class="marked0"><a name="line46"></a>46               report = Simplabs::ReportsAsSparkline::Report.new(self, name, options)
-</span><span class="inferred1"><a name="line47"></a>47             end
-</span><span class="marked0"><a name="line48"></a>48             raise ArgumentError.new unless args.length == 0 || (args.length == 1 &amp;&amp; args[0].is_a?(Hash))
-</span><span class="marked1"><a name="line49"></a>49             report.run(args.length == 0 ? {} : args[0])
-</span><span class="inferred0"><a name="line50"></a>50           end
-</span><span class="inferred1"><a name="line51"></a>51         end
-</span><span class="marked0"><a name="line52"></a>52       end
-</span><span class="inferred1"><a name="line53"></a>53 
-</span><span class="inferred0"><a name="line54"></a>54     end
-</span><span class="inferred1"><a name="line55"></a>55 
-</span><span class="inferred0"><a name="line56"></a>56   end
-</span><span class="inferred1"><a name="line57"></a>57 
-</span><span class="inferred0"><a name="line58"></a>58 end
+</span><span class="inferred0"><a name="line34"></a>34       #
+</span><span class="inferred1"><a name="line35"></a>35       #  class User &lt; ActiveRecord::Base
+</span><span class="inferred0"><a name="line36"></a>36       #    reports_as_sparkline :registrations, :aggregation =&gt; :count
+</span><span class="inferred1"><a name="line37"></a>37       #    reports_as_sparkline :activations,   :aggregation =&gt; :count, :date_column =&gt; :activated_at
+</span><span class="inferred0"><a name="line38"></a>38       #    reports_as_sparkline :total_users,   :cumulate =&gt; true
+</span><span class="inferred1"><a name="line39"></a>39       #    reports_as_sparkline :rake,          :aggregation =&gt; :sum,   :value_column =&gt; :profile_visits
+</span><span class="inferred0"><a name="line40"></a>40       #  end
+</span><span class="marked1"><a name="line41"></a>41       def reports_as_sparkline(name, options = {})
+</span><span class="marked0"><a name="line42"></a>42         (class &lt;&lt; self; self; end).instance_eval do
+</span><span class="marked1"><a name="line43"></a>43           define_method &quot;#{name.to_s}_report&quot;.to_sym do |*args|
+</span><span class="marked0"><a name="line44"></a>44             if options.delete(:cumulate)
+</span><span class="uncovered1"><a name="line45"></a>45               report = Simplabs::ReportsAsSparkline::CumulatedReport.new(self, name, options)
+</span><span class="inferred0"><a name="line46"></a>46             else
+</span><span class="marked1"><a name="line47"></a>47               report = Simplabs::ReportsAsSparkline::Report.new(self, name, options)
+</span><span class="inferred0"><a name="line48"></a>48             end
+</span><span class="marked1"><a name="line49"></a>49             raise ArgumentError.new unless args.length == 0 || (args.length == 1 &amp;&amp; args[0].is_a?(Hash))
+</span><span class="marked0"><a name="line50"></a>50             report.run(args.length == 0 ? {} : args[0])
+</span><span class="inferred1"><a name="line51"></a>51           end
+</span><span class="inferred0"><a name="line52"></a>52         end
+</span><span class="marked1"><a name="line53"></a>53       end
+</span><span class="inferred0"><a name="line54"></a>54 
+</span><span class="inferred1"><a name="line55"></a>55     end
+</span><span class="inferred0"><a name="line56"></a>56 
+</span><span class="inferred1"><a name="line57"></a>57   end
+</span><span class="inferred0"><a name="line58"></a>58 
+</span><span class="inferred1"><a name="line59"></a>59 end
 </span></pre><hr/>
     <p>Generated using the <a href='http://eigenclass.org/hiki.rb?rcov'>rcov code coverage analysis tool for Ruby</a>
    version 0.8.1.2.</p>

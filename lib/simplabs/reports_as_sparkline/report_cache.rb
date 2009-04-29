@@ -4,6 +4,8 @@ module Simplabs #:nodoc:
 
     class ReportCache < ActiveRecord::Base #:nodoc:
 
+      set_table_name :reports_as_sparkline_cache
+
       def self.process(report, options, cache = true, &block)
         raise ArgumentError.new('A block must be given') unless block_given?
         self.transaction do

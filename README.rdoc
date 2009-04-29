@@ -101,7 +101,7 @@ If you are on PostgreSQL, you should add functional indices:
 * Limit number of data points to maximum that the google chart api allows
 * Make graph styling configurable
 
-If you want ot suggest any new features or report bugs, do so at http://simplabs.lighthouseapp.com/projects/21060-reportsassparkline/overview.
+If you want to suggest any new features or report bugs, do so at http://github.com/marcoow/reports_as_sparkline/issues.
 
 == Contributors
 

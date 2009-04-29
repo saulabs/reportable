@@ -1,0 +1,1093 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>RSpec results</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Expires" content="-1" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <style type="text/css">
+  body {
+    margin: 0;
+    padding: 0;
+    background: #fff;
+    font-size: 80%;
+  }
+  </style>
+  <script type="text/javascript">
+    // <![CDATA[
+function moveProgressBar(percentDone) {
+  document.getElementById("rspec-header").style.width = percentDone +"%";
+}
+function makeRed(element_id) {
+  document.getElementById(element_id).style.background = '#C40D0D';
+  document.getElementById(element_id).style.color = '#FFFFFF';
+}
+
+function makeYellow(element_id) {
+  if (element_id == "rspec-header" && document.getElementById(element_id).style.background != '#C40D0D')
+  {
+    document.getElementById(element_id).style.background = '#FAF834';
+    document.getElementById(element_id).style.color = '#000000';
+  }
+  else
+  {
+    document.getElementById(element_id).style.background = '#FAF834';
+    document.getElementById(element_id).style.color = '#000000';
+  }
+}
+
+    // ]]>
+  </script>
+  <style type="text/css">
+#rspec-header {
+  background: #65C400; color: #fff; height: 4em;
+}
+
+.rspec-report h1 {
+  margin: 0px 10px 0px 10px;
+  padding: 10px;
+  font-family: "Lucida Grande", Helvetica, sans-serif;
+  font-size: 1.8em;
+  position: absolute;
+}
+
+#summary {
+  margin: 0; padding: 5px 10px;
+  font-family: "Lucida Grande", Helvetica, sans-serif;
+  text-align: right;
+  top: 0px;
+  right: 0px;
+  float:right;
+}
+
+#summary p {
+  margin: 0 0 0 2px;
+}
+
+#summary #totals {
+  font-size: 1.2em;
+}
+
+.example_group {
+  margin: 0 10px 5px;
+  background: #fff;
+}
+
+dl {
+  margin: 0; padding: 0 0 5px;
+  font: normal 11px "Lucida Grande", Helvetica, sans-serif;
+}
+
+dt {
+  padding: 3px;
+  background: #65C400;
+  color: #fff;
+  font-weight: bold;
+}
+
+dd {
+  margin: 5px 0 5px 5px;
+  padding: 3px 3px 3px 18px;
+}
+
+dd.spec.passed {
+  border-left: 5px solid #65C400;
+  border-bottom: 1px solid #65C400;
+  background: #DBFFB4; color: #3D7700;
+}
+
+dd.spec.failed {
+  border-left: 5px solid #C20000;
+  border-bottom: 1px solid #C20000;
+  color: #C20000; background: #FFFBD3;
+}
+
+dd.spec.not_implemented {
+  border-left: 5px solid #FAF834;
+  border-bottom: 1px solid #FAF834;
+  background: #FCFB98; color: #131313;
+}
+
+dd.spec.pending_fixed {
+  border-left: 5px solid #0000C2;
+  border-bottom: 1px solid #0000C2;
+  color: #0000C2; background: #D3FBFF;
+}
+
+.backtrace {
+  color: #000;
+  font-size: 12px;
+}
+
+a {
+  color: #BE5C00;
+}
+
+/* Ruby code, style similar to vibrant ink */
+.ruby {
+  font-size: 12px;
+  font-family: monospace;
+  color: white;
+  background-color: black;
+  padding: 0.1em 0 0.2em 0;
+}
+
+.ruby .keyword { color: #FF6600; }
+.ruby .constant { color: #339999; }
+.ruby .attribute { color: white; }
+.ruby .global { color: white; }
+.ruby .module { color: white; }
+.ruby .class { color: white; }
+.ruby .string { color: #66FF00; }
+.ruby .ident { color: white; }
+.ruby .method { color: #FFCC00; }
+.ruby .number { color: white; }
+.ruby .char { color: white; }
+.ruby .comment { color: #9933CC; }
+.ruby .symbol { color: white; }
+.ruby .regex { color: #44B4CC; }
+.ruby .punct { color: white; }
+.ruby .escape { color: white; }
+.ruby .interp { color: white; }
+.ruby .expr { color: white; }
+
+.ruby .offending { background-color: gray; }
+.ruby .linenum {
+  width: 75px;
+  padding: 0.1em 1em 0.2em 0;
+  color: #000000;
+  background-color: #FFFBD3;
+}
+
+  </style>
+</head>
+<body>
+<div class="rspec-report">
+
+<div id="rspec-header">
+  <div id="label">
+    <h1>RSpec Code Examples</h1>
+  </div>
+
+  <div id="summary">
+    <p id="totals">&nbsp;</p>
+    <p id="duration">&nbsp;</p>
+  </div>
+</div>
+
+<div class="results">
+<div class="example_group">
+  <dl>
+  <dt id="example_group_1">Simplabs::ReportsAsSparkline::CumulatedReport#run</dt>
+    <script type="text/javascript">moveProgressBar('0.3');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should cumulate the data</span></dd>
+    <script type="text/javascript">moveProgressBar('0.7');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return an array of the same length as the specified limit when :live_data is false</span></dd>
+    <script type="text/javascript">moveProgressBar('1.1');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return an array of the same length as the specified limit + 1 when :live_data is true</span></dd>
+  </dl>
+</div>
+<div class="example_group">
+  <dl>
+  <dt id="example_group_2">Simplabs::ReportsAsSparkline::CumulatedReport#run for grouping hour with :live_data = true</dt>
+    <script type="text/javascript">moveProgressBar('1.4');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :count</span></dd>
+    <script type="text/javascript">moveProgressBar('1.8');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :sum</span></dd>
+    <script type="text/javascript">moveProgressBar('2.2');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :count when custom conditions are specified</span></dd>
+    <script type="text/javascript">moveProgressBar('2.6');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :sum when custom conditions are specified</span></dd>
+  </dl>
+</div>
+<div class="example_group">
+  <dl>
+  <dt id="example_group_3">Simplabs::ReportsAsSparkline::CumulatedReport#run for grouping hour with :live_data = true the returned result</dt>
+    <script type="text/javascript">moveProgressBar('2.9');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should be an array starting reporting period (Time.now - limit.hour)</span></dd>
+    <script type="text/javascript">moveProgressBar('3.3');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should be data ending with the current reporting period</span></dd>
+  </dl>
+</div>
+<div class="example_group">
+  <dl>
+  <dt id="example_group_4">Simplabs::ReportsAsSparkline::CumulatedReport#run for grouping hour with :live_data = false</dt>
+    <script type="text/javascript">moveProgressBar('3.7');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :count</span></dd>
+    <script type="text/javascript">moveProgressBar('4.1');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :sum</span></dd>
+    <script type="text/javascript">moveProgressBar('4.4');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :count when custom conditions are specified</span></dd>
+    <script type="text/javascript">moveProgressBar('4.8');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :sum when custom conditions are specified</span></dd>
+  </dl>
+</div>
+<div class="example_group">
+  <dl>
+  <dt id="example_group_5">Simplabs::ReportsAsSparkline::CumulatedReport#run for grouping hour with :live_data = false the returned result</dt>
+    <script type="text/javascript">moveProgressBar('5.2');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should be an array starting reporting period (Time.now - limit.hour)</span></dd>
+    <script type="text/javascript">moveProgressBar('5.5');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should be data ending with the reporting period before the current</span></dd>
+  </dl>
+</div>
+<div class="example_group">
+  <dl>
+  <dt id="example_group_6">Simplabs::ReportsAsSparkline::CumulatedReport#run for grouping day with :live_data = true</dt>
+    <script type="text/javascript">moveProgressBar('5.9');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :count</span></dd>
+    <script type="text/javascript">moveProgressBar('6.3');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :sum</span></dd>
+    <script type="text/javascript">moveProgressBar('6.7');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :count when custom conditions are specified</span></dd>
+    <script type="text/javascript">moveProgressBar('7.0');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :sum when custom conditions are specified</span></dd>
+  </dl>
+</div>
+<div class="example_group">
+  <dl>
+  <dt id="example_group_7">Simplabs::ReportsAsSparkline::CumulatedReport#run for grouping day with :live_data = true the returned result</dt>
+    <script type="text/javascript">moveProgressBar('7.4');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should be an array starting reporting period (Time.now - limit.day)</span></dd>
+    <script type="text/javascript">moveProgressBar('7.8');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should be data ending with the current reporting period</span></dd>
+  </dl>
+</div>
+<div class="example_group">
+  <dl>
+  <dt id="example_group_8">Simplabs::ReportsAsSparkline::CumulatedReport#run for grouping day with :live_data = false</dt>
+    <script type="text/javascript">moveProgressBar('8.2');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :count</span></dd>
+    <script type="text/javascript">moveProgressBar('8.5');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :sum</span></dd>
+    <script type="text/javascript">moveProgressBar('8.9');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :count when custom conditions are specified</span></dd>
+    <script type="text/javascript">moveProgressBar('9.3');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :sum when custom conditions are specified</span></dd>
+  </dl>
+</div>
+<div class="example_group">
+  <dl>
+  <dt id="example_group_9">Simplabs::ReportsAsSparkline::CumulatedReport#run for grouping day with :live_data = false the returned result</dt>
+    <script type="text/javascript">moveProgressBar('9.7');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should be an array starting reporting period (Time.now - limit.day)</span></dd>
+    <script type="text/javascript">moveProgressBar('10.0');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should be data ending with the reporting period before the current</span></dd>
+  </dl>
+</div>
+<div class="example_group">
+  <dl>
+  <dt id="example_group_10">Simplabs::ReportsAsSparkline::CumulatedReport#run for grouping week with :live_data = true</dt>
+    <script type="text/javascript">moveProgressBar('10.4');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :count</span></dd>
+    <script type="text/javascript">moveProgressBar('10.8');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :sum</span></dd>
+    <script type="text/javascript">moveProgressBar('11.1');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :count when custom conditions are specified</span></dd>
+    <script type="text/javascript">moveProgressBar('11.5');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :sum when custom conditions are specified</span></dd>
+  </dl>
+</div>
+<div class="example_group">
+  <dl>
+  <dt id="example_group_11">Simplabs::ReportsAsSparkline::CumulatedReport#run for grouping week with :live_data = true the returned result</dt>
+    <script type="text/javascript">moveProgressBar('11.9');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should be an array starting reporting period (Time.now - limit.week)</span></dd>
+    <script type="text/javascript">moveProgressBar('12.3');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should be data ending with the current reporting period</span></dd>
+  </dl>
+</div>
+<div class="example_group">
+  <dl>
+  <dt id="example_group_12">Simplabs::ReportsAsSparkline::CumulatedReport#run for grouping week with :live_data = false</dt>
+    <script type="text/javascript">moveProgressBar('12.6');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :count</span></dd>
+    <script type="text/javascript">moveProgressBar('13.0');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :sum</span></dd>
+    <script type="text/javascript">moveProgressBar('13.4');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :count when custom conditions are specified</span></dd>
+    <script type="text/javascript">moveProgressBar('13.8');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :sum when custom conditions are specified</span></dd>
+  </dl>
+</div>
+<div class="example_group">
+  <dl>
+  <dt id="example_group_13">Simplabs::ReportsAsSparkline::CumulatedReport#run for grouping week with :live_data = false the returned result</dt>
+    <script type="text/javascript">moveProgressBar('14.1');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should be an array starting reporting period (Time.now - limit.week)</span></dd>
+    <script type="text/javascript">moveProgressBar('14.5');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should be data ending with the reporting period before the current</span></dd>
+  </dl>
+</div>
+<div class="example_group">
+  <dl>
+  <dt id="example_group_14">Simplabs::ReportsAsSparkline::CumulatedReport#run for grouping month with :live_data = true</dt>
+    <script type="text/javascript">moveProgressBar('14.9');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :count</span></dd>
+    <script type="text/javascript">moveProgressBar('15.2');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :sum</span></dd>
+    <script type="text/javascript">moveProgressBar('15.6');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :count when custom conditions are specified</span></dd>
+    <script type="text/javascript">moveProgressBar('16.0');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :sum when custom conditions are specified</span></dd>
+  </dl>
+</div>
+<div class="example_group">
+  <dl>
+  <dt id="example_group_15">Simplabs::ReportsAsSparkline::CumulatedReport#run for grouping month with :live_data = true the returned result</dt>
+    <script type="text/javascript">moveProgressBar('16.4');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should be an array starting reporting period (Time.now - limit.month)</span></dd>
+    <script type="text/javascript">moveProgressBar('16.7');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should be data ending with the current reporting period</span></dd>
+  </dl>
+</div>
+<div class="example_group">
+  <dl>
+  <dt id="example_group_16">Simplabs::ReportsAsSparkline::CumulatedReport#run for grouping month with :live_data = false</dt>
+    <script type="text/javascript">moveProgressBar('17.1');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :count</span></dd>
+    <script type="text/javascript">moveProgressBar('17.5');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :sum</span></dd>
+    <script type="text/javascript">moveProgressBar('17.9');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :count when custom conditions are specified</span></dd>
+    <script type="text/javascript">moveProgressBar('18.2');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :sum when custom conditions are specified</span></dd>
+  </dl>
+</div>
+<div class="example_group">
+  <dl>
+  <dt id="example_group_17">Simplabs::ReportsAsSparkline::CumulatedReport#run for grouping month with :live_data = false the returned result</dt>
+    <script type="text/javascript">moveProgressBar('18.6');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should be an array starting reporting period (Time.now - limit.month)</span></dd>
+    <script type="text/javascript">moveProgressBar('19.0');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should be data ending with the reporting period before the current</span></dd>
+  </dl>
+</div>
+<div class="example_group">
+  <dl>
+  <dt id="example_group_18">Simplabs::ReportsAsSparkline::CumulatedReport#cumulate</dt>
+    <script type="text/javascript">moveProgressBar('19.4');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should correctly cumulate the given data</span></dd>
+  </dl>
+</div>
+<div class="example_group">
+  <dl>
+  <dt id="example_group_19">Simplabs::ReportsAsSparkline::Grouping#new</dt>
+    <script type="text/javascript">moveProgressBar('19.7');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should raise an error if an unsupported grouping is specified</span></dd>
+  </dl>
+</div>
+<div class="example_group">
+  <dl>
+  <dt id="example_group_20">Simplabs::ReportsAsSparkline::Grouping#to_sql for MySQL</dt>
+    <script type="text/javascript">moveProgressBar('20.1');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should use DATE_FORMAT with format string &quot;%Y/%m/%d/%H&quot; for grouping :hour</span></dd>
+    <script type="text/javascript">moveProgressBar('20.5');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should use DATE_FORMAT with format string &quot;%Y/%m/%d&quot; for grouping :day</span></dd>
+    <script type="text/javascript">moveProgressBar('20.8');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should use YEARWEEK with mode 3 for grouping :week</span></dd>
+    <script type="text/javascript">moveProgressBar('21.2');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should use DATE_FORMAT with format string &quot;%Y/%m&quot; for grouping :month</span></dd>
+  </dl>
+</div>
+<div class="example_group">
+  <dl>
+  <dt id="example_group_21">Simplabs::ReportsAsSparkline::Grouping#to_sql for PostgreSQL</dt>
+    <script type="text/javascript">moveProgressBar('21.6');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should use date_trunc with truncation identifier &quot;hour&quot; for grouping :hour</span></dd>
+    <script type="text/javascript">moveProgressBar('22.0');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should use date_trunc with truncation identifier &quot;day&quot; for grouping :day</span></dd>
+    <script type="text/javascript">moveProgressBar('22.3');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should use date_trunc with truncation identifier &quot;week&quot; for grouping :week</span></dd>
+    <script type="text/javascript">moveProgressBar('22.7');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should use date_trunc with truncation identifier &quot;month&quot; for grouping :month</span></dd>
+  </dl>
+</div>
+<div class="example_group">
+  <dl>
+  <dt id="example_group_22">Simplabs::ReportsAsSparkline::Grouping#to_sql for SQLite3</dt>
+    <script type="text/javascript">moveProgressBar('23.1');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should use strftime with format string &quot;%Y/%m/%d/%H&quot; for grouping :hour</span></dd>
+    <script type="text/javascript">moveProgressBar('23.5');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should use strftime with format string &quot;%Y/%m/%d&quot; for grouping :day</span></dd>
+    <script type="text/javascript">moveProgressBar('23.8');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should use date with mode &quot;weekday 0&quot; for grouping :week</span></dd>
+    <script type="text/javascript">moveProgressBar('24.2');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should use strftime with format string &quot;%Y/%m&quot; for grouping :month</span></dd>
+  </dl>
+</div>
+<div class="example_group">
+  <dl>
+  <dt id="example_group_23">Simplabs::ReportsAsSparkline::Grouping#date_parts_from_db_string for SQLite3</dt>
+    <script type="text/javascript">moveProgressBar('24.6');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should split the string with '/' for grouping :hour</span></dd>
+    <script type="text/javascript">moveProgressBar('25.0');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should split the string with '/' for grouping :day</span></dd>
+    <script type="text/javascript">moveProgressBar('25.3');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should split the string with '/' for grouping :month</span></dd>
+    <script type="text/javascript">moveProgressBar('25.7');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should split the string with &quot;-&quot; and return teh calendar year and week for grouping :week</span></dd>
+  </dl>
+</div>
+<div class="example_group">
+  <dl>
+  <dt id="example_group_24">Simplabs::ReportsAsSparkline::Grouping#date_parts_from_db_string for PostgreSQL</dt>
+    <script type="text/javascript">moveProgressBar('26.1');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should split the date part of the string with &quot;-&quot; and read out the hour for grouping :hour</span></dd>
+    <script type="text/javascript">moveProgressBar('26.4');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should split the date part of the string with &quot;-&quot; for grouping :day</span></dd>
+    <script type="text/javascript">moveProgressBar('26.8');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should split the date part of the string with &quot;-&quot; and calculate the calendar week for grouping :week</span></dd>
+    <script type="text/javascript">moveProgressBar('27.2');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should split the date part of the string with &quot;-&quot; and return year and month for grouping :month</span></dd>
+  </dl>
+</div>
+<div class="example_group">
+  <dl>
+  <dt id="example_group_25">Simplabs::ReportsAsSparkline::Grouping#date_parts_from_db_string for MySQL</dt>
+    <script type="text/javascript">moveProgressBar('27.6');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should split the string with '/' for grouping :hour</span></dd>
+    <script type="text/javascript">moveProgressBar('27.9');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should split the string with '/' for grouping :day</span></dd>
+    <script type="text/javascript">moveProgressBar('28.3');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should split the string with '/' for grouping :month</span></dd>
+    <script type="text/javascript">moveProgressBar('28.7');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should use the first 4 numbers for the year and the last 2 numbers for the week for grouping :week</span></dd>
+  </dl>
+</div>
+<div class="example_group">
+  <dl>
+  <dt id="example_group_26">Simplabs::ReportsAsSparkline::ReportCache.process</dt>
+    <script type="text/javascript">moveProgressBar('29.1');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should raise an ArgumentError if no block is given</span></dd>
+    <script type="text/javascript">moveProgressBar('29.4');</script>
+    <dd class="spec passed"><span class="passed_spec_name">sould start a transaction</span></dd>
+    <script type="text/javascript">moveProgressBar('29.8');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should read existing data from the cache</span></dd>
+    <script type="text/javascript">moveProgressBar('30.2');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should utilize the end_date in the conditions</span></dd>
+    <script type="text/javascript">moveProgressBar('30.5');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should read existing data from the cache for the correct grouping if one other than the report's default grouping is specified</span></dd>
+    <script type="text/javascript">moveProgressBar('30.9');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should yield the first reporting period if the cache is empty</span></dd>
+  </dl>
+</div>
+<div class="example_group">
+  <dl>
+  <dt id="example_group_27">Simplabs::ReportsAsSparkline::ReportCache.process with :live_data = true</dt>
+    <script type="text/javascript">moveProgressBar('31.3');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should yield to the given block</span></dd>
+    <script type="text/javascript">moveProgressBar('31.7');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should yield the reporting period after the last one in the cache if data was read from cache</span></dd>
+  </dl>
+</div>
+<div class="example_group">
+  <dl>
+  <dt id="example_group_28">Simplabs::ReportsAsSparkline::ReportCache.process with :live_data = false</dt>
+    <script type="text/javascript">moveProgressBar('32.0');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should not yield to the block if data for the reporting period before the current one has been found in the cache</span></dd>
+    <script type="text/javascript">moveProgressBar('32.4');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should yield to the block if no data for the reporting period before the current one has been found in the cache</span></dd>
+    <script type="text/javascript">moveProgressBar('32.8');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should yield the reporting period after the last one in the cache if data was read from cache</span></dd>
+  </dl>
+</div>
+<div class="example_group">
+  <dl>
+  <dt id="example_group_29">Simplabs::ReportsAsSparkline::ReportCache.process with cache = false</dt>
+    <script type="text/javascript">moveProgressBar('33.2');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should not read any data from cache</span></dd>
+    <script type="text/javascript">moveProgressBar('33.5');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should yield the first reporting period</span></dd>
+  </dl>
+</div>
+<div class="example_group">
+  <dl>
+  <dt id="example_group_30">Simplabs::ReportsAsSparkline::ReportCache.prepare_result</dt>
+    <script type="text/javascript">moveProgressBar('33.9');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should create :limit instances of Simplabs::ReportsAsSparkline::ReportCache with value 0.0 if no new data has been read and nothing was cached</span></dd>
+    <script type="text/javascript">moveProgressBar('34.3');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should create a new Simplabs::ReportsAsSparkline::ReportCache with the correct value if new data has been read</span></dd>
+    <script type="text/javascript">moveProgressBar('34.7');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should save the created Simplabs::ReportsAsSparkline::ReportCache</span></dd>
+    <script type="text/javascript">moveProgressBar('35.0');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return an array of arrays of Dates and Floats</span></dd>
+  </dl>
+</div>
+<div class="example_group">
+  <dl>
+  <dt id="example_group_31">Simplabs::ReportsAsSparkline::ReportCache.prepare_result with :live_data = false</dt>
+    <script type="text/javascript">moveProgressBar('35.4');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return an array of length :limit</span></dd>
+    <script type="text/javascript">moveProgressBar('35.8');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should not include an entry for the current reporting period</span></dd>
+  </dl>
+</div>
+<div class="example_group">
+  <dl>
+  <dt id="example_group_32">Simplabs::ReportsAsSparkline::ReportCache.prepare_result with :live_data = true</dt>
+    <script type="text/javascript">moveProgressBar('36.1');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return an array of length (:limit + 1)</span></dd>
+    <script type="text/javascript">moveProgressBar('36.5');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should include an entry for the current reporting period</span></dd>
+  </dl>
+</div>
+<div class="example_group">
+  <dl>
+  <dt id="example_group_33">Simplabs::ReportsAsSparkline::ReportCache.prepare_result with cache = false</dt>
+    <script type="text/javascript">moveProgressBar('36.9');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should not save the created Simplabs::ReportsAsSparkline::ReportCache</span></dd>
+  </dl>
+</div>
+<div class="example_group">
+  <dl>
+  <dt id="example_group_34">Simplabs::ReportsAsSparkline::ReportCache.find_value</dt>
+    <script type="text/javascript">moveProgressBar('37.3');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return the correct value when new data has been read for the reporting period</span></dd>
+    <script type="text/javascript">moveProgressBar('37.6');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return 0.0 when no data has been read for the reporting period</span></dd>
+  </dl>
+</div>
+<div class="example_group">
+  <dl>
+  <dt id="example_group_35">Simplabs::ReportsAsSparkline::Report#options</dt>
+    <script type="text/javascript">moveProgressBar('38.0');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should be frozen</span></dd>
+  </dl>
+</div>
+<div class="example_group">
+  <dl>
+  <dt id="example_group_36">Simplabs::ReportsAsSparkline::Report#run</dt>
+    <script type="text/javascript">moveProgressBar('38.4');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should process the data with the report cache</span></dd>
+    <script type="text/javascript">moveProgressBar('38.8');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should process the data with the report cache and specify cache = false when custom conditions are given</span></dd>
+    <script type="text/javascript">moveProgressBar('39.1');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should validate the specified options for the :run context</span></dd>
+    <script type="text/javascript">moveProgressBar('39.5');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should use a custom grouping if one is specified</span></dd>
+    <script type="text/javascript">moveProgressBar('39.9');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return an array of the same length as the specified limit when :live_data is false</span></dd>
+    <script type="text/javascript">moveProgressBar('40.2');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return an array of the same length as the specified limit + 1 when :live_data is true</span></dd>
+  </dl>
+</div>
+<div class="example_group">
+  <dl>
+  <dt id="example_group_37">Simplabs::ReportsAsSparkline::Report#run for grouping :hour when :end_date is specified the returned result</dt>
+    <script type="text/javascript">moveProgressBar('40.6');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should start with the reporting period (end_date - limit.hour)</span></dd>
+    <script type="text/javascript">moveProgressBar('41.0');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should end with the reporting period of the specified end date</span></dd>
+  </dl>
+</div>
+<div class="example_group">
+  <dl>
+  <dt id="example_group_38">Simplabs::ReportsAsSparkline::Report#run for grouping :hour with :live_data = true</dt>
+    <script type="text/javascript">moveProgressBar('41.4');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :count</span></dd>
+    <script type="text/javascript">moveProgressBar('41.7');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :sum</span></dd>
+    <script type="text/javascript">moveProgressBar('42.1');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :maximum</span></dd>
+    <script type="text/javascript">moveProgressBar('42.5');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :minimum</span></dd>
+    <script type="text/javascript">moveProgressBar('42.9');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :average</span></dd>
+    <script type="text/javascript">moveProgressBar('43.2');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :count when custom conditions are specified</span></dd>
+    <script type="text/javascript">moveProgressBar('43.6');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :sum when custom conditions are specified</span></dd>
+    <script type="text/javascript">moveProgressBar('44.0');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct results when run twice in a row with a higher limit on the second run</span></dd>
+  </dl>
+</div>
+<div class="example_group">
+  <dl>
+  <dt id="example_group_39">Simplabs::ReportsAsSparkline::Report#run for grouping :hour with :live_data = true the returned result</dt>
+    <script type="text/javascript">moveProgressBar('44.4');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should be an array starting reporting period (Time.now - limit.hour)</span></dd>
+    <script type="text/javascript">moveProgressBar('44.7');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should be data ending with the current reporting period</span></dd>
+  </dl>
+</div>
+<div class="example_group">
+  <dl>
+  <dt id="example_group_40">Simplabs::ReportsAsSparkline::Report#run for grouping :hour with :live_data = false</dt>
+    <script type="text/javascript">moveProgressBar('45.1');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :count</span></dd>
+    <script type="text/javascript">moveProgressBar('45.5');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :sum</span></dd>
+    <script type="text/javascript">moveProgressBar('45.8');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :maximum</span></dd>
+    <script type="text/javascript">moveProgressBar('46.2');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :minimum</span></dd>
+    <script type="text/javascript">moveProgressBar('46.6');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :average</span></dd>
+    <script type="text/javascript">moveProgressBar('47.0');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :count when custom conditions are specified</span></dd>
+    <script type="text/javascript">moveProgressBar('47.3');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :sum when custom conditions are specified</span></dd>
+    <script type="text/javascript">moveProgressBar('47.7');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct results when run twice in a row with a higher limit on the second run</span></dd>
+    <script type="text/javascript">moveProgressBar('48.1');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :count when :end_date is specified</span></dd>
+    <script type="text/javascript">moveProgressBar('48.5');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :sum when :end_date is specified</span></dd>
+  </dl>
+</div>
+<div class="example_group">
+  <dl>
+  <dt id="example_group_41">Simplabs::ReportsAsSparkline::Report#run for grouping :hour with :live_data = false the returned result</dt>
+    <script type="text/javascript">moveProgressBar('48.8');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should be an array starting reporting period (Time.now - limit.hour)</span></dd>
+    <script type="text/javascript">moveProgressBar('49.2');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should be data ending with the reporting period before the current</span></dd>
+  </dl>
+</div>
+<div class="example_group">
+  <dl>
+  <dt id="example_group_42">Simplabs::ReportsAsSparkline::Report#run for grouping :day when :end_date is specified the returned result</dt>
+    <script type="text/javascript">moveProgressBar('49.6');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should start with the reporting period (end_date - limit.day)</span></dd>
+    <script type="text/javascript">moveProgressBar('50.0');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should end with the reporting period of the specified end date</span></dd>
+  </dl>
+</div>
+<div class="example_group">
+  <dl>
+  <dt id="example_group_43">Simplabs::ReportsAsSparkline::Report#run for grouping :day with :live_data = true</dt>
+    <script type="text/javascript">moveProgressBar('50.3');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :count</span></dd>
+    <script type="text/javascript">moveProgressBar('50.7');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :sum</span></dd>
+    <script type="text/javascript">moveProgressBar('51.1');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :maximum</span></dd>
+    <script type="text/javascript">moveProgressBar('51.4');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :minimum</span></dd>
+    <script type="text/javascript">moveProgressBar('51.8');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :average</span></dd>
+    <script type="text/javascript">moveProgressBar('52.2');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :count when custom conditions are specified</span></dd>
+    <script type="text/javascript">moveProgressBar('52.6');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :sum when custom conditions are specified</span></dd>
+    <script type="text/javascript">moveProgressBar('52.9');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct results when run twice in a row with a higher limit on the second run</span></dd>
+  </dl>
+</div>
+<div class="example_group">
+  <dl>
+  <dt id="example_group_44">Simplabs::ReportsAsSparkline::Report#run for grouping :day with :live_data = true the returned result</dt>
+    <script type="text/javascript">moveProgressBar('53.3');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should be an array starting reporting period (Time.now - limit.day)</span></dd>
+    <script type="text/javascript">moveProgressBar('53.7');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should be data ending with the current reporting period</span></dd>
+  </dl>
+</div>
+<div class="example_group">
+  <dl>
+  <dt id="example_group_45">Simplabs::ReportsAsSparkline::Report#run for grouping :day with :live_data = false</dt>
+    <script type="text/javascript">moveProgressBar('54.1');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :count</span></dd>
+    <script type="text/javascript">moveProgressBar('54.4');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :sum</span></dd>
+    <script type="text/javascript">moveProgressBar('54.8');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :maximum</span></dd>
+    <script type="text/javascript">moveProgressBar('55.2');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :minimum</span></dd>
+    <script type="text/javascript">moveProgressBar('55.5');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :average</span></dd>
+    <script type="text/javascript">moveProgressBar('55.9');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :count when custom conditions are specified</span></dd>
+    <script type="text/javascript">moveProgressBar('56.3');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :sum when custom conditions are specified</span></dd>
+    <script type="text/javascript">moveProgressBar('56.7');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct results when run twice in a row with a higher limit on the second run</span></dd>
+    <script type="text/javascript">moveProgressBar('57.0');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :count when :end_date is specified</span></dd>
+    <script type="text/javascript">moveProgressBar('57.4');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :sum when :end_date is specified</span></dd>
+  </dl>
+</div>
+<div class="example_group">
+  <dl>
+  <dt id="example_group_46">Simplabs::ReportsAsSparkline::Report#run for grouping :day with :live_data = false the returned result</dt>
+    <script type="text/javascript">moveProgressBar('57.8');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should be an array starting reporting period (Time.now - limit.day)</span></dd>
+    <script type="text/javascript">moveProgressBar('58.2');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should be data ending with the reporting period before the current</span></dd>
+  </dl>
+</div>
+<div class="example_group">
+  <dl>
+  <dt id="example_group_47">Simplabs::ReportsAsSparkline::Report#run for grouping :week when :end_date is specified the returned result</dt>
+    <script type="text/javascript">moveProgressBar('58.5');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should start with the reporting period (end_date - limit.week)</span></dd>
+    <script type="text/javascript">moveProgressBar('58.9');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should end with the reporting period of the specified end date</span></dd>
+  </dl>
+</div>
+<div class="example_group">
+  <dl>
+  <dt id="example_group_48">Simplabs::ReportsAsSparkline::Report#run for grouping :week with :live_data = true</dt>
+    <script type="text/javascript">moveProgressBar('59.3');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :count</span></dd>
+    <script type="text/javascript">moveProgressBar('59.7');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :sum</span></dd>
+    <script type="text/javascript">moveProgressBar('60.0');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :maximum</span></dd>
+    <script type="text/javascript">moveProgressBar('60.4');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :minimum</span></dd>
+    <script type="text/javascript">moveProgressBar('60.8');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :average</span></dd>
+    <script type="text/javascript">moveProgressBar('61.1');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :count when custom conditions are specified</span></dd>
+    <script type="text/javascript">moveProgressBar('61.5');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :sum when custom conditions are specified</span></dd>
+    <script type="text/javascript">moveProgressBar('61.9');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct results when run twice in a row with a higher limit on the second run</span></dd>
+  </dl>
+</div>
+<div class="example_group">
+  <dl>
+  <dt id="example_group_49">Simplabs::ReportsAsSparkline::Report#run for grouping :week with :live_data = true the returned result</dt>
+    <script type="text/javascript">moveProgressBar('62.3');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should be an array starting reporting period (Time.now - limit.week)</span></dd>
+    <script type="text/javascript">moveProgressBar('62.6');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should be data ending with the current reporting period</span></dd>
+  </dl>
+</div>
+<div class="example_group">
+  <dl>
+  <dt id="example_group_50">Simplabs::ReportsAsSparkline::Report#run for grouping :week with :live_data = false</dt>
+    <script type="text/javascript">moveProgressBar('63.0');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :count</span></dd>
+    <script type="text/javascript">moveProgressBar('63.4');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :sum</span></dd>
+    <script type="text/javascript">moveProgressBar('63.8');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :maximum</span></dd>
+    <script type="text/javascript">moveProgressBar('64.1');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :minimum</span></dd>
+    <script type="text/javascript">moveProgressBar('64.5');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :average</span></dd>
+    <script type="text/javascript">moveProgressBar('64.9');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :count when custom conditions are specified</span></dd>
+    <script type="text/javascript">moveProgressBar('65.2');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :sum when custom conditions are specified</span></dd>
+    <script type="text/javascript">moveProgressBar('65.6');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct results when run twice in a row with a higher limit on the second run</span></dd>
+    <script type="text/javascript">moveProgressBar('66.0');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :count when :end_date is specified</span></dd>
+    <script type="text/javascript">moveProgressBar('66.4');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :sum when :end_date is specified</span></dd>
+  </dl>
+</div>
+<div class="example_group">
+  <dl>
+  <dt id="example_group_51">Simplabs::ReportsAsSparkline::Report#run for grouping :week with :live_data = false the returned result</dt>
+    <script type="text/javascript">moveProgressBar('66.7');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should be an array starting reporting period (Time.now - limit.week)</span></dd>
+    <script type="text/javascript">moveProgressBar('67.1');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should be data ending with the reporting period before the current</span></dd>
+  </dl>
+</div>
+<div class="example_group">
+  <dl>
+  <dt id="example_group_52">Simplabs::ReportsAsSparkline::Report#run for grouping :month when :end_date is specified the returned result</dt>
+    <script type="text/javascript">moveProgressBar('67.5');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should start with the reporting period (end_date - limit.month)</span></dd>
+    <script type="text/javascript">moveProgressBar('67.9');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should end with the reporting period of the specified end date</span></dd>
+  </dl>
+</div>
+<div class="example_group">
+  <dl>
+  <dt id="example_group_53">Simplabs::ReportsAsSparkline::Report#run for grouping :month with :live_data = true</dt>
+    <script type="text/javascript">moveProgressBar('68.2');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :count</span></dd>
+    <script type="text/javascript">moveProgressBar('68.6');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :sum</span></dd>
+    <script type="text/javascript">moveProgressBar('69.0');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :maximum</span></dd>
+    <script type="text/javascript">moveProgressBar('69.4');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :minimum</span></dd>
+    <script type="text/javascript">moveProgressBar('69.7');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :average</span></dd>
+    <script type="text/javascript">moveProgressBar('70.1');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :count when custom conditions are specified</span></dd>
+    <script type="text/javascript">moveProgressBar('70.5');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :sum when custom conditions are specified</span></dd>
+    <script type="text/javascript">moveProgressBar('70.8');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct results when run twice in a row with a higher limit on the second run</span></dd>
+  </dl>
+</div>
+<div class="example_group">
+  <dl>
+  <dt id="example_group_54">Simplabs::ReportsAsSparkline::Report#run for grouping :month with :live_data = true the returned result</dt>
+    <script type="text/javascript">moveProgressBar('71.2');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should be an array starting reporting period (Time.now - limit.month)</span></dd>
+    <script type="text/javascript">moveProgressBar('71.6');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should be data ending with the current reporting period</span></dd>
+  </dl>
+</div>
+<div class="example_group">
+  <dl>
+  <dt id="example_group_55">Simplabs::ReportsAsSparkline::Report#run for grouping :month with :live_data = false</dt>
+    <script type="text/javascript">moveProgressBar('72.0');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :count</span></dd>
+    <script type="text/javascript">moveProgressBar('72.3');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :sum</span></dd>
+    <script type="text/javascript">moveProgressBar('72.7');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :maximum</span></dd>
+    <script type="text/javascript">moveProgressBar('73.1');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :minimum</span></dd>
+    <script type="text/javascript">moveProgressBar('73.5');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :average</span></dd>
+    <script type="text/javascript">moveProgressBar('73.8');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :count when custom conditions are specified</span></dd>
+    <script type="text/javascript">moveProgressBar('74.2');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :sum when custom conditions are specified</span></dd>
+    <script type="text/javascript">moveProgressBar('74.6');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct results when run twice in a row with a higher limit on the second run</span></dd>
+    <script type="text/javascript">moveProgressBar('75.0');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :count when :end_date is specified</span></dd>
+    <script type="text/javascript">moveProgressBar('75.3');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :sum when :end_date is specified</span></dd>
+  </dl>
+</div>
+<div class="example_group">
+  <dl>
+  <dt id="example_group_56">Simplabs::ReportsAsSparkline::Report#run for grouping :month with :live_data = false the returned result</dt>
+    <script type="text/javascript">moveProgressBar('75.7');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should be an array starting reporting period (Time.now - limit.month)</span></dd>
+    <script type="text/javascript">moveProgressBar('76.1');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should be data ending with the reporting period before the current</span></dd>
+  </dl>
+</div>
+<div class="example_group">
+  <dl>
+  <dt id="example_group_57">Simplabs::ReportsAsSparkline::Report#run for grouping week with data ranging over two years with the first week of the second year belonging to the first year</dt>
+    <script type="text/javascript">moveProgressBar('76.4');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :count</span></dd>
+  </dl>
+</div>
+<div class="example_group">
+  <dl>
+  <dt id="example_group_58">Simplabs::ReportsAsSparkline::Report#run for grouping week with data ranging over two years with the first week of the second year belonging to the second year</dt>
+    <script type="text/javascript">moveProgressBar('76.8');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return correct data for aggregation :count</span></dd>
+  </dl>
+</div>
+<div class="example_group">
+  <dl>
+  <dt id="example_group_59">Simplabs::ReportsAsSparkline::Report#read_data</dt>
+    <script type="text/javascript">moveProgressBar('77.2');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should invoke the aggregation method on the model</span></dd>
+    <script type="text/javascript">moveProgressBar('77.6');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should setup the conditions</span></dd>
+  </dl>
+</div>
+<div class="example_group">
+  <dl>
+  <dt id="example_group_60">Simplabs::ReportsAsSparkline::Report#setup_conditions</dt>
+    <script type="text/javascript">moveProgressBar('77.9');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return conditions for date_column BETWEEN begin_at and end_at only when no custom conditions are specified and both begin and end date are specified</span></dd>
+    <script type="text/javascript">moveProgressBar('78.3');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return conditions for date_column &gt;= begin_at when no custom conditions and a begin_at are specified</span></dd>
+    <script type="text/javascript">moveProgressBar('78.7');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return conditions for date_column &lt;= end_at when no custom conditions and a end_at are specified</span></dd>
+    <script type="text/javascript">moveProgressBar('79.1');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should raise an argument error when neither begin_at or end_at are specified</span></dd>
+    <script type="text/javascript">moveProgressBar('79.4');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return conditions for date_column BETWEEN begin_at and end_date only when an empty Hash of custom conditions is specified</span></dd>
+    <script type="text/javascript">moveProgressBar('79.8');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return conditions for date_column BETWEEN begin_at and end_date only when an empty Array of custom conditions is specified</span></dd>
+    <script type="text/javascript">moveProgressBar('80.2');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should correctly include custom conditions if they are specified as a Hash</span></dd>
+    <script type="text/javascript">moveProgressBar('80.5');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should correctly include custom conditions if they are specified as an Array</span></dd>
+  </dl>
+</div>
+<div class="example_group">
+  <dl>
+  <dt id="example_group_61">Simplabs::ReportsAsSparkline::Report#ensure_valid_options</dt>
+    <script type="text/javascript">moveProgressBar('80.9');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should raise an error if malformed conditions are specified</span></dd>
+    <script type="text/javascript">moveProgressBar('81.3');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should not raise an error if conditions are specified as an Array</span></dd>
+    <script type="text/javascript">moveProgressBar('81.7');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should not raise an error if conditions are specified as a Hash</span></dd>
+    <script type="text/javascript">moveProgressBar('82.0');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should raise an error if an invalid grouping is specified</span></dd>
+    <script type="text/javascript">moveProgressBar('82.4');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should raise an error if an end date is specified that is not a DateTime</span></dd>
+    <script type="text/javascript">moveProgressBar('82.8');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should raise an error if an end date is specified that is in the future</span></dd>
+    <script type="text/javascript">moveProgressBar('83.2');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should raise an error if both an end date and :live_data = true are specified</span></dd>
+    <script type="text/javascript">moveProgressBar('83.5');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should not raise an error if both an end date and :live_data = false are specified</span></dd>
+  </dl>
+</div>
+<div class="example_group">
+  <dl>
+  <dt id="example_group_62">Simplabs::ReportsAsSparkline::Report#ensure_valid_options for context :initialize</dt>
+    <script type="text/javascript">moveProgressBar('83.9');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should not raise an error if valid options are specified</span></dd>
+    <script type="text/javascript">moveProgressBar('84.3');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should raise an error if an unsupported option is specified</span></dd>
+    <script type="text/javascript">moveProgressBar('84.7');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should raise an error if an invalid aggregation is specified</span></dd>
+    <script type="text/javascript">moveProgressBar('85.0');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should raise an error if aggregation :sum is spesicied but no :value_column</span></dd>
+  </dl>
+</div>
+<div class="example_group">
+  <dl>
+  <dt id="example_group_63">Simplabs::ReportsAsSparkline::Report#ensure_valid_options for context :run</dt>
+    <script type="text/javascript">moveProgressBar('85.4');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should not raise an error if valid options are specified</span></dd>
+    <script type="text/javascript">moveProgressBar('85.8');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should raise an error if an unsupported option is specified</span></dd>
+  </dl>
+</div>
+<div class="example_group">
+  <dl>
+  <dt id="example_group_64">Simplabs::ReportsAsSparkline::ReportingPeriod#date_time</dt>
+    <script type="text/javascript">moveProgressBar('86.1');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return the date and time with minutes = seconds = 0 for grouping :hour</span></dd>
+    <script type="text/javascript">moveProgressBar('86.5');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return the date part only for grouping :day</span></dd>
+    <script type="text/javascript">moveProgressBar('86.9');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return the date with day = 1 for grouping :month</span></dd>
+  </dl>
+</div>
+<div class="example_group">
+  <dl>
+  <dt id="example_group_65">Simplabs::ReportsAsSparkline::ReportingPeriod#date_time for grouping :week</dt>
+    <script type="text/javascript">moveProgressBar('87.3');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return the date of the monday of the week date_time is in for any day in that week</span></dd>
+    <script type="text/javascript">moveProgressBar('87.6');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return the date of the monday of the week date_time is in when the specified date is a monday already</span></dd>
+    <script type="text/javascript">moveProgressBar('88.0');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return the date of the monday of the week date_time is in when the monday is in a different month than the specified date</span></dd>
+    <script type="text/javascript">moveProgressBar('88.4');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return the date of the monday of the week date_time is in when the monday is in a different year than the specified date</span></dd>
+  </dl>
+</div>
+<div class="example_group">
+  <dl>
+  <dt id="example_group_66">Simplabs::ReportsAsSparkline::ReportingPeriod#last_date_time</dt>
+    <script type="text/javascript">moveProgressBar('88.8');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return the date and time with minutes = seconds = 59 for grouping :hour</span></dd>
+    <script type="text/javascript">moveProgressBar('89.1');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return the date part with hour = 23 and minute = seconds = 59 for grouping :day</span></dd>
+    <script type="text/javascript">moveProgressBar('89.5');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return the date of the last day of the month for grouping :month</span></dd>
+  </dl>
+</div>
+<div class="example_group">
+  <dl>
+  <dt id="example_group_67">Simplabs::ReportsAsSparkline::ReportingPeriod#last_date_time for grouping :week</dt>
+    <script type="text/javascript">moveProgressBar('89.9');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return the date of the sunday of the week date_time is in for any day in that week</span></dd>
+    <script type="text/javascript">moveProgressBar('90.2');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return the date of the sunday of the week date_time is in when the sunday is in a different month than the specified date</span></dd>
+    <script type="text/javascript">moveProgressBar('90.6');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return the date of the sunday of the week date_time is in when the sunday is in a different year than the specified date</span></dd>
+  </dl>
+</div>
+<div class="example_group">
+  <dl>
+  <dt id="example_group_68">Simplabs::ReportsAsSparkline::ReportingPeriod.from_db_string</dt>
+    <script type="text/javascript">moveProgressBar('91.0');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return a reporting period with the correct date and time and with minutes = seconds = 0 for grouping :hour</span></dd>
+    <script type="text/javascript">moveProgressBar('91.4');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return a reporting period with the date part only for grouping :day</span></dd>
+    <script type="text/javascript">moveProgressBar('91.7');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return a reporting period with the date part of the monday of the week the date is in for grouping :week</span></dd>
+    <script type="text/javascript">moveProgressBar('92.1');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return a reporting period with the correct date and with day = 1 for grouping :month</span></dd>
+  </dl>
+</div>
+<div class="example_group">
+  <dl>
+  <dt id="example_group_69">Simplabs::ReportsAsSparkline::ReportingPeriod#next</dt>
+    <script type="text/javascript">moveProgressBar('92.5');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return a reporting period with date and time one hour after the current period for grouping :hour</span></dd>
+    <script type="text/javascript">moveProgressBar('92.9');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return a reporting period with date one day after the current period for grouping :day</span></dd>
+    <script type="text/javascript">moveProgressBar('93.2');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return a reporting period with date one week after the current period for grouping :week</span></dd>
+    <script type="text/javascript">moveProgressBar('93.6');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return a reporting period with date of the first day in the month one month after the current period</span></dd>
+  </dl>
+</div>
+<div class="example_group">
+  <dl>
+  <dt id="example_group_70">Simplabs::ReportsAsSparkline::ReportingPeriod#previous</dt>
+    <script type="text/javascript">moveProgressBar('94.0');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return a reporting period with date and time one hour before the current period for grouping :hour</span></dd>
+    <script type="text/javascript">moveProgressBar('94.4');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return a reporting period with date one day before the current period for grouping :day</span></dd>
+    <script type="text/javascript">moveProgressBar('94.7');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return a reporting period with date one week before the current period for grouping :week</span></dd>
+    <script type="text/javascript">moveProgressBar('95.1');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return a reporting period with date of the first day in the month one month before the current period</span></dd>
+  </dl>
+</div>
+<div class="example_group">
+  <dl>
+  <dt id="example_group_71">Simplabs::ReportsAsSparkline::ReportingPeriod#==</dt>
+    <script type="text/javascript">moveProgressBar('95.5');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return true for 2 reporting periods with the same date_time and grouping</span></dd>
+    <script type="text/javascript">moveProgressBar('95.8');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return false for 2 reporting periods with the same date_time but different groupings</span></dd>
+    <script type="text/javascript">moveProgressBar('96.2');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return true for 2 reporting periods with the same grouping but different date_times if the date times evaluate to the same reporting period identifier</span></dd>
+    <script type="text/javascript">moveProgressBar('96.6');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return false for 2 reporting periods with the same grouping but different date_times if the date times evaluate to different reporting period identifiers</span></dd>
+  </dl>
+</div>
+<div class="example_group">
+  <dl>
+  <dt id="example_group_72">Simplabs::ReportsAsSparkline::ReportingPeriod.first</dt>
+    <script type="text/javascript">moveProgressBar('97.0');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return a reporting period with the date part of (DateTime.now - limit.hours with minutes = seconds = 0 for grouping :hour</span></dd>
+    <script type="text/javascript">moveProgressBar('97.3');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return a reporting period with the date part of (DateTime.now - limit.days) for grouping :day</span></dd>
+    <script type="text/javascript">moveProgressBar('97.7');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return a reporting period with the date of the first day of the month at (DateTime.now - limit.months) for grouping :month</span></dd>
+    <script type="text/javascript">moveProgressBar('98.1');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should return a reporting period with the date of the monday of the week at (DateTime.now - limit.weeks) for grouping :week</span></dd>
+  </dl>
+</div>
+<div class="example_group">
+  <dl>
+  <dt id="example_group_73">Simplabs::ReportsAsSparkline for inherited models</dt>
+    <script type="text/javascript">moveProgressBar('98.5');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should include all data when invoked on the base model class</span></dd>
+    <script type="text/javascript">moveProgressBar('98.8');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should include only data for instances of the inherited model when invoked on the inherited model class</span></dd>
+  </dl>
+</div>
+<div class="example_group">
+  <dl>
+  <dt id="example_group_74">Simplabs::ReportsAsSparkline::SparklineTagHelper#sparkline_tag</dt>
+    <script type="text/javascript">moveProgressBar('99.2');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should render an image with the correct source</span></dd>
+    <script type="text/javascript">moveProgressBar('99.6');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should add parameters for labels to the source of the image if rendering of lables is specified</span></dd>
+    <script type="text/javascript">moveProgressBar('100.0');</script>
+    <dd class="spec passed"><span class="passed_spec_name">should set the parameters for custom colors if custom colors are specified</span></dd>
+  </dl>
+</div>
+<script type="text/javascript">document.getElementById('duration').innerHTML = "Finished in <strong>41.896488 seconds</strong>";</script>
+<script type="text/javascript">document.getElementById('totals').innerHTML = "268 examples, 0 failures";</script>
+</div>
+</div>
+</body>
+</html>

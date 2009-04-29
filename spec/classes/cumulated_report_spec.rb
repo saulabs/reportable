@@ -36,9 +36,10 @@ describe Simplabs::ReportsAsSparkline::CumulatedReport do
 
             before(:all) do
               User.delete_all
-              User.create!(:login => 'test 1', :created_at => Time.now - 1.send(grouping), :profile_visits => 1)
-              User.create!(:login => 'test 2', :created_at => Time.now - 3.send(grouping), :profile_visits => 2)
-              User.create!(:login => 'test 3', :created_at => Time.now - 3.send(grouping), :profile_visits => 3)
+              User.create!(:login => 'test 1', :created_at => Time.now - 1.send(grouping),  :profile_visits => 1)
+              User.create!(:login => 'test 2', :created_at => Time.now - 3.send(grouping),  :profile_visits => 2)
+              User.create!(:login => 'test 3', :created_at => Time.now - 3.send(grouping),  :profile_visits => 3)
+              User.create!(:login => 'test 4', :created_at => Time.now - 20.send(grouping), :profile_visits => 1)
             end
 
             describe 'the returned result' do
@@ -78,11 +79,11 @@ describe Simplabs::ReportsAsSparkline::CumulatedReport do
               )
               result = @report.run
 
-              result[10][1].should == 3.0 if live_data
-              result[9][1].should  == 3.0
-              result[8][1].should  == 2.0
-              result[7][1].should  == 2.0
-              result[6][1].should  == 0.0
+              result[10][1].should == 4.0 if live_data
+              result[9][1].should  == 4.0
+              result[8][1].should  == 3.0
+              result[7][1].should  == 3.0
+              result[6][1].should  == 1.0
             end
 
             it 'should return correct data for aggregation :sum' do
@@ -95,11 +96,11 @@ describe Simplabs::ReportsAsSparkline::CumulatedReport do
               )
               result = @report.run()
 
-              result[10][1].should == 6.0 if live_data
-              result[9][1].should  == 6.0
-              result[8][1].should  == 5.0
-              result[7][1].should  == 5.0
-              result[6][1].should  == 0.0
+              result[10][1].should == 7.0 if live_data
+              result[9][1].should  == 7.0
+              result[8][1].should  == 6.0
+              result[7][1].should  == 6.0
+              result[6][1].should  == 1.0
             end
 
             it 'should return correct data for aggregation :count when custom conditions are specified' do
@@ -109,13 +110,13 @@ describe Simplabs::ReportsAsSparkline::CumulatedReport do
                 :limit       => 10,
                 :live_data   => live_data
               )
-              result = @report.run(:conditions => ['login IN (?)', ['test 1', 'test 2']])
+              result = @report.run(:conditions => ['login IN (?)', ['test 1', 'test 2', 'test 4']])
 
-              result[10][1].should == 2.0 if live_data
-              result[9][1].should  == 2.0
-              result[8][1].should  == 1.0
-              result[7][1].should  == 1.0
-              result[6][1].should  == 0.0
+              result[10][1].should == 3.0 if live_data
+              result[9][1].should  == 3.0
+              result[8][1].should  == 2.0
+              result[7][1].should  == 2.0
+              result[6][1].should  == 1.0
             end
 
             it 'should return correct data for aggregation :sum when custom conditions are specified' do
@@ -126,13 +127,13 @@ describe Simplabs::ReportsAsSparkline::CumulatedReport do
                 :limit        => 10,
                 :live_data    => live_data
               )
-              result = @report.run(:conditions => ['login IN (?)', ['test 1', 'test 2']])
+              result = @report.run(:conditions => ['login IN (?)', ['test 1', 'test 2', 'test 4']])
 
-              result[10][1].should == 3.0 if live_data
-              result[9][1].should  == 3.0
-              result[8][1].should  == 2.0
-              result[7][1].should  == 2.0
-              result[6][1].should  == 0.0
+              result[10][1].should == 4.0 if live_data
+              result[9][1].should  == 4.0
+              result[8][1].should  == 3.0
+              result[7][1].should  == 3.0
+              result[6][1].should  == 1.0
             end
 
           end

@@ -77,7 +77,7 @@ module Simplabs #:nodoc:
 
         def setup_conditions(begin_at, end_at, custom_conditions = [])
           conditions = [@klass.send(:sanitize_sql_for_conditions, custom_conditions) || '']
-          conditions[0] += "#{(conditions[0].blank? ? '' : ' AND ')}\"#{@klass.table_name}\".\"#{@date_column.to_s}\" "
+          conditions[0] += "#{(conditions[0].blank? ? '' : ' AND ')}#{ActiveRecord::Base.connection.quote_table_name(@klass.table_name)}.#{ActiveRecord::Base.connection.quote_column_name(@date_column.to_s)} "
           conditions[0] += if begin_at && end_at
             'BETWEEN ? AND ?'
           elsif begin_at

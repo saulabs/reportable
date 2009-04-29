@@ -334,18 +334,19 @@ describe Simplabs::ReportsAsSparkline::Report do
     before do
       @begin_at = Time.now
       @end_at = 5.days.from_now
+      @created_at_column_clause = "#{ActiveRecord::Base.connection.quote_table_name('users')}.#{ActiveRecord::Base.connection.quote_column_name('created_at')}"
     end
 
     it 'should return conditions for date_column BETWEEN begin_at and end_at only when no custom conditions are specified and both begin and end date are specified' do
-      @report.send(:setup_conditions, @begin_at, @end_at).should == ['"users"."created_at" BETWEEN ? AND ?', @begin_at, @end_at]
+      @report.send(:setup_conditions, @begin_at, @end_at).should == ["#{@created_at_column_clause} BETWEEN ? AND ?", @begin_at, @end_at]
     end
 
     it 'should return conditions for date_column >= begin_at when no custom conditions and a begin_at are specified' do
-      @report.send(:setup_conditions, @begin_at, nil).should == ['"users"."created_at" >= ?', @begin_at]
+      @report.send(:setup_conditions, @begin_at, nil).should == ["#{@created_at_column_clause} >= ?", @begin_at]
     end
     
     it 'should return conditions for date_column <= end_at when no custom conditions and a end_at are specified' do
-      @report.send(:setup_conditions, nil, @end_at).should == ['"users"."created_at" <= ?', @end_at]
+      @report.send(:setup_conditions, nil, @end_at).should == ["#{@created_at_column_clause} <= ?", @end_at]
     end
     
     it 'should raise an argument error when neither begin_at or end_at are specified' do
@@ -353,11 +354,11 @@ describe Simplabs::ReportsAsSparkline::Report do
     end
 
     it 'should return conditions for date_column BETWEEN begin_at and end_date only when an empty Hash of custom conditions is specified' do
-      @report.send(:setup_conditions, @begin_at, @end_at, {}).should == ['"users"."created_at" BETWEEN ? AND ?', @begin_at, @end_at]
+      @report.send(:setup_conditions, @begin_at, @end_at, {}).should == ["#{@created_at_column_clause} BETWEEN ? AND ?", @begin_at, @end_at]
     end
 
     it 'should return conditions for date_column BETWEEN begin_at and end_date only when an empty Array of custom conditions is specified' do
-      @report.send(:setup_conditions, @begin_at, @end_at, []).should == ['"users"."created_at" BETWEEN ? AND ?', @begin_at, @end_at]
+      @report.send(:setup_conditions, @begin_at, @end_at, []).should == ["#{@created_at_column_clause} BETWEEN ? AND ?", @begin_at, @end_at]
     end
 
     it 'should correctly include custom conditions if they are specified as a Hash' do
@@ -365,29 +366,17 @@ describe Simplabs::ReportsAsSparkline::Report do
 
       conditions = @report.send(:setup_conditions, @begin_at, @end_at, custom_conditions)
       # cannot directly check for string equqlity here since hashes are not ordered and so there is no way to now in which order the conditions are added to the SQL clause
-      conditions[0].should =~ (/"users"."first_name" = \'first name\'/)
-      conditions[0].should =~ (/"users"."last_name" = \'last name\'/)
-      conditions[0].should =~ (/"users"."created_at" BETWEEN \? AND \?/)
+      conditions[0].should =~ (/#{ActiveRecord::Base.connection.quote_table_name('users')}.#{ActiveRecord::Base.connection.quote_column_name('first_name')} = #{ActiveRecord::Base.connection.quote('first name')}/)
+      conditions[0].should =~ (/#{ActiveRecord::Base.connection.quote_table_name('users')}.#{ActiveRecord::Base.connection.quote_column_name('last_name')} = #{ActiveRecord::Base.connection.quote('last name')}/)
+      conditions[0].should =~ (/#{@created_at_column_clause} BETWEEN \? AND \?/)
       conditions[1].should == @begin_at
       conditions[2].should == @end_at
-    end
-
-    it 'should correctly translate { :column => nil }' do
-      @report.send(:setup_conditions, @begin_at, @end_at, { :column => nil }).should == ['"users"."column" IS NULL AND "users"."created_at" BETWEEN ? AND ?', @begin_at, @end_at]
-    end
-
-    it 'should correctly translate { :column => [1, 2] }' do
-      @report.send(:setup_conditions, @begin_at, @end_at, { :column => [1, 2] }).should == ['"users"."column" IN (1,2) AND "users"."created_at" BETWEEN ? AND ?', @begin_at, @end_at]
-    end
-
-    it 'should correctly translate { :column => (1..3) }' do
-      @report.send(:setup_conditions, @begin_at, @end_at, { :column => (1..3) }).should == ['"users"."column" BETWEEN 1 AND 3 AND "users"."created_at" BETWEEN ? AND ?', @begin_at, @end_at]
     end
 
     it 'should correctly include custom conditions if they are specified as an Array' do
       custom_conditions = ['first_name = ? AND last_name = ?', 'first name', 'last name']
 
-      @report.send(:setup_conditions, @begin_at, @end_at, custom_conditions).should == ['first_name = \'first name\' AND last_name = \'last name\' AND "users"."created_at" BETWEEN ? AND ?', @begin_at, @end_at]
+      @report.send(:setup_conditions, @begin_at, @end_at, custom_conditions).should == ["first_name = #{ActiveRecord::Base.connection.quote('first name')} AND last_name = #{ActiveRecord::Base.connection.quote('last name')} AND #{@created_at_column_clause} BETWEEN ? AND ?", @begin_at, @end_at]
     end
 
   end

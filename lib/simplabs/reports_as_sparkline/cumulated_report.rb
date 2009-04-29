@@ -22,7 +22,7 @@ module Simplabs #:nodoc:
 
       protected
 
-        def cumulate(data, options) #:nodoc:
+        def cumulate(data, options)
           first_reporting_period = ReportingPeriod.first(options[:grouping], options[:limit], options[:end_date])
           acc = initial_cumulative_value(first_reporting_period.date_time, options)
           result = []

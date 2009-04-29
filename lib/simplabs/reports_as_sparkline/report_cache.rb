@@ -10,7 +10,7 @@ module Simplabs #:nodoc:
         raise ArgumentError.new('A block must be given') unless block_given?
         self.transaction do
           cached_data = []
-          first_reporting_period = ReportingPeriod.first(options[:grouping], options[:limit], options[:end_date])
+          first_reporting_period = ReportingPeriod.first(options[:grouping], (options[:end_date] ? options[:limit] - 1 : options[:limit]), options[:end_date])
           last_reporting_period = options[:end_date] ? ReportingPeriod.new(options[:grouping], options[:end_date]) : nil
 
           if cache
@@ -22,7 +22,7 @@ module Simplabs #:nodoc:
           new_data = if !options[:live_data] && last_cached_reporting_period == ReportingPeriod.new(options[:grouping]).previous
             []
           else
-            end_date = options[:live_data] ? nil : last_reporting_period && last_reporting_period.date_time
+            end_date = options[:live_data] ? nil : (options[:end_date] ? last_reporting_period.last_date_time : nil)
             yield((last_cached_reporting_period.next rescue first_reporting_period).date_time, end_date)
           end
 
@@ -35,9 +35,9 @@ module Simplabs #:nodoc:
         def self.prepare_result(new_data, cached_data, report, options, cache = true)
           new_data = new_data.map { |data| [ReportingPeriod.from_db_string(options[:grouping], data[0]), data[1]] }
           result = cached_data.map { |cached| [cached.reporting_period, cached.value] }
-          last_reporting_period = ReportingPeriod.new(options[:grouping], options[:end_date])
-          reporting_period = cached_data.empty? ? ReportingPeriod.first(options[:grouping], options[:limit], options[:end_date]) : ReportingPeriod.new(options[:grouping], cached_data.last.reporting_period).next
-          while reporting_period < last_reporting_period
+          last_reporting_period = ReportingPeriod.new(options[:grouping])
+          reporting_period = cached_data.empty? ? ReportingPeriod.first(options[:grouping], (options[:end_date] ? options[:limit] - 1 : options[:limit]), options[:end_date]) : ReportingPeriod.new(options[:grouping], cached_data.last.reporting_period).next
+          while reporting_period < (options[:end_date] ? ReportingPeriod.new(options[:grouping], options[:end_date]).next : last_reporting_period)
             cached = build_cached_data(report, options[:grouping], options[:limit], reporting_period, find_value(new_data, reporting_period))
             cached.save! if cache
             result << [reporting_period.date_time, cached.value]

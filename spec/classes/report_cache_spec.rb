@@ -120,7 +120,7 @@ describe Simplabs::ReportsAsSparkline::ReportCache do
           @report.options[:grouping].identifier.to_s,
           @report.aggregation.to_s,
           10,
-          Simplabs::ReportsAsSparkline::ReportingPeriod.first(@report.options[:grouping], 10).date_time,
+          Simplabs::ReportsAsSparkline::ReportingPeriod.first(@report.options[:grouping], 9).date_time,
           Simplabs::ReportsAsSparkline::ReportingPeriod.new(@report.options[:grouping], end_date).date_time
         ],
         :limit => 10,

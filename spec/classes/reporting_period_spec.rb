@@ -28,24 +28,24 @@ describe Simplabs::ReportsAsSparkline::ReportingPeriod do
       end
 
       it 'should return the date of the monday of the week date_time is in when the specified date is a monday already' do
-        date_time = DateTime.new(2008, 11, 24) #this is a monday already, should not change
+        date_time = DateTime.new(2008, 11, 24)
         reporting_period = Simplabs::ReportsAsSparkline::ReportingPeriod.new(Simplabs::ReportsAsSparkline::Grouping.new(:week), date_time)
 
-        reporting_period.date_time.should == Date.new(date_time.year, date_time.month, 24) # expect to get monday 24th again
+        reporting_period.date_time.should == Date.new(date_time.year, date_time.month, 24)
       end
 
       it 'should return the date of the monday of the week date_time is in when the monday is in a different month than the specified date' do
-        date_time = DateTime.new(2008, 11, 1) #this is a saturday
+        date_time = DateTime.new(2008, 11, 1)
         reporting_period = Simplabs::ReportsAsSparkline::ReportingPeriod.new(Simplabs::ReportsAsSparkline::Grouping.new(:week), date_time)
 
-        reporting_period.date_time.should == Date.new(2008, 10, 27) # expect to get the monday before the 1st, which is in october
+        reporting_period.date_time.should == Date.new(2008, 10, 27)
       end
 
       it 'should return the date of the monday of the week date_time is in when the monday is in a different year than the specified date' do
-        date_time = DateTime.new(2009, 1, 1) #this is a thursday
+        date_time = DateTime.new(2009, 1, 1)
         reporting_period = Simplabs::ReportsAsSparkline::ReportingPeriod.new(Simplabs::ReportsAsSparkline::Grouping.new(:week), date_time)
 
-        reporting_period.date_time.should == Date.new(2008, 12, 29) # expect to get the monday before the 1st, which is in december 2008
+        reporting_period.date_time.should == Date.new(2008, 12, 29)
       end
 
     end
@@ -55,6 +55,56 @@ describe Simplabs::ReportsAsSparkline::ReportingPeriod do
       reporting_period = Simplabs::ReportsAsSparkline::ReportingPeriod.new(Simplabs::ReportsAsSparkline::Grouping.new(:month), date_time)
 
       reporting_period.date_time.should == Date.new(date_time.year, date_time.month, 1)
+    end
+
+  end
+
+  describe '#last_date_time' do
+
+    it 'should return the date and time with minutes = seconds = 59 for grouping :hour' do
+      date_time = DateTime.now
+      reporting_period = Simplabs::ReportsAsSparkline::ReportingPeriod.new(Simplabs::ReportsAsSparkline::Grouping.new(:hour), date_time)
+
+      reporting_period.last_date_time.should == DateTime.new(date_time.year, date_time.month, date_time.day, date_time.hour, 59, 59)
+    end
+
+    it 'should return the date part with hour = 23 and minute = seconds = 59 for grouping :day' do
+      date_time = DateTime.now
+      reporting_period = Simplabs::ReportsAsSparkline::ReportingPeriod.new(Simplabs::ReportsAsSparkline::Grouping.new(:day), date_time)
+
+      reporting_period.last_date_time.should == DateTime.new(date_time.year, date_time.month, date_time.day, 23, 59, 59)
+    end
+
+    describe 'for grouping :week' do
+
+      it 'should return the date of the sunday of the week date_time is in for any day in that week' do
+        date_time = DateTime.new(2008, 11, 27)
+        reporting_period = Simplabs::ReportsAsSparkline::ReportingPeriod.new(Simplabs::ReportsAsSparkline::Grouping.new(:week), date_time)
+
+        reporting_period.last_date_time.should == Date.new(date_time.year, date_time.month, 30)
+      end
+
+      it 'should return the date of the sunday of the week date_time is in when the sunday is in a different month than the specified date' do
+        date_time = DateTime.new(2008, 10, 30)
+        reporting_period = Simplabs::ReportsAsSparkline::ReportingPeriod.new(Simplabs::ReportsAsSparkline::Grouping.new(:week), date_time)
+
+        reporting_period.last_date_time.should == Date.new(2008, 11, 2)
+      end
+
+      it 'should return the date of the sunday of the week date_time is in when the sunday is in a different year than the specified date' do
+        date_time = DateTime.new(2008, 12, 29)
+        reporting_period = Simplabs::ReportsAsSparkline::ReportingPeriod.new(Simplabs::ReportsAsSparkline::Grouping.new(:week), date_time)
+
+        reporting_period.last_date_time.should == Date.new(2009, 1, 4)
+      end
+
+    end
+
+    it 'should return the date of the last day of the month for grouping :month' do
+      date_time = DateTime.new(2009, 4, 29)
+      reporting_period = Simplabs::ReportsAsSparkline::ReportingPeriod.new(Simplabs::ReportsAsSparkline::Grouping.new(:month), date_time)
+
+      reporting_period.last_date_time.should == Date.new(date_time.year, date_time.month, 30)
     end
 
   end

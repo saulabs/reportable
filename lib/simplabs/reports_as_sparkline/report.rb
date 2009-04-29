@@ -108,7 +108,8 @@ module Simplabs #:nodoc:
           raise ArgumentError.new('Options :live_data and :end_date may not both be specified!') if options[:live_data] && options[:end_date]
           raise ArgumentError.new("Invalid grouping #{options[:grouping]}!") if options[:grouping] && ![:hour, :day, :week, :month].include?(options[:grouping])
           raise ArgumentError.new("Invalid conditions: #{options[:conditions].inspect}!") if options[:conditions] && !options[:conditions].is_a?(Array) && !options[:conditions].is_a?(Hash)
-          raise ArgumentError.new("Invalid end date: #{options[:end_date].inspect}; must be a DateTime!") if options[:end_date] && !options[:end_date].is_a?(DateTime)
+          raise ArgumentError.new("Invalid end date: #{options[:end_date].inspect}; must be a DateTime!") if options[:end_date] && !options[:end_date].is_a?(DateTime) && !options[:end_date].is_a?(Time)
+          raise ArgumentError.new('End date may not be in the future!') if options[:end_date] && options[:end_date] > DateTime.now
         end
 
     end

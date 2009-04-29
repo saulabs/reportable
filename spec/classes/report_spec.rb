@@ -70,26 +70,53 @@ describe Simplabs::ReportsAsSparkline::Report do
 
     for grouping in [:hour, :day, :week, :month] do
 
-      describe "for grouping #{grouping.to_s}" do
+      describe "for grouping :#{grouping.to_s}" do
+
+        before(:all) do
+          User.create!(:login => 'test 1', :created_at => Time.now,                    :profile_visits => 2)
+          User.create!(:login => 'test 2', :created_at => Time.now - 1.send(grouping), :profile_visits => 1)
+          User.create!(:login => 'test 3', :created_at => Time.now - 3.send(grouping), :profile_visits => 2)
+          User.create!(:login => 'test 4', :created_at => Time.now - 3.send(grouping), :profile_visits => 3)
+        end
+
+        describe 'when :end_date is specified' do
+
+          describe 'the returned result' do
+
+            before do
+              @end_date = DateTime.now - 1.send(grouping)
+              @grouping = Simplabs::ReportsAsSparkline::Grouping.new(grouping)
+              @report = Simplabs::ReportsAsSparkline::Report.new(User, :registrations,
+                :grouping => grouping,
+                :limit    => 10,
+                :end_date => @end_date
+              )
+              @result = @report.run
+            end
+
+            it "should start with the reporting period (end_date - limit.#{grouping.to_s})" do
+              @result.first[0].should == Simplabs::ReportsAsSparkline::ReportingPeriod.new(@grouping, @end_date - 9.send(grouping)).date_time
+            end
+
+            it "should end with the reporting period of the specified end date" do
+              @result.last[0].should == Simplabs::ReportsAsSparkline::ReportingPeriod.new(@grouping, @end_date).date_time
+            end
+
+          end
+
+        end
 
         [true, false].each do |live_data|
 
           describe "with :live_data = #{live_data}" do
-
-            before(:all) do
-              User.create!(:login => 'test 1', :created_at => Time.now,                    :profile_visits => 2)
-              User.create!(:login => 'test 2', :created_at => Time.now - 1.send(grouping), :profile_visits => 1)
-              User.create!(:login => 'test 3', :created_at => Time.now - 3.send(grouping), :profile_visits => 2)
-              User.create!(:login => 'test 4', :created_at => Time.now - 3.send(grouping), :profile_visits => 3)
-            end
 
             describe 'the returned result' do
 
               before do
                 @grouping = Simplabs::ReportsAsSparkline::Grouping.new(grouping)
                 @report = Simplabs::ReportsAsSparkline::Report.new(User, :registrations,
-                  :grouping => grouping,
-                  :limit => 10,
+                  :grouping  => grouping,
+                  :limit     => 10,
                   :live_data => live_data
                 )
                 @result = @report.run
@@ -228,7 +255,7 @@ describe Simplabs::ReportsAsSparkline::Report do
               result[6][1].should  == 0.0
             end
 
-            it 'should return correct results when run twice with different limits' do
+            it 'should return correct results when run twice in a row with a higher limit on the second run' do
               @report = Simplabs::ReportsAsSparkline::Report.new(User, :registrations,
                 :aggregation => :count,
                 :grouping    => grouping,
@@ -250,12 +277,47 @@ describe Simplabs::ReportsAsSparkline::Report do
               result[6][1].should  == 0.0
             end
 
+            unless live_data
+
+              it 'should return correct data for aggregation :count when :end_date is specified' do
+                @report = Simplabs::ReportsAsSparkline::Report.new(User, :registrations,
+                  :aggregation => :count,
+                  :grouping    => grouping,
+                  :limit       => 10,
+                  :end_date    => Time.now - 3.send(grouping)
+                )
+                result = @report.run.to_a
+
+                result[9][1].should  == 2.0
+                result[8][1].should  == 0.0
+                result[7][1].should  == 0.0
+                result[6][1].should  == 0.0
+              end
+
+              it 'should return correct data for aggregation :sum when :end_date is specified' do
+                @report = Simplabs::ReportsAsSparkline::Report.new(User, :registrations,
+                  :aggregation  => :sum,
+                  :grouping     => grouping,
+                  :value_column => :profile_visits,
+                  :limit        => 10,
+                  :end_date     => Time.now - 3.send(grouping)
+                )
+                result = @report.run.to_a
+
+                result[9][1].should  == 5.0
+                result[8][1].should  == 0.0
+                result[7][1].should  == 0.0
+                result[6][1].should  == 0.0
+              end
+
+            end
+
           end
 
-          after(:all) do
-            User.destroy_all
-          end
+        end
 
+        after(:all) do
+          User.destroy_all
         end
 
       end
@@ -423,6 +485,10 @@ describe Simplabs::ReportsAsSparkline::Report do
 
     it 'should raise an error if an end date is specified that is not a DateTime' do
       lambda { @report.send(:ensure_valid_options, { :end_date => 'today' }) }.should raise_error(ArgumentError)
+    end
+
+    it 'should raise an error if an end date is specified that is in the future' do
+      lambda { @report.send(:ensure_valid_options, { :end_date => (DateTime.now + 1.month) }) }.should raise_error(ArgumentError)
     end
 
     it 'should raise an error if both an end date and :live_data = true are specified' do

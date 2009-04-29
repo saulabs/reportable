@@ -71,10 +71,24 @@ module Simplabs #:nodoc:
         raise ArgumentError.new("Can only compare instances of #{Simplabs::ReportsAsSparkline::ReportingPeriod.klass}")
       end
 
+      def last_date_time #:nodoc:
+        case @grouping.identifier
+          when :hour
+            DateTime.new(@date_time.year, @date_time.month, @date_time.day, @date_time.hour, 59, 59)
+          when :day
+            DateTime.new(@date_time.year, @date_time.month, @date_time.day, 23, 59, 59)
+          when :week
+            date_time = (@date_time - @date_time.wday.days) + 7.days
+            Date.new(date_time.year, date_time.month, date_time.day)
+          when :month
+            Date.new(@date_time.year, @date_time.month, (Date.new(@date_time.year, 12, 31) << (12 - @date_time.month)).day)
+        end
+      end
+
       private
 
         def parse_date_time(date_time)
-          return case @grouping.identifier
+          case @grouping.identifier
             when :hour
               DateTime.new(date_time.year, date_time.month, date_time.day, date_time.hour)
             when :day

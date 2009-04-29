@@ -68,49 +68,6 @@ describe Simplabs::ReportsAsSparkline::Report do
       @report.run.length.should == 11
     end
 
-    describe "a month report with a limit of 2" do
-      before(:all) do
-        User.create!(:login => 'test 1', :created_at => Time.now,           :profile_visits => 2)
-        User.create!(:login => 'test 2', :created_at => Time.now - 1.month, :profile_visits => 1)
-        User.create!(:login => 'test 3', :created_at => Time.now - 3.month, :profile_visits => 2)
-        User.create!(:login => 'test 4', :created_at => Time.now - 3.month, :profile_visits => 3)
-
-        @report2 = Simplabs::ReportsAsSparkline::Report.new(User, :registrations,
-          :grouping => :month,
-          :limit => 2
-        )
-
-        @one_month_ago    = Date.new(DateTime.now.year, DateTime.now.month, 1) - 1.month
-        @two_months_ago   = Date.new(DateTime.now.year, DateTime.now.month, 1) - 2.months
-        @three_months_ago = Date.new(DateTime.now.year, DateTime.now.month, 1) - 3.months
-      end
-
-      it "should return data for the last two months when there is no end date" do
-        @report2.run.should == [[@two_months_ago, 0.0], [@one_month_ago, 1.0]]
-      end
-
-      it "should go back further into history on a second report run if the limit is higher" do
-        @report2.run(:limit => 2)
-        @report2.run(:limit => 3).should == [[@three_months_ago, 2.0], [@two_months_ago.to_time, 0.0], [@one_month_ago.to_time, 1.0]]
-      end
-
-      it "should return data for two months prior to the end date" do
-        @report2.run(:end_date => 1.month.ago).should == [[@three_months_ago, 2.0], [@two_months_ago, 0.0]]
-      end
-
-      it "should return data for the two months prior to the end date, and also the end date's month when live_date = true" do
-        @report2.run(:end_date => 1.month.ago, :live_data => true).should == [[@three_months_ago, 2.0], [@two_months_ago, 0.0], [@one_month_ago, 1.0]]
-      end
-
-      it "should return data for the two months prior to the end date, and also the end date's month when live_date = true, when getting the data from the cache" do
-        # run it once to get from the database...
-        @report2.run(:end_date => 1.month.ago, :live_data => true)
-
-        # and then again from the cache...
-        @report2.run(:end_date => 1.month.ago, :live_data => true).should == [[@three_months_ago.to_time, 2.0], [@two_months_ago.to_time, 0.0], [@one_month_ago, 1.0]]
-      end
-    end
-
     for grouping in [:hour, :day, :week, :month] do
 
       describe "for grouping #{grouping.to_s}" do

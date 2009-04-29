@@ -26,41 +26,6 @@ describe Simplabs::ReportsAsSparkline::CumulatedReport do
       @report.run.length.should == 11
     end
     
-    describe "a month report with a limit of 2" do
-      before(:all) do
-        User.delete_all
-        User.create!(:login => 'test 1', :created_at => Time.now,           :profile_visits => 2)
-        User.create!(:login => 'test 2', :created_at => Time.now - 1.month, :profile_visits => 1)
-        User.create!(:login => 'test 3', :created_at => Time.now - 3.month, :profile_visits => 2)
-        User.create!(:login => 'test 4', :created_at => Time.now - 3.month, :profile_visits => 3)
-        User.create!(:login => 'test 5', :created_at => Time.now - 4.month, :profile_visits => 4)
-        
-        @report2 = Simplabs::ReportsAsSparkline::CumulatedReport.new(User, :cumulated_registrations,
-          :grouping => :month,
-          :limit => 2
-        )
-
-        @one_month_ago    = Date.new(DateTime.now.year, DateTime.now.month, 1) - 1.month
-        @two_months_ago   = Date.new(DateTime.now.year, DateTime.now.month, 1) - 2.months
-        @three_months_ago = Date.new(DateTime.now.year, DateTime.now.month, 1) - 3.months
-      end
-      
-      it 'should include the counts from before the first period in the cumulated totals' do
-        @report2.run.should == [[@two_months_ago, 3.0], [@one_month_ago, 4.0]]
-      end
-      
-      it 'should return the initial count for initial_cumulative_value' do
-        options = @report2.send(:options_for_run, {})
-        tomorrow = 1.day.from_now
-        @report2.send(:initial_cumulative_value, tomorrow,            options).should == 5
-        @report2.send(:initial_cumulative_value, tomorrow - 1.month,  options).should == 4
-        @report2.send(:initial_cumulative_value, tomorrow - 2.months, options).should == 3
-        @report2.send(:initial_cumulative_value, tomorrow - 3.months, options).should == 3
-        @report2.send(:initial_cumulative_value, tomorrow - 4.months, options).should == 1
-        @report2.send(:initial_cumulative_value, tomorrow - 5.months, options).should == 0
-      end
-    end
-
     for grouping in [:hour, :day, :week, :month] do
 
       describe "for grouping #{grouping.to_s}" do

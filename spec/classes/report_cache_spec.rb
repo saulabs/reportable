@@ -155,16 +155,6 @@ describe Simplabs::ReportsAsSparkline::ReportCache do
       Simplabs::ReportsAsSparkline::ReportCache.process(@report, { :limit => 10, :grouping => grouping }) { [] }
     end
 
-    it 'should prepare the results before it returns them' do
-      new_after_cache_data = []
-      new_before_cache_data = []
-      cached_data = []
-      Simplabs::ReportsAsSparkline::ReportCache.stub!(:find).and_return(cached_data)
-      Simplabs::ReportsAsSparkline::ReportCache.should_receive(:prepare_result).once.with(new_before_cache_data, new_after_cache_data, cached_data, @report, @report.options, true)
-
-      Simplabs::ReportsAsSparkline::ReportCache.process(@report, @report.options) { new_after_cache_data }
-    end
-
     it 'should yield the first reporting period if the cache is empty' do
       Simplabs::ReportsAsSparkline::ReportCache.process(@report, @report.options) do |begin_at, end_at|
         begin_at.should == Simplabs::ReportsAsSparkline::ReportingPeriod.first(@report.options[:grouping], 10).date_time
@@ -202,12 +192,6 @@ describe Simplabs::ReportsAsSparkline::ReportCache do
       @cached = Simplabs::ReportsAsSparkline::ReportCache.new
       @cached.stub!(:save!)
       Simplabs::ReportsAsSparkline::ReportCache.stub!(:build_cached_data).and_return(@cached)
-    end
-
-    it 'should convert the date strings from the newly read data to reporting periods' do
-      Simplabs::ReportsAsSparkline::ReportingPeriod.should_receive(:from_db_string).once.with(@report.options[:grouping], @new_after_cache_data[0][0]).and_return(Simplabs::ReportsAsSparkline::ReportingPeriod.new(@report.options[:grouping]))
-
-      Simplabs::ReportsAsSparkline::ReportCache.send(:prepare_result, [], @new_after_cache_data, [], @report, @report.options)
     end
 
     it 'should create :limit instances of Simplabs::ReportsAsSparkline::ReportCache with value 0.0 if no new data has been read and nothing was cached' do

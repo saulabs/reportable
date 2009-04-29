@@ -421,6 +421,18 @@ describe Simplabs::ReportsAsSparkline::Report do
       lambda { @report.send(:ensure_valid_options, { :grouping => :decade }) }.should raise_error(ArgumentError)
     end
 
+    it 'should raise an error if an end date is specified that is not a DateTime' do
+      lambda { @report.send(:ensure_valid_options, { :end_date => 'today' }) }.should raise_error(ArgumentError)
+    end
+
+    it 'should raise an error if both an end date and :live_data = true are specified' do
+      lambda { @report.send(:ensure_valid_options, { :end_date => DateTime.now, :live_data => true }) }.should raise_error(ArgumentError)
+    end
+
+    it 'should not raise an error if both an end date and :live_data = false are specified' do
+      lambda { @report.send(:ensure_valid_options, { :end_date => DateTime.now, :live_data => false }) }.should_not raise_error
+    end
+
     describe 'for context :initialize' do
 
       it 'should not raise an error if valid options are specified' do

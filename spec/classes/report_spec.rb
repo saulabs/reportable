@@ -228,6 +228,28 @@ describe Simplabs::ReportsAsSparkline::Report do
               result[6][1].should  == 0.0
             end
 
+            it 'should return correct results when run twice with different limits' do
+              @report = Simplabs::ReportsAsSparkline::Report.new(User, :registrations,
+                :aggregation => :count,
+                :grouping    => grouping,
+                :limit       => 10,
+                :live_data   => live_data
+              )
+              result = @report.run(:limit => 2).to_a
+
+              result[2][1].should == 1.0 if live_data
+              result[1][1].should  == 1.0
+              result[0][1].should  == 0.0
+
+              result = @report.run(:limit => 10).to_a
+
+              result[10][1].should == 1.0 if live_data
+              result[9][1].should  == 1.0
+              result[8][1].should  == 0.0
+              result[7][1].should  == 2.0
+              result[6][1].should  == 0.0
+            end
+
           end
 
           after(:all) do

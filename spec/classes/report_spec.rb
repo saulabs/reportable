@@ -83,7 +83,7 @@ describe Simplabs::ReportsAsSparkline::Report do
 
           it 'should not raise a SQL duplicate key error after multiple runs' do
             @report = Simplabs::ReportsAsSparkline::Report.new(User, :registrations,
-              :limit => 2,
+              :limit    => 2,
               :grouping => grouping,
               :end_date => Date.yesterday.to_datetime
             )

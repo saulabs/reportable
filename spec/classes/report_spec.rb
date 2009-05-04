@@ -81,6 +81,16 @@ describe Simplabs::ReportsAsSparkline::Report do
 
         describe 'when :end_date is specified' do
 
+          it 'should not raise a SQL duplicate key error after multiple runs' do
+            @report = Simplabs::ReportsAsSparkline::Report.new(User, :registrations,
+              :limit => 2,
+              :grouping => grouping,
+              :end_date => Date.yesterday.to_datetime
+            )
+            @report.run
+            lambda { @report.run }.should_not raise_error
+          end
+
           describe 'the returned result' do
 
             before do
@@ -428,11 +438,11 @@ describe Simplabs::ReportsAsSparkline::Report do
     it 'should return conditions for date_column >= begin_at when no custom conditions and a begin_at are specified' do
       @report.send(:setup_conditions, @begin_at, nil).should == ["#{@created_at_column_clause} >= ?", @begin_at]
     end
-    
+
     it 'should return conditions for date_column <= end_at when no custom conditions and a end_at are specified' do
       @report.send(:setup_conditions, nil, @end_at).should == ["#{@created_at_column_clause} <= ?", @end_at]
     end
-    
+
     it 'should raise an argument error when neither begin_at or end_at are specified' do
       lambda {@report.send(:setup_conditions, nil, nil)}.should raise_error(ArgumentError)
     end

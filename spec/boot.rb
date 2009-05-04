@@ -12,6 +12,9 @@ $:.unshift "#{plugin_root}/lib"
 RAILS_ROOT = File.expand_path(File.dirname(__FILE__) + '/../')
 Rails::Initializer.run(:set_load_path)
 Rails::Initializer.run(:set_autoload_paths)
+Rails::Initializer.run(:initialize_time_zone) do |config|
+  config.time_zone = 'Pacific Time (US & Canada)'
+end
 
 require File.join(File.dirname(__FILE__), '/../init.rb')
 

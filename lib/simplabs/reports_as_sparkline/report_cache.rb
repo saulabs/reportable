@@ -8,6 +8,13 @@ module Simplabs #:nodoc:
 
       set_table_name :reports_as_sparkline_cache
 
+      # When reporting_period has a time zone conversion performed, we get duplicate key sql errors.
+      # This occurs because find_cached_data will return a record set that is missing a record when we
+      # have an end date.  The SQL criteria reporting_period BETWEEN before_date AND end_date will not include
+      # the last record that it should, because our end_date will not be time-zone converted (ex: 5/1/09 00:00:00) but
+      # the reported_period in the database will be time-zone converted (ex: 5/1/00 07:00:00).
+      self.skip_time_zone_conversion_for_attributes = [:reporting_period]
+
       def self.process(report, options, cache = true, &block) #:nodoc:
         raise ArgumentError.new('A block must be given') unless block_given?
         self.transaction do

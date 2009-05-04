@@ -123,6 +123,7 @@ describe Simplabs::ReportsAsSparkline::Report do
             describe 'the returned result' do
 
               before do
+                Simplabs::ReportsAsSparkline::ReportCache.delete_all
                 @grouping = Simplabs::ReportsAsSparkline::Grouping.new(grouping)
                 @report = Simplabs::ReportsAsSparkline::Report.new(User, :registrations,
                   :grouping  => grouping,

@@ -1,3 +1,9 @@
+=== v1.3
+
+* Fixed another bug where two report runs with different :end_date values would lead to invalid data
+* Entries in the report cache entry are no longer identified by the :limit the report was run with (YOU WILL HAVE TO RECREATE YOUR CACHE TABLE!)
+* rewrote the data retrieval and processing code, it's now much more compact and less complicated with fewer cache misses
+
 === v1.2
 
 * FIXED: duplicate key error when using custom time zones (thanks to myronmarston  (http://github.com/myronmarston))

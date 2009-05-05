@@ -27,11 +27,6 @@ module Simplabs #:nodoc:
       #
       # ==== Examples
       #
-      #  class Game < ActiveRecord::Base
-      #    reports_as_sparkline :games_per_day
-      #    reports_as_sparkline :games_played_total, :cumulate => true
-      #  end
-      #
       #  class User < ActiveRecord::Base
       #    reports_as_sparkline :registrations, :aggregation => :count
       #    reports_as_sparkline :activations,   :aggregation => :count, :date_column => :activated_at

@@ -11,8 +11,16 @@ module Simplabs #:nodoc:
         @date_time = parse_date_time(date_time || DateTime.now)
       end
 
+      def offset(offset)
+        self.class.new(@grouping, @date_time + offset.send(@grouping.identifier))
+      end
+
       def self.first(grouping, limit, end_date = nil)
         self.new(grouping, end_date).offset(-limit)
+      end
+
+      def self.current(grouping)
+        self.new(grouping, Time.now)
       end
 
       def self.from_db_string(grouping, db_string)
@@ -38,22 +46,24 @@ module Simplabs #:nodoc:
         self.offset(-1)
       end
 
-      def offset(offset)
-        self.class.new(@grouping, @date_time + offset.send(@grouping.identifier))
-      end
-
       def ==(other)
-        if other.class == Simplabs::ReportsAsSparkline::ReportingPeriod
-          return @date_time.to_s == other.date_time.to_s && @grouping.identifier.to_s == other.grouping.identifier.to_s
+        if other.is_a?(Simplabs::ReportsAsSparkline::ReportingPeriod)
+          @date_time.to_s == other.date_time.to_s && @grouping.identifier.to_s == other.grouping.identifier.to_s
+        elsif other.is_a?(Time) || other.is_a?(DateTime)
+          @date_time == parse_date_time(other)
+        else
+          raise ArgumentError.new("Can only compare instances of #{self.class.name}")
         end
-        false
       end
 
       def <(other)
-        if other.class == Simplabs::ReportsAsSparkline::ReportingPeriod
+        if other.is_a?(Simplabs::ReportsAsSparkline::ReportingPeriod)
           return @date_time < other.date_time
+        elsif other.is_a?(Time) || other.is_a?(DateTime)
+          @date_time < parse_date_time(other)
+        else
+          raise ArgumentError.new("Can only compare instances of #{self.class.name}")
         end
-        raise ArgumentError.new("Can only compare instances of #{Simplabs::ReportsAsSparkline::ReportingPeriod.klass}")
       end
 
       def last_date_time

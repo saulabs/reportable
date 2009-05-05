@@ -14,7 +14,7 @@ module Simplabs #:nodoc:
       end
 
       def date_parts_from_db_string(db_string)
-        return case ActiveRecord::Base.connection.adapter_name
+        case ActiveRecord::Base.connection.adapter_name
           when /mysql/i
             from_mysql_db_string(db_string)
           when /sqlite/i
@@ -25,7 +25,7 @@ module Simplabs #:nodoc:
       end
 
       def to_sql(date_column) #:nodoc:
-        return case ActiveRecord::Base.connection.adapter_name
+        case ActiveRecord::Base.connection.adapter_name
           when /mysql/i
             mysql_format(date_column)
           when /sqlite/i
@@ -70,7 +70,7 @@ module Simplabs #:nodoc:
         end
 
         def mysql_format(date_column)
-          return case @identifier
+          case @identifier
             when :hour
               "DATE_FORMAT(#{date_column}, '%Y/%m/%d/%H')"
             when :day
@@ -83,7 +83,7 @@ module Simplabs #:nodoc:
         end
 
         def sqlite_format(date_column)
-          return case @identifier
+          case @identifier
             when :hour
               "strftime('%Y/%m/%d/%H', #{date_column})"
             when :day
@@ -96,7 +96,7 @@ module Simplabs #:nodoc:
         end
 
         def postgresql_format(date_column)
-          return case @identifier
+          case @identifier
             when :hour
               "date_trunc('hour', #{date_column})"
             when :day

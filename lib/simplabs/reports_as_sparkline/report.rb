@@ -70,8 +70,9 @@ module Simplabs #:nodoc:
           @klass.send(@aggregation,
             @value_column,
             :conditions => conditions,
-            :group => options[:grouping].to_sql(@date_column),
-            :order => "#{options[:grouping].to_sql(@date_column)} ASC"
+            :group      => options[:grouping].to_sql(@date_column),
+            :order      => "#{options[:grouping].to_sql(@date_column)} ASC",
+            :limit      => options[:limit]
           )
         end
 

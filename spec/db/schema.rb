@@ -15,7 +15,6 @@ ActiveRecord::Schema.define(:version => 1) do
     t.string   :aggregation,      :null => false
     t.float    :value,            :null => false, :default => 0
     t.datetime :reporting_period, :null => false
-    t.integer  :run_limit,        :null => false
 
     t.timestamps
   end
@@ -23,16 +22,14 @@ ActiveRecord::Schema.define(:version => 1) do
     :model_name,
     :report_name,
     :grouping,
-    :aggregation,
-    :run_limit
+    :aggregation
   ], :name => :name_model_grouping_agregation_run_limit
   add_index :reports_as_sparkline_cache, [
     :model_name,
     :report_name,
     :grouping,
     :aggregation,
-    :reporting_period,
-    :run_limit
+    :reporting_period
   ], :unique => true, :name => :name_model_grouping_aggregation_period_run_limit
 
 end

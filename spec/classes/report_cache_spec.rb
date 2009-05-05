@@ -6,6 +6,19 @@ describe Simplabs::ReportsAsSparkline::ReportCache do
     @report = Simplabs::ReportsAsSparkline::Report.new(User, :registrations, :limit => 10)
   end
 
+  describe '.clear_for' do
+
+    it 'should delete all entries in the cache for the klass and report name' do
+      Simplabs::ReportsAsSparkline::ReportCache.should_receive(:delete_all).once.with(:conditions => {
+        :model_name  => User.name,
+        :report_name => 'registrations'
+      })
+
+      Simplabs::ReportsAsSparkline::ReportCache.clear_for(User, :registrations)
+    end
+
+  end
+
   describe '.process' do
 
     before do
@@ -37,17 +50,31 @@ describe Simplabs::ReportsAsSparkline::ReportCache do
         }.should raise_error(YieldMatchException)
       end
 
-      it 'should yield the reporting period after the last one in the cache if data was read from cache' do
+      it 'should yield the first reporting period if not all required data could be retrieved from the cache' do
         reporting_period = Simplabs::ReportsAsSparkline::ReportingPeriod.new(
           @report.options[:grouping],
           Time.now - 3.send(@report.options[:grouping].identifier)
         )
-        cached = Simplabs::ReportsAsSparkline::ReportCache.new
-        cached.stub!(:reporting_period).and_return(reporting_period.date_time)
-        Simplabs::ReportsAsSparkline::ReportCache.stub!(:find).and_return([cached])
+        Simplabs::ReportsAsSparkline::ReportCache.stub!(:all).and_return([Simplabs::ReportsAsSparkline::ReportCache.new])
 
         Simplabs::ReportsAsSparkline::ReportCache.process(@report, @options) do |begin_at, end_at|
-          begin_at.should == reporting_period.next.date_time
+          begin_at.should == Simplabs::ReportsAsSparkline::ReportingPeriod.first(@report.options[:grouping], @report.options[:limit]).date_time
+          end_at.should   == nil
+          []
+        end
+      end
+
+      it 'should yield the reporting period after the last one in the cache if all required data could be retrieved from the cache' do
+        reporting_period = Simplabs::ReportsAsSparkline::ReportingPeriod.new(
+          @report.options[:grouping],
+          Time.now - @report.options[:limit].send(@report.options[:grouping].identifier)
+        )
+        cached = Simplabs::ReportsAsSparkline::ReportCache.new
+        cached.stub!(:reporting_period).and_return(reporting_period.date_time)
+        Simplabs::ReportsAsSparkline::ReportCache.stub!(:all).and_return(Array.new(@report.options[:limit] - 1, Simplabs::ReportsAsSparkline::ReportCache.new), cached)
+
+        Simplabs::ReportsAsSparkline::ReportCache.process(@report, @options) do |begin_at, end_at|
+          begin_at.should == reporting_period.date_time
           end_at.should   == nil
           []
         end
@@ -57,75 +84,73 @@ describe Simplabs::ReportsAsSparkline::ReportCache do
 
     describe 'with :live_data = false' do
 
-      it 'should not yield to the block if data for the reporting period before the current one has been found in the cache' do
-        cached = Simplabs::ReportsAsSparkline::ReportCache.new
-        cached.stub!(:reporting_period).and_return(Simplabs::ReportsAsSparkline::ReportingPeriod.new(@report.options[:grouping]).previous)
-        Simplabs::ReportsAsSparkline::ReportCache.stub!(:find).and_return([cached])
+      it 'should not yield if all required data could be retrieved from the cache' do
+        Simplabs::ReportsAsSparkline::ReportCache.stub!(:all).and_return(Array.new(@report.options[:limit], Simplabs::ReportsAsSparkline::ReportCache.new))
+
         lambda {
           Simplabs::ReportsAsSparkline::ReportCache.process(@report, @report.options) { raise YieldMatchException.new }
         }.should_not raise_error(YieldMatchException)
       end
 
-      it 'should yield to the block if no data for the reporting period before the current one has been found in the cache' do
+      it 'should yield to the block if no data could be retrieved from the cache' do
+        Simplabs::ReportsAsSparkline::ReportCache.stub!(:all).and_return([])
+
         lambda {
           Simplabs::ReportsAsSparkline::ReportCache.process(@report, @report.options) { raise YieldMatchException.new }
         }.should raise_error(YieldMatchException)
       end
 
-      it 'should yield the reporting period after the last one in the cache if data was read from cache' do
-        reporting_period = Simplabs::ReportsAsSparkline::ReportingPeriod.new(
-          @report.options[:grouping],
-          Time.now - 3.send(@report.options[:grouping].identifier)
-        )
-        cached = Simplabs::ReportsAsSparkline::ReportCache.new
-        cached.stub!(:reporting_period).and_return(reporting_period.date_time)
-        Simplabs::ReportsAsSparkline::ReportCache.stub!(:find).and_return([cached])
+      describe 'with :end_date = <some date>' do
 
-        Simplabs::ReportsAsSparkline::ReportCache.process(@report, @report.options) do |begin_at, end_at|
-          begin_at.should == reporting_period.next.date_time
-          end_at.should == nil
-          []
+        before do
+          @options = @report.options.merge(:end_date => Time.now)
         end
+
+        it 'should yield the last date and time of the reporting period for the specified end date' do
+          reporting_period = Simplabs::ReportsAsSparkline::ReportingPeriod.new(@report.options[:grouping], @options[:end_date])
+
+          Simplabs::ReportsAsSparkline::ReportCache.process(@report, @options) do |begin_at, end_at|
+            end_at.should   == reporting_period.last_date_time
+            []
+          end
+        end
+
       end
 
     end
 
     it 'should read existing data from the cache' do
-      Simplabs::ReportsAsSparkline::ReportCache.should_receive(:find).once.with(
-        :all,
+      Simplabs::ReportsAsSparkline::ReportCache.should_receive(:all).once.with(
         :conditions => [
-          'model_name = ? AND report_name = ? AND grouping = ? AND aggregation = ? AND run_limit = ? AND reporting_period >= ?',
+          'model_name = ? AND report_name = ? AND grouping = ? AND aggregation = ? AND reporting_period >= ?',
           @report.klass.to_s,
           @report.name.to_s,
           @report.options[:grouping].identifier.to_s,
           @report.aggregation.to_s,
-          10,
           Simplabs::ReportsAsSparkline::ReportingPeriod.first(@report.options[:grouping], 10).date_time
         ],
         :limit => 10,
         :order => 'reporting_period ASC'
-      )
+      ).and_return([])
 
       Simplabs::ReportsAsSparkline::ReportCache.process(@report, @report.options) { [] }
     end
 
     it 'should utilize the end_date in the conditions' do
       end_date = Time.now
-      Simplabs::ReportsAsSparkline::ReportCache.should_receive(:find).once.with(
-        :all,
+      Simplabs::ReportsAsSparkline::ReportCache.should_receive(:all).once.with(
         :conditions => [
-          'model_name = ? AND report_name = ? AND grouping = ? AND aggregation = ? AND run_limit = ? AND reporting_period BETWEEN ? AND ?',
+          'model_name = ? AND report_name = ? AND grouping = ? AND aggregation = ? AND reporting_period BETWEEN ? AND ?',
           @report.klass.to_s,
           @report.name.to_s,
           @report.options[:grouping].identifier.to_s,
           @report.aggregation.to_s,
-          10,
           Simplabs::ReportsAsSparkline::ReportingPeriod.first(@report.options[:grouping], 9).date_time,
           Simplabs::ReportsAsSparkline::ReportingPeriod.new(@report.options[:grouping], end_date).date_time
         ],
         :limit => 10,
         :order => 'reporting_period ASC'
-      )
+      ).and_return([])
 
       Simplabs::ReportsAsSparkline::ReportCache.process(@report, @report.options.merge(:end_date => end_date)) { [] }
     end
@@ -135,17 +160,16 @@ describe Simplabs::ReportsAsSparkline::ReportCache do
       Simplabs::ReportsAsSparkline::ReportCache.should_receive(:find).once.with(
         :all,
         :conditions => [
-          'model_name = ? AND report_name = ? AND grouping = ? AND aggregation = ? AND run_limit = ? AND reporting_period >= ?',
+          'model_name = ? AND report_name = ? AND grouping = ? AND aggregation = ? AND reporting_period >= ?',
           @report.klass.to_s,
           @report.name.to_s,
           grouping.identifier.to_s,
           @report.aggregation.to_s,
-          10,
           Simplabs::ReportsAsSparkline::ReportingPeriod.first(grouping, 10).date_time
         ],
         :limit => 10,
         :order => 'reporting_period ASC'
-      )
+      ).and_return([])
 
       Simplabs::ReportsAsSparkline::ReportCache.process(@report, { :limit => 10, :grouping => grouping }) { [] }
     end
@@ -193,7 +217,6 @@ describe Simplabs::ReportsAsSparkline::ReportCache do
       Simplabs::ReportsAsSparkline::ReportCache.should_receive(:build_cached_data).exactly(10).times.with(
         @report,
         @report.options[:grouping],
-        10,
         anything(),
         0.0
       ).and_return(@cached)
@@ -205,14 +228,12 @@ describe Simplabs::ReportsAsSparkline::ReportCache do
       Simplabs::ReportsAsSparkline::ReportCache.should_receive(:build_cached_data).exactly(9).times.with(
         @report,
         @report.options[:grouping],
-        10,
         anything(),
         0.0
       ).and_return(@cached)
       Simplabs::ReportsAsSparkline::ReportCache.should_receive(:build_cached_data).once.with(
         @report,
         @report.options[:grouping],
-        10,
         @current_reporting_period.previous,
         1.0
       ).and_return(@cached)

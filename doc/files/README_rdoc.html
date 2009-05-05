@@ -56,7 +56,7 @@
     </tr>
     <tr class="top-aligned-row">
       <td><strong>Last Update:</strong></td>
-      <td>Wed Apr 29 19:32:28 +0200 2009</td>
+      <td>Tue May 05 19:07:10 +0200 2009</td>
     </tr>
     </table>
   </div>
@@ -177,6 +177,35 @@ the <tt>:limit</tt> reporting periods until this date.
   User.registrations_report(:conditions =&gt; ['last_name LIKE 'A%'])
   User.activations_report(:grouping =&gt; :week, :limit =&gt; 5)
 </pre>
+<h3>The Report cache</h3>
+<p>
+Unless you specify parameters that make it impossible to cache report
+results, all results will be cached. You can access the cache via the
+<tt><a
+href="../classes/Simplabs/ReportsAsSparkline/ReportCache.html">Simplabs::ReportsAsSparkline::ReportCache</a></tt>
+class. <b>Beware that when you modify data in the cache, report results may
+be incorrect or execurting reports may even fail completely!</b> To clear
+the cache for a specific report, use the
+<tt>Simplabs::ReportsAsSparkline::ReportCache.clear_for</tt> method.
+</p>
+<p>
+<b>Example</b>
+</p>
+<p>
+For a report defined as
+</p>
+<pre>
+  class User &lt; ActiveRecord::Base
+    reports_as_sparkline :registrations
+  end
+</pre>
+<p>
+you can clear the cache with
+</p>
+<pre>
+  Simplabs::ReportsAsSparkline::ReportCache.clear_for(User, :registrations)
+</pre>
+<h3>In your views</h3>
 <p>
 You can than render sparklines for these reports with sparkline_tag in your
 view:
@@ -254,6 +283,19 @@ If you are on PostgreSQL, you should add functional indices:
   add_index :[table], :[date_column], :functional =&gt; &quot;date_trunc('day',  [date_column])&quot;
   add_index :[table], :[date_column], :functional =&gt; &quot;date_trunc('week', [date_column])&quot;
   add_index :[table], :[date_column], :functional =&gt; &quot;date_trunc('year', [date_column])&quot;
+</pre>
+<p>
+You might also want to use fragment caching in your views since processing
+the data read from the db (either from the model&#8216;s table or from the
+cache) aso takes some time.
+</p>
+<p>
+<b>Example</b>
+</p>
+<pre>
+  &lt;%- cache(:key =&gt; 'UserRegistrationsReport') do -%&gt;
+    &lt;%= sparkline_tag(User.registrations_report) %&gt;
+  &lt;%- end -%&gt;
 </pre>
 <h2>TODOs/ future plans</h2>
 <ul>

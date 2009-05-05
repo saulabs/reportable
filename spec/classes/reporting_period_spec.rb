@@ -245,6 +245,54 @@ describe Simplabs::ReportsAsSparkline::ReportingPeriod do
       (reporting_period1 == reporting_period2).should == false
     end
 
+    describe 'when invoked with DateTimes or Times' do
+
+      describe 'for grouping :hour' do
+
+        it 'should return true when the date and hour are equal' do
+          date_time = DateTime.new(2008, 10, 30, 12)
+          reporting_period = Simplabs::ReportsAsSparkline::ReportingPeriod.new(Simplabs::ReportsAsSparkline::Grouping.new(:hour), date_time)
+
+          reporting_period.should == date_time
+        end
+
+      end
+
+      describe 'for grouping :day' do
+
+        it 'should return true when the date is equal' do
+          date_time = DateTime.new(2008, 10, 30)
+          reporting_period = Simplabs::ReportsAsSparkline::ReportingPeriod.new(Simplabs::ReportsAsSparkline::Grouping.new(:day), date_time)
+
+          reporting_period.should == date_time
+        end
+
+      end
+
+      describe 'for grouping :week' do
+
+        it 'should return true when the date of the first day in that week is equal' do
+          date_time = DateTime.new(2009, 5, 4) #monday (first day of the week for reports_asp_sparkline)
+          reporting_period = Simplabs::ReportsAsSparkline::ReportingPeriod.new(Simplabs::ReportsAsSparkline::Grouping.new(:week), date_time)
+
+          reporting_period.should == DateTime.new(2009, 5, 7) #thursday of same week, should be equal
+        end
+
+      end
+
+      describe 'for grouping :month' do
+
+        it 'should return true when the date of the first day in that month is equal' do
+          date_time = DateTime.new(2009, 5, 1)
+          reporting_period = Simplabs::ReportsAsSparkline::ReportingPeriod.new(Simplabs::ReportsAsSparkline::Grouping.new(:month), date_time)
+
+          reporting_period.should == DateTime.new(2009, 5, 17)
+        end
+
+      end
+
+    end
+
   end
 
   describe '.first' do

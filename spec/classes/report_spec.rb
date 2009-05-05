@@ -321,6 +321,26 @@ describe Simplabs::ReportsAsSparkline::Report do
                 result[6][1].should  == 0.0
               end
 
+              it 'should return correct results when run twice in a row with an end date further in the past on the second run' do
+                @report = Simplabs::ReportsAsSparkline::Report.new(User, :registrations,
+                  :aggregation => :count,
+                  :grouping    => grouping,
+                  :limit       => 10,
+                  :live_data   => live_data
+                )
+                result = @report.run(:end_date => Time.now - 1.send(grouping)).to_a
+
+                result[9][1].should  == 1.0
+                result[8][1].should  == 0.0
+                result[7][1].should  == 2.0
+
+                result = @report.run(:end_date => Time.now - 3.send(grouping)).to_a
+
+                result[9][1].should  == 2.0
+                result[8][1].should  == 0.0
+                result[7][1].should  == 0.0
+              end
+
             end
 
           end

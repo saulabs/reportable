@@ -43,6 +43,26 @@ When invoking the report, you can override some of the options you specified for
   User.registrations_report(:conditions => ['last_name LIKE 'A%'])
   User.activations_report(:grouping => :week, :limit => 5)
 
+=== The Report cache
+
+Unless you specify parameters that make it impossible to cache report results, all results will be cached. You can access the cache via the <tt>Simplabs::ReportsAsSparkline::ReportCache</tt> class.
+<b>Beware that when you modify data in the cache, report results may be incorrect or execurting reports may even fail completely!</b> To clear the cache for a specific report, use the <tt>Simplabs::ReportsAsSparkline::ReportCache.clear_for</tt>
+method.
+
+<b>Example</b>
+
+For a report defined as
+
+  class User < ActiveRecord::Base
+    reports_as_sparkline :registrations
+  end
+
+you can clear the cache with
+
+  Simplabs::ReportsAsSparkline::ReportCache.clear_for(User, :registrations)
+
+=== In your views
+
 You can than render sparklines for these reports with sparkline_tag in your view:
 
   <%= sparkline_tag(User.registrations_report) %>
@@ -90,6 +110,15 @@ If you are on PostgreSQL, you should add functional indices:
   add_index :[table], :[date_column], :functional => "date_trunc('day',  [date_column])"
   add_index :[table], :[date_column], :functional => "date_trunc('week', [date_column])"
   add_index :[table], :[date_column], :functional => "date_trunc('year', [date_column])"
+
+You might also want to use fragment caching in your views since processing the data read from the db (either from the model's table or from the cache)
+aso takes some time.
+
+<b>Example</b>
+
+  <%- cache do -%>
+    <%= sparkline_tag(User.registrations_report) %>
+  <%- end -%>
 
 == TODOs/ future plans
 

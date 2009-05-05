@@ -85,8 +85,7 @@ The <a href="ReportCache.html">ReportCache</a> class is a regular
 reporting periods (table name is <tt>reports_as_sparkline_cache</tt>) <a
 href="ReportCache.html">ReportCache</a> instances are identified by the
 combination of <tt>model_name</tt>, <tt>report_name</tt>,
-<tt>grouping</tt>, <tt>aggregation</tt>, <tt>reporting_period</tt>,
-<tt>run_limit</tt>
+<tt>grouping</tt>, <tt>aggregation</tt> and <tt>reporting_period</tt>
 </p>
 
     </div>
@@ -94,6 +93,13 @@ combination of <tt>model_name</tt>, <tt>report_name</tt>,
 
    </div>
 
+    <div id="method-list">
+      <h3 class="section-bar">Methods</h3>
+
+      <div class="name-list">
+      <a href="#M000006">clear_for</a>&nbsp;&nbsp;
+      </div>
+    </div>
 
   </div>
 
@@ -110,6 +116,64 @@ combination of <tt>model_name</tt>, <tt>report_name</tt>,
 
 
     <!-- if method_list -->
+    <div id="methods">
+      <h3 class="section-bar">Public Class methods</h3>
+
+      <div id="method-M000006" class="method-detail">
+        <a name="M000006"></a>
+
+        <div class="method-heading">
+          <a href="#M000006" class="method-signature">
+          <span class="method-name">clear_for</span><span class="method-args">(klass, report)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Clears the cache for the specified <tt>klass</tt> and <tt>report</tt>
+</p>
+<h3>Parameters</h3>
+<ul>
+<li><tt>klass</tt> - The model the report to clear the cache for works on
+
+</li>
+<li><tt>report</tt> - The name of the report to clear the cache for
+
+</li>
+</ul>
+<h3>Example</h3>
+<p>
+To clear the cache for a report defined as
+</p>
+<pre>
+ class User &lt; ActiveRecord::Base
+   reports_as_sparkline :registrations
+ end
+</pre>
+<p>
+just do
+</p>
+<pre>
+ Simplabs::ReportsAsSparkline::ReportCache.clear_for(User, :registrations)
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000006-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000006-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/simplabs/reports_as_sparkline/report_cache.rb, line 26</span>
+26:       <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">clear_for</span>(<span class="ruby-identifier">klass</span>, <span class="ruby-identifier">report</span>)
+27:         <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">delete_all</span>(<span class="ruby-identifier">:conditions</span> =<span class="ruby-operator">&gt;</span> {
+28:           <span class="ruby-identifier">:model_name</span>  =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">klass</span>.<span class="ruby-identifier">name</span>,
+29:           <span class="ruby-identifier">:report_name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">report</span>.<span class="ruby-identifier">to_s</span>
+30:         })
+31:       <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
 
 
   </div>

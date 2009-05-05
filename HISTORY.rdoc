@@ -1,3 +1,8 @@
+=== v1.3.1
+
+* fixed migration template
+* fixed data type returned by the report methods
+
 === v1.3
 
 * Fixed another bug where two report runs with different :end_date values would lead to invalid data

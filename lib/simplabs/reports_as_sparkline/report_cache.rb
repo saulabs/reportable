@@ -52,7 +52,7 @@ module Simplabs #:nodoc:
           result = []
           while reporting_period < (options[:end_date] ? ReportingPeriod.new(options[:grouping], options[:end_date]).next : current_reporting_period)
             if cached = cached_data.find { |cached| reporting_period == cached[0] }
-              result << cached
+              result << [cached[0].date_time, cached[1]]
             else
               new_cached = build_cached_data(report, options[:grouping], reporting_period, find_value(new_data, reporting_period))
               new_cached.save! if cache

@@ -4,6 +4,8 @@ ReportsAsSparkline enables you to generate sparkline reports from your model's d
 
 See the API docs at http://docs.github.com/marcoow/reports_as_sparkline.
 
+The CI server is at http://ci.simplabs.com/reportsassparkline.
+
 == Usage
 
 If you hace a +User+ model with +created_at+ and +activated_at+ columns, you can just add +reports_as_sparkline+

@@ -1,6 +1,5 @@
 plugin_root = File.join(File.dirname(__FILE__), '..')
 
-require 'rubygems'
 gem 'rails'
 require 'activerecord'
 require 'active_support'

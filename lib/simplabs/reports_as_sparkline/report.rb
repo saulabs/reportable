@@ -44,13 +44,12 @@ module Simplabs #:nodoc:
       # ==== Options
       # * <tt>:grouping</tt> - The period records are grouped on (<tt>:hour</tt>, <tt>:day</tt>, <tt>:week</tt>, <tt>:month</tt>); <b>Beware that <tt>reports_as_sparkline</tt> treats weeks as starting on monday!</b>
       # * <tt>:limit</tt> - The number of reporting periods to get (see <tt>:grouping</tt>), (defaults to 100)
-      # * <tt>:conditions</tt> - Conditions like in <tt>ActiveRecord::Base#find</tt>; only records that match the conditions are reported; <b>Beware that when conditions are specified, caching is disabled!</b>
+      # * <tt>:conditions</tt> - Conditions like in <tt>ActiveRecord::Base#find</tt>; only records that match the conditions are reported
       # * <tt>:live_data</tt> - Specifies whether data for the current reporting period is to be read; <b>if <tt>:live_data</tt> is <tt>true</tt>, you will experience a performance hit since the request cannot be satisfied from the cache only (defaults to <tt>false</tt>)</b>
       # * <tt>:end_date</tt> - When specified, the report will only include data for the <tt>:limit</tt> reporting periods until this date.
       def run(options = {})
-        custom_conditions = options.key?(:conditions)
         options = options_for_run(options)
-        ReportCache.process(self, options, !custom_conditions) do |begin_at, end_at|
+        ReportCache.process(self, options) do |begin_at, end_at|
           read_data(begin_at, end_at, options)
         end
       end

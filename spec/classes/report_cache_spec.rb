@@ -122,7 +122,7 @@ describe Simplabs::ReportsAsSparkline::ReportCache do
     it 'should read existing data from the cache' do
       Simplabs::ReportsAsSparkline::ReportCache.should_receive(:all).once.with(
         :conditions => [
-          'model_name = ? AND report_name = ? AND grouping = ? AND aggregation = ? AND condition = ? AND reporting_period >= ?',
+          'model_name = ? AND report_name = ? AND grouping = ? AND aggregation = ? AND `condition` = ? AND reporting_period >= ?',
           @report.klass.to_s,
           @report.name.to_s,
           @report.options[:grouping].identifier.to_s,
@@ -141,7 +141,7 @@ describe Simplabs::ReportsAsSparkline::ReportCache do
       end_date = Time.now
       Simplabs::ReportsAsSparkline::ReportCache.should_receive(:all).once.with(
         :conditions => [
-          'model_name = ? AND report_name = ? AND grouping = ? AND aggregation = ? AND condition = ? AND reporting_period BETWEEN ? AND ?',
+          'model_name = ? AND report_name = ? AND grouping = ? AND aggregation = ? AND `condition` = ? AND reporting_period BETWEEN ? AND ?',
           @report.klass.to_s,
           @report.name.to_s,
           @report.options[:grouping].identifier.to_s,
@@ -162,7 +162,7 @@ describe Simplabs::ReportsAsSparkline::ReportCache do
       Simplabs::ReportsAsSparkline::ReportCache.should_receive(:find).once.with(
         :all,
         :conditions => [
-          'model_name = ? AND report_name = ? AND grouping = ? AND aggregation = ? AND condition = ? AND reporting_period >= ?',
+          'model_name = ? AND report_name = ? AND grouping = ? AND aggregation = ? AND `condition` = ? AND reporting_period >= ?',
           @report.klass.to_s,
           @report.name.to_s,
           grouping.identifier.to_s,

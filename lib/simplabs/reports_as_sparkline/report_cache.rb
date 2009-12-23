@@ -82,7 +82,7 @@ module Simplabs #:nodoc:
 
         def self.read_cached_data(report, options)
           conditions = [
-            'model_name = ? AND report_name = ? AND grouping = ? AND aggregation = ? AND condition = ?',
+            'model_name = ? AND report_name = ? AND grouping = ? AND aggregation = ? AND `condition` = ?',
             report.klass.to_s,
             report.name.to_s,
             options[:grouping].identifier.to_s,

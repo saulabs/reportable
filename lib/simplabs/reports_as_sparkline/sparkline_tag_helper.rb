@@ -18,6 +18,7 @@ module Simplabs #:nodoc:
       # * <tt>fill_color</tt> - The color to fill the area below the sparkline with (hex code)
       # * <tt>labels</tt> - The axes to render lables for (Array of <tt>:x</tt>, <tt>:y+</tt>, <tt>:r</tt>, <tt>:t</tt>; this is x axis, y axis, right, top)
       # * <tt>alt</tt> - The HTML img alt tag
+      # * <tt>title</tt> - The HTML img title tag
       #
       # ==== Example
       # <tt><%= sparkline_tag(User.registrations_report, :width => 200, :height => 100, :color => '000') %></tt>

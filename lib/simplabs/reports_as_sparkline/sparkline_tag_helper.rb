@@ -22,7 +22,7 @@ module Simplabs #:nodoc:
       # ==== Example
       # <tt><%= sparkline_tag(User.registrations_report, :width => 200, :height => 100, :color => '000') %></tt>
       def sparkline_tag(data, options = {})
-        options.reverse_merge!({ :width => 300, :height => 34, :line_color => '0077cc', :fill_color => 'e6f2fa', :labels => [], :alt => '' })
+        options.reverse_merge!({ :width => 300, :height => 34, :line_color => '0077cc', :fill_color => 'e6f2fa', :labels => [], :alt => '', :title => '' })
         data = data.collect { |d| d[1] }
         labels = ""
         unless options[:labels].empty?
@@ -34,7 +34,8 @@ module Simplabs #:nodoc:
         end
         image_tag(
           "http://chart.apis.google.com/chart?cht=ls&chs=#{options[:width]}x#{options[:height]}&chd=t:#{data.join(',')}&chco=#{options[:line_color]}&chm=B,#{options[:fill_color]},0,0,0&chls=1,0,0&chds=#{data.min},#{data.max}#{labels}",
-          :alt => options[:alt]
+          :alt => options[:alt],
+          :title => options[:title]
         )
       end
 

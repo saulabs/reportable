@@ -17,18 +17,24 @@ module Simplabs #:nodoc:
       # * <tt>line_color</tt> - The line color of the sparkline (hex code)
       # * <tt>fill_color</tt> - The color to fill the area below the sparkline with (hex code)
       # * <tt>labels</tt> - The axes to render lables for (Array of <tt>:x</tt>, <tt>:y+</tt>, <tt>:r</tt>, <tt>:t</tt>; this is x axis, y axis, right, top)
+      # * <tt>alt</tt> - The HTML img alt tag
       #
       # ==== Example
       # <tt><%= sparkline_tag(User.registrations_report, :width => 200, :height => 100, :color => '000') %></tt>
       def sparkline_tag(data, options = {})
-        options.reverse_merge!({ :width => 300, :height => 34, :line_color => '0077cc', :fill_color => 'e6f2fa', :labels => [] })
+        options.reverse_merge!({ :width => 300, :height => 34, :line_color => '0077cc', :fill_color => 'e6f2fa', :labels => [], :alt => '' })
         data = data.collect { |d| d[1] }
         labels = ""
         unless options[:labels].empty?
-          labels = "&chxt=#{options[:labels].map(&:to_s).join(',')}&chxr=0,0,#{data.length}|1,0,#{data.max}|2,0,#{data.max}|3,0,#{data.length}"
+          chxr = {}
+          options[:labels].each_with_index do |l, i|
+            chxr[l] = "#{i}," + ([:x, :t].include?(l) ? "0,#{data.length}" : "#{[data.min, 0].min},#{data.max}")
+          end
+          labels = "&chxt=#{options[:labels].map(&:to_s).join(',')}&chxr=#{options[:labels].collect{|l| chxr[l]}.join('|')}"
         end
         image_tag(
-          "http://chart.apis.google.com/chart?cht=ls&chs=#{options[:width]}x#{options[:height]}&chd=t:#{data.join(',')}&chco=#{options[:line_color]}&chm=B,#{options[:fill_color]},0,0,0&chls=1,0,0&chds=#{data.min},#{data.max}#{labels}"
+          "http://chart.apis.google.com/chart?cht=ls&chs=#{options[:width]}x#{options[:height]}&chd=t:#{data.join(',')}&chco=#{options[:line_color]}&chm=B,#{options[:fill_color]},0,0,0&chls=1,0,0&chds=#{data.min},#{data.max}#{labels}",
+          :alt => options[:alt]
         )
       end
 

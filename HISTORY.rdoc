@@ -1,3 +1,8 @@
+=== v1.3.2
+
+* the tag helper now support options for title and alt tags (thanks to jan (http://github.com/jan))
+* reports are now cached also when conditions are specified (thanks to eric (http://github.com/eric))
+
 === v1.3.1
 
 * fixed migration template

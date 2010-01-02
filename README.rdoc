@@ -135,6 +135,8 @@ If you want to suggest any new features or report bugs, do so at http://github.c
 == Contributors
 
 * myronmarston (http://github.com/myronmarston)
+* jan (http://github.com/jan)
+* eric (http://github.com/eric)
 
 == Author
 

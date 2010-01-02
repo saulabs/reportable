@@ -1,7 +1,7 @@
 plugin_root = File.join(File.dirname(__FILE__), '..')
 
 gem 'rails'
-require 'activerecord'
+require 'active_record'
 require 'active_support'
 require 'action_controller'
 require 'action_view'

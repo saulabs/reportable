@@ -3,9 +3,9 @@ require File.join(File.dirname(__FILE__), '..', 'spec_helper')
 describe Simplabs::ReportsAsSparkline::Report do
 
   before do
-    @now = DateTime.now
-    DateTime.stub!(:now).and_return(@now)
     @report = Simplabs::ReportsAsSparkline::Report.new(User, :registrations)
+    @now    = Time.now
+    DateTime.stub!(:now).and_return(@now)
   end
 
   describe '#options' do

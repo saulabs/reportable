@@ -30,21 +30,18 @@ module Simplabs #:nodoc:
         })
       end
 
-      def self.process(report, options, cache = true, &block) #:nodoc:
+      def self.process(report, options, &block) #:nodoc:
         raise ArgumentError.new('A block must be given') unless block_given?
         self.transaction do
-          cached_data = []
-          if cache
-            cached_data = read_cached_data(report, options)
-          end
+          cached_data = read_cached_data(report, options)
           new_data = read_new_data(cached_data, options, &block)
-          prepare_result(new_data, cached_data, report, options, cache)
+          prepare_result(new_data, cached_data, report, options)
         end
       end
 
       private
 
-        def self.prepare_result(new_data, cached_data, report, options, cache = true)
+        def self.prepare_result(new_data, cached_data, report, options)
           new_data = new_data.map { |data| [ReportingPeriod.from_db_string(options[:grouping], data[0]), data[1]] }
           cached_data.map! { |cached| [ReportingPeriod.new(options[:grouping], cached.reporting_period), cached.value] }
           current_reporting_period = ReportingPeriod.current(options[:grouping])
@@ -54,8 +51,8 @@ module Simplabs #:nodoc:
             if cached = cached_data.find { |cached| reporting_period == cached[0] }
               result << [cached[0].date_time, cached[1]]
             else
-              new_cached = build_cached_data(report, options[:grouping], reporting_period, find_value(new_data, reporting_period))
-              new_cached.save! if cache
+              new_cached = build_cached_data(report, options[:grouping], options[:conditions], reporting_period, find_value(new_data, reporting_period))
+              new_cached.save!
               result << [reporting_period.date_time, new_cached.value]
             end
             reporting_period = reporting_period.next
@@ -71,12 +68,13 @@ module Simplabs #:nodoc:
           data ? data[1] : 0.0
         end
 
-        def self.build_cached_data(report, grouping, reporting_period, value)
+        def self.build_cached_data(report, grouping, condition, reporting_period, value)
           self.new(
             :model_name       => report.klass.to_s,
             :report_name      => report.name.to_s,
             :grouping         => grouping.identifier.to_s,
             :aggregation      => report.aggregation.to_s,
+            :condition        => condition.to_s,
             :reporting_period => reporting_period.date_time,
             :value            => value
           )
@@ -84,11 +82,12 @@ module Simplabs #:nodoc:
 
         def self.read_cached_data(report, options)
           conditions = [
-            'model_name = ? AND report_name = ? AND grouping = ? AND aggregation = ?',
+            'model_name = ? AND report_name = ? AND grouping = ? AND aggregation = ? AND `condition` = ?',
             report.klass.to_s,
             report.name.to_s,
             options[:grouping].identifier.to_s,
-            report.aggregation.to_s
+            report.aggregation.to_s,
+            options[:conditions].to_s
           ]
           first_reporting_period = get_first_reporting_period(options)
           last_reporting_period = get_last_reporting_period(options)

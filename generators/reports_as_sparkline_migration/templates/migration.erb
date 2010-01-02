@@ -6,6 +6,7 @@ class <%= class_name %> < ActiveRecord::Migration
       t.string   :report_name,      :null => false
       t.string   :grouping,         :null => false
       t.string   :aggregation,      :null => false
+      t.string   :condition,        :null => false
       t.float    :value,            :null => false, :default => 0
       t.datetime :reporting_period, :null => false
 
@@ -16,13 +17,15 @@ class <%= class_name %> < ActiveRecord::Migration
       :model_name,
       :report_name,
       :grouping,
-      :aggregation
+      :aggregation,
+      :condition
     ], :name => :name_model_grouping_agregation
     add_index :reports_as_sparkline_cache, [
       :model_name,
       :report_name,
       :grouping,
       :aggregation,
+      :condition,
       :reporting_period
     ], :unique => true, :name => :name_model_grouping_aggregation_period
   end

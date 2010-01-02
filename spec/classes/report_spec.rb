@@ -21,18 +21,16 @@ describe Simplabs::ReportsAsSparkline::Report do
     it 'should process the data with the report cache' do
       Simplabs::ReportsAsSparkline::ReportCache.should_receive(:process).once.with(
         @report,
-        { :limit => 100, :grouping => @report.options[:grouping], :conditions => [], :live_data => false, :end_date => false },
-        true
+        { :limit => 100, :grouping => @report.options[:grouping], :conditions => [], :live_data => false, :end_date => false }
       )
 
       @report.run
     end
 
-    it 'should process the data with the report cache and specify cache = false when custom conditions are given' do
+    it 'should process the data with the report cache when custom conditions are given' do
       Simplabs::ReportsAsSparkline::ReportCache.should_receive(:process).once.with(
         @report,
-        { :limit => 100, :grouping => @report.options[:grouping], :conditions => { :some => :condition }, :live_data => false, :end_date => false },
-        false
+        { :limit => 100, :grouping => @report.options[:grouping], :conditions => { :some => :condition }, :live_data => false, :end_date => false }
       )
 
       @report.run(:conditions => { :some => :condition })
@@ -49,8 +47,7 @@ describe Simplabs::ReportsAsSparkline::Report do
       Simplabs::ReportsAsSparkline::Grouping.should_receive(:new).once.with(:month).and_return(grouping)
       Simplabs::ReportsAsSparkline::ReportCache.should_receive(:process).once.with(
         @report,
-        { :limit => 100, :grouping => grouping, :conditions => [], :live_data => false, :end_date => false },
-        true
+        { :limit => 100, :grouping => grouping, :conditions => [], :live_data => false, :end_date => false }
       )
 
       @report.run(:grouping => :month)

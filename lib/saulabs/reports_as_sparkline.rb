@@ -1,4 +1,4 @@
-module Simplabs #:nodoc:
+module Saulabs #:nodoc:
 
   module ReportsAsSparkline
 
@@ -8,7 +8,7 @@ module Simplabs #:nodoc:
 
     module ClassMethods
 
-      # Generates a report on a model. That report can then be executed via the new method <tt><name>_report</tt> (see documentation of Simplabs::ReportsAsSparkline::Report#run).
+      # Generates a report on a model. That report can then be executed via the new method <tt><name>_report</tt> (see documentation of Saulabs::ReportsAsSparkline::Report#run).
       # 
       # ==== Parameters
       #
@@ -37,9 +37,9 @@ module Simplabs #:nodoc:
         (class << self; self; end).instance_eval do
           define_method "#{name.to_s}_report".to_sym do |*args|
             if options.delete(:cumulate)
-              report = Simplabs::ReportsAsSparkline::CumulatedReport.new(self, name, options)
+              report = Saulabs::ReportsAsSparkline::CumulatedReport.new(self, name, options)
             else
-              report = Simplabs::ReportsAsSparkline::Report.new(self, name, options)
+              report = Saulabs::ReportsAsSparkline::Report.new(self, name, options)
             end
             raise ArgumentError.new unless args.length == 0 || (args.length == 1 && args[0].is_a?(Hash))
             report.run(args.length == 0 ? {} : args[0])

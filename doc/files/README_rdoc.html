@@ -182,11 +182,11 @@ the <tt>:limit</tt> reporting periods until this date.
 Unless you specify parameters that make it impossible to cache report
 results, all results will be cached. You can access the cache via the
 <tt><a
-href="../classes/Simplabs/ReportsAsSparkline/ReportCache.html">Simplabs::ReportsAsSparkline::ReportCache</a></tt>
+href="../classes/Saulabs/ReportsAsSparkline/ReportCache.html">Saulabs::ReportsAsSparkline::ReportCache</a></tt>
 class. <b>Beware that when you modify data in the cache, report results may
 be incorrect or execurting reports may even fail completely!</b> To clear
 the cache for a specific report, use the
-<tt>Simplabs::ReportsAsSparkline::ReportCache.clear_for</tt> method.
+<tt>Saulabs::ReportsAsSparkline::ReportCache.clear_for</tt> method.
 </p>
 <p>
 <b>Example</b>
@@ -203,7 +203,7 @@ For a report defined as
 you can clear the cache with
 </p>
 <pre>
-  Simplabs::ReportsAsSparkline::ReportCache.clear_for(User, :registrations)
+  Saulabs::ReportsAsSparkline::ReportCache.clear_for(User, :registrations)
 </pre>
 <h3>In your views</h3>
 <p>
@@ -270,7 +270,7 @@ If you are on Rails &lt; 2.1, do this from your RAILS_ROOT
 <p>
 To achieve best performance, you should add indices to your tables on the
 date columns that are used for grouping the records (see
-Simplabs::ReportsAsSparkline::ClassMethods.reports_as_sparkline):
+Saulabs::ReportsAsSparkline::ClassMethods.reports_as_sparkline):
 </p>
 <pre>
   add_index :[table], :[date_column]
@@ -323,7 +323,7 @@ href="http://github.com/myronmarston">github.com/myronmarston</a>)
 <h2>Author</h2>
 <p>
 © 2008-2009 Marco Otte-Witte (<a
-href="http://simplabs.com">simplabs.com</a>), Martin Kavalar, released
+href="http://saulabs.com">saulabs.com</a>), Martin Kavalar, released
 under the MIT license
 </p>
 

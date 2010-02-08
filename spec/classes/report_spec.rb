@@ -1,9 +1,9 @@
 require File.join(File.dirname(__FILE__), '..', 'spec_helper')
 
-describe Simplabs::ReportsAsSparkline::Report do
+describe Saulabs::ReportsAsSparkline::Report do
 
   before do
-    @report = Simplabs::ReportsAsSparkline::Report.new(User, :registrations)
+    @report = Saulabs::ReportsAsSparkline::Report.new(User, :registrations)
     @now    = Time.now
     DateTime.stub!(:now).and_return(@now)
   end
@@ -19,7 +19,7 @@ describe Simplabs::ReportsAsSparkline::Report do
   describe '#run' do
 
     it 'should process the data with the report cache' do
-      Simplabs::ReportsAsSparkline::ReportCache.should_receive(:process).once.with(
+      Saulabs::ReportsAsSparkline::ReportCache.should_receive(:process).once.with(
         @report,
         { :limit => 100, :grouping => @report.options[:grouping], :conditions => [], :live_data => false, :end_date => false }
       )
@@ -28,7 +28,7 @@ describe Simplabs::ReportsAsSparkline::Report do
     end
 
     it 'should process the data with the report cache when custom conditions are given' do
-      Simplabs::ReportsAsSparkline::ReportCache.should_receive(:process).once.with(
+      Saulabs::ReportsAsSparkline::ReportCache.should_receive(:process).once.with(
         @report,
         { :limit => 100, :grouping => @report.options[:grouping], :conditions => { :some => :condition }, :live_data => false, :end_date => false }
       )
@@ -43,9 +43,9 @@ describe Simplabs::ReportsAsSparkline::Report do
     end
 
     it 'should use a custom grouping if one is specified' do
-      grouping = Simplabs::ReportsAsSparkline::Grouping.new(:month)
-      Simplabs::ReportsAsSparkline::Grouping.should_receive(:new).once.with(:month).and_return(grouping)
-      Simplabs::ReportsAsSparkline::ReportCache.should_receive(:process).once.with(
+      grouping = Saulabs::ReportsAsSparkline::Grouping.new(:month)
+      Saulabs::ReportsAsSparkline::Grouping.should_receive(:new).once.with(:month).and_return(grouping)
+      Saulabs::ReportsAsSparkline::ReportCache.should_receive(:process).once.with(
         @report,
         { :limit => 100, :grouping => grouping, :conditions => [], :live_data => false, :end_date => false }
       )
@@ -54,13 +54,13 @@ describe Simplabs::ReportsAsSparkline::Report do
     end
 
     it 'should return an array of the same length as the specified limit when :live_data is false' do
-      @report = Simplabs::ReportsAsSparkline::Report.new(User, :cumulated_registrations, :limit => 10, :live_data => false)
+      @report = Saulabs::ReportsAsSparkline::Report.new(User, :cumulated_registrations, :limit => 10, :live_data => false)
 
       @report.run.length.should == 10
     end
 
     it 'should return an array of the same length as the specified limit + 1 when :live_data is true' do
-      @report = Simplabs::ReportsAsSparkline::Report.new(User, :cumulated_registrations, :limit => 10, :live_data => true)
+      @report = Saulabs::ReportsAsSparkline::Report.new(User, :cumulated_registrations, :limit => 10, :live_data => true)
 
       @report.run.length.should == 11
     end
@@ -79,7 +79,7 @@ describe Simplabs::ReportsAsSparkline::Report do
         describe 'when :end_date is specified' do
 
           it 'should not raise a SQL duplicate key error after multiple runs' do
-            @report = Simplabs::ReportsAsSparkline::Report.new(User, :registrations,
+            @report = Saulabs::ReportsAsSparkline::Report.new(User, :registrations,
               :limit    => 2,
               :grouping => grouping,
               :end_date => Date.yesterday.to_datetime
@@ -92,8 +92,8 @@ describe Simplabs::ReportsAsSparkline::Report do
 
             before do
               @end_date = DateTime.now - 1.send(grouping)
-              @grouping = Simplabs::ReportsAsSparkline::Grouping.new(grouping)
-              @report = Simplabs::ReportsAsSparkline::Report.new(User, :registrations,
+              @grouping = Saulabs::ReportsAsSparkline::Grouping.new(grouping)
+              @report = Saulabs::ReportsAsSparkline::Report.new(User, :registrations,
                 :grouping => grouping,
                 :limit    => 10,
                 :end_date => @end_date
@@ -102,11 +102,11 @@ describe Simplabs::ReportsAsSparkline::Report do
             end
 
             it "should start with the reporting period (end_date - limit.#{grouping.to_s})" do
-              @result.first[0].should == Simplabs::ReportsAsSparkline::ReportingPeriod.new(@grouping, @end_date - 9.send(grouping)).date_time
+              @result.first[0].should == Saulabs::ReportsAsSparkline::ReportingPeriod.new(@grouping, @end_date - 9.send(grouping)).date_time
             end
 
             it "should end with the reporting period of the specified end date" do
-              @result.last[0].should == Simplabs::ReportsAsSparkline::ReportingPeriod.new(@grouping, @end_date).date_time
+              @result.last[0].should == Saulabs::ReportsAsSparkline::ReportingPeriod.new(@grouping, @end_date).date_time
             end
 
           end
@@ -120,9 +120,9 @@ describe Simplabs::ReportsAsSparkline::Report do
             describe 'the returned result' do
 
               before do
-                Simplabs::ReportsAsSparkline::ReportCache.delete_all
-                @grouping = Simplabs::ReportsAsSparkline::Grouping.new(grouping)
-                @report = Simplabs::ReportsAsSparkline::Report.new(User, :registrations,
+                Saulabs::ReportsAsSparkline::ReportCache.delete_all
+                @grouping = Saulabs::ReportsAsSparkline::Grouping.new(grouping)
+                @report = Saulabs::ReportsAsSparkline::Report.new(User, :registrations,
                   :grouping  => grouping,
                   :limit     => 10,
                   :live_data => live_data
@@ -131,23 +131,23 @@ describe Simplabs::ReportsAsSparkline::Report do
               end
 
               it "should be an array starting reporting period (Time.now - limit.#{grouping.to_s})" do
-                @result.first[0].should == Simplabs::ReportsAsSparkline::ReportingPeriod.new(@grouping, Time.now - 10.send(grouping)).date_time
+                @result.first[0].should == Saulabs::ReportsAsSparkline::ReportingPeriod.new(@grouping, Time.now - 10.send(grouping)).date_time
               end
 
               if live_data
                 it "should be data ending with the current reporting period" do
-                  @result.last[0].should == Simplabs::ReportsAsSparkline::ReportingPeriod.new(@grouping).date_time
+                  @result.last[0].should == Saulabs::ReportsAsSparkline::ReportingPeriod.new(@grouping).date_time
                 end
               else
                 it "should be data ending with the reporting period before the current" do
-                  @result.last[0].should == Simplabs::ReportsAsSparkline::ReportingPeriod.new(@grouping).previous.date_time
+                  @result.last[0].should == Saulabs::ReportsAsSparkline::ReportingPeriod.new(@grouping).previous.date_time
                 end
               end
 
             end
 
             it 'should return correct data for aggregation :count' do
-              @report = Simplabs::ReportsAsSparkline::Report.new(User, :registrations,
+              @report = Saulabs::ReportsAsSparkline::Report.new(User, :registrations,
                 :aggregation => :count,
                 :grouping    => grouping,
                 :limit       => 10,
@@ -163,7 +163,7 @@ describe Simplabs::ReportsAsSparkline::Report do
             end
 
             it 'should return correct data for aggregation :sum' do
-              @report = Simplabs::ReportsAsSparkline::Report.new(User, :registrations,
+              @report = Saulabs::ReportsAsSparkline::Report.new(User, :registrations,
                 :aggregation  => :sum,
                 :grouping     => grouping,
                 :value_column => :profile_visits,
@@ -180,7 +180,7 @@ describe Simplabs::ReportsAsSparkline::Report do
             end
 
             it 'should return correct data for aggregation :maximum' do
-              @report = Simplabs::ReportsAsSparkline::Report.new(User, :registrations,
+              @report = Saulabs::ReportsAsSparkline::Report.new(User, :registrations,
                 :aggregation  => :maximum,
                 :grouping     => grouping,
                 :value_column => :profile_visits,
@@ -197,7 +197,7 @@ describe Simplabs::ReportsAsSparkline::Report do
             end
 
             it 'should return correct data for aggregation :minimum' do
-              @report = Simplabs::ReportsAsSparkline::Report.new(User, :registrations,
+              @report = Saulabs::ReportsAsSparkline::Report.new(User, :registrations,
                 :aggregation  => :minimum,
                 :grouping     => grouping,
                 :value_column => :profile_visits,
@@ -214,7 +214,7 @@ describe Simplabs::ReportsAsSparkline::Report do
             end
 
             it 'should return correct data for aggregation :average' do
-              @report = Simplabs::ReportsAsSparkline::Report.new(User, :registrations,
+              @report = Saulabs::ReportsAsSparkline::Report.new(User, :registrations,
                 :aggregation  => :average,
                 :grouping     => grouping,
                 :value_column => :profile_visits,
@@ -231,7 +231,7 @@ describe Simplabs::ReportsAsSparkline::Report do
             end
 
             it 'should return correct data for aggregation :count when custom conditions are specified' do
-              @report = Simplabs::ReportsAsSparkline::Report.new(User, :registrations,
+              @report = Saulabs::ReportsAsSparkline::Report.new(User, :registrations,
                 :aggregation => :count,
                 :grouping    => grouping,
                 :limit       => 10,
@@ -247,7 +247,7 @@ describe Simplabs::ReportsAsSparkline::Report do
             end
 
             it 'should return correct data for aggregation :sum when custom conditions are specified' do
-              @report = Simplabs::ReportsAsSparkline::Report.new(User, :registrations,
+              @report = Saulabs::ReportsAsSparkline::Report.new(User, :registrations,
                 :aggregation  => :sum,
                 :grouping     => grouping,
                 :value_column => :profile_visits,
@@ -264,7 +264,7 @@ describe Simplabs::ReportsAsSparkline::Report do
             end
 
             it 'should return correct results when run twice in a row with a higher limit on the second run' do
-              @report = Simplabs::ReportsAsSparkline::Report.new(User, :registrations,
+              @report = Saulabs::ReportsAsSparkline::Report.new(User, :registrations,
                 :aggregation => :count,
                 :grouping    => grouping,
                 :limit       => 10,
@@ -288,7 +288,7 @@ describe Simplabs::ReportsAsSparkline::Report do
             unless live_data
 
               it 'should return correct data for aggregation :count when :end_date is specified' do
-                @report = Simplabs::ReportsAsSparkline::Report.new(User, :registrations,
+                @report = Saulabs::ReportsAsSparkline::Report.new(User, :registrations,
                   :aggregation => :count,
                   :grouping    => grouping,
                   :limit       => 10,
@@ -303,7 +303,7 @@ describe Simplabs::ReportsAsSparkline::Report do
               end
 
               it 'should return correct data for aggregation :sum when :end_date is specified' do
-                @report = Simplabs::ReportsAsSparkline::Report.new(User, :registrations,
+                @report = Saulabs::ReportsAsSparkline::Report.new(User, :registrations,
                   :aggregation  => :sum,
                   :grouping     => grouping,
                   :value_column => :profile_visits,
@@ -319,7 +319,7 @@ describe Simplabs::ReportsAsSparkline::Report do
               end
 
               it 'should return correct results when run twice in a row with an end date further in the past on the second run' do
-                @report = Simplabs::ReportsAsSparkline::Report.new(User, :registrations,
+                @report = Saulabs::ReportsAsSparkline::Report.new(User, :registrations,
                   :aggregation => :count,
                   :grouping    => grouping,
                   :limit       => 10,
@@ -367,7 +367,7 @@ describe Simplabs::ReportsAsSparkline::Report do
         end
 
         it 'should return correct data for aggregation :count' do
-          @report = Simplabs::ReportsAsSparkline::Report.new(User, :registrations,
+          @report = Saulabs::ReportsAsSparkline::Report.new(User, :registrations,
             :aggregation => :count,
             :grouping    => :week,
             :limit       => 10
@@ -396,7 +396,7 @@ describe Simplabs::ReportsAsSparkline::Report do
         end
 
         it 'should return correct data for aggregation :count' do
-          @report = Simplabs::ReportsAsSparkline::Report.new(User, :registrations,
+          @report = Saulabs::ReportsAsSparkline::Report.new(User, :registrations,
             :aggregation => :count,
             :grouping    => :week,
             :limit       => 10
@@ -415,7 +415,7 @@ describe Simplabs::ReportsAsSparkline::Report do
     end
 
     after do
-      Simplabs::ReportsAsSparkline::ReportCache.destroy_all
+      Saulabs::ReportsAsSparkline::ReportCache.destroy_all
     end
 
     after(:all) do
@@ -427,7 +427,7 @@ describe Simplabs::ReportsAsSparkline::Report do
   describe '#read_data' do
 
     it 'should invoke the aggregation method on the model' do
-      @report = Simplabs::ReportsAsSparkline::Report.new(User, :registrations, :aggregation => :count)
+      @report = Saulabs::ReportsAsSparkline::Report.new(User, :registrations, :aggregation => :count)
       User.should_receive(:count).once.and_return([])
 
       @report.send(:read_data, Time.now, 5.days.from_now, { :grouping => @report.options[:grouping], :conditions => [] })

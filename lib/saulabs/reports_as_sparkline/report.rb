@@ -1,4 +1,4 @@
-module Simplabs #:nodoc:
+module Saulabs #:nodoc:
 
   module ReportsAsSparkline #:nodoc:
 
@@ -8,8 +8,8 @@ module Simplabs #:nodoc:
       attr_reader :klass, :name, :date_column, :value_column, :aggregation, :options
 
       # ==== Parameters
-      # * <tt>klass</tt> - The model the report works on (This is the class you invoke Simplabs::ReportsAsSparkline::ClassMethods#reports_as_sparkline on)
-      # * <tt>name</tt> - The name of the report (as in Simplabs::ReportsAsSparkline::ClassMethods#reports_as_sparkline)
+      # * <tt>klass</tt> - The model the report works on (This is the class you invoke Saulabs::ReportsAsSparkline::ClassMethods#reports_as_sparkline on)
+      # * <tt>name</tt> - The name of the report (as in Saulabs::ReportsAsSparkline::ClassMethods#reports_as_sparkline)
       #
       # ==== Options
       #

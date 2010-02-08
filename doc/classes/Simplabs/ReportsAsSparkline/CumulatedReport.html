@@ -5,7 +5,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-  <title>Class: Simplabs::ReportsAsSparkline::CumulatedReport</title>
+  <title>Class: Saulabs::ReportsAsSparkline::CumulatedReport</title>
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
   <meta http-equiv="Content-Script-Type" content="text/javascript" />
   <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
@@ -50,13 +50,13 @@
         <table class="header-table">
         <tr class="top-aligned-row">
           <td><strong>Class</strong></td>
-          <td class="class-name-in-header">Simplabs::ReportsAsSparkline::CumulatedReport</td>
+          <td class="class-name-in-header">Saulabs::ReportsAsSparkline::CumulatedReport</td>
         </tr>
         <tr class="top-aligned-row">
             <td><strong>In:</strong></td>
             <td>
-                <a href="../../../files/lib/simplabs/reports_as_sparkline/cumulated_report_rb.html">
-                lib/simplabs/reports_as_sparkline/cumulated_report.rb
+                <a href="../../../files/lib/saulabs/reports_as_sparkline/cumulated_report_rb.html">
+                lib/saulabs/reports_as_sparkline/cumulated_report.rb
                 </a>
         <br />
             </td>
@@ -83,18 +83,18 @@
     <div id="description">
       <p>
 A special report class that cumulates all data (see <a
-href="Report.html">Simplabs::ReportsAsSparkline::Report</a>)
+href="Report.html">Saulabs::ReportsAsSparkline::Report</a>)
 </p>
 <h4>Examples</h4>
 <p>
-When <a href="Report.html">Simplabs::ReportsAsSparkline::Report</a> returns
+When <a href="Report.html">Saulabs::ReportsAsSparkline::Report</a> returns
 </p>
 <pre>
  [[&lt;DateTime today&gt;, 1], [&lt;DateTime yesterday&gt;, 2], etc.]
 </pre>
 <p>
 <a
-href="CumulatedReport.html">Simplabs::ReportsAsSparkline::CumulatedReport</a>
+href="CumulatedReport.html">Saulabs::ReportsAsSparkline::CumulatedReport</a>
 returns
 </p>
 <pre>
@@ -146,13 +146,13 @@ returns
         <div class="method-description">
           <p>
 Runs the report (see <a
-href="Report.html#M000008">Simplabs::ReportsAsSparkline::Report#run</a>)
+href="Report.html#M000008">Saulabs::ReportsAsSparkline::Report#run</a>)
 </p>
           <p><a class="source-toggle" href="#"
             onclick="toggleCode('M000003-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000003-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/simplabs/reports_as_sparkline/cumulated_report.rb, line 19</span>
+    <span class="ruby-comment cmt"># File lib/saulabs/reports_as_sparkline/cumulated_report.rb, line 19</span>
 19:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">run</span>(<span class="ruby-identifier">options</span> = {})
 20:         <span class="ruby-identifier">cumulate</span>(<span class="ruby-keyword kw">super</span>, <span class="ruby-identifier">options_for_run</span>(<span class="ruby-identifier">options</span>))
 21:       <span class="ruby-keyword kw">end</span>
@@ -177,7 +177,7 @@ href="Report.html#M000008">Simplabs::ReportsAsSparkline::Report#run</a>)
             onclick="toggleCode('M000004-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000004-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/simplabs/reports_as_sparkline/cumulated_report.rb, line 25</span>
+    <span class="ruby-comment cmt"># File lib/saulabs/reports_as_sparkline/cumulated_report.rb, line 25</span>
 25:         <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cumulate</span>(<span class="ruby-identifier">data</span>, <span class="ruby-identifier">options</span>)
 26:           <span class="ruby-identifier">first_reporting_period</span> = <span class="ruby-constant">ReportingPeriod</span>.<span class="ruby-identifier">first</span>(<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:grouping</span>], <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:limit</span>], <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:end_date</span>])
 27:           <span class="ruby-identifier">acc</span> = <span class="ruby-identifier">initial_cumulative_value</span>(<span class="ruby-identifier">first_reporting_period</span>.<span class="ruby-identifier">date_time</span>, <span class="ruby-identifier">options</span>)
@@ -207,7 +207,7 @@ href="Report.html#M000008">Simplabs::ReportsAsSparkline::Report#run</a>)
             onclick="toggleCode('M000005-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000005-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/simplabs/reports_as_sparkline/cumulated_report.rb, line 36</span>
+    <span class="ruby-comment cmt"># File lib/saulabs/reports_as_sparkline/cumulated_report.rb, line 36</span>
 36:         <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initial_cumulative_value</span>(<span class="ruby-identifier">date</span>, <span class="ruby-identifier">options</span>)
 37:           <span class="ruby-identifier">conditions</span> = <span class="ruby-identifier">setup_conditions</span>(<span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">date</span>, <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:conditions</span>])
 38:           <span class="ruby-ivar">@klass</span>.<span class="ruby-identifier">send</span>(<span class="ruby-ivar">@aggregation</span>, <span class="ruby-ivar">@value_column</span>, <span class="ruby-identifier">:conditions</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">conditions</span>)

@@ -1,6 +1,6 @@
 require File.join(File.dirname(__FILE__), '..', 'spec_helper')
 
-describe Simplabs::ReportsAsSparkline do
+describe Saulabs::ReportsAsSparkline do
 
   describe 'for inherited models' do
 
@@ -32,7 +32,7 @@ describe Simplabs::ReportsAsSparkline do
   end
 
   after do
-    Simplabs::ReportsAsSparkline::ReportCache.destroy_all
+    Saulabs::ReportsAsSparkline::ReportCache.destroy_all
   end
 
 end

@@ -4,7 +4,7 @@ ReportsAsSparkline enables you to generate sparkline reports from your model's d
 
 See the API docs at http://docs.github.com/marcoow/reports_as_sparkline.
 
-The CI server is at http://ci.simplabs.com/reportsassparkline.
+The CI server is at http://ci.saulabs.com/reportsassparkline.
 
 == Usage
 
@@ -49,8 +49,8 @@ When invoking the report, you can override some of the options you specified for
 
 === The Report cache
 
-Unless you specify parameters that make it impossible to cache report results, all results will be cached. You can access the cache via the <tt>Simplabs::ReportsAsSparkline::ReportCache</tt> class.
-<b>Beware that when you modify data in the cache, report results may be incorrect or execurting reports may even fail completely!</b> To clear the cache for a specific report, use the <tt>Simplabs::ReportsAsSparkline::ReportCache.clear_for</tt>
+Unless you specify parameters that make it impossible to cache report results, all results will be cached. You can access the cache via the <tt>Saulabs::ReportsAsSparkline::ReportCache</tt> class.
+<b>Beware that when you modify data in the cache, report results may be incorrect or execurting reports may even fail completely!</b> To clear the cache for a specific report, use the <tt>Saulabs::ReportsAsSparkline::ReportCache.clear_for</tt>
 method.
 
 <b>Example</b>
@@ -63,7 +63,7 @@ For a report defined as
 
 you can clear the cache with
 
-  Simplabs::ReportsAsSparkline::ReportCache.clear_for(User, :registrations)
+  Saulabs::ReportsAsSparkline::ReportCache.clear_for(User, :registrations)
 
 === In your views
 
@@ -104,7 +104,7 @@ If you are on Rails < 2.1, do this from your RAILS_ROOT
 == Performance
 
 To achieve best performance, you should add indices to your tables on the date columns that are
-used for grouping the records (see Simplabs::ReportsAsSparkline::ClassMethods.reports_as_sparkline):
+used for grouping the records (see Saulabs::ReportsAsSparkline::ClassMethods.reports_as_sparkline):
 
   add_index :[table], :[date_column]
 
@@ -140,4 +140,4 @@ If you want to suggest any new features or report bugs, do so at http://github.c
 
 == Author
 
-© 2008-2010 Marco Otte-Witte (http://simplabs.com), Martin Kavalar, released under the MIT license
+© 2008-2010 Marco Otte-Witte (http://saulabs.com), Martin Kavalar, released under the MIT license

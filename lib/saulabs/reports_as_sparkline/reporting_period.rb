@@ -1,4 +1,4 @@
-module Simplabs #:nodoc:
+module Saulabs #:nodoc:
 
   module ReportsAsSparkline #:nodoc:
 
@@ -47,7 +47,7 @@ module Simplabs #:nodoc:
       end
 
       def ==(other)
-        if other.is_a?(Simplabs::ReportsAsSparkline::ReportingPeriod)
+        if other.is_a?(Saulabs::ReportsAsSparkline::ReportingPeriod)
           @date_time.to_s == other.date_time.to_s && @grouping.identifier.to_s == other.grouping.identifier.to_s
         elsif other.is_a?(Time) || other.is_a?(DateTime)
           @date_time == parse_date_time(other)
@@ -57,7 +57,7 @@ module Simplabs #:nodoc:
       end
 
       def <(other)
-        if other.is_a?(Simplabs::ReportsAsSparkline::ReportingPeriod)
+        if other.is_a?(Saulabs::ReportsAsSparkline::ReportingPeriod)
           return @date_time < other.date_time
         elsif other.is_a?(Time) || other.is_a?(DateTime)
           @date_time < parse_date_time(other)

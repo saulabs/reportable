@@ -1,21 +1,21 @@
-module Simplabs #:nodoc:
+module Saulabs #:nodoc:
 
   module ReportsAsSparkline #:nodoc:
 
-    # A special report class that cumulates all data (see Simplabs::ReportsAsSparkline::Report)
+    # A special report class that cumulates all data (see Saulabs::ReportsAsSparkline::Report)
     #
     # ==== Examples
     #
-    # When Simplabs::ReportsAsSparkline::Report returns
+    # When Saulabs::ReportsAsSparkline::Report returns
     #
     #  [[<DateTime today>, 1], [<DateTime yesterday>, 2], etc.]
     #
-    # Simplabs::ReportsAsSparkline::CumulatedReport returns
+    # Saulabs::ReportsAsSparkline::CumulatedReport returns
     #
     #  [[<DateTime today>, 3], [<DateTime yesterday>, 2], etc.]
     class CumulatedReport < Report
 
-      # Runs the report (see Simplabs::ReportsAsSparkline::Report#run)
+      # Runs the report (see Saulabs::ReportsAsSparkline::Report#run)
       def run(options = {})
         cumulate(super, options_for_run(options))
       end

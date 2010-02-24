@@ -1,29 +1,3 @@
-=== v1.3.2
+=== v1.0.0
 
-* the tag helper now support options for title and alt tags (thanks to jan (http://github.com/jan))
-* reports are now cached also when conditions are specified (thanks to eric (http://github.com/eric))
-
-=== v1.3.1
-
-* fixed migration template
-* fixed data type returned by the report methods
-
-=== v1.3
-
-* Fixed another bug where two report runs with different :end_date values would lead to invalid data
-* Entries in the report cache entry are no longer identified by the :limit the report was run with (YOU WILL HAVE TO RECREATE YOUR CACHE TABLE!)
-* rewrote the data retrieval and processing code, it's now much more compact and less complicated with fewer cache misses
-
-=== v1.2
-
-* FIXED: duplicate key error when using custom time zones (thanks to myronmarston  (http://github.com/myronmarston))
-
-=== v1.1
-
-* new :end_date option: if specified, only data for the reporting periods for (end date - (limit - 1)) until (end date) will be included in the result set (thanks to myronmarston (http://github.com/myronmarston) for the great work)
-* added rcov report and spec report
-
-
-=== prior to v1.1
-
-* cannot remember, should habe started a history file right from the beginning...
+* Initial release of the new Reportable gem (this was formerly ReportsAsSparkline)

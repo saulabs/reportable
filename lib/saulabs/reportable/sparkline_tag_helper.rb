@@ -25,7 +25,7 @@ module Saulabs #:nodoc:
       def sparkline_tag(data, options = {})
         options.reverse_merge!({ :width => 300, :height => 34, :line_color => '0077cc', :fill_color => 'e6f2fa', :labels => [], :alt => '', :title => '' })
         data = data.collect { |d| d[1] }
-        labels = ""
+        labels = ''
         unless options[:labels].empty?
           chxr = {}
           options[:labels].each_with_index do |l, i|
@@ -33,9 +33,13 @@ module Saulabs #:nodoc:
           end
           labels = "&chxt=#{options[:labels].map(&:to_s).join(',')}&chxr=#{options[:labels].collect{|l| chxr[l]}.join('|')}"
         end
+        title = ''
+        unless options[:title].empty?
+          title = "&chtt=#{options[:title]}"
+        end
         image_tag(
-          "http://chart.apis.google.com/chart?cht=ls&chs=#{options[:width]}x#{options[:height]}&chd=t:#{data.join(',')}&chco=#{options[:line_color]}&chm=B,#{options[:fill_color]},0,0,0&chls=1,0,0&chds=#{data.min},#{data.max}#{labels}",
-          :alt => options[:alt],
+          "http://chart.apis.google.com/chart?cht=ls&chs=#{options[:width]}x#{options[:height]}&chd=t:#{data.join(',')}&chco=#{options[:line_color]}&chm=B,#{options[:fill_color]},0,0,0&chls=1,0,0&chds=#{data.min},#{data.max}#{labels}#{title}",
+          :alt   => options[:alt],
           :title => options[:title]
         )
       end

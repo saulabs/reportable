@@ -1,5 +1,4 @@
 require 'rake'
-require 'rake/rdoctask'
 require 'spec/rake/spectask'
 
 desc 'Default: run specs.'

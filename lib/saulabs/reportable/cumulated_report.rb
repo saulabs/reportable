@@ -1,26 +1,23 @@
-module Saulabs #:nodoc:
+module Saulabs
 
-  module Reportable #:nodoc:
+  module Reportable
 
-    # A special report class that cumulates all data (see Saulabs::Reportable::Report)
+    # A special report class that cumulates all data (see {Saulabs::Reportable::Report})
     #
-    # ==== Examples
-    #
-    # When Saulabs::Reportable::Report returns
+    # @example Cumulated reports as opposed to regular reports
     #
     #  [[<DateTime today>, 1], [<DateTime yesterday>, 2], etc.]
-    #
-    # Saulabs::Reportable::CumulatedReport returns
-    #
     #  [[<DateTime today>, 3], [<DateTime yesterday>, 2], etc.]
+    #
     class CumulatedReport < Report
 
-      # Runs the report (see Saulabs::Reportable::Report#run)
+      # Runs the report (see {Saulabs::Reportable::Report#run})
+      #
       def run(options = {})
         cumulate(super, options_for_run(options))
       end
 
-      protected
+      private
 
         def cumulate(data, options)
           first_reporting_period = ReportingPeriod.first(options[:grouping], options[:limit], options[:end_date])

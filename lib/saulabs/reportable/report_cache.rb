@@ -1,9 +1,10 @@
-module Saulabs #:nodoc:
+module Saulabs
 
-  module Reportable #:nodoc:
+  module Reportable
 
-    # The ReportCache class is a regular +ActiveRecord+ model and represents cached results for single reporting periods (table name is +reportable_cache+)
-    # ReportCache instances are identified by the combination of +model_name+, +report_name+, +grouping+, +aggregation+ and +reporting_period+
+    # The +ReportCache+ class is a regular {ActiveRecord} model and represents cached results for single {Saulabs::Reportable::ReportingPeriod}s.
+    # +ReportCache+ instances are identified by the combination of +model_name+, +report_name+, +grouping+, +aggregation+ and +reporting_period+.
+    #
     class ReportCache < ActiveRecord::Base
 
       set_table_name :reportable_cache
@@ -12,17 +13,19 @@ module Saulabs #:nodoc:
 
       # Clears the cache for the specified +klass+ and +report+
       #
-      # === Parameters
-      # * <tt>klass</tt> - The model the report to clear the cache for works on
-      # * <tt>report</tt> - The name of the report to clear the cache for
+      # @param [Class] klass
+      #   the model the report to clear the cache for works on
+      # @param [Symbol] report
+      #   the name of the report to clear the cache for
       #
-      # === Example
-      # To clear the cache for a report defined as
-      #  class User < ActiveRecord::Base
-      #    reportable :registrations
-      #  end
-      # just do
-      #  Saulabs::Reportable::ReportCache.clear_for(User, :registrations)
+      # @example Clearing the cache for a report
+      #
+      #   class User < ActiveRecord::Base
+      #     reportable :registrations
+      #   end
+      #
+      #   Saulabs::Reportable::ReportCache.clear_for(User, :registrations)
+      #
       def self.clear_for(klass, report)
         self.delete_all(:conditions => {
           :model_name  => klass.name,
@@ -30,7 +33,28 @@ module Saulabs #:nodoc:
         })
       end
 
-      def self.process(report, options, &block) #:nodoc:
+      # Processes the report using the respective cache.
+      #
+      # @param [Saulabe::Reportable::Report] report
+      #   the report to process
+      # @param [Hash] options
+      #   options for the report
+      #
+      # @option options [Symbol] :grouping (:day)
+      #   the period records are grouped in (+:hour+, +:day+, +:week+, +:month+); <b>Beware that <tt>reportable</tt> treats weeks as starting on monday!</b>
+      # @option options [Fixnum] :limit (100)
+      #   the number of reporting periods to get (see +:grouping+)
+      # @option options [Hash] :conditions ({})
+      #   conditions like in +ActiveRecord::Base#find+; only records that match these conditions are reported;
+      # @option options [Boolean] :live_data (false)
+      #   specifies whether data for the current reporting period is to be read; <b>if +:live_data+ is +true+, you will experience a performance hit since the request cannot be satisfied from the cache alone</b>
+      # @option options [DateTime, Boolean] :end_date (false)
+      #   when specified, the report will only include data for the +:limit+ reporting periods until this date.
+      #
+      # @returns [Array<Array<DateTime, Float>>]
+      #   the result of the report as pairs of {DateTime}s and {Float}s
+      #
+      def self.process(report, options, &block)
         raise ArgumentError.new('A block must be given') unless block_given?
         self.transaction do
           cached_data = read_cached_data(report, options)
@@ -44,7 +68,7 @@ module Saulabs #:nodoc:
         def self.prepare_result(new_data, cached_data, report, options)
           new_data = new_data.map { |data| [ReportingPeriod.from_db_string(options[:grouping], data[0]), data[1]] }
           cached_data.map! { |cached| [ReportingPeriod.new(options[:grouping], cached.reporting_period), cached.value] }
-          current_reporting_period = ReportingPeriod.current(options[:grouping])
+          current_reporting_period = ReportingPeriod.new(options[:grouping])
           reporting_period = get_first_reporting_period(options)
           result = []
           while reporting_period < (options[:end_date] ? ReportingPeriod.new(options[:grouping], options[:end_date]).next : current_reporting_period)

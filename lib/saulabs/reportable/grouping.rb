@@ -1,18 +1,38 @@
-module Saulabs #:nodoc:
+module Saulabs
 
-  module Reportable #:nodoc:
+  module Reportable
 
-    class Grouping #:nodoc:
+    # The grouping specifies which records are grouped into one {Saulabs::Reportable::ReportingPeriod}.
+    #
+    class Grouping
 
+      # Initializes a new grouping.
+      #
+      # @param [Symbol] identifier
+      #   the identifier of the grouping (one of +:hour+, +:day+, +:week+ or +:month+)
+      #
       def initialize(identifier)
         raise ArgumentError.new("Invalid grouping #{identifier}") unless [:hour, :day, :week, :month].include?(identifier)
         @identifier = identifier
       end
 
+      # Gets the identifier of the grouping.
+      #
+      # @returns [Symbol]
+      #   the identifier of the grouping.
+      #
       def identifier
         @identifier
       end
 
+      # Gets an array of date parts from a DB string.
+      #
+      # @param [String] db_string
+      #   the DB string to get the date parts from
+      #
+      # @returns [Array<Fixnum>]
+      #   array of numbers that represent the values of the date
+      #
       def date_parts_from_db_string(db_string)
         case ActiveRecord::Base.connection.adapter_name
           when /mysql/i
@@ -24,7 +44,12 @@ module Saulabs #:nodoc:
         end
       end
 
-      def to_sql(date_column) #:nodoc:
+      # Converts the grouping into a DB specific string that can be used to group records.
+      #
+      # @param [String] date_column
+      #   the name of the DB column that holds the date
+      #
+      def to_sql(date_column)
         case ActiveRecord::Base.connection.adapter_name
           when /mysql/i
             mysql_format(date_column)

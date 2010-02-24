@@ -1,26 +1,61 @@
-module Saulabs #:nodoc:
+module Saulabs
 
-  module Reportable #:nodoc:
+  module Reportable
 
-    # The Report class that does all the data retrieval and calculations
+    # The Report class that does all the data retrieval and calculations.
+    #
     class Report
 
-      attr_reader :klass, :name, :date_column, :value_column, :aggregation, :options
+      # the model the report works on (This is the class you invoke {Saulabs::Reportable::ClassMethods#reportable} on)
+      #
+      attr_reader :klass
 
-      # ==== Parameters
-      # * <tt>klass</tt> - The model the report works on (This is the class you invoke Saulabs::Reportable::ClassMethods#reportable on)
-      # * <tt>name</tt> - The name of the report (as in Saulabs::Reportable::ClassMethods#reportable)
+      # the name of the report (as in {Saulabs::Reportable::ClassMethods#reportable})
       #
-      # ==== Options
+      attr_reader :name
+
+      # the name of the date column over that the records are aggregated
       #
-      # * <tt>:date_column</tt> - The name of the date column over that the records are aggregated (defaults to <tt>created_at</tt>)
-      # * <tt>:value_column</tt> - The name of the column that holds the values to sum up when using aggregation <tt>:sum</tt>
-      # * <tt>:aggregation</tt> - The aggregation to use (one of <tt>:count</tt>, <tt>:sum</tt>, <tt>:minimum</tt>, <tt>:maximum</tt> or <tt>:average</tt>); when using anything other than <tt>:count</tt>, <tt>:value_column</tt> must also be specified (<b>If you really want to e.g. sum up the values in the <tt>id</tt> column, you have to explicitely say so.</b>); (defaults to <tt>:count</tt>)
-      # * <tt>:grouping</tt> - The period records are grouped on (<tt>:hour</tt>, <tt>:day</tt>, <tt>:week</tt>, <tt>:month</tt>); <b>Beware that <tt>reportable</tt> treats weeks as starting on monday!</b>
-      # * <tt>:limit</tt> - The number of reporting periods to get (see <tt>:grouping</tt>), (defaults to 100)
-      # * <tt>:conditions</tt> - Conditions like in <tt>ActiveRecord::Base#find</tt>; only records that match the conditions are reported; <b>Beware that when conditions are specified, caching is disabled!</b>
-      # * <tt>:live_data</tt> - Specifies whether data for the current reporting period is to be read; <b>if <tt>:live_data</tt> is <tt>true</tt>, you will experience a performance hit since the request cannot be satisfied from the cache only (defaults to <tt>false</tt>)</b>
-      # * <tt>:end_date</tt> - When specified, the report will only include data for the <tt>:limit</tt> reporting periods until this date.
+      attr_reader :date_column
+
+      # the name of the column that holds the values to aggregate when using a calculation aggregation like +:sum+
+      #
+      attr_reader :value_column
+
+      # the aggregation to use (one of +:count+, +:sum+, +:minimum+, +:maximum+ or +:average+); when using anything other than +:count+, +:value_column+ must also be specified
+      #
+      attr_reader :aggregation
+
+      # options for the report
+      #
+      attr_reader :options
+
+      # Initializes a new {Saulabs::Reportable::Report}
+      #
+      # @param [Class] klass
+      #   the model the report works on (This is the class you invoke {Saulabs::Reportable::ClassMethods#reportable} on)
+      # @param [String] name
+      #   the name of the report (as in {Saulabs::Reportable::ClassMethods#reportable})
+      # @param [Hash] options
+      #   options for the report creation
+      #
+      # @option options [Symbol] :date_column (created_at)
+      #   the name of the date column over that the records are aggregated
+      # @option options [String, Symbol] :value_column (:id)
+      #   the name of the column that holds the values to aggregate when using a calculation aggregation like +:sum+
+      # @option options [Symbol] :aggregation (:count)
+      #   the aggregation to use (one of +:count+, +:sum+, +:minimum+, +:maximum+ or +:average+); when using anything other than +:count+, +:value_column+ must also be specified
+      # @option options [Symbol] :grouping (:day)
+      #   the period records are grouped in (+:hour+, +:day+, +:week+, +:month+); <b>Beware that <tt>reportable</tt> treats weeks as starting on monday!</b>
+      # @option options [Fixnum] :limit (100)
+      #   the number of reporting periods to get (see +:grouping+)
+      # @option options [Hash] :conditions ({})
+      #   conditions like in +ActiveRecord::Base#find+; only records that match these conditions are reported;
+      # @option options [Boolean] :live_data (false)
+      #   specifies whether data for the current reporting period is to be read; <b>if +:live_data+ is +true+, you will experience a performance hit since the request cannot be satisfied from the cache alone</b>
+      # @option options [DateTime, Boolean] :end_date (false)
+      #   when specified, the report will only include data for the +:limit+ reporting periods until this date.
+      #
       def initialize(klass, name, options = {})
         ensure_valid_options(options)
         @klass        = klass
@@ -41,12 +76,23 @@ module Saulabs #:nodoc:
 
       # Runs the report and returns an array of array of DateTimes and Floats
       #
-      # ==== Options
-      # * <tt>:grouping</tt> - The period records are grouped on (<tt>:hour</tt>, <tt>:day</tt>, <tt>:week</tt>, <tt>:month</tt>); <b>Beware that <tt>reportable</tt> treats weeks as starting on monday!</b>
-      # * <tt>:limit</tt> - The number of reporting periods to get (see <tt>:grouping</tt>), (defaults to 100)
-      # * <tt>:conditions</tt> - Conditions like in <tt>ActiveRecord::Base#find</tt>; only records that match the conditions are reported
-      # * <tt>:live_data</tt> - Specifies whether data for the current reporting period is to be read; <b>if <tt>:live_data</tt> is <tt>true</tt>, you will experience a performance hit since the request cannot be satisfied from the cache only (defaults to <tt>false</tt>)</b>
-      # * <tt>:end_date</tt> - When specified, the report will only include data for the <tt>:limit</tt> reporting periods until this date.
+      # @param [Hash] options
+      #   options to run the report with
+      #
+      # @option options [Symbol] :grouping (:day)
+      #   the period records are grouped in (+:hour+, +:day+, +:week+, +:month+); <b>Beware that <tt>reportable</tt> treats weeks as starting on monday!</b>
+      # @option options [Fixnum] :limit (100)
+      #   the number of reporting periods to get (see +:grouping+)
+      # @option options [Hash] :conditions ({})
+      #   conditions like in +ActiveRecord::Base#find+; only records that match these conditions are reported;
+      # @option options [Boolean] :live_data (false)
+      #   specifies whether data for the current reporting period is to be read; <b>if +:live_data+ is +true+, you will experience a performance hit since the request cannot be satisfied from the cache alone</b>
+      # @option options [DateTime, Boolean] :end_date (false)
+      #   when specified, the report will only include data for the +:limit+ reporting periods until this date.
+      #
+      # @returns [Array<Array<DateTime, Float>>]
+      #   the result of the report as pairs of {DateTime}s and {Float}s
+      #
       def run(options = {})
         options = options_for_run(options)
         ReportCache.process(self, options) do |begin_at, end_at|

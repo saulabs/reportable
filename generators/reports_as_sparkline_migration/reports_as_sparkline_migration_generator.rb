@@ -1,4 +1,4 @@
-class ReportableMigrationGenerator < Rails::Generator::NamedBase #:nodoc:
+class ReportableMigrationGenerator < Rails::Generator::NamedBase
 
   def manifest
     record do |m|

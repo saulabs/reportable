@@ -22,13 +22,13 @@ Spec::Rake::SpecTask.new(:spec) do |t|
   t.spec_files = FileList['spec/**/*_spec.rb']
 end
 
-desc 'Generate documentation for the ReportsAsSparkline plugin.'
-Rake::RDocTask.new(:rdoc) do |rdoc|
-  rdoc.rdoc_dir = 'doc'
-  rdoc.title    = 'ReportsAsSparkline'
-  rdoc.options << '--line-numbers' << '--inline-source'
-  rdoc.rdoc_files.include('README.rdoc')
-  rdoc.rdoc_files.include('lib/**/*.rb')
+begin
+  require 'yard'
+  YARD::Rake::YardocTask.new(:doc) do |t|
+    t.files   = ['lib/**/*.rb', '-', 'README.md']
+    t.options = ['--no-private', '--title', 'Reportable Documentation']
+  end
+rescue LoadError
 end
 
 begin

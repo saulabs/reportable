@@ -16,7 +16,7 @@ end
 begin
   require 'yard'
   YARD::Rake::YardocTask.new(:doc) do |t|
-    t.files   = ['lib/**/*.rb', '-', 'README.md']
+    t.files   = ['lib/**/*.rb', '-', 'HISTORY.md']
     t.options = ['--no-private', '--title', 'Reportable Documentation']
   end
 rescue LoadError

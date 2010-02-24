@@ -26,7 +26,7 @@ module Saulabs
       # @option options [String] :title ('')
       #   the title attribute for the generated image
       #
-      # @returns [String]
+      # @return [String]
       #   an image tag showing a sparkline for the passed +data+
       #
       # @example Rendering a sparkline tag for report data

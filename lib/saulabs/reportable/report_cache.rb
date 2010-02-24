@@ -2,7 +2,7 @@ module Saulabs
 
   module Reportable
 
-    # The +ReportCache+ class is a regular {ActiveRecord} model and represents cached results for single {Saulabs::Reportable::ReportingPeriod}s.
+    # The +ReportCache+ class is a regular +ActiveRecord+ model and represents cached results for single {Saulabs::Reportable::ReportingPeriod}s.
     # +ReportCache+ instances are identified by the combination of +model_name+, +report_name+, +grouping+, +aggregation+ and +reporting_period+.
     #
     class ReportCache < ActiveRecord::Base
@@ -51,7 +51,7 @@ module Saulabs
       # @option options [DateTime, Boolean] :end_date (false)
       #   when specified, the report will only include data for the +:limit+ reporting periods until this date.
       #
-      # @returns [Array<Array<DateTime, Float>>]
+      # @return [Array<Array<DateTime, Float>>]
       #   the result of the report as pairs of {DateTime}s and {Float}s
       #
       def self.process(report, options, &block)

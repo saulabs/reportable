@@ -6,7 +6,7 @@ module Saulabs
     #
     class ReportingPeriod
 
-      # The actual {DateTime} the reporting period represents
+      # The actual +DateTime the reporting period represents
       #
       attr_reader :date_time
 
@@ -19,7 +19,7 @@ module Saulabs
       # @param [Saulabs::Reportable::Grouping] grouping
       #   the grouping the generate the reporting period for
       # @param [DateTime] date_time
-      #   the {DateTime} to generate the reporting period for
+      #   the +DateTime+ to generate the reporting period for
       #
       def initialize(grouping, date_time = nil)
         @grouping  = grouping
@@ -31,7 +31,7 @@ module Saulabs
       # @param [Fixnum] offset
       #   the offset to get the reporting period for
       #
-      # @returns [Saulabs::Reportable::ReportingPeriod]
+      # @return [Saulabs::Reportable::ReportingPeriod]
       #   the reporting period relative by offset to the current one
       #
       # @example Getting the reporting period one week later
@@ -52,7 +52,7 @@ module Saulabs
       # @param [DateTime] end_date
       #   the end date to get the first reporting period for (the first reporting period is then +end_date+ - +limit+ * +grouping+)
       #
-      # @returns [Saulabs::Reportable::ReportingPeriod]
+      # @return [Saulabs::Reportable::ReportingPeriod]
       #   the first reporting period for the grouping, limit and optionally end date
       #
       def self.first(grouping, limit, end_date = nil)
@@ -66,7 +66,7 @@ module Saulabs
       # @param [String] db_string
       #   the DB string to parse and get the reporting period for
       #
-      # @returns [Saulabs::Reportable::ReportingPeriod]
+      # @return [Saulabs::Reportable::ReportingPeriod]
       #   the reporting period for the {Saulabs::Reportable::Grouping} as parsed from the db string
       #
       def self.from_db_string(grouping, db_string)
@@ -86,7 +86,7 @@ module Saulabs
 
       # Gets the next reporting period.
       #
-      # @returns [Saulabs::Reportable::ReportingPeriod]
+      # @return [Saulabs::Reportable::ReportingPeriod]
       #   the reporting period after the current one
       #
       def next
@@ -95,7 +95,7 @@ module Saulabs
 
       # Gets the previous reporting period.
       #
-      # @returns [Saulabs::Reportable::ReportingPeriod]
+      # @return [Saulabs::Reportable::ReportingPeriod]
       #   the reporting period before the current one
       #
       def previous
@@ -107,7 +107,7 @@ module Saulabs
       # @param [Saulabs::Reportable::ReportingPeriod] other
       #   the reporting period to check for whether it is equal to the current one
       #
-      # @returns [Boolean]
+      # @return [Boolean]
       #   true if +other+ is equal to the current reporting period, false otherwise
       #
       def ==(other)
@@ -125,7 +125,7 @@ module Saulabs
       # @param [Saulabs::Reportable::ReportingPeriod] other
       #   the reporting period to check for whether it is smaller to the current one
       #
-      # @returns [Boolean]
+      # @return [Boolean]
       #   true if +other+ is smaller to the current reporting period, false otherwise
       #
       def <(other)
@@ -141,7 +141,7 @@ module Saulabs
       # Gets the latest point in time that is included the reporting period. The latest point in time included in a reporting period
       # for grouping hour would be that hour and 59 minutes and 59 seconds.
       #
-      # @returns [DateTime]
+      # @return [DateTime]
       #   the latest point in time that is included in the reporting period
       #
       def last_date_time

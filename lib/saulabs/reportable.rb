@@ -2,7 +2,7 @@ module Saulabs
 
   module Reportable
 
-    # Includes the {Saulabs::Reportable.reportable} method into +base+.
+    # Extends the {Saulabs::Reportable::ClassMethods#reportable} method into +base+.
     #
     def self.included(base)
       base.extend ClassMethods

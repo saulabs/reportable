@@ -18,7 +18,7 @@ module Saulabs
 
       # Gets the identifier of the grouping.
       #
-      # @returns [Symbol]
+      # @return [Symbol]
       #   the identifier of the grouping.
       #
       def identifier
@@ -30,7 +30,7 @@ module Saulabs
       # @param [String] db_string
       #   the DB string to get the date parts from
       #
-      # @returns [Array<Fixnum>]
+      # @return [Array<Fixnum>]
       #   array of numbers that represent the values of the date
       #
       def date_parts_from_db_string(db_string)

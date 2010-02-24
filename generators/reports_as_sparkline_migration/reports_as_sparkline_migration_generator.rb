@@ -1,4 +1,4 @@
-class ReportsAsSparklineMigrationGenerator < Rails::Generator::NamedBase #:nodoc:
+class ReportableMigrationGenerator < Rails::Generator::NamedBase #:nodoc:
 
   def manifest
     record do |m|

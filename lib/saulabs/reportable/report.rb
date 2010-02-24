@@ -1,6 +1,6 @@
 module Saulabs #:nodoc:
 
-  module ReportsAsSparkline #:nodoc:
+  module Reportable #:nodoc:
 
     # The Report class that does all the data retrieval and calculations
     class Report
@@ -8,15 +8,15 @@ module Saulabs #:nodoc:
       attr_reader :klass, :name, :date_column, :value_column, :aggregation, :options
 
       # ==== Parameters
-      # * <tt>klass</tt> - The model the report works on (This is the class you invoke Saulabs::ReportsAsSparkline::ClassMethods#reports_as_sparkline on)
-      # * <tt>name</tt> - The name of the report (as in Saulabs::ReportsAsSparkline::ClassMethods#reports_as_sparkline)
+      # * <tt>klass</tt> - The model the report works on (This is the class you invoke Saulabs::Reportable::ClassMethods#reportable on)
+      # * <tt>name</tt> - The name of the report (as in Saulabs::Reportable::ClassMethods#reportable)
       #
       # ==== Options
       #
       # * <tt>:date_column</tt> - The name of the date column over that the records are aggregated (defaults to <tt>created_at</tt>)
       # * <tt>:value_column</tt> - The name of the column that holds the values to sum up when using aggregation <tt>:sum</tt>
       # * <tt>:aggregation</tt> - The aggregation to use (one of <tt>:count</tt>, <tt>:sum</tt>, <tt>:minimum</tt>, <tt>:maximum</tt> or <tt>:average</tt>); when using anything other than <tt>:count</tt>, <tt>:value_column</tt> must also be specified (<b>If you really want to e.g. sum up the values in the <tt>id</tt> column, you have to explicitely say so.</b>); (defaults to <tt>:count</tt>)
-      # * <tt>:grouping</tt> - The period records are grouped on (<tt>:hour</tt>, <tt>:day</tt>, <tt>:week</tt>, <tt>:month</tt>); <b>Beware that <tt>reports_as_sparkline</tt> treats weeks as starting on monday!</b>
+      # * <tt>:grouping</tt> - The period records are grouped on (<tt>:hour</tt>, <tt>:day</tt>, <tt>:week</tt>, <tt>:month</tt>); <b>Beware that <tt>reportable</tt> treats weeks as starting on monday!</b>
       # * <tt>:limit</tt> - The number of reporting periods to get (see <tt>:grouping</tt>), (defaults to 100)
       # * <tt>:conditions</tt> - Conditions like in <tt>ActiveRecord::Base#find</tt>; only records that match the conditions are reported; <b>Beware that when conditions are specified, caching is disabled!</b>
       # * <tt>:live_data</tt> - Specifies whether data for the current reporting period is to be read; <b>if <tt>:live_data</tt> is <tt>true</tt>, you will experience a performance hit since the request cannot be satisfied from the cache only (defaults to <tt>false</tt>)</b>
@@ -42,7 +42,7 @@ module Saulabs #:nodoc:
       # Runs the report and returns an array of array of DateTimes and Floats
       #
       # ==== Options
-      # * <tt>:grouping</tt> - The period records are grouped on (<tt>:hour</tt>, <tt>:day</tt>, <tt>:week</tt>, <tt>:month</tt>); <b>Beware that <tt>reports_as_sparkline</tt> treats weeks as starting on monday!</b>
+      # * <tt>:grouping</tt> - The period records are grouped on (<tt>:hour</tt>, <tt>:day</tt>, <tt>:week</tt>, <tt>:month</tt>); <b>Beware that <tt>reportable</tt> treats weeks as starting on monday!</b>
       # * <tt>:limit</tt> - The number of reporting periods to get (see <tt>:grouping</tt>), (defaults to 100)
       # * <tt>:conditions</tt> - Conditions like in <tt>ActiveRecord::Base#find</tt>; only records that match the conditions are reported
       # * <tt>:live_data</tt> - Specifies whether data for the current reporting period is to be read; <b>if <tt>:live_data</tt> is <tt>true</tt>, you will experience a performance hit since the request cannot be satisfied from the cache only (defaults to <tt>false</tt>)</b>

@@ -1,12 +1,12 @@
 module Saulabs #:nodoc:
 
-  module ReportsAsSparkline #:nodoc:
+  module Reportable #:nodoc:
 
-    # The ReportCache class is a regular +ActiveRecord+ model and represents cached results for single reporting periods (table name is +reports_as_sparkline_cache+)
+    # The ReportCache class is a regular +ActiveRecord+ model and represents cached results for single reporting periods (table name is +reportable_cache+)
     # ReportCache instances are identified by the combination of +model_name+, +report_name+, +grouping+, +aggregation+ and +reporting_period+
     class ReportCache < ActiveRecord::Base
 
-      set_table_name :reports_as_sparkline_cache
+      set_table_name :reportable_cache
 
       self.skip_time_zone_conversion_for_attributes = [:reporting_period]
 
@@ -19,10 +19,10 @@ module Saulabs #:nodoc:
       # === Example
       # To clear the cache for a report defined as
       #  class User < ActiveRecord::Base
-      #    reports_as_sparkline :registrations
+      #    reportable :registrations
       #  end
       # just do
-      #  Saulabs::ReportsAsSparkline::ReportCache.clear_for(User, :registrations)
+      #  Saulabs::Reportable::ReportCache.clear_for(User, :registrations)
       def self.clear_for(klass, report)
         self.delete_all(:conditions => {
           :model_name  => klass.name,

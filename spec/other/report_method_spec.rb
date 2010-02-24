@@ -1,6 +1,6 @@
 require File.join(File.dirname(__FILE__), '..', 'spec_helper')
 
-describe Saulabs::ReportsAsSparkline do
+describe Saulabs::Reportable do
 
   describe 'for inherited models' do
 
@@ -32,13 +32,13 @@ describe Saulabs::ReportsAsSparkline do
   end
 
   after do
-    Saulabs::ReportsAsSparkline::ReportCache.destroy_all
+    Saulabs::Reportable::ReportCache.destroy_all
   end
 
 end
 
 class User < ActiveRecord::Base
-  reports_as_sparkline :registrations, :limit => 10
+  reportable :registrations, :limit => 10
 end
 
 class SpecialUser < User; end

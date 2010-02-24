@@ -1,4 +1,4 @@
 .DS_Store
 spec/log/spec.log
-spec/db/reports_as_sparkline.sqlite3.db
+spec/db/reportable.sqlite3.db
 doc

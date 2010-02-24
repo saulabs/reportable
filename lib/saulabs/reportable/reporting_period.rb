@@ -1,6 +1,6 @@
 module Saulabs #:nodoc:
 
-  module ReportsAsSparkline #:nodoc:
+  module Reportable #:nodoc:
 
     class ReportingPeriod #:nodoc:
 
@@ -47,7 +47,7 @@ module Saulabs #:nodoc:
       end
 
       def ==(other)
-        if other.is_a?(Saulabs::ReportsAsSparkline::ReportingPeriod)
+        if other.is_a?(Saulabs::Reportable::ReportingPeriod)
           @date_time.to_s == other.date_time.to_s && @grouping.identifier.to_s == other.grouping.identifier.to_s
         elsif other.is_a?(Time) || other.is_a?(DateTime)
           @date_time == parse_date_time(other)
@@ -57,7 +57,7 @@ module Saulabs #:nodoc:
       end
 
       def <(other)
-        if other.is_a?(Saulabs::ReportsAsSparkline::ReportingPeriod)
+        if other.is_a?(Saulabs::Reportable::ReportingPeriod)
           return @date_time < other.date_time
         elsif other.is_a?(Time) || other.is_a?(DateTime)
           @date_time < parse_date_time(other)

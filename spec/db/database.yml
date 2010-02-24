@@ -1,15 +1,15 @@
 sqlite3:
   adapter:  sqlite3
-  database: spec/db/reports_as_sparkline.sqlite3.db
+  database: spec/db/reportable.sqlite3.db
 mysql:
   adapter:  mysql
-  database: reports_as_sparkline_test
-  username: reports_as_sparkline
-  password: reports_as_sparkline
+  database: reportable_test
+  username: reportable
+  password: reportable
   host:     localhost
 postgresql:
   adapter:  postgresql
-  database: reports_as_sparkline_test
-  username: reports_as_sparkline
-  password: reports_as_sparkline
+  database: reportable_test
+  username: reportable
+  password: reportable
   host:     localhost

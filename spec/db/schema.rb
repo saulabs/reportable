@@ -8,7 +8,7 @@ ActiveRecord::Schema.define(:version => 1) do
     t.timestamps
   end
 
-  create_table :reports_as_sparkline_cache, :force => true do |t|
+  create_table :reportable_cache, :force => true do |t|
     t.string   :model_name,       :null => false
     t.string   :report_name,      :null => false
     t.string   :grouping,         :null => false
@@ -19,14 +19,14 @@ ActiveRecord::Schema.define(:version => 1) do
 
     t.timestamps
   end
-  add_index :reports_as_sparkline_cache, [
+  add_index :reportable_cache, [
     :model_name,
     :report_name,
     :grouping,
     :aggregation,
     :condition
   ], :name => :name_model_grouping_agregation
-  add_index :reports_as_sparkline_cache, [
+  add_index :reportable_cache, [
     :model_name,
     :report_name,
     :grouping,

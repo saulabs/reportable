@@ -1,6 +1,6 @@
 module Saulabs #:nodoc:
 
-  module ReportsAsSparkline #:nodoc:
+  module Reportable #:nodoc:
 
     module SparklineTagHelper
 

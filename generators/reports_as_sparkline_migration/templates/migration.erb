@@ -1,7 +1,7 @@
 class <%= class_name %> < ActiveRecord::Migration
 
   def self.up
-    create_table :reports_as_sparkline_cache, :force => true do |t|
+    create_table :reportable_cache, :force => true do |t|
       t.string   :model_name,       :null => false
       t.string   :report_name,      :null => false
       t.string   :grouping,         :null => false
@@ -13,14 +13,14 @@ class <%= class_name %> < ActiveRecord::Migration
       t.timestamps
     end
 
-    add_index :reports_as_sparkline_cache, [
+    add_index :reportable_cache, [
       :model_name,
       :report_name,
       :grouping,
       :aggregation,
       :condition
     ], :name => :name_model_grouping_agregation
-    add_index :reports_as_sparkline_cache, [
+    add_index :reportable_cache, [
       :model_name,
       :report_name,
       :grouping,
@@ -31,10 +31,10 @@ class <%= class_name %> < ActiveRecord::Migration
   end
 
   def self.down
-    remove_index :reports_as_sparkline_cache, :name => :name_model_grouping_agregation
-    remove_index :reports_as_sparkline_cache, :name => :name_model_grouping_aggregation_period
+    remove_index :reportable_cache, :name => :name_model_grouping_agregation
+    remove_index :reportable_cache, :name => :name_model_grouping_aggregation_period
 
-    drop_table :reports_as_sparkline_cache
+    drop_table :reportable_cache
   end
 
 end

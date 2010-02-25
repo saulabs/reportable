@@ -1,4 +1,6 @@
 .DS_Store
+.bundle
+Gemfile.lock
 spec/log/spec.log
 spec/db/reportable.sqlite3.db
 doc

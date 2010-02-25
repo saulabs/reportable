@@ -1,5 +1,12 @@
+require 'rubygems'
 require 'rake'
+require 'bundler'
+
+Bundler.setup
+Bundler.require
+
 require 'spec/rake/spectask'
+require 'simplabs/excellent/rake'
 
 desc 'Default: run specs.'
 task :default => :spec
@@ -12,19 +19,11 @@ Spec::Rake::SpecTask.new(:spec) do |t|
   t.spec_files = FileList['spec/**/*_spec.rb']
 end
 
-begin
-  require 'yard'
-  YARD::Rake::YardocTask.new(:doc) do |t|
-    t.files   = ['lib/**/*.rb', '-', 'HISTORY.md']
-    t.options = ['--no-private', '--title', 'Reportable Documentation']
-  end
-rescue LoadError
+YARD::Rake::YardocTask.new(:doc) do |t|
+  t.files   = ['lib/**/*.rb', '-', 'HISTORY.md']
+  t.options = ['--no-private', '--title', 'Reportable Documentation']
 end
 
-begin
-  require 'simplabs/excellent/rake'
-  Simplabs::Excellent::Rake::ExcellentTask.new(:excellent) do |t|
-    t.paths = %w(lib)
-  end
-rescue LoadError
+Simplabs::Excellent::Rake::ExcellentTask.new(:excellent) do |t|
+  t.paths = %w(lib)
 end

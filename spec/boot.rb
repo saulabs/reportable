@@ -15,7 +15,7 @@ Rails::Initializer.run(:initialize_time_zone) do |config|
   config.time_zone = 'Pacific Time (US & Canada)'
 end
 
-require File.join(File.dirname(__FILE__), '/../init.rb')
+require File.join(File.dirname(__FILE__), '..', 'rails', 'init.rb')
 
 FileUtils.mkdir_p File.join(File.dirname(__FILE__), 'log')
 ActiveRecord::Base.logger = Logger.new(File.join(File.dirname(__FILE__), 'log', 'spec.log'))

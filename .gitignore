@@ -3,3 +3,4 @@ spec/log/spec.log
 spec/db/reportable.sqlite3.db
 doc
 .yardoc
+reportable-*.gem

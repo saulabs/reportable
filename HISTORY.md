@@ -1,4 +1,4 @@
 v1.0.0
 ------
 
-* Initial release of the new Reportable gem (this was formerly ReportsAsSparkline)
+* Initial release of the new Reportable gem (formerly known as the ReportsAsSparkline plugin)

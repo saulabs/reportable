@@ -13,7 +13,7 @@ ActiveRecord::Schema.define(:version => 1) do
     t.string   :report_name,      :null => false
     t.string   :grouping,         :null => false
     t.string   :aggregation,      :null => false
-    t.string   :condition,        :null => false
+    t.string   :conditions,       :null => false
     t.float    :value,            :null => false, :default => 0
     t.datetime :reporting_period, :null => false
 
@@ -24,14 +24,14 @@ ActiveRecord::Schema.define(:version => 1) do
     :report_name,
     :grouping,
     :aggregation,
-    :condition
+    :conditions
   ], :name => :name_model_grouping_agregation
   add_index :reportable_cache, [
     :model_name,
     :report_name,
     :grouping,
     :aggregation,
-    :condition,
+    :conditions,
     :reporting_period
   ], :unique => true, :name => :name_model_grouping_aggregation_period
 

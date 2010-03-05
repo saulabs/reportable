@@ -122,7 +122,9 @@ describe Saulabs::Reportable::ReportCache do
     it 'should read existing data from the cache' do
       Saulabs::Reportable::ReportCache.should_receive(:all).once.with(
         :conditions => [
-          'model_name = ? AND report_name = ? AND grouping = ? AND aggregation = ? AND `condition` = ? AND reporting_period >= ?',
+          %w(model_name report_name grouping aggregation conditions).map do |column_name|
+            "#{Saulabs::Reportable::ReportCache.connection.quote_column_name(column_name)} = ?"
+          end.join(' AND ') + ' AND reporting_period >= ?',
           @report.klass.to_s,
           @report.name.to_s,
           @report.options[:grouping].identifier.to_s,
@@ -141,7 +143,9 @@ describe Saulabs::Reportable::ReportCache do
       end_date = Time.now
       Saulabs::Reportable::ReportCache.should_receive(:all).once.with(
         :conditions => [
-          'model_name = ? AND report_name = ? AND grouping = ? AND aggregation = ? AND `condition` = ? AND reporting_period BETWEEN ? AND ?',
+          %w(model_name report_name grouping aggregation conditions).map do |column_name|
+            "#{Saulabs::Reportable::ReportCache.connection.quote_column_name(column_name)} = ?"
+          end.join(' AND ') + ' AND reporting_period BETWEEN ? AND ?',
           @report.klass.to_s,
           @report.name.to_s,
           @report.options[:grouping].identifier.to_s,
@@ -162,7 +166,9 @@ describe Saulabs::Reportable::ReportCache do
       Saulabs::Reportable::ReportCache.should_receive(:find).once.with(
         :all,
         :conditions => [
-          'model_name = ? AND report_name = ? AND grouping = ? AND aggregation = ? AND `condition` = ? AND reporting_period >= ?',
+          %w(model_name report_name grouping aggregation conditions).map do |column_name|
+            "#{Saulabs::Reportable::ReportCache.connection.quote_column_name(column_name)} = ?"
+          end.join(' AND ') + ' AND reporting_period >= ?',
           @report.klass.to_s,
           @report.name.to_s,
           grouping.identifier.to_s,

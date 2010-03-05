@@ -92,13 +92,13 @@ module Saulabs
           data ? data[1] : 0.0
         end
 
-        def self.build_cached_data(report, grouping, condition, reporting_period, value)
+        def self.build_cached_data(report, grouping, conditions, reporting_period, value)
           self.new(
             :model_name       => report.klass.to_s,
             :report_name      => report.name.to_s,
             :grouping         => grouping.identifier.to_s,
             :aggregation      => report.aggregation.to_s,
-            :condition        => condition.to_s,
+            :conditions       => conditions.to_s,
             :reporting_period => reporting_period.date_time,
             :value            => value
           )
@@ -106,7 +106,9 @@ module Saulabs
 
         def self.read_cached_data(report, options)
           conditions = [
-            'model_name = ? AND report_name = ? AND grouping = ? AND aggregation = ? AND `condition` = ?',
+            %w(model_name report_name grouping aggregation conditions).map do |column_name|
+              "#{self.connection.quote_column_name(column_name)} = ?"
+            end.join(' AND '),
             report.klass.to_s,
             report.name.to_s,
             options[:grouping].identifier.to_s,

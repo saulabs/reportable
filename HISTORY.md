@@ -1,3 +1,8 @@
+v1.0.1
+------
+
+* Fixed a bug with PostgreSQL
+
 v1.0.0
 ------
 

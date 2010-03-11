@@ -1,3 +1,8 @@
+v1.0.3
+------
+
+* Fixed bug in reportable method that broke cumulated reports and reports with options
+
 v1.0.2
 ------
 

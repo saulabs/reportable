@@ -22,7 +22,7 @@ the number of updated users records per second or the number of registrations of
 
       reportable :last_name_starting_with_a_registrations, :aggregation => :count, :grouping => :month, :conditions => ["last_name LIKE 'A%'"]
 
-      reportable :updated_per_second, :aggregation => :count, :grouping => :second, :date_column => :updated_at
+      reportable :updated_per_second, :aggregation => :count, :grouping => :hour, :date_column => :updated_at
 
     end
 

@@ -23,7 +23,7 @@ describe Saulabs::Reportable::Grouping do
       end
 
       it 'should use DATE_FORMAT with format string "%Y/%m/%d" for grouping :day' do
-        Saulabs::Reportable::Grouping.new(:day).send(:to_sql, 'created_at').should == "DATE_FORMAT(created_at, '%Y/%m/%d')"
+        Saulabs::Reportable::Grouping.new(:day).send(:to_sql, 'created_at').should == "DATE(created_at)"
       end
 
       it 'should use YEARWEEK with mode 3 for grouping :week' do

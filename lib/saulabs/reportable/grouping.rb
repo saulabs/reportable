@@ -66,7 +66,7 @@ module Saulabs
           if @identifier == :week
             parts = [db_string[0..3], db_string[4..5]].map(&:to_i)
           else
-            db_string.split('/').map(&:to_i)
+            db_string.split(@identifier == :day ? '-' : '/').map(&:to_i)
           end
         end
 
@@ -99,7 +99,7 @@ module Saulabs
             when :hour
               "DATE_FORMAT(#{date_column}, '%Y/%m/%d/%H')"
             when :day
-              "DATE_FORMAT(#{date_column}, '%Y/%m/%d')"
+              "DATE(#{date_column})"
             when :week
               "YEARWEEK(#{date_column}, 3)"
             when :month

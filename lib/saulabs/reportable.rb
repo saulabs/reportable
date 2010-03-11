@@ -44,14 +44,15 @@ module Saulabs
       #  end
       def reportable(name, options = {})
         (class << self; self; end).instance_eval do
-          define_method "#{name.to_s}_report".to_sym do |*args|
-            if options.delete(:cumulate)
-              report = Saulabs::Reportable::CumulatedReport.new(self, name, options)
-            else
-              report = Saulabs::Reportable::Report.new(self, name, options)
-            end
-            raise ArgumentError.new unless args.length == 0 || (args.length == 1 && args[0].is_a?(Hash))
-            report.run(args.length == 0 ? {} : args[0])
+          report_klass = if options.delete(:cumulate)
+            Saulabs::Reportable::CumulatedReport
+          else
+            Saulabs::Reportable::Report
+          end
+          define_method("#{name.to_s}_report".to_sym) do |*args|
+            report = report_klass.new(self, name, options)
+            raise ArgumentError.new unless args.empty? || (args.length == 1 && args.first.is_a?(Hash))
+            report.run(args.first || {})
           end
         end
       end

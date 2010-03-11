@@ -18,14 +18,14 @@ class <%= class_name %> < ActiveRecord::Migration
       :report_name,
       :grouping,
       :aggregation,
-      :condition
+      :conditions
     ], :name => :name_model_grouping_agregation
     add_index :reportable_cache, [
       :model_name,
       :report_name,
       :grouping,
       :aggregation,
-      :condition,
+      :conditions,
       :reporting_period
     ], :unique => true, :name => :name_model_grouping_aggregation_period
   end

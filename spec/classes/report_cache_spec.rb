@@ -6,6 +6,91 @@ describe Saulabs::Reportable::ReportCache do
     @report = Saulabs::Reportable::Report.new(User, :registrations, :limit => 10)
   end
 
+  describe 'validations' do
+
+    before do
+      @report_cache = Saulabs::Reportable::ReportCache.new(
+        :model_name       => User.name,
+        :report_name      => 'registrations',
+        :grouping         => 'date',
+        :aggregation      => 'count',
+        :value            => 1.0,
+        :reporting_period => '2070/03/23'
+      )
+    end
+
+    it 'should succeed when all required attributes are set' do
+      @report_cache.should be_valid
+    end
+
+    it 'should not succeed when no model_name is set' do
+      @report_cache.model_name = nil
+
+      @report_cache.should_not be_valid
+    end
+
+    it 'should not succeed when a blank model_name is set' do
+      @report_cache.model_name = ''
+
+      @report_cache.should_not be_valid
+    end
+
+    it 'should not succeed when no report_name is set' do
+      @report_cache.report_name = nil
+
+      @report_cache.should_not be_valid
+    end
+
+    it 'should not succeed when a blank report_name is set' do
+      @report_cache.report_name = ''
+
+      @report_cache.should_not be_valid
+    end
+
+    it 'should not succeed when no grouping is set' do
+      @report_cache.grouping = nil
+
+      @report_cache.should_not be_valid
+    end
+
+    it 'should not succeed when a blank grouping is set' do
+      @report_cache.grouping = ''
+
+      @report_cache.should_not be_valid
+    end
+
+    it 'should not succeed when no aggregation is set' do
+      @report_cache.aggregation = nil
+
+      @report_cache.should_not be_valid
+    end
+
+    it 'should not succeed when a blank aggregation is set' do
+      @report_cache.aggregation = ''
+
+      @report_cache.should_not be_valid
+    end
+
+    it 'should not succeed when no value is set' do
+      @report_cache.value = nil
+
+      @report_cache.should_not be_valid
+    end
+
+    it 'should not succeed when no reporting_period is set' do
+      @report_cache.reporting_period = nil
+
+      @report_cache.should_not be_valid
+    end
+
+    it 'should not succeed when a blank reporting_period is set' do
+      @report_cache.reporting_period = ''
+
+      @report_cache.should_not be_valid
+    end
+
+  end
+
   describe '.clear_for' do
 
     it 'should delete all entries in the cache for the klass and report name' do

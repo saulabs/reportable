@@ -9,6 +9,13 @@ module Saulabs
 
       set_table_name :reportable_cache
 
+      validates_presence_of :model_name
+      validates_presence_of :report_name
+      validates_presence_of :grouping
+      validates_presence_of :aggregation
+      validates_presence_of :value
+      validates_presence_of :reporting_period
+
       self.skip_time_zone_conversion_for_attributes = [:reporting_period]
 
       # Clears the cache for the specified +klass+ and +report+

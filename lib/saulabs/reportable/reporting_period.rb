@@ -71,7 +71,7 @@ module Saulabs
       #
       def self.from_db_string(grouping, db_string)
         parts = grouping.date_parts_from_db_string(db_string)
-        result = case grouping.identifier
+        case grouping.identifier
           when :hour
             self.new(grouping, DateTime.new(parts[0], parts[1], parts[2], parts[3], 0, 0))
           when :day
@@ -81,7 +81,6 @@ module Saulabs
           when :month
             self.new(grouping, Date.new(parts[0], parts[1], 1))
         end
-        result
       end
 
       # Gets the next reporting period.

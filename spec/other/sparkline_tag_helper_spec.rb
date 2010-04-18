@@ -1,6 +1,6 @@
 require File.join(File.dirname(__FILE__), '..', 'spec_helper')
 
-describe Saulabs::Reportable::SparklineTagHelper do
+describe Saulabs::Reportable::ReportTagHelper do
 
   before do
     @helper = TestHelper.new
@@ -59,6 +59,6 @@ end
 
 class TestHelper
 
-  include Saulabs::Reportable::SparklineTagHelper
+  include Saulabs::Reportable::ReportTagHelper
 
 end

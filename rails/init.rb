@@ -5,5 +5,5 @@ ActiveRecord::Base.class_eval do
 end
 
 ActionView::Base.class_eval do
-  include Saulabs::Reportable::SparklineTagHelper
+  include Saulabs::Reportable::SparklineReportTagHelper
 end

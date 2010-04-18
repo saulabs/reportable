@@ -1,12 +1,12 @@
 require File.join(File.dirname(__FILE__), '..', 'spec_helper')
 
-describe Saulabs::Reportable::SparklineTagHelper do
+describe Saulabs::Reportable::ReportTagHelper do
 
   before do
     @helper = TestHelper.new
   end
 
-  describe '#sparkline_tag' do
+  describe '#report_tag' do
 
     it 'should render an image with the correct source' do
       @helper.should_receive(:image_tag).once.with(
@@ -14,7 +14,7 @@ describe Saulabs::Reportable::SparklineTagHelper do
         { :title => '', :alt => '' }
       )
 
-      @helper.sparkline_tag([[DateTime.now, 1.0], [DateTime.now, 2.0], [DateTime.now, 3.0]])
+      @helper.report_tag([[DateTime.now, 1.0], [DateTime.now, 2.0], [DateTime.now, 3.0]])
     end
 
     it 'should add parameters for labels to the source of the image if rendering of lables is specified' do
@@ -23,7 +23,7 @@ describe Saulabs::Reportable::SparklineTagHelper do
         { :title => '', :alt => '' }
       )
 
-      @helper.sparkline_tag([[DateTime.now, 1.0], [DateTime.now, 2.0], [DateTime.now, 3.0]], :labels => [:x, :y, :r, :t])
+      @helper.report_tag([[DateTime.now, 1.0], [DateTime.now, 2.0], [DateTime.now, 3.0]], :labels => [:x, :y, :r, :t])
     end
 
     it 'should set the parameters for custom colors if custom colors are specified' do
@@ -32,7 +32,7 @@ describe Saulabs::Reportable::SparklineTagHelper do
         { :title => '', :alt => '' }
       )
 
-      @helper.sparkline_tag([[DateTime.now, 1.0], [DateTime.now, 2.0], [DateTime.now, 3.0]], :line_color => '000000', :fill_color => 'ffffff')
+      @helper.report_tag([[DateTime.now, 1.0], [DateTime.now, 2.0], [DateTime.now, 3.0]], :line_color => '000000', :fill_color => 'ffffff')
     end
 
     it 'should set the parameters for a custom title if a title specified' do
@@ -41,7 +41,7 @@ describe Saulabs::Reportable::SparklineTagHelper do
         { :title => 'title', :alt => '' }
       )
 
-      @helper.sparkline_tag([[DateTime.now, 1.0], [DateTime.now, 2.0], [DateTime.now, 3.0]], :title => 'title')
+      @helper.report_tag([[DateTime.now, 1.0], [DateTime.now, 2.0], [DateTime.now, 3.0]], :title => 'title')
     end
 
     it 'should use a specified alt text as alt text for the image' do
@@ -50,7 +50,7 @@ describe Saulabs::Reportable::SparklineTagHelper do
         { :title => '', :alt => 'alt' }
       )
 
-      @helper.sparkline_tag([[DateTime.now, 1.0], [DateTime.now, 2.0], [DateTime.now, 3.0]], :alt => 'alt')
+      @helper.report_tag([[DateTime.now, 1.0], [DateTime.now, 2.0], [DateTime.now, 3.0]], :alt => 'alt')
     end
 
   end
@@ -59,6 +59,6 @@ end
 
 class TestHelper
 
-  include Saulabs::Reportable::SparklineTagHelper
+  include Saulabs::Reportable::ReportTagHelper
 
 end

@@ -1,8 +1,10 @@
+require 'saulabs/reportable/config'
+
 module Saulabs
 
   module Reportable
 
-    module SparklineTagHelper
+    module ReportTagHelper
 
       # Renders a sparkline with the given data.
       #
@@ -31,9 +33,9 @@ module Saulabs
       #
       # @example Rendering a sparkline tag for report data
       #
-      #   <%= sparkline_tag(User.registrations_report, :width => 200, :height => 100, :color => '000') %>
+      #   <%= report_tag(User.registrations_report, :width => 200, :height => 100, :color => '000') %>
       #
-      def sparkline_tag(data, options = {})
+      def report_tag(data, options = {})
         options.reverse_merge!({ :width => 300, :height => 34, :line_color => '0077cc', :fill_color => 'e6f2fa', :labels => [], :alt => '', :title => '' })
         data = data.collect { |d| d[1] }
         labels = ''

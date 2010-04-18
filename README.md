@@ -48,7 +48,7 @@ The data is returned as an `Array` of `Array`s of `DateTime`s and `Float`s, e.g.
 
 Reportable provides a helper method to generate a sparkline image from this data that you can use in your views:
 
-    <%= sparkline_tag(User.registrations_report) %>
+    <%= report_tag(User.registrations_report) %>
 
 
 Installation

@@ -7,10 +7,12 @@ module Saulabs
 
     class Railtie < Rails::Railtie
 
-      railtie_name :reportable
-
-      initializer 'saulabs.reportable.configure_rails_initialization' do
+      initializer 'saulabs.reportable.initialization' do
         require File.join(File.dirname(__FILE__), '..', '..', '..', 'rails', 'init')
+      end
+
+      generators do
+        require File.join(File.dirname(__FILE__), '..', '..', '..', 'generators', 'reportable_migration', 'reportable_migration_generator')
       end
 
     end

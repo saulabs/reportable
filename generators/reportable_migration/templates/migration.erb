@@ -1,4 +1,4 @@
-class <%= class_name %> < ActiveRecord::Migration
+class CreateReportableCache < ActiveRecord::Migration
 
   def self.up
     create_table :reportable_cache, :force => true do |t|

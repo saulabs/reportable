@@ -1,3 +1,5 @@
+require 'saulabs/reportable/report'
+
 module Saulabs
 
   module Reportable

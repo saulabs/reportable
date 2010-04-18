@@ -1,6 +1,11 @@
+require 'saulabs/reportable/report'
+require 'saulabs/reportable/cumulated_report'
+
 module Saulabs
 
   module Reportable
+
+    require File.join(File.dirname(__FILE__), 'reportable', 'railtie') if defined?(Rails) && Rails::VERSION::MAJOR >= 3
 
     # Extends the {Saulabs::Reportable::ClassMethods#reportable} method into +base+.
     #

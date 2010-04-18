@@ -1,3 +1,6 @@
+require 'saulabs/reportable/grouping'
+require 'saulabs/reportable/report_cache'
+
 module Saulabs
 
   module Reportable

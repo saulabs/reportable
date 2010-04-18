@@ -1,3 +1,5 @@
+require 'saulabs/reportable/reporting_period'
+
 module Saulabs
 
   module Reportable

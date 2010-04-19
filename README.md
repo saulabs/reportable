@@ -54,19 +54,35 @@ Reportable provides a helper method to generate a sparkline image from this data
 Installation
 ------------
 
-To install Reportable, simply run
+To install the Reportable gem, simply run
 
     [sudo] gem install reportable
 
-and add it to your application's dependencies in your `environment.rb`:
+### Rails 2.x
+
+To install Reportable for Rails 2.x, add it to your application's dependencies in your `environment.rb`:
 
     config.gem 'reportable', :lib => 'saulabs/reportable'
 
-When you installed the gem, you have to generate the migration that creates Reportable's cache table:
+and generate the migration that creates Reportable's cache table:
 
     ./script/generate reportable_migration create_reportable_cache
 
-and migrate:
+Run the generated migration as the last step:
+
+    rake db:migrate
+
+### Rails 3.0
+
+To install Reportable for Rails 3.0, add it to your application's Gemfile:
+
+    gem 'reportable', :require => 'saulabs/reportable'
+
+and generate the migration that creates Reportable's cache table:
+
+    ./script/generate reportable_migration
+
+Run the generated migration as the last step:
 
     rake db:migrate
 

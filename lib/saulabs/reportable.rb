@@ -5,7 +5,9 @@ module Saulabs
 
   module Reportable
 
-    require 'saulabs/reportable/railtie' if defined?(Rails) && Rails::VERSION::MAJOR >= 3
+    IS_RAILS3 = defined?(Rails) && Rails::VERSION::MAJOR >= 3
+
+    require 'saulabs/reportable/railtie' if IS_RAILS3
 
     # Extends the {Saulabs::Reportable::ClassMethods#reportable} method into +base+.
     #

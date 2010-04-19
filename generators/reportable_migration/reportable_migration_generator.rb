@@ -1,4 +1,4 @@
-if defined?(Rails) && Rails::VERSION::MAJOR >= 3
+if Saulabs::Reportable::IS_RAILS3
 
   require 'rails/generators'
   require 'rails/generators/migration'

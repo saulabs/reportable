@@ -1,3 +1,11 @@
+v1.1.0
+------
+
+* added configuration options
+* added support for Rails 3
+* added generator for the packaged Grafico
+* moved tag helper to ReportTagHelper
+
 v1.0.3
 ------
 

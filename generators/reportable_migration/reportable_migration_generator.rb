@@ -5,7 +5,7 @@ if Saulabs::Reportable::IS_RAILS3
     include Rails::Generators::Migration
 
     def create_migration
-      migration_template File.join(File.dirname(__FILE__), 'templates', 'migration.erb'), 'db/migrate/create_reportable_cache'
+      migration_template File.join(File.dirname(__FILE__), 'templates', 'migration-rails3.rb'), 'db/migrate/create_reportable_cache.rb'
     end
 
     def self.next_migration_number(dirname)

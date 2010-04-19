@@ -6,7 +6,7 @@ pkg_files = [
   'Rakefile',
   'MIT-LICENSE'
 ]
-pkg_files += Dir['generators/**/*.{rb,erb}']
+pkg_files += Dir['generators/**/*']
 pkg_files += Dir['lib/**/*.rb']
 pkg_files += Dir['rails/**/*.rb']
 pkg_files += Dir['spec/**/*.{rb,yml,opts}']

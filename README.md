@@ -64,13 +64,13 @@ To install Reportable for Rails 2.x, add it to your application's dependencies i
 
     config.gem 'reportable', :lib => 'saulabs/reportable'
 
-and generate the migration that creates Reportable's cache table:
+and generate the migration that create reportable's cache table:
 
-    ./script/generate reportable_migration create_reportable_cache
+    ./script/generate reportable_migration
 
-Run the generated migration as the last step:
+If you want to use reportable's JavaScript graph output format, you also have to generate the JavaScript files:
 
-    rake db:migrate
+    ./script/generate reportable_assets
 
 ### Rails 3.0
 
@@ -78,13 +78,13 @@ To install Reportable for Rails 3.0, add it to your application's Gemfile:
 
     gem 'reportable', :require => 'saulabs/reportable'
 
-and generate the migration that creates Reportable's cache table:
+and generate the migration that create reportable's cache table (beware that reportable currently only supports ActiveRecord):
 
-    ./script/generate reportable_migration
+    rails generate reportable_migration
 
-Run the generated migration as the last step:
+If you want to use reportable's JavaScript graph output format, you also have to generate the JavaScript files:
 
-    rake db:migrate
+    rails generate reportable_assets
 
 
 Plans

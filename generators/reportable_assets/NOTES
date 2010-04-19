@@ -1,0 +1,3 @@
+
+  ** Beware that Grafico depends on Prototype.js!
+  ** Also don't forget to include Grafico as well as Prototype.js in your layout's head section.

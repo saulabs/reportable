@@ -5,7 +5,10 @@ if Saulabs::Reportable::IS_RAILS3
     include Rails::Generators::Migration
 
     def create_migration
-      migration_template File.join(File.dirname(__FILE__), 'templates', 'migration-rails3.rb'), 'db/migrate/create_reportable_cache.rb'
+      migration_template(
+        File.join(File.dirname(__FILE__), 'templates', 'migration-rails3.rb'),
+        'db/migrate/create_reportable_cache.rb'
+      )
     end
 
     def self.next_migration_number(dirname)
@@ -20,12 +23,16 @@ if Saulabs::Reportable::IS_RAILS3
 
 else
 
-  class ReportableMigrationGenerator < Rails::Generator::NamedBase
+  class ReportableMigrationGenerator < Rails::Generator::Base
 
     def manifest
       record do |m|
-        m.migration_template 'migration.erb', 'db/migrate'
+        m.migration_template('migration.rb', 'db/migrate')
       end
+    end
+
+    def file_name
+      'create_reportable_cache'
     end
 
   end

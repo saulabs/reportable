@@ -1,8 +1,5 @@
 if Saulabs::Reportable::IS_RAILS3
 
-  require 'rails/generators'
-  require 'rails/generators/migration'
-
   class ReportableMigrationGenerator < Rails::Generators::Base
 
     include Rails::Generators::Migration

@@ -2,11 +2,11 @@ class CreateReportableCache < ActiveRecord::Migration
 
   def self.up
     create_table :reportable_cache, :force => true do |t|
-      t.string   :model_name,       :null => false
-      t.string   :report_name,      :null => false
-      t.string   :grouping,         :null => false
-      t.string   :aggregation,      :null => false
-      t.string   :conditions,       :null => false
+      t.string   :model_name,       :null => false, :limit => 100
+      t.string   :report_name,      :null => false, :limit => 100
+      t.string   :grouping,         :null => false, :limit => 10
+      t.string   :aggregation,      :null => false, :limit => 10
+      t.string   :conditions,       :null => false, :limit => 100
       t.float    :value,            :null => false, :default => 0
       t.datetime :reporting_period, :null => false
 

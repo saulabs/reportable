@@ -6,7 +6,7 @@ describe Saulabs::Reportable::ReportTagHelper do
     @helper = TestHelper.new
   end
 
-  describe '#report_tag' do
+  describe '#google_report_tag' do
 
     it 'should render an image with the correct source' do
       @helper.should_receive(:image_tag).once.with(
@@ -14,7 +14,7 @@ describe Saulabs::Reportable::ReportTagHelper do
         { :title => '', :alt => '' }
       )
 
-      @helper.report_tag([[DateTime.now, 1.0], [DateTime.now, 2.0], [DateTime.now, 3.0]])
+      @helper.google_report_tag([[DateTime.now, 1.0], [DateTime.now, 2.0], [DateTime.now, 3.0]])
     end
 
     it 'should add parameters for labels to the source of the image if rendering of lables is specified' do
@@ -23,7 +23,7 @@ describe Saulabs::Reportable::ReportTagHelper do
         { :title => '', :alt => '' }
       )
 
-      @helper.report_tag([[DateTime.now, 1.0], [DateTime.now, 2.0], [DateTime.now, 3.0]], :labels => [:x, :y, :r, :t])
+      @helper.google_report_tag([[DateTime.now, 1.0], [DateTime.now, 2.0], [DateTime.now, 3.0]], :labels => [:x, :y, :r, :t])
     end
 
     it 'should set the parameters for custom colors if custom colors are specified' do
@@ -32,7 +32,7 @@ describe Saulabs::Reportable::ReportTagHelper do
         { :title => '', :alt => '' }
       )
 
-      @helper.report_tag([[DateTime.now, 1.0], [DateTime.now, 2.0], [DateTime.now, 3.0]], :line_color => '000000', :fill_color => 'ffffff')
+      @helper.google_report_tag([[DateTime.now, 1.0], [DateTime.now, 2.0], [DateTime.now, 3.0]], :line_color => '000000', :fill_color => 'ffffff')
     end
 
     it 'should set the parameters for a custom title if a title specified' do
@@ -41,7 +41,7 @@ describe Saulabs::Reportable::ReportTagHelper do
         { :title => 'title', :alt => '' }
       )
 
-      @helper.report_tag([[DateTime.now, 1.0], [DateTime.now, 2.0], [DateTime.now, 3.0]], :title => 'title')
+      @helper.google_report_tag([[DateTime.now, 1.0], [DateTime.now, 2.0], [DateTime.now, 3.0]], :title => 'title')
     end
 
     it 'should use a specified alt text as alt text for the image' do
@@ -50,7 +50,7 @@ describe Saulabs::Reportable::ReportTagHelper do
         { :title => '', :alt => 'alt' }
       )
 
-      @helper.report_tag([[DateTime.now, 1.0], [DateTime.now, 2.0], [DateTime.now, 3.0]], :alt => 'alt')
+      @helper.google_report_tag([[DateTime.now, 1.0], [DateTime.now, 2.0], [DateTime.now, 3.0]], :alt => 'alt')
     end
 
   end

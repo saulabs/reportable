@@ -36,7 +36,7 @@ module Saulabs
       #   <%= report_tag(User.registrations_report, :width => 200, :height => 100, :color => '000') %>
       #
       def google_report_tag(data, options = {})
-        options.reverse_merge!({ :width => 300, :height => 34, :line_color => '0077cc', :fill_color => 'e6f2fa', :labels => [], :alt => '', :title => '' })
+        options.reverse_merge!(Config.google_options)
         data = data.collect { |d| d[1] }
         labels = ''
         unless options[:labels].empty?
@@ -47,7 +47,7 @@ module Saulabs
           labels = "&chxt=#{options[:labels].map(&:to_s).join(',')}&chxr=#{options[:labels].collect{|l| chxr[l]}.join('|')}"
         end
         title = ''
-        unless options[:title].empty?
+        unless options[:title].blank?
           title = "&chtt=#{options[:title]}"
         end
         image_tag(

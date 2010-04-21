@@ -83,9 +83,9 @@ module Saulabs
       #   <%= report_tag(User.registrations_report, {:width => 200, :height => 100, :format => "div(100).to_i"}, {:vertical_label_unit => "registrations"}) %>
       #
       def grafico_report_tag(data, options = {}, grafico_options = {})
-        options.reverse_merge!(Config.grafico_options.slice(:width, :height))
+        options.reverse_merge!(Config.grafico_options.slice(:width, :height, :format))
         options.reverse_merge!(:dom_id => "#{data.model_name.downcase}_#{data.report_name}")
-        grafico_options.reverse_merge!(Config.grafico_options.except(:width, :height))
+        grafico_options.reverse_merge!(Config.grafico_options.except(:width, :height, :format))
         %Q{<div id="#{options[:dom_id] || "reportable_#{Time.now}"}" style="width: #{options[:width]}px; height: #{options[:height]}px;"></div>
         <script type="text/javascript" charset="utf-8">
           new Grafico.AreaGraph(

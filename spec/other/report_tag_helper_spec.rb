@@ -5,6 +5,30 @@ describe Saulabs::Reportable::ReportTagHelper do
   before do
     @helper = TestHelper.new
   end
+  
+  describe '#grafico_report_tag' do
+    
+    data_set = Saulabs::Reportable::ResultSet.new([[DateTime.now, 1.0], [DateTime.now - 1.day, 3.0]], "User", "registrations")
+    
+    it 'should not raise an error' do
+      lambda {
+        @helper.grafico_report_tag(data_set)
+      }.should_not raise_error
+    end
+    
+    it 'should return a string' do
+      @helper.grafico_report_tag(data_set).class.should == String
+    end
+    
+    it 'should contain div tag' do
+      @helper.grafico_report_tag(data_set).should =~ /^<div id=".*">.*<\/div>/
+    end
+    
+    it 'should contain script tag' do
+      @helper.grafico_report_tag(data_set).should =~ /<script type="text\/javascript" charset="utf-8">.*<\/script>/m
+    end
+    
+  end
 
   describe '#google_report_tag' do
 

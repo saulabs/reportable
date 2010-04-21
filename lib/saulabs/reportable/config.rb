@@ -16,11 +16,11 @@ module Saulabs
 
       mattr_accessor :grafico_options
 
-      @@grafico_basic_options = {
+      @@grafico_options = {
         :width                  => 300,
         :height                 => 100,
         :dom_id                 => nil,
-        :format                 => 'div(100).to_i',
+        :format                 => 'to_i',
         :area_opacity           => 0.3,
         :markers                => 'value',
         :grid                   => false,

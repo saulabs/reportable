@@ -2,12 +2,33 @@ require File.join(File.dirname(__FILE__), '..', 'spec_helper')
 
 describe Saulabs::Reportable do
 
+  before(:all) do
+    User.create!(:login => 'test 1', :created_at => Time.now - 1.days,  :profile_visits => 1)
+    User.create!(:login => 'test 2', :created_at => Time.now - 2.days, :profile_visits => 2)
+  end
+
+  it 'should return a Saulabs::Reportable::ResultSet' do
+    User.registrations_report.should be_instance_of(Saulabs::Reportable::ResultSet)
+  end
+
+  it 'should return a result set that stores the name of the model the report was invoked on' do
+    User.registrations_report.model_name.should == User.name
+  end
+
+  it 'should return a result set that stores the name of the report that was invoked' do
+    User.registrations_report.report_name.should == 'registrations'
+  end
+
   describe 'for inherited models' do
 
     before(:all) do
       User.create!(:login => 'test 1', :created_at => Time.now - 1.days,  :profile_visits => 1)
       User.create!(:login => 'test 2', :created_at => Time.now - 2.days, :profile_visits => 2)
       SpecialUser.create!(:login => 'test 3', :created_at => Time.now - 2.days, :profile_visits => 3)
+    end
+
+    it 'should return a result set that stores the model the report was invoked on' do
+      SpecialUser.registrations_report.model_name.should == SpecialUser.name
     end
 
     it 'should include all data when invoked on the base model class' do
@@ -38,7 +59,9 @@ describe Saulabs::Reportable do
 end
 
 class User < ActiveRecord::Base
+
   reportable :registrations, :limit => 10
+
 end
 
 class SpecialUser < User; end

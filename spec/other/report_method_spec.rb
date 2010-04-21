@@ -22,8 +22,6 @@ describe Saulabs::Reportable do
   describe 'for inherited models' do
 
     before(:all) do
-      User.create!(:login => 'test 1', :created_at => Time.now - 1.days,  :profile_visits => 1)
-      User.create!(:login => 'test 2', :created_at => Time.now - 2.days, :profile_visits => 2)
       SpecialUser.create!(:login => 'test 3', :created_at => Time.now - 2.days, :profile_visits => 3)
     end
 
@@ -46,7 +44,6 @@ describe Saulabs::Reportable do
     end
 
     after(:all) do
-      User.destroy_all
       SpecialUser.destroy_all
     end
 
@@ -54,6 +51,10 @@ describe Saulabs::Reportable do
 
   after do
     Saulabs::Reportable::ReportCache.destroy_all
+  end
+
+  after(:all) do
+    User.destroy_all
   end
 
 end

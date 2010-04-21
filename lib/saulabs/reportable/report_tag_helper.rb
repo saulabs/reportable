@@ -83,35 +83,10 @@ module Saulabs
       #   <%= report_tag(User.registrations_report, {:width => 200, :height => 100, :format => "div(100).to_i"}, {:vertical_label_unit => "registrations"}) %>
       #
       def grafico_report_tag(data, options = {}, grafico_options = {})
-        options.reverse_merge!(
-        { 
-          :width => 300, 
-          :height => 100, 
-          :dom_id => "reportable_#{Time.now.to_i}", 
-          :format => 'to_i'
-        })
-        grafico_options.reverse_merge!(
-        {
-          :area_opacity => 0.3,
-          :markers => 'value',
-          :grid => false,
-          :draw_axis => false,
-          :plot_padding => 0,
-          :padding_left =>0,
-          :padding_bottom => 0,
-          :padding_right => 0,
-          :padding_top => 0,
-          :stroke_width => 2,
-          :show_vertical_labels => false,
-          :show_horizontal_labels => false,
-          :hover_color => '#000',
-          :hover_text_color => '#fff',
-          :vertical_label_unit => '',
-          :colors => { :data => '#2F69BF' },
-          :curve_amount => 1,
-          :focus_hint => false
-        })
-        %Q{<div id="#{options[:dom_id]}" style="width:#{options[:width]}px;height:#{options[:height]}px;"></div>
+        options.reverse_merge!(Config.grafico_options.slice(:width, :height))
+        options.reverse_merge!(:dom_id => "#{data.model_name.downcase}_#{data.report_name}")
+        grafico_options.reverse_merge!(Config.grafico_options.except(:width, :height))
+        %Q{<div id="#{options[:dom_id] || "reportable_#{Time.now}"}" style="width: #{options[:width]}px; height: #{options[:height]}px;"></div>
         <script type="text/javascript" charset="utf-8">
           new Grafico.AreaGraph(
             $('#{options[:dom_id]}'), 

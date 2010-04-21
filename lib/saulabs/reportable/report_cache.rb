@@ -1,4 +1,5 @@
 require 'saulabs/reportable/reporting_period'
+require 'saulabs/reportable/result_set'
 
 module Saulabs
 
@@ -93,7 +94,7 @@ module Saulabs
           if options[:live_data]
             result << [current_reporting_period.date_time, find_value(new_data, current_reporting_period)]
           end
-          result
+          Saulabs::Reportable::ResultSet.new(result, report.klass.name, report.name)
         end
 
         def self.find_value(data, reporting_period)

@@ -1,6 +1,6 @@
 if Saulabs::Reportable::IS_RAILS3
 
-  class ReportableAssetsGenerator < Rails::Generators::Base
+  class ReportableGraficoAssetsGenerator < Rails::Generators::Base
 
     include Rails::Generators::Actions
 
@@ -21,7 +21,7 @@ if Saulabs::Reportable::IS_RAILS3
 
 else
 
-  class ReportableAssetsGenerator < Rails::Generator::Base
+  class ReportableGraficoAssetsGenerator < Rails::Generator::Base
 
     def manifest
       record do |m|

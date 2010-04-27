@@ -111,7 +111,7 @@ module Saulabs
       #
       def ==(other)
         if other.is_a?(Saulabs::Reportable::ReportingPeriod)
-          @date_time == other.date_time && @grouping.identifier.to_s == other.grouping.identifier.to_s
+          @date_time == other.date_time && @grouping.identifier == other.grouping.identifier
         elsif other.is_a?(Time) || other.is_a?(DateTime)
           @date_time == parse_date_time(other)
         else

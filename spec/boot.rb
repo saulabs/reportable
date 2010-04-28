@@ -1,11 +1,5 @@
 plugin_root = File.join(File.dirname(__FILE__), '..')
 
-gem 'rails'
-require 'active_record'
-require 'active_support'
-require 'action_controller'
-require 'action_view'
-
 $:.unshift "#{plugin_root}/lib"
 
 RAILS_ROOT = File.expand_path(File.dirname(__FILE__) + '/../')

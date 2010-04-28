@@ -1,5 +1,4 @@
-source :gemcutter
-
+gem 'rails',         '>= 2.2.0'
 gem 'activerecord',  '>= 2.2.0', :require => 'active_record'
 gem 'activesupport', '>= 2.2.0', :require => 'active_support'
 gem 'actionpack',    '>= 2.2.0', :require => 'action_pack'

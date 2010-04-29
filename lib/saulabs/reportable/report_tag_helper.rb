@@ -86,12 +86,40 @@ module Saulabs
         options.reverse_merge!(Config.grafico_options.slice(:width, :height, :format))
         options.reverse_merge!(:dom_id => "#{data.model_name.downcase}_#{data.report_name}")
         grafico_options.reverse_merge!(Config.grafico_options.except(:width, :height, :format))
-        %Q{<div id="#{options[:dom_id] || "reportable_#{Time.now}"}" style="width: #{options[:width]}px; height: #{options[:height]}px;"></div>
+        %Q{<div id="#{options[:dom_id]}" style="width: #{options[:width]}px; height: #{options[:height]}px;"></div>
         <script type="text/javascript" charset="utf-8">
           new Grafico.AreaGraph(
             $('#{options[:dom_id]}'), 
             { data: #{data.map{|d| eval options[:format], d[1].send(:binding) }.to_json} },
             #{grafico_options.to_json});
+        </script>}
+      end
+      
+      def raphael_report_tag(data, options = {}, raphael_options = {})
+        options.reverse_merge!(Config.raphael_options.slice(:width, :height, :format))
+        options.reverse_merge!(:dom_id => "#{data.model_name.downcase}_#{data.report_name}")
+        raphael_options.reverse_merge!(Config.raphael_options.except(:width, :height, :format))
+        %Q{<div id="#{options[:dom_id]}" style="width:#{options[:width]}px;height:#{options[:height]}px;"></div>
+        <script type="text/javascript">
+          var graph = Raphael('#{options[:dom_id]}');
+          graph.g.linechart(
+            -10, 4, #{options[:width]}, #{options[:height]},
+            #{(0..data.size).to_a.to_json},
+            #{data.map{|d| eval options[:format], d[1].send(:binding) }.to_json},
+            #{raphael_options.to_json}
+          ).hover(function() {
+            this.disc = graph.g.disc(this.x, this.y, 3).attr({fill: "#2F69BF", stroke: '#2F69BF' }).insertBefore(this);
+            this.flag = graph.g.flag(this.x, this.y, this.value || "0", 0).insertBefore(this);
+            if (this.x + this.flag.getBBox().width > this.paper.width) {
+              this.flag.rotate(-180);
+              this.flag.translate(-this.flag.getBBox().width, 0);
+              this.flag.items[1].rotate(180);
+              this.flag.items[1].translate(-5, 0);
+            }
+          }, function() {
+            this.disc.remove();
+            this.flag.remove();
+          });
         </script>}
       end
     

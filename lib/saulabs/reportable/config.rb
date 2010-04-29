@@ -40,6 +40,16 @@ module Saulabs
         :curve_amount           => 1,
         :focus_hint             => false
       }
+      
+      mattr_accessor :raphael_options
+      
+      @@raphael_options = {
+        :width                  => 300,
+        :height                 => 100,
+        :dom_id                 => nil,
+        :format                 => 'to_i',
+        :shade                  => true
+      }
 
     end
 

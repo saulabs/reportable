@@ -70,7 +70,7 @@ and generate the migration that create reportable's cache table:
 
 If you want to use reportable's JavaScript graph output format, you also have to generate the JavaScript files:
 
-		./script/generate reportable_grafico_assets
+		./script/generate reportable_raphael_assets
 
 if you want to use [Raphael](http://raphaeljs.com/) or if you want to use [jQuery](http://jquery.com/) and [flot](http://code.google.com/p/flot/):
 
@@ -88,7 +88,7 @@ and generate the migration that create reportable's cache table (beware that rep
 
 If you want to use reportable's JavaScript graph output format, you also have to generate the JavaScript files:
 
-    rails generate reportable_grafico_assets
+    rails generate reportable_raphael_assets
 
 if you want to use [Raphael](http://raphaeljs.com/) or if you want to use [jQuery](http://jquery.com/) and [flot](http://code.google.com/p/flot/):
 

@@ -1,10 +1,10 @@
 if Saulabs::Reportable::IS_RAILS3
 
-  class ReportableGraficoAssetsGenerator < Rails::Generators::Base
+  class ReportableRaphaelAssetsGenerator < Rails::Generators::Base
 
     include Rails::Generators::Actions
 
-    def create_grafico_file
+    def create_raphael_file
       empty_directory('public/javascripts')
       copy_file(
         File.join(File.dirname(__FILE__), 'templates', 'raphael.min.js'),
@@ -17,7 +17,7 @@ if Saulabs::Reportable::IS_RAILS3
 
 else
 
-  class ReportableGraficoAssetsGenerator < Rails::Generator::Base
+  class ReportableRaphaelAssetsGenerator < Rails::Generator::Base
 
     def manifest
       record do |m|

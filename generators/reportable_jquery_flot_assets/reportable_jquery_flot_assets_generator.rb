@@ -4,7 +4,7 @@ if Saulabs::Reportable::IS_RAILS3
 
     include Rails::Generators::Actions
 
-    def create_grafico_file
+    def create_jquery_flot_file
       empty_directory('public/javascripts')
       copy_file(
         File.join(File.dirname(__FILE__), 'templates', 'jquery.flot.min.js'),

@@ -15,7 +15,7 @@ module Saulabs
 
       generators do
         require File.join(GEM_ROOT, 'generators', 'reportable_migration', 'reportable_migration_generator')
-        require File.join(GEM_ROOT, 'generators', 'reportable_grafico_assets', 'reportable_grafico_assets_generator')
+        require File.join(GEM_ROOT, 'generators', 'reportable_raphael_assets', 'reportable_raphael_assets_generator')
         require File.join(GEM_ROOT, 'generators', 'reportable_jquery_flot_assets', 'reportable_jquery_flot_assets_generator')
       end
 

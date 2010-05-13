@@ -110,3 +110,16 @@ Authors
 © 2008-2010 Marco Otte-Witte (<http://simplabs.com>), Martin Kavalar (<http://www.sauspiel.de>)
 
 Released under the MIT license
+
+
+Contributors
+------------
+
+* Eric Lindvall (<http://github.com/eric>)
+* Jan Bromberger (<http://github.com/jan>)
+* Jared Dobson (<http://github.com/onesupercoder>)
+* Jarod Reid
+* Lars Kuhnt (<http://github.com/larskuhnt>)
+* Max Schöfmann (<http://github.com/schoefmax>)
+* Myron Marston (<http://github.com/myronmarston>)
+* Ryan Bates (<http://github.com/ryanb>)

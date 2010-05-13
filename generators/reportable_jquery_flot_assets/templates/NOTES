@@ -1,2 +1,4 @@
 
-  ** Don't forget to include jquery, excanvas, jquery float in your layout's head section.
+  ** Beware that flot depends on jQuery!
+  ** Don't forget to include excanvas and flot as well as jQuery in your layout's head section.
+

@@ -6,7 +6,7 @@ if Saulabs::Reportable::IS_RAILS3
 
     def create_migration
       migration_template(
-        File.join(File.dirname(__FILE__), 'templates', 'migration-rails3.rb'),
+        File.join(File.dirname(__FILE__), 'templates', 'migration.rb'),
         'db/migrate/create_reportable_cache.rb'
       )
     end

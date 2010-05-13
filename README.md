@@ -107,7 +107,7 @@ Plans
 Authors
 -------
 
-© 2008-2010 Marco Otte-Witte (<http://simplabs.com>), Martin Kavalar (<http://www.sauspiel.de>)
+© 2008-2010 Marco Otte-Witte (<http://simplabs.com>) and Martin Kavalar (<http://www.sauspiel.de>)
 
 Released under the MIT license
 

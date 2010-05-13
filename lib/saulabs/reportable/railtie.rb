@@ -19,10 +19,6 @@ module Saulabs
         require File.join(GEM_ROOT, 'generators', 'reportable_jquery_flot_assets', 'reportable_jquery_flot_assets_generator')
       end
 
-      rake_tasks do
-        load File.join(GEM_ROOT, 'tasks', 'reportable_tasks.rake')
-      end
-
     end
 
   end

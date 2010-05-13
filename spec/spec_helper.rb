@@ -4,7 +4,7 @@ require 'rubygems'
 require 'bundler'
 Bundler.setup
 
-require File.join(File.dirname(__FILE__), 'boot') unless defined?(ActiveRecord)
+require File.join(File.dirname(__FILE__), 'boot')
 
 class User < ActiveRecord::Base; end
 

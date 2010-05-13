@@ -7,7 +7,7 @@ class CreateReportableCache < ActiveRecord::Migration
       t.string   :grouping,         :null => false, :limit => 10
       t.string   :aggregation,      :null => false, :limit => 10
       t.string   :conditions,       :null => false, :limit => 100
-      t.float    :value,            :null => false, :default => 0
+      t.float    :value,            :null => false,                :default => 0
       t.datetime :reporting_period, :null => false
 
       t.timestamps

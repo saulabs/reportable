@@ -1,3 +1,4 @@
+require 'action_view'
 require 'saulabs/reportable'
 require 'saulabs/reportable/report_tag_helper'
 

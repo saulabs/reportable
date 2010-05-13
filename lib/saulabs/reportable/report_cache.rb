@@ -19,6 +19,8 @@ module Saulabs
       validates_presence_of :value
       validates_presence_of :reporting_period
 
+      attr_accessible :model_name, :report_name, :grouping, :aggregation, :value, :reporting_period, :conditions
+
       self.skip_time_zone_conversion_for_attributes = [:reporting_period]
 
       # Clears the cache for the specified +klass+ and +report+

@@ -5,23 +5,32 @@ describe Saulabs::Reportable::ReportTagHelper do
   before do
     @helper = TestHelper.new
   end
-  
+
   describe '#raphael_report_tag' do
-    
+
     data_set = Saulabs::Reportable::ResultSet.new([[DateTime.now, 1.0], [DateTime.now - 1.day, 3.0]], "User", "registrations")
-    
+
     it 'should return a string' do
       @helper.raphael_report_tag(data_set).class.should == String
     end
-    
+
     it 'should contain a div tag' do
       @helper.raphael_report_tag(data_set).should =~ /^<div id=".*">.*<\/div>/
     end
-    
+
     it 'should contain a script tag' do
       @helper.raphael_report_tag(data_set).should =~ /<script type="text\/javascript" charset="utf-8">.*<\/script>/m
     end
-    
+
+    it 'should assign a default dom id to the the div tag if none is specified' do
+      @helper.raphael_report_tag(data_set).should =~ /^<div id="#{data_set.model_name.downcase}_#{data_set.report_name}".*<\/div>/
+    end
+
+    it 'should assign correct default dom ids to the the div tag if none is specified and there are more than one report tags on the page' do
+      @helper.raphael_report_tag(data_set).should =~ /^<div id="#{data_set.model_name.downcase}_#{data_set.report_name}".*<\/div>/
+      @helper.raphael_report_tag(data_set).should =~ /^<div id="#{data_set.model_name.downcase}_#{data_set.report_name}1".*<\/div>/
+    end
+
   end
 
   describe '#google_report_tag' do

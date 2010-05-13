@@ -58,15 +58,14 @@ module Saulabs
       end
 
     
-      # Renders a sparkline with the given data using grafico.
+      # Renders a sparkline with the given data using Raphael.
       #
       # @param [Array<Array<DateTime, Float>>] data
       #   an array of report data as returned by {Saulabs::Reportable::Report#run}
       # @param [Hash] options
       #   options for width, height, the dom id and the format
-      # @param [Hash] grafico_options
-      #   options for grafico which to_json get called on, 
-      #   see the grafico documentation for more information.
+      # @param [Hash] raphael_options
+      #   options that are passed directly to Raphael as JSON
       #
       # @option options [Fixnum] :width (300)
       #   the width of the generated graph
@@ -80,11 +79,14 @@ module Saulabs
       #
       # @example Rendering a sparkline tag for report data
       #
-      #   <%= raphael_report_tag(User.registrations_report, {:width => 200, :height => 100, :format => "div(100).to_i"}, {:vertical_label_unit => "registrations"}) %>
+      #   <%= raphael_report_tag(User.registrations_report, { :width => 200, :height => 100, :format => 'div(100).to_i' }, { :vertical_label_unit => 'registrations' }) %>
       #
       def raphael_report_tag(data, options = {}, raphael_options = {})
+        @__raphael_report_tag_count ||= -1
+        @__raphael_report_tag_count += 1
+        default_dom_id = "#{data.model_name.downcase}_#{data.report_name}#{@__raphael_report_tag_count > 0 ? @__raphael_report_tag_count : ''}"
         options.reverse_merge!(Config.raphael_options.slice(:width, :height, :format))
-        options.reverse_merge!(:dom_id => "#{data.model_name.downcase}_#{data.report_name}")
+        options.reverse_merge!(:dom_id => default_dom_id)
         raphael_options.reverse_merge!(Config.raphael_options.except(:width, :height, :format))
         %Q{<div id="#{options[:dom_id]}" style="width:#{options[:width]}px;height:#{options[:height]}px;"></div>
         <script type="text\/javascript" charset="utf-8">
@@ -92,7 +94,7 @@ module Saulabs
           graph.g.linechart(
             -10, 4, #{options[:width]}, #{options[:height]},
             #{(0..data.size).to_a.to_json},
-            #{data.map{|d| eval options[:format], d[1].send(:binding) }.to_json},
+            #{data.map { |d| eval options[:format], d[1].send(:binding) }.to_json},
             #{raphael_options.to_json}
           ).hover(function() {
             this.disc = graph.g.disc(this.x, this.y, 3).attr({fill: "#2F69BF", stroke: '#2F69BF' }).insertBefore(this);

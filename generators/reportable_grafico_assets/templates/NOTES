@@ -1,4 +1,4 @@
 
-  ** Beware that Grafico depends on Prototype.js!
-  ** Also don't forget to include Raphael and Grafico as well as Prototype.js in your layout's head section.
+  ** Beware that Raphael depends on Prototype.js!
+  ** Also don't forget to include Raphael as well as Prototype.js in your layout's head section.
 

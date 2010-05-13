@@ -10,10 +10,6 @@ if Saulabs::Reportable::IS_RAILS3
         File.join(File.dirname(__FILE__), 'templates', 'raphael.min.js'),
         'public/javascripts/raphael.min.js'
       )
-      copy_file(
-        File.join(File.dirname(__FILE__), 'templates', 'grafico.min.js'),
-        'public/javascripts/grafico.min.js'
-      )
       readme(File.join(File.dirname(__FILE__), 'templates', 'NOTES'))
     end
 
@@ -27,7 +23,6 @@ else
       record do |m|
         m.directory('public/javascripts')
         m.file('raphael.min.js', 'public/javascripts/raphael.min.js')
-        m.file('grafico.min.js', 'public/javascripts/grafico.min.js')
         m.readme('NOTES')
       end
     end

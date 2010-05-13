@@ -72,7 +72,7 @@ If you want to use reportable's JavaScript graph output format, you also have to
 
 		./script/generate reportable_grafico_assets
 
-if you want to use [Grafico](http://grafico.kilianvalkhof.com/) or if you want to use [jQuery](http://jquery.com/) and [flot](http://code.google.com/p/flot/):
+if you want to use [Raphael](http://raphaeljs.com/) or if you want to use [jQuery](http://jquery.com/) and [flot](http://code.google.com/p/flot/):
 
 		./script/generate reportable_jquery_flot_assets
 
@@ -90,7 +90,7 @@ If you want to use reportable's JavaScript graph output format, you also have to
 
     rails generate reportable_grafico_assets
 
-if you want to use [Grafico](http://grafico.kilianvalkhof.com/) or if you want to use [jQuery](http://jquery.com/) and [flot](http://code.google.com/p/flot/):
+if you want to use [Raphael](http://raphaeljs.com/) or if you want to use [jQuery](http://jquery.com/) and [flot](http://code.google.com/p/flot/):
 
 		rails generate reportable_jquery_flot_assets
 

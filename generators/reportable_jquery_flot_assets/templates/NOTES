@@ -1,4 +1,4 @@
 
   ** Beware that flot depends on jQuery!
-  ** Don't forget to include excanvas and flot as well as jQuery in your layout's head section.
+  ** Don't forget to include excanvas.min.js, jquery.flot.min.js as well as jQuery in your layout's head section.
 

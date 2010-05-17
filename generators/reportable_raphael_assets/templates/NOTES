@@ -1,4 +1,2 @@
 
-  ** Beware that Raphael depends on Prototype.js!
-  ** Also don't forget to include Raphael as well as Prototype.js in your layout's head section.
-
+  ** Don't forget to include Raphael as well as gRaphaels javascripts in your head section

@@ -25,6 +25,26 @@ module Saulabs
         :hover_line_color => '2f69bf',
         :hover_fill_color => '2f69bf'
       }
+      
+      mattr_accessor :flot_options
+      
+      @@flot_options = {
+        :width      => 300,
+        :height     => 100,
+        :dom_id     => nil,
+        :colors => ['rgba(6,122,205,1)'],
+        :grid => { 
+          :show => false
+        },
+        :series => {
+          :lines => {
+            :fill => true,
+            :fillColor => 'rgba(6,122,205,.5)',
+            :lineWidth => 2
+          },
+          :shadowSize => 0
+        }
+      }
 
     end
 

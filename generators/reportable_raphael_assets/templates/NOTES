@@ -1,3 +1,2 @@
 
-  ** Don't forget to include raphael.min.js as well as g.raphael.min.js and g.line.min.js in your layout's head section.
-
+  ** Don't forget to include Raphael as well as gRaphaels javascripts in your head section

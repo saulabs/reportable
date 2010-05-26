@@ -111,6 +111,50 @@ module Saulabs
           });
         </script>}
       end
+          
+      # Renders a sparkline with the given data using the jquery flot plugin.
+      #
+      # @param [Array<Array<DateTime, Float>>] data
+      #   an array of report data as returned by {Saulabs::Reportable::Report#run}
+      # @param [Hash] options
+      #   options for width, height, the dom id and the format
+      # @param [Hash] flot_options
+      #   options that are passed directly to Raphael as JSON
+      #
+      # @option options [Fixnum] :width (300)
+      #   the width of the generated graph
+      # @option options [Fixnum] :height (34)
+      #   the height of the generated graph
+      # @option options [Array<Symbol>] :dom_id ("reportable_#{Time.now.to_i}")
+      #   the dom id of the generated div
+      #
+      # @return [String]
+      #   an div tag and the javascript code showing a sparkline for the passed +data+
+      #
+      # @example Rendering a sparkline tag for report data
+      #
+      #   <%= flot_report_tag(User.registrations_report) %>
+      #
+
+      def flot_report_tag(data, options = {}, flot_options = {})
+        @__flot_report_tag_count ||= -1
+        @__flot_report_tag_count += 1
+        default_dom_id = "#{data.model_name.downcase}_#{data.report_name}#{@__flot_report_tag_count > 0 ? @__flot_report_tag_count : ''}"
+        options.reverse_merge!(Config.flot_options.slice(:width, :height, :format))
+        options.reverse_merge!(:dom_id => default_dom_id)
+        flot_options.reverse_merge!(Config.flot_options.except(:width, :height, :format))
+        %Q{<div id="#{options[:dom_id]}" style="width:#{options[:width]}px;height:#{options[:height]}px;"></div>
+        <script type="text\/javascript" charset="utf-8">
+        $(function() {
+          var set = #{data.to_json},
+          data = [];
+          for (var i = 0; i < set.length; i++) {
+            data.push([i, set[i]]);
+          }
+          $.plot($('#interactive_graph'), [data], );
+        });
+        </script>}
+      end
     
     end
   end

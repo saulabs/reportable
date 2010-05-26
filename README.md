@@ -46,9 +46,11 @@ The data is returned as an `Array` of `Array`s of `DateTime`s and `Float`s, e.g.
       [DateTime.now - 2.days, 3.0]
     ]
 
-Reportable provides a helper method to generate a sparkline image from this data that you can use in your views:
+Reportable provides helper methods to generate a sparkline image from this data that you can use in your views, e.g.:
 
-    <%= report_tag(User.registrations_report) %>
+    <%= google_report_tag(User.registrations_report) %>
+
+For other options to generate sparklines see the [API docs](http://rdoc.info/projects/saulabs/reportable).
 
 
 Installation

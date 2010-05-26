@@ -4,6 +4,7 @@ v1.1.0
 * added configuration options
 * added support for Rails 3
 * added generator for the packaged Grafico
+* added support for jquery.flot with generator
 * moved tag helper to ReportTagHelper
 * added the ResultSet class that allows access to the model name and report name via the resulting data
 

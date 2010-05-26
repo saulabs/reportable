@@ -18,7 +18,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new('>= 0') if s.respond_to?(:required_rubygems_version=)
   s.authors                   = ['Marco Otte-Witte', 'Martin Kavalar']
-  s.date                      = %q{2010-03-11}
+  s.date                      = %q{2010-05-26}
   s.email                     = %q{reportable@saulabs.com}
   s.files                     = pkg_files
   s.homepage                  = %q{http://github.com/saulabs/reportable}
@@ -26,7 +26,7 @@ Gem::Specification.new do |s|
   s.rubygems_version          = %q{1.3.0}
   s.has_rdoc                  = false
   s.summary                   = %q{Easy report generation for Ruby on Rails}
-  s.description               = %q{Reportable allows for easy report generation from ActiveRecord and DataMapper models by the addition of the reportable method.}
+  s.description               = %q{Reportable allows for easy report generation from ActiveRecord models by the addition of the reportable method.}
 
   if s.respond_to?(:specification_version) then
     current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION

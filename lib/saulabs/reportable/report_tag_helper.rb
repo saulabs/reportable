@@ -146,12 +146,12 @@ module Saulabs
         %Q{<div id="#{options[:dom_id]}" style="width:#{options[:width]}px;height:#{options[:height]}px;"></div>
         <script type="text\/javascript" charset="utf-8">
         $(function() {
-          var set = #{data.to_json},
+          var set = #{data.map{|d| d[1] }.to_json},
           data = [];
           for (var i = 0; i < set.length; i++) {
             data.push([i, set[i]]);
           }
-          $.plot($('#interactive_graph'), [data], );
+          $.plot($('##{options[:dom_id]}'), [data], #{flot_options.to_json});
         });
         </script>}
       end

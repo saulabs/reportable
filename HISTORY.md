@@ -1,3 +1,8 @@
+v1.1.1
+------
+
+* not including the whole Saulabs::Reportable namespace into ActiveRecord anymore.
+
 v1.1.0
 ------
 

@@ -25,7 +25,7 @@ ActiveRecord::Schema.define(:version => 1) do
     :grouping,
     :aggregation,
     :conditions
-  ], :name => :name_model_grouping_agregation
+  ], :name => 'name_model_grouping_agregation'
   add_index :reportable_cache, [
     :model_name,
     :report_name,
@@ -33,6 +33,6 @@ ActiveRecord::Schema.define(:version => 1) do
     :aggregation,
     :conditions,
     :reporting_period
-  ], :unique => true, :name => :name_model_grouping_aggregation_period
+  ], :unique => true, :name => 'name_model_grouping_aggregation_period'
 
 end

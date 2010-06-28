@@ -1,3 +1,8 @@
+v1.1.2
+------
+
+* pushed a faulty version to Rubygems - need to use a new version number for the fixed version
+
 v1.1.1
 ------
 

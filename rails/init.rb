@@ -3,7 +3,7 @@ require 'saulabs/reportable'
 require 'saulabs/reportable/report_tag_helper'
 
 ActiveRecord::Base.class_eval do
-  include Saulabs::Reportable
+  include Saulabs::Reportable::RailsAdapter
 end
 
 ActionView::Base.class_eval do

@@ -1,4 +1,4 @@
-if Saulabs::Reportable::IS_RAILS3
+if Saulabs::Reportable::RailsAdapter::IS_RAILS3
 
   class ReportableJqueryFlotAssetsGenerator < Rails::Generators::Base
 

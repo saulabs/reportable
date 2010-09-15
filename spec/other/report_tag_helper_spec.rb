@@ -30,6 +30,10 @@ describe Saulabs::Reportable::ReportTagHelper do
       @helper.raphael_report_tag(data_set).should =~ /^<div id="#{data_set.model_name.downcase}_#{data_set.report_name}".*<\/div>/
       @helper.raphael_report_tag(data_set).should =~ /^<div id="#{data_set.model_name.downcase}_#{data_set.report_name}1".*<\/div>/
     end
+    
+    it 'should include the data [1,3]' do
+      @helper.raphael_report_tag(data_set).should =~ /\[1,3\]/
+    end
 
   end
   

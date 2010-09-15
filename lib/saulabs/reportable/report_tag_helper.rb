@@ -94,7 +94,7 @@ module Saulabs
           graph.g.linechart(
             -10, 4, #{options[:width]}, #{options[:height]},
             #{(0..data.size).to_a.to_json},
-            #{data.map { |d| eval options[:format], d[1].send(:binding) }.to_json},
+            #{data.map { |d| d[1].send(options[:format]) }.to_json},
             #{raphael_options.to_json}
           ).hover(function() {
             this.disc = graph.g.disc(this.x, this.y, 3).attr({fill: "#{options[:hover_fill_color]}", stroke: '#{options[:hover_line_color]}' }).insertBefore(this);

@@ -70,6 +70,7 @@ module Saulabs
       #   the reporting period for the {Saulabs::Reportable::Grouping} as parsed from the db string
       #
       def self.from_db_string(grouping, db_string)
+        return self.new(grouping, db_string) if db_string.is_a?(Date)
         parts = grouping.date_parts_from_db_string(db_string)
         case grouping.identifier
           when :hour

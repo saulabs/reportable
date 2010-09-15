@@ -138,6 +138,16 @@ describe Saulabs::Reportable::ReportingPeriod do
 
       Saulabs::Reportable::ReportingPeriod.from_db_string(grouping, '').date_time.should == Date.new(2008, 1, 1)
     end
+    
+    it "should return a reporting period with the correct date when a Date object is passed" do
+      grouping = Saulabs::Reportable::Grouping.new(:day)
+      Saulabs::Reportable::ReportingPeriod.from_db_string(grouping, Date.new(2008, 1, 1)).date_time.should == Date.new(2008, 1, 1)
+    end
+    
+    it "should return a reporting period with the correct date when a DateTime object is passed" do
+      grouping = Saulabs::Reportable::Grouping.new(:hour)
+      Saulabs::Reportable::ReportingPeriod.from_db_string(grouping, DateTime.new(2008, 1, 1, 12, 0, 0)).date_time.should == DateTime.new(2008, 1, 1, 12, 0, 0)
+    end
 
   end
 

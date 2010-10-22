@@ -110,13 +110,14 @@ module Saulabs
             :report_name      => report.name.to_s,
             :grouping         => grouping.identifier.to_s,
             :aggregation      => report.aggregation.to_s,
-            :conditions       => conditions.to_s,
+            :conditions       => conditions.join(''),
             :reporting_period => reporting_period.date_time,
             :value            => value
           )
         end
 
         def self.read_cached_data(report, options)
+          options[:conditions] ||= []
           conditions = [
             %w(model_name report_name grouping aggregation conditions).map do |column_name|
               "#{self.connection.quote_column_name(column_name)} = ?"
@@ -125,7 +126,7 @@ module Saulabs
             report.name.to_s,
             options[:grouping].identifier.to_s,
             report.aggregation.to_s,
-            options[:conditions].to_s
+            options[:conditions].join('')
           ]
           first_reporting_period = get_first_reporting_period(options)
           last_reporting_period = get_last_reporting_period(options)

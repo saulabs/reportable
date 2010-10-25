@@ -110,10 +110,20 @@ module Saulabs
             :report_name      => report.name.to_s,
             :grouping         => grouping.identifier.to_s,
             :aggregation      => report.aggregation.to_s,
-            :conditions       => conditions.join(''),
+            :conditions       => serialize_conditions(conditions),
             :reporting_period => reporting_period.date_time,
             :value            => value
           )
+        end
+        
+        def self.serialize_conditions(conditions)
+          if conditions.is_a?(Array)
+            conditions.join
+          elsif conditions.is_a?(Hash)
+            conditions.map.sort{|x,y|x.to_s<=>y.to_s}.flatten.join
+          else 
+            conditions.to_s
+          end
         end
 
         def self.read_cached_data(report, options)
@@ -126,7 +136,7 @@ module Saulabs
             report.name.to_s,
             options[:grouping].identifier.to_s,
             report.aggregation.to_s,
-            options[:conditions].join('')
+            serialize_conditions(options[:conditions])
           ]
           first_reporting_period = get_first_reporting_period(options)
           last_reporting_period = get_last_reporting_period(options)

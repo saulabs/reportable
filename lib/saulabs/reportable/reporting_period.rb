@@ -71,7 +71,7 @@ module Saulabs
       #
       def self.from_db_string(grouping, db_string)
         return self.new(grouping, db_string) if db_string.is_a?(Date)
-        parts = grouping.date_parts_from_db_string(db_string)
+        parts = grouping.date_parts_from_db_string(db_string.to_s)
         case grouping.identifier
           when :hour
             self.new(grouping, DateTime.new(parts[0], parts[1], parts[2], parts[3], 0, 0))

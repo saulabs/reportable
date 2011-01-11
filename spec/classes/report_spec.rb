@@ -4,8 +4,8 @@ describe Saulabs::Reportable::Report do
 
   before do
     @report = Saulabs::Reportable::Report.new(User, :registrations)
-    @now    = Time.now
-    DateTime.stub!(:now).and_return(@now)
+    now     = Time.zone.now
+    Time.zone.stub!(:now).and_return(now)
   end
 
   describe '#options' do
@@ -70,10 +70,10 @@ describe Saulabs::Reportable::Report do
       describe "for grouping :#{grouping.to_s}" do
 
         before(:all) do
-          User.create!(:login => 'test 1', :created_at => Time.now,                    :profile_visits => 2)
-          User.create!(:login => 'test 2', :created_at => Time.now - 1.send(grouping), :profile_visits => 1)
-          User.create!(:login => 'test 3', :created_at => Time.now - 3.send(grouping), :profile_visits => 2)
-          User.create!(:login => 'test 4', :created_at => Time.now - 3.send(grouping), :profile_visits => 3)
+          User.create!(:login => 'test 1', :created_at => Time.zone.now,                    :profile_visits => 2)
+          User.create!(:login => 'test 2', :created_at => Time.zone.now - 1.send(grouping), :profile_visits => 1)
+          User.create!(:login => 'test 3', :created_at => Time.zone.now - 3.send(grouping), :profile_visits => 2)
+          User.create!(:login => 'test 4', :created_at => Time.zone.now - 3.send(grouping), :profile_visits => 3)
         end
 
         describe 'when :end_date is specified' do
@@ -91,7 +91,7 @@ describe Saulabs::Reportable::Report do
           describe 'the returned result' do
 
             before do
-              @end_date = DateTime.now - 1.send(grouping)
+              @end_date = Time.zone.now - 1.send(grouping)
               @grouping = Saulabs::Reportable::Grouping.new(grouping)
               @report = Saulabs::Reportable::Report.new(User, :registrations,
                 :grouping => grouping,
@@ -130,8 +130,8 @@ describe Saulabs::Reportable::Report do
                 @result = @report.run
               end
 
-              it "should be an array starting reporting period (Time.now - limit.#{grouping.to_s})" do
-                @result.first[0].should == Saulabs::Reportable::ReportingPeriod.new(@grouping, Time.now - 10.send(grouping)).date_time
+              it "should be an array starting reporting period (Time.zone.now - limit.#{grouping.to_s})" do
+                @result.first[0].should == Saulabs::Reportable::ReportingPeriod.new(@grouping, Time.zone.now - 10.send(grouping)).date_time
               end
 
               if live_data
@@ -292,7 +292,7 @@ describe Saulabs::Reportable::Report do
                   :aggregation => :count,
                   :grouping    => grouping,
                   :limit       => 10,
-                  :end_date    => Time.now - 3.send(grouping)
+                  :end_date    => Time.zone.now - 3.send(grouping)
                 )
                 result = @report.run.to_a
 
@@ -308,7 +308,7 @@ describe Saulabs::Reportable::Report do
                   :grouping     => grouping,
                   :value_column => :profile_visits,
                   :limit        => 10,
-                  :end_date     => Time.now - 3.send(grouping)
+                  :end_date     => Time.zone.now - 3.send(grouping)
                 )
                 result = @report.run.to_a
 
@@ -325,13 +325,13 @@ describe Saulabs::Reportable::Report do
                   :limit       => 10,
                   :live_data   => live_data
                 )
-                result = @report.run(:end_date => Time.now - 1.send(grouping)).to_a
+                result = @report.run(:end_date => Time.zone.now - 1.send(grouping)).to_a
 
                 result[9][1].should  == 1.0
                 result[8][1].should  == 0.0
                 result[7][1].should  == 2.0
 
-                result = @report.run(:end_date => Time.now - 3.send(grouping)).to_a
+                result = @report.run(:end_date => Time.zone.now - 3.send(grouping)).to_a
 
                 result[9][1].should  == 2.0
                 result[8][1].should  == 0.0
@@ -430,13 +430,13 @@ describe Saulabs::Reportable::Report do
       @report = Saulabs::Reportable::Report.new(User, :registrations, :aggregation => :count)
       User.should_receive(:count).once.and_return([])
 
-      @report.send(:read_data, Time.now, 5.days.from_now, { :grouping => @report.options[:grouping], :conditions => [] })
+      @report.send(:read_data, Time.zone.now, 5.days.from_now, { :grouping => @report.options[:grouping], :conditions => [] })
     end
 
     it 'should setup the conditions' do
       @report.should_receive(:setup_conditions).once.and_return([])
 
-      @report.send(:read_data, Time.now, 5.days.from_now, { :grouping => @report.options[:grouping], :conditions => [] })
+      @report.send(:read_data, Time.zone.now, 5.days.from_now, { :grouping => @report.options[:grouping], :conditions => [] })
     end
 
   end
@@ -444,7 +444,7 @@ describe Saulabs::Reportable::Report do
   describe '#setup_conditions' do
 
     before do
-      @begin_at = Time.now
+      @begin_at = Time.zone.now
       @end_at = 5.days.from_now
       @created_at_column_clause = "#{ActiveRecord::Base.connection.quote_table_name('users')}.#{ActiveRecord::Base.connection.quote_column_name('created_at')}"
     end
@@ -511,20 +511,20 @@ describe Saulabs::Reportable::Report do
       lambda { @report.send(:ensure_valid_options, { :grouping => :decade }) }.should raise_error(ArgumentError)
     end
 
-    it 'should raise an error if an end date is specified that is not a DateTime' do
+    it 'should raise an error if an end date is specified that is not a Date or Time' do
       lambda { @report.send(:ensure_valid_options, { :end_date => 'today' }) }.should raise_error(ArgumentError)
     end
 
     it 'should raise an error if an end date is specified that is in the future' do
-      lambda { @report.send(:ensure_valid_options, { :end_date => (DateTime.now + 1.month) }) }.should raise_error(ArgumentError)
+      lambda { @report.send(:ensure_valid_options, { :end_date => (Time.zone.now + 1.month) }) }.should raise_error(ArgumentError)
     end
 
     it 'should raise an error if both an end date and :live_data = true are specified' do
-      lambda { @report.send(:ensure_valid_options, { :end_date => DateTime.now, :live_data => true }) }.should raise_error(ArgumentError)
+      lambda { @report.send(:ensure_valid_options, { :end_date => Time.zone.now, :live_data => true }) }.should raise_error(ArgumentError)
     end
 
     it 'should not raise an error if both an end date and :live_data = false are specified' do
-      lambda { @report.send(:ensure_valid_options, { :end_date => DateTime.now, :live_data => false }) }.should_not raise_error
+      lambda { @report.send(:ensure_valid_options, { :end_date => Time.zone.now, :live_data => false }) }.should_not raise_error
     end
 
     describe 'for context :initialize' do

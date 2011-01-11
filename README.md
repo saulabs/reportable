@@ -38,12 +38,12 @@ For every declared report a method is generated on the model that returns the da
 Working with the data
 ---------------------
 
-The data is returned as an `Array` of `Array`s of `DateTime`s and `Float`s, e.g.:
+The data is returned as an `Array` of `Array`s of `Date`s or `Time`s and `Float`s, e.g.:
 
     [
-      [DateTime.now,          1.0],
-      [DateTime.now - 1.day,  2.0],
-      [DateTime.now - 2.days, 3.0]
+      [Date.today,          1.0],
+      [Date.today - 1.day,  2.0],
+      [Date.today - 2.days, 3.0]
     ]
 
 Reportable provides helper methods to generate a sparkline image from this data that you can use in your views, e.g.:

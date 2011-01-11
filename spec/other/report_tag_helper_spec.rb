@@ -39,7 +39,7 @@ describe Saulabs::Reportable::ReportTagHelper do
   
     describe '#flot_report_tag' do
 
-    data_set = Saulabs::Reportable::ResultSet.new([[DateTime.now, 1.0], [DateTime.now - 1.day, 3.0]], "User", "registrations")
+    data_set = Saulabs::Reportable::ResultSet.new([[Date.today, 1.0], [Date.today - 1.day, 3.0]], "User", "registrations")
 
     it 'should return a string' do
       @helper.flot_report_tag(data_set).class.should == String

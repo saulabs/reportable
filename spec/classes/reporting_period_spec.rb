@@ -234,7 +234,7 @@ describe Saulabs::Reportable::ReportingPeriod do
     end
 
     it 'should return false for 2 reporting periods with the same date_time but different groupings' do
-      now = Time.now
+      now = Time.zone.now
       reporting_period1 = Saulabs::Reportable::ReportingPeriod.new(Saulabs::Reportable::Grouping.new(:month), now)
       reporting_period2 = Saulabs::Reportable::ReportingPeriod.new(Saulabs::Reportable::Grouping.new(:day), now)
 
@@ -255,7 +255,7 @@ describe Saulabs::Reportable::ReportingPeriod do
       (reporting_period1 == reporting_period2).should == false
     end
 
-    describe 'when invoked with DateTimes or Times' do
+    describe 'when invoked with Dates or Times' do
 
       describe 'for grouping :hour' do
 
@@ -319,7 +319,7 @@ describe Saulabs::Reportable::ReportingPeriod do
       reporting_period.date_time.should == Time.zone.local(expected.year, expected.month, expected.day, expected.hour, 0, 0)
     end
 
-    it 'should return a reporting period with the date part of (DateTime.now - limit.days) for grouping :day' do
+    it 'should return a reporting period with the date part of (Time.zone.now - limit.days) for grouping :day' do
       reporting_period = Saulabs::Reportable::ReportingPeriod.first(Saulabs::Reportable::Grouping.new(:day), 3)
       expected = Time.zone.now - 3.days
 

@@ -363,7 +363,7 @@ describe Saulabs::Reportable::Report do
           User.create!(:login => 'test 4', :created_at => DateTime.new(2009, 1, 5))
           User.create!(:login => 'test 5', :created_at => DateTime.new(2009, 1, 12))
 
-          Time.stub!(:now).and_return(DateTime.new(2009, 1, 25))
+          Time.zone.stub!(:now).and_return(DateTime.new(2009, 1, 25))
         end
 
         it 'should return correct data for aggregation :count' do

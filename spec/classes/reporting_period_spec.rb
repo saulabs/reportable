@@ -5,10 +5,10 @@ describe Saulabs::Reportable::ReportingPeriod do
   describe '#date_time' do
 
     it 'should return the date and time with minutes = seconds = 0 for grouping :hour' do
-      date_time = DateTime.now
+      date_time = Time.zone.now
       reporting_period = Saulabs::Reportable::ReportingPeriod.new(Saulabs::Reportable::Grouping.new(:hour), date_time)
 
-      reporting_period.date_time.should == DateTime.new(date_time.year, date_time.month, date_time.day, date_time.hour, 0, 0)
+      reporting_period.date_time.should == Time.zone.local(date_time.year, date_time.month, date_time.day, date_time.hour, 0, 0)
     end
 
     it 'should return the date part only for grouping :day' do
@@ -62,17 +62,17 @@ describe Saulabs::Reportable::ReportingPeriod do
   describe '#last_date_time' do
 
     it 'should return the date and time with minutes = seconds = 59 for grouping :hour' do
-      date_time = DateTime.now
+      date_time = Time.zone.now
       reporting_period = Saulabs::Reportable::ReportingPeriod.new(Saulabs::Reportable::Grouping.new(:hour), date_time)
 
-      reporting_period.last_date_time.should == DateTime.new(date_time.year, date_time.month, date_time.day, date_time.hour, 59, 59)
+      reporting_period.last_date_time.should == Time.zone.local(date_time.year, date_time.month, date_time.day, date_time.hour, 59, 59)
     end
 
     it 'should return the date part with hour = 23 and minute = seconds = 59 for grouping :day' do
-      date_time = DateTime.now
+      date_time = Time.zone.now
       reporting_period = Saulabs::Reportable::ReportingPeriod.new(Saulabs::Reportable::Grouping.new(:day), date_time)
 
-      reporting_period.last_date_time.should == DateTime.new(date_time.year, date_time.month, date_time.day, 23, 59, 59)
+      reporting_period.last_date_time.should == Time.zone.local(date_time.year, date_time.month, date_time.day, 23, 59, 59)
     end
 
     describe 'for grouping :week' do
@@ -115,7 +115,7 @@ describe Saulabs::Reportable::ReportingPeriod do
       grouping = Saulabs::Reportable::Grouping.new(:hour)
       grouping.stub!(:date_parts_from_db_string).and_return([2008, 1, 1, 12])
 
-      Saulabs::Reportable::ReportingPeriod.from_db_string(grouping, '').date_time.should == DateTime.new(2008, 1, 1, 12, 0, 0)
+      Saulabs::Reportable::ReportingPeriod.from_db_string(grouping, '').date_time.should == Time.zone.local(2008, 1, 1, 12, 0, 0)
     end
 
     it 'should return a reporting period with the date part only for grouping :day' do
@@ -139,14 +139,14 @@ describe Saulabs::Reportable::ReportingPeriod do
       Saulabs::Reportable::ReportingPeriod.from_db_string(grouping, '').date_time.should == Date.new(2008, 1, 1)
     end
     
-    it "should return a reporting period with the correct date when a Date object is passed" do
+    it 'should return a reporting period with the correct date when a Date object is passed' do
       grouping = Saulabs::Reportable::Grouping.new(:day)
       Saulabs::Reportable::ReportingPeriod.from_db_string(grouping, Date.new(2008, 1, 1)).date_time.should == Date.new(2008, 1, 1)
     end
     
-    it "should return a reporting period with the correct date when a DateTime object is passed" do
+    it 'should return a reporting period with the correct date when a Time object is passed' do
       grouping = Saulabs::Reportable::Grouping.new(:hour)
-      Saulabs::Reportable::ReportingPeriod.from_db_string(grouping, DateTime.new(2008, 1, 1, 12, 0, 0)).date_time.should == DateTime.new(2008, 1, 1, 12, 0, 0)
+      Saulabs::Reportable::ReportingPeriod.from_db_string(grouping, Time.zone.local(2008, 1, 1, 12, 0, 0)).date_time.should == Time.zone.local(2008, 1, 1, 12, 0, 0)
     end
 
   end
@@ -154,15 +154,15 @@ describe Saulabs::Reportable::ReportingPeriod do
   describe '#next' do
 
     it 'should return a reporting period with date and time one hour after the current period for grouping :hour' do
-      now = Time.now
+      now = Time.zone.now
       reporting_period = Saulabs::Reportable::ReportingPeriod.new(Saulabs::Reportable::Grouping.new(:hour), now)
       expected = now + 1.hour
 
-      reporting_period.next.date_time.should == DateTime.new(expected.year, expected.month, expected.day, expected.hour)
+      reporting_period.next.date_time.should == Time.zone.local(expected.year, expected.month, expected.day, expected.hour)
     end
 
     it 'should return a reporting period with date one day after the current period for grouping :day' do
-      now = Time.now
+      now = Date.today
       reporting_period = Saulabs::Reportable::ReportingPeriod.new(Saulabs::Reportable::Grouping.new(:day), now)
       expected = now + 1.day
 
@@ -170,7 +170,7 @@ describe Saulabs::Reportable::ReportingPeriod do
     end
 
     it 'should return a reporting period with date one week after the current period for grouping :week' do
-      now = DateTime.now
+      now = Date.today
       reporting_period = Saulabs::Reportable::ReportingPeriod.new(Saulabs::Reportable::Grouping.new(:week), now)
       expected = reporting_period.date_time + 1.week
 
@@ -178,7 +178,7 @@ describe Saulabs::Reportable::ReportingPeriod do
     end
 
     it 'should return a reporting period with date of the first day in the month one month after the current period' do
-      now = Time.now
+      now = Date.today
       reporting_period = Saulabs::Reportable::ReportingPeriod.new(Saulabs::Reportable::Grouping.new(:month), now)
       expected = reporting_period.date_time + 1.month
 
@@ -190,15 +190,15 @@ describe Saulabs::Reportable::ReportingPeriod do
   describe '#previous' do
 
     it 'should return a reporting period with date and time one hour before the current period for grouping :hour' do
-      now = Time.now
+      now = Time.zone.now
       reporting_period = Saulabs::Reportable::ReportingPeriod.new(Saulabs::Reportable::Grouping.new(:hour), now)
       expected = now - 1.hour
 
-      reporting_period.previous.date_time.should == DateTime.new(expected.year, expected.month, expected.day, expected.hour)
+      reporting_period.previous.date_time.should == Time.zone.local(expected.year, expected.month, expected.day, expected.hour)
     end
 
     it 'should return a reporting period with date one day before the current period for grouping :day' do
-      now = Time.now
+      now = Date.today
       reporting_period = Saulabs::Reportable::ReportingPeriod.new(Saulabs::Reportable::Grouping.new(:day), now)
       expected = now - 1.day
 
@@ -206,7 +206,7 @@ describe Saulabs::Reportable::ReportingPeriod do
     end
 
     it 'should return a reporting period with date one week before the current period for grouping :week' do
-      now = DateTime.now
+      now = Date.today
       reporting_period = Saulabs::Reportable::ReportingPeriod.new(Saulabs::Reportable::Grouping.new(:week), now)
       expected = reporting_period.date_time - 1.week
 
@@ -214,7 +214,7 @@ describe Saulabs::Reportable::ReportingPeriod do
     end
 
     it 'should return a reporting period with date of the first day in the month one month before the current period' do
-      now = Time.now
+      now = Date.today
       reporting_period = Saulabs::Reportable::ReportingPeriod.new(Saulabs::Reportable::Grouping.new(:month), now)
       expected = reporting_period.date_time - 1.month
 
@@ -308,36 +308,36 @@ describe Saulabs::Reportable::ReportingPeriod do
   describe '.first' do
 
     before do
-      @now = DateTime.now
-      DateTime.stub!(:now).and_return(@now)
+      now = Time.zone.now
+      Time.zone.stub!(:now).and_return(now)
     end
 
-    it 'should return a reporting period with the date part of (DateTime.now - limit.hours with minutes = seconds = 0 for grouping :hour' do
+    it 'should return a reporting period with the date part of (Time.zone.now - limit.hours with minutes = seconds = 0 for grouping :hour' do
       reporting_period = Saulabs::Reportable::ReportingPeriod.first(Saulabs::Reportable::Grouping.new(:hour), 3)
-      expected = @now - 3.hours
+      expected = Time.zone.now - 3.hours
 
-      reporting_period.date_time.should == DateTime.new(expected.year, expected.month, expected.day, expected.hour, 0, 0)
+      reporting_period.date_time.should == Time.zone.local(expected.year, expected.month, expected.day, expected.hour, 0, 0)
     end
 
     it 'should return a reporting period with the date part of (DateTime.now - limit.days) for grouping :day' do
       reporting_period = Saulabs::Reportable::ReportingPeriod.first(Saulabs::Reportable::Grouping.new(:day), 3)
-      expected = @now - 3.days
+      expected = Time.zone.now - 3.days
 
       reporting_period.date_time.should == Date.new(expected.year, expected.month, expected.day)
     end
 
-    it 'should return a reporting period with the date of the first day of the month at (DateTime.now - limit.months) for grouping :month' do
-      DateTime.stub!(:now).and_return(DateTime.new(2008, 12, 31, 0, 0, 0))
+    it 'should return a reporting period with the date of the first day of the month at (Date.today - limit.months) for grouping :month' do
+      Time.zone.stub!(:now).and_return(Time.zone.local(2008, 12, 31, 0, 0, 0))
       reporting_period = Saulabs::Reportable::ReportingPeriod.first(Saulabs::Reportable::Grouping.new(:month), 3)
 
-      reporting_period.date_time.should == DateTime.new(2008, 9, 1)
+      reporting_period.date_time.should == Date.new(2008, 9, 1)
     end
 
     it 'should return a reporting period with the date of the monday of the week at (DateTime.now - limit.weeks) for grouping :week' do
-      DateTime.stub!(:now).and_return(DateTime.new(2008, 12, 31, 0, 0, 0)) #wednesday
+      Time.zone.stub!(:now).and_return(Time.zone.local(2008, 12, 31, 0, 0, 0)) #wednesday
       reporting_period = Saulabs::Reportable::ReportingPeriod.first(Saulabs::Reportable::Grouping.new(:week), 3)
 
-      reporting_period.date_time.should == DateTime.new(2008, 12, 8) #the monday 3 weeks earlier
+      reporting_period.date_time.should == Date.new(2008, 12, 8) #the monday 3 weeks earlier
     end
 
   end

@@ -23,7 +23,7 @@ module Saulabs
       #
       def initialize(grouping, date_time = nil)
         @grouping  = grouping
-        @date_time = parse_date_time(date_time || DateTime.now)
+        @date_time = parse_date_time(date_time || Time.zone.now)
       end
 
       # Gets a reporting period relative to the current one.
@@ -36,7 +36,7 @@ module Saulabs
       #
       # @example Getting the reporting period one week later
       #
-      #   reporting_period = Saulabs::Reportable::ReportingPeriod.new(:week, DateTime.now)
+      #   reporting_period = Saulabs::Reportable::ReportingPeriod.new(:week, Date.today)
       #   next_week = reporting_period.offset(1)
       #
       def offset(offset)
@@ -49,7 +49,7 @@ module Saulabs
       #   the grouping to get the first reporting period for
       # @param [Fixnum] limit
       #   the limit to get the first reporting period for
-      # @param [DateTime] end_date
+      # @param [Date, Time] end_date
       #   the end date to get the first reporting period for (the first reporting period is then +end_date+ - +limit+ * +grouping+)
       #
       # @return [Saulabs::Reportable::ReportingPeriod]
@@ -70,11 +70,12 @@ module Saulabs
       #   the reporting period for the {Saulabs::Reportable::Grouping} as parsed from the db string
       #
       def self.from_db_string(grouping, db_string)
-        return self.new(grouping, db_string) if db_string.is_a?(Date)
+        return self.new(grouping, db_string) if db_string.is_a?(Date) || db_string.is_a?(Time)
         parts = grouping.date_parts_from_db_string(db_string.to_s)
         case grouping.identifier
           when :hour
-            self.new(grouping, DateTime.new(parts[0], parts[1], parts[2], parts[3], 0, 0))
+            puts "PARTS: #{parts.inspect}"
+            self.new(grouping, Time.zone.local(parts[0], parts[1], parts[2], parts[3], 0, 0))
           when :day
             self.new(grouping, Date.new(parts[0], parts[1], parts[2]))
           when :week
@@ -113,7 +114,7 @@ module Saulabs
       def ==(other)
         if other.is_a?(Saulabs::Reportable::ReportingPeriod)
           @date_time == other.date_time && @grouping.identifier == other.grouping.identifier
-        elsif other.is_a?(Time) || other.is_a?(DateTime)
+        elsif other.is_a?(Time) || other.is_a?(Date)
           @date_time == parse_date_time(other)
         else
           raise ArgumentError.new("Can only compare instances of #{self.class.name}")
@@ -131,7 +132,7 @@ module Saulabs
       def <(other)
         if other.is_a?(Saulabs::Reportable::ReportingPeriod)
           return @date_time < other.date_time
-        elsif other.is_a?(Time) || other.is_a?(DateTime)
+        elsif other.is_a?(Time) || other.is_a?(Date)
           @date_time < parse_date_time(other)
         else
           raise ArgumentError.new("Can only compare instances of #{self.class.name}")
@@ -141,15 +142,15 @@ module Saulabs
       # Gets the latest point in time that is included the reporting period. The latest point in time included in a reporting period
       # for grouping hour would be that hour and 59 minutes and 59 seconds.
       #
-      # @return [DateTime]
+      # @return [Date, Time]
       #   the latest point in time that is included in the reporting period
       #
       def last_date_time
         case @grouping.identifier
           when :hour
-            DateTime.new(@date_time.year, @date_time.month, @date_time.day, @date_time.hour, 59, 59)
+            Time.zone.local(@date_time.year, @date_time.month, @date_time.day, @date_time.hour, 59, 59)
           when :day
-            DateTime.new(@date_time.year, @date_time.month, @date_time.day, 23, 59, 59)
+            Time.zone.local(@date_time.year, @date_time.month, @date_time.day, 23, 59, 59)
           when :week
             date_time = (@date_time - @date_time.wday.days) + 7.days
             Date.new(date_time.year, date_time.month, date_time.day)
@@ -163,7 +164,7 @@ module Saulabs
         def parse_date_time(date_time)
           case @grouping.identifier
             when :hour
-              DateTime.new(date_time.year, date_time.month, date_time.day, date_time.hour)
+              Time.zone.local(date_time.year, date_time.month, date_time.day, date_time.hour)
             when :day
               date_time.to_date
             when :week

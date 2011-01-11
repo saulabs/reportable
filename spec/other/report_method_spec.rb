@@ -3,8 +3,8 @@ require File.join(File.dirname(__FILE__), '..', 'spec_helper')
 describe Saulabs::Reportable do
 
   before(:all) do
-    User.create!(:login => 'test 1', :created_at => Time.now - 1.days,  :profile_visits => 1)
-    User.create!(:login => 'test 2', :created_at => Time.now - 2.days, :profile_visits => 2)
+    User.create!(:login => 'test 1', :created_at => Time.zone.now - 1.day,  :profile_visits => 1)
+    User.create!(:login => 'test 2', :created_at => Time.zone.now - 2.days, :profile_visits => 2)
   end
 
   it 'should return a Saulabs::Reportable::ResultSet' do
@@ -22,7 +22,7 @@ describe Saulabs::Reportable do
   describe 'for inherited models' do
 
     before(:all) do
-      SpecialUser.create!(:login => 'test 3', :created_at => Time.now - 2.days, :profile_visits => 3)
+      SpecialUser.create!(:login => 'test 3', :created_at => Time.zone.now - 2.days, :profile_visits => 3)
     end
 
     it 'should return a result set that stores the model the report was invoked on' do

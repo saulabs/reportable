@@ -138,7 +138,7 @@ describe Saulabs::Reportable::ReportCache do
       it 'should yield the first reporting period if not all required data could be retrieved from the cache' do
         reporting_period = Saulabs::Reportable::ReportingPeriod.new(
           @report.options[:grouping],
-          Time.now - 3.send(@report.options[:grouping].identifier)
+          Time.zone.now - 3.send(@report.options[:grouping].identifier)
         )
         Saulabs::Reportable::ReportCache.stub!(:all).and_return([Saulabs::Reportable::ReportCache.new])
 
@@ -152,7 +152,7 @@ describe Saulabs::Reportable::ReportCache do
       it 'should yield the reporting period after the last one in the cache if all required data could be retrieved from the cache' do
         reporting_period = Saulabs::Reportable::ReportingPeriod.new(
           @report.options[:grouping],
-          Time.now - @report.options[:limit].send(@report.options[:grouping].identifier)
+          Time.zone.now - @report.options[:limit].send(@report.options[:grouping].identifier)
         )
         cached = Saulabs::Reportable::ReportCache.new
         cached.stub!(:reporting_period).and_return(reporting_period.date_time)
@@ -188,7 +188,7 @@ describe Saulabs::Reportable::ReportCache do
       describe 'with :end_date = <some date>' do
 
         before do
-          @options = @report.options.merge(:end_date => Time.now)
+          @options = @report.options.merge(:end_date => Time.zone.now)
         end
 
         it 'should yield the last date and time of the reporting period for the specified end date' do
@@ -225,7 +225,7 @@ describe Saulabs::Reportable::ReportCache do
     end
 
     it 'should utilize the end_date in the conditions' do
-      end_date = Time.now
+      end_date = Time.zone.now
       Saulabs::Reportable::ReportCache.should_receive(:all).once.with(
         :conditions => [
           %w(model_name report_name grouping aggregation conditions).map do |column_name|

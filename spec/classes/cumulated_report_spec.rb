@@ -36,10 +36,10 @@ describe Saulabs::Reportable::CumulatedReport do
 
             before(:all) do
               User.delete_all
-              User.create!(:login => 'test 1', :created_at => Time.now,                    :profile_visits => 2)
-              User.create!(:login => 'test 2', :created_at => Time.now - 1.send(grouping), :profile_visits => 1)
-              User.create!(:login => 'test 3', :created_at => Time.now - 3.send(grouping), :profile_visits => 2)
-              User.create!(:login => 'test 4', :created_at => Time.now - 3.send(grouping), :profile_visits => 3)
+              User.create!(:login => 'test 1', :created_at => Time.zone.now,                    :profile_visits => 2)
+              User.create!(:login => 'test 2', :created_at => Time.zone.now - 1.send(grouping), :profile_visits => 1)
+              User.create!(:login => 'test 3', :created_at => Time.zone.now - 3.send(grouping), :profile_visits => 2)
+              User.create!(:login => 'test 4', :created_at => Time.zone.now - 3.send(grouping), :profile_visits => 3)
             end
 
             describe 'the returned result' do
@@ -54,8 +54,8 @@ describe Saulabs::Reportable::CumulatedReport do
                 @result = @report.run
               end
 
-              it "should be an array starting reporting period (Time.now - limit.#{grouping.to_s})" do
-                @result.first[0].should == Saulabs::Reportable::ReportingPeriod.new(@grouping, Time.now - 10.send(grouping)).date_time
+              it "should be an array starting reporting period (Time.zone.now - limit.#{grouping.to_s})" do
+                @result.first[0].should == Saulabs::Reportable::ReportingPeriod.new(@grouping, Time.zone.now - 10.send(grouping)).date_time
               end
 
               if live_data
@@ -157,8 +157,8 @@ describe Saulabs::Reportable::CumulatedReport do
   describe '#cumulate' do
 
     it 'should correctly cumulate the given data' do
-      first = (Time.now - 1.week).to_s
-      second = Time.now.to_s
+      first = (Time.zone.now - 1.week).to_s
+      second = Time.zone.now.to_s
       data = [[first, 1], [second, 2]]
 
       @report.send(:cumulate, data, @report.send(:options_for_run, {})).should == [[first, 1.0], [second, 3.0]]

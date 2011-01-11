@@ -12,7 +12,7 @@ describe Saulabs::Reportable::ReportingPeriod do
     end
 
     it 'should return the date part only for grouping :day' do
-      date_time = DateTime.now
+      date_time = Time.zone.now
       reporting_period = Saulabs::Reportable::ReportingPeriod.new(Saulabs::Reportable::Grouping.new(:day), date_time)
 
       reporting_period.date_time.should == date_time.to_date
@@ -21,28 +21,28 @@ describe Saulabs::Reportable::ReportingPeriod do
     describe 'for grouping :week' do
 
       it 'should return the date of the monday of the week date_time is in for any day in that week' do
-        date_time = DateTime.new(2008, 11, 27)
+        date_time = Date.new(2008, 11, 27)
         reporting_period = Saulabs::Reportable::ReportingPeriod.new(Saulabs::Reportable::Grouping.new(:week), date_time)
 
         reporting_period.date_time.should == Date.new(date_time.year, date_time.month, 24)
       end
 
       it 'should return the date of the monday of the week date_time is in when the specified date is a monday already' do
-        date_time = DateTime.new(2008, 11, 24)
+        date_time = Date.new(2008, 11, 24)
         reporting_period = Saulabs::Reportable::ReportingPeriod.new(Saulabs::Reportable::Grouping.new(:week), date_time)
 
         reporting_period.date_time.should == Date.new(date_time.year, date_time.month, 24)
       end
 
       it 'should return the date of the monday of the week date_time is in when the monday is in a different month than the specified date' do
-        date_time = DateTime.new(2008, 11, 1)
+        date_time = Date.new(2008, 11, 1)
         reporting_period = Saulabs::Reportable::ReportingPeriod.new(Saulabs::Reportable::Grouping.new(:week), date_time)
 
         reporting_period.date_time.should == Date.new(2008, 10, 27)
       end
 
       it 'should return the date of the monday of the week date_time is in when the monday is in a different year than the specified date' do
-        date_time = DateTime.new(2009, 1, 1)
+        date_time = Date.new(2009, 1, 1)
         reporting_period = Saulabs::Reportable::ReportingPeriod.new(Saulabs::Reportable::Grouping.new(:week), date_time)
 
         reporting_period.date_time.should == Date.new(2008, 12, 29)
@@ -51,7 +51,7 @@ describe Saulabs::Reportable::ReportingPeriod do
     end
 
     it 'should return the date with day = 1 for grouping :month' do
-      date_time = Time.now
+      date_time = Time.zone.now
       reporting_period = Saulabs::Reportable::ReportingPeriod.new(Saulabs::Reportable::Grouping.new(:month), date_time)
 
       reporting_period.date_time.should == Date.new(date_time.year, date_time.month, 1)
@@ -78,21 +78,21 @@ describe Saulabs::Reportable::ReportingPeriod do
     describe 'for grouping :week' do
 
       it 'should return the date of the sunday of the week date_time is in for any day in that week' do
-        date_time = DateTime.new(2008, 11, 27)
+        date_time = Date.new(2008, 11, 27)
         reporting_period = Saulabs::Reportable::ReportingPeriod.new(Saulabs::Reportable::Grouping.new(:week), date_time)
 
         reporting_period.last_date_time.should == Date.new(date_time.year, date_time.month, 30)
       end
 
       it 'should return the date of the sunday of the week date_time is in when the sunday is in a different month than the specified date' do
-        date_time = DateTime.new(2008, 10, 30)
+        date_time = Date.new(2008, 10, 30)
         reporting_period = Saulabs::Reportable::ReportingPeriod.new(Saulabs::Reportable::Grouping.new(:week), date_time)
 
         reporting_period.last_date_time.should == Date.new(2008, 11, 2)
       end
 
       it 'should return the date of the sunday of the week date_time is in when the sunday is in a different year than the specified date' do
-        date_time = DateTime.new(2008, 12, 29)
+        date_time = Date.new(2008, 12, 29)
         reporting_period = Saulabs::Reportable::ReportingPeriod.new(Saulabs::Reportable::Grouping.new(:week), date_time)
 
         reporting_period.last_date_time.should == Date.new(2009, 1, 4)
@@ -101,7 +101,7 @@ describe Saulabs::Reportable::ReportingPeriod do
     end
 
     it 'should return the date of the last day of the month for grouping :month' do
-      date_time = DateTime.new(2009, 4, 29)
+      date_time = Date.new(2009, 4, 29)
       reporting_period = Saulabs::Reportable::ReportingPeriod.new(Saulabs::Reportable::Grouping.new(:month), date_time)
 
       reporting_period.last_date_time.should == Date.new(date_time.year, date_time.month, 30)
@@ -226,7 +226,7 @@ describe Saulabs::Reportable::ReportingPeriod do
   describe '#==' do
 
     it 'should return true for 2 reporting periods with the same date_time and grouping' do
-      now = DateTime.now
+      now = Time.zone.now
       reporting_period1 = Saulabs::Reportable::ReportingPeriod.new(Saulabs::Reportable::Grouping.new(:month), now)
       reporting_period2 = Saulabs::Reportable::ReportingPeriod.new(Saulabs::Reportable::Grouping.new(:month), now)
 
@@ -242,15 +242,15 @@ describe Saulabs::Reportable::ReportingPeriod do
     end
 
     it 'should return true for 2 reporting periods with the same grouping but different date_times if the date times evaluate to the same reporting period identifier' do
-      reporting_period1 = Saulabs::Reportable::ReportingPeriod.new(Saulabs::Reportable::Grouping.new(:month), Time.now)
-      reporting_period2 = Saulabs::Reportable::ReportingPeriod.new(Saulabs::Reportable::Grouping.new(:month), Time.now + 1.day)
+      reporting_period1 = Saulabs::Reportable::ReportingPeriod.new(Saulabs::Reportable::Grouping.new(:month), Date.new(2011, 1, 1))
+      reporting_period2 = Saulabs::Reportable::ReportingPeriod.new(Saulabs::Reportable::Grouping.new(:month), Date.new(2011, 1, 1) + 1.day)
 
       (reporting_period1 == reporting_period2).should == true
     end
 
     it 'should return false for 2 reporting periods with the same grouping but different date_times if the date times evaluate to different reporting period identifiers' do
-      reporting_period1 = Saulabs::Reportable::ReportingPeriod.new(Saulabs::Reportable::Grouping.new(:month), Time.now)
-      reporting_period2 = Saulabs::Reportable::ReportingPeriod.new(Saulabs::Reportable::Grouping.new(:month), Time.now + 2.months)
+      reporting_period1 = Saulabs::Reportable::ReportingPeriod.new(Saulabs::Reportable::Grouping.new(:month), Date.new(2011, 1, 1))
+      reporting_period2 = Saulabs::Reportable::ReportingPeriod.new(Saulabs::Reportable::Grouping.new(:month), Date.new(2011, 1, 1) + 1.month)
 
       (reporting_period1 == reporting_period2).should == false
     end
@@ -260,7 +260,7 @@ describe Saulabs::Reportable::ReportingPeriod do
       describe 'for grouping :hour' do
 
         it 'should return true when the date and hour are equal' do
-          date_time = DateTime.new(2008, 10, 30, 12)
+          date_time = Time.zone.local(2008, 10, 30, 12)
           reporting_period = Saulabs::Reportable::ReportingPeriod.new(Saulabs::Reportable::Grouping.new(:hour), date_time)
 
           reporting_period.should == date_time
@@ -271,7 +271,7 @@ describe Saulabs::Reportable::ReportingPeriod do
       describe 'for grouping :day' do
 
         it 'should return true when the date is equal' do
-          date_time = DateTime.new(2008, 10, 30)
+          date_time = Date.new(2008, 10, 30)
           reporting_period = Saulabs::Reportable::ReportingPeriod.new(Saulabs::Reportable::Grouping.new(:day), date_time)
 
           reporting_period.should == date_time
@@ -282,10 +282,10 @@ describe Saulabs::Reportable::ReportingPeriod do
       describe 'for grouping :week' do
 
         it 'should return true when the date of the first day in that week is equal' do
-          date_time = DateTime.new(2009, 5, 4) #monday (first day of the week for reports_asp_sparkline)
+          date_time = Date.new(2009, 5, 4) #monday (first day of the week for reports_asp_sparkline)
           reporting_period = Saulabs::Reportable::ReportingPeriod.new(Saulabs::Reportable::Grouping.new(:week), date_time)
 
-          reporting_period.should == DateTime.new(2009, 5, 7) #thursday of same week, should be equal
+          reporting_period.should == Date.new(2009, 5, 7) #thursday of same week, should be equal
         end
 
       end
@@ -293,10 +293,10 @@ describe Saulabs::Reportable::ReportingPeriod do
       describe 'for grouping :month' do
 
         it 'should return true when the date of the first day in that month is equal' do
-          date_time = DateTime.new(2009, 5, 1)
+          date_time = Date.new(2009, 5, 1)
           reporting_period = Saulabs::Reportable::ReportingPeriod.new(Saulabs::Reportable::Grouping.new(:month), date_time)
 
-          reporting_period.should == DateTime.new(2009, 5, 17)
+          reporting_period.should == Date.new(2009, 5, 17)
         end
 
       end
@@ -333,7 +333,7 @@ describe Saulabs::Reportable::ReportingPeriod do
       reporting_period.date_time.should == Date.new(2008, 9, 1)
     end
 
-    it 'should return a reporting period with the date of the monday of the week at (DateTime.now - limit.weeks) for grouping :week' do
+    it 'should return a reporting period with the date of the monday of the week at (Time.zone.now - limit.weeks) for grouping :week' do
       Time.zone.stub!(:now).and_return(Time.zone.local(2008, 12, 31, 0, 0, 0)) #wednesday
       reporting_period = Saulabs::Reportable::ReportingPeriod.first(Saulabs::Reportable::Grouping.new(:week), 3)
 

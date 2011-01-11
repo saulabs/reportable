@@ -357,13 +357,13 @@ describe Saulabs::Reportable::Report do
       describe 'with the first week of the second year belonging to the first year' do
 
         before(:all) do
-          User.create!(:login => 'test 1', :created_at => DateTime.new(2008, 12, 22))
-          User.create!(:login => 'test 2', :created_at => DateTime.new(2008, 12, 29))
-          User.create!(:login => 'test 3', :created_at => DateTime.new(2009, 1, 4))
-          User.create!(:login => 'test 4', :created_at => DateTime.new(2009, 1, 5))
-          User.create!(:login => 'test 5', :created_at => DateTime.new(2009, 1, 12))
+          User.create!(:login => 'test 1', :created_at => Time.zone.local(2008, 12, 22))
+          User.create!(:login => 'test 2', :created_at => Time.zone.local(2008, 12, 29))
+          User.create!(:login => 'test 3', :created_at => Time.zone.local(2009, 1, 4))
+          User.create!(:login => 'test 4', :created_at => Time.zone.local(2009, 1, 5))
+          User.create!(:login => 'test 5', :created_at => Time.zone.local(2009, 1, 12))
 
-          Time.zone.stub!(:now).and_return(DateTime.new(2009, 1, 25))
+          Time.zone.stub!(:now).and_return(Time.zone.local(2009, 1, 25))
         end
 
         it 'should return correct data for aggregation :count' do
@@ -386,13 +386,13 @@ describe Saulabs::Reportable::Report do
       describe 'with the first week of the second year belonging to the second year' do
 
         before(:all) do
-          User.create!(:login => 'test 1', :created_at => DateTime.new(2009, 12, 21))
-          User.create!(:login => 'test 2', :created_at => DateTime.new(2009, 12, 28))
-          User.create!(:login => 'test 3', :created_at => DateTime.new(2010, 1, 3))
-          User.create!(:login => 'test 4', :created_at => DateTime.new(2010, 1, 4))
-          User.create!(:login => 'test 5', :created_at => DateTime.new(2010, 1, 11))
+          User.create!(:login => 'test 1', :created_at => Time.zone.local(2009, 12, 21))
+          User.create!(:login => 'test 2', :created_at => Time.zone.local(2009, 12, 28))
+          User.create!(:login => 'test 3', :created_at => Time.zone.local(2010, 1, 3))
+          User.create!(:login => 'test 4', :created_at => Time.zone.local(2010, 1, 4))
+          User.create!(:login => 'test 5', :created_at => Time.zone.local(2010, 1, 11))
 
-          Time.stub!(:now).and_return(DateTime.new(2010, 1, 25))
+          Time.stub!(:now).and_return(Time.zone.local(2010, 1, 25))
         end
 
         it 'should return correct data for aggregation :count' do

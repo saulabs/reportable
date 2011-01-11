@@ -60,11 +60,11 @@ module Saulabs
       #   conditions like in +ActiveRecord::Base#find+; only records that match these conditions are reported;
       # @option options [Boolean] :live_data (false)
       #   specifies whether data for the current reporting period is to be read; <b>if +:live_data+ is +true+, you will experience a performance hit since the request cannot be satisfied from the cache alone</b>
-      # @option options [DateTime, Boolean] :end_date (false)
+      # @option options [Date, Time, Boolean] :end_date (false)
       #   when specified, the report will only include data for the +:limit+ reporting periods until this date.
       #
-      # @return [Array<Array<DateTime, Float>>]
-      #   the result of the report as pairs of {DateTime}s and {Float}s
+      # @return [Array<Array<Date, Time, Float>>]
+      #   the result of the report as pairs of {Date, Time}s and {Float}s
       #
       def self.process(report, options, &block)
         raise ArgumentError.new('A block must be given') unless block_given?

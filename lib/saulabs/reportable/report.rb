@@ -56,7 +56,7 @@ module Saulabs
       #   conditions like in +ActiveRecord::Base#find+; only records that match these conditions are reported;
       # @option options [Boolean] :live_data (false)
       #   specifies whether data for the current reporting period is to be read; <b>if +:live_data+ is +true+, you will experience a performance hit since the request cannot be satisfied from the cache alone</b>
-      # @option options [DateTime, Boolean] :end_date (false)
+      # @option options [Date, Time, Boolean] :end_date (false)
       #   when specified, the report will only include data for the +:limit+ reporting periods until this date.
       #
       def initialize(klass, name, options = {})
@@ -77,7 +77,7 @@ module Saulabs
         @options.freeze
       end
 
-      # Runs the report and returns an array of array of DateTimes and Floats
+      # Runs the report and returns an array of array of Dates or Times and Floats
       #
       # @param [Hash] options
       #   options to run the report with
@@ -90,11 +90,11 @@ module Saulabs
       #   conditions like in +ActiveRecord::Base#find+; only records that match these conditions are reported;
       # @option options [Boolean] :live_data (false)
       #   specifies whether data for the current reporting period is to be read; <b>if +:live_data+ is +true+, you will experience a performance hit since the request cannot be satisfied from the cache alone</b>
-      # @option options [DateTime, Boolean] :end_date (false)
+      # @option options [Date, Time, Boolean] :end_date (false)
       #   when specified, the report will only include data for the +:limit+ reporting periods until this date.
       #
-      # @return [Array<Array<DateTime, Float>>]
-      #   the result of the report as pairs of {DateTime}s and {Float}s
+      # @return [Array<Array<(Date|Time), Float>>]
+      #   the result of the report as pairs of {Date}s or {Time}s and {Float}s
       #
       def run(options = {})
         options = options_for_run(options)
@@ -157,7 +157,7 @@ module Saulabs
           raise ArgumentError.new('Options :live_data and :end_date may not both be specified!') if options[:live_data] && options[:end_date]
           raise ArgumentError.new("Invalid grouping #{options[:grouping]}!") if options[:grouping] && ![:hour, :day, :week, :month].include?(options[:grouping])
           raise ArgumentError.new("Invalid conditions: #{options[:conditions].inspect}!") if options[:conditions] && !options[:conditions].is_a?(Array) && !options[:conditions].is_a?(Hash)
-          raise ArgumentError.new("Invalid end date: #{options[:end_date].inspect}; must be a DateTime!") if options[:end_date] && !options[:end_date].is_a?(DateTime) && !options[:end_date].is_a?(Time)
+          raise ArgumentError.new("Invalid end date: #{options[:end_date].inspect}; must be a Date or Time!") if options[:end_date] && !options[:end_date].is_a?(Date) && !options[:end_date].is_a?(Time)
           raise ArgumentError.new('End date may not be in the future!') if options[:end_date] && options[:end_date] > Time.zone.now
         end
 

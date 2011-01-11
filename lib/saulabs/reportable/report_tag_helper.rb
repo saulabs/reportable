@@ -8,7 +8,7 @@ module Saulabs
 
       # Renders a sparkline with the given data using the google drawing api.
       #
-      # @param [Array<Array<DateTime, Float>>] data
+      # @param [Array<Array<(Date|Time), Float>>] data
       #   an array of report data as returned by {Saulabs::Reportable::Report#run}
       # @param [Hash] options
       #   options for the sparkline
@@ -60,7 +60,7 @@ module Saulabs
     
       # Renders a sparkline with the given data using Raphael.
       #
-      # @param [Array<Array<DateTime, Float>>] data
+      # @param [Array<Array<(Date|Time), Float>>] data
       #   an array of report data as returned by {Saulabs::Reportable::Report#run}
       # @param [Hash] options
       #   options for width, height, the dom id and the format
@@ -114,7 +114,7 @@ module Saulabs
           
       # Renders a sparkline with the given data using the jquery flot plugin.
       #
-      # @param [Array<Array<DateTime, Float>>] data
+      # @param [Array<Array<(Date|Time), Float>>] data
       #   an array of report data as returned by {Saulabs::Reportable::Report#run}
       # @param [Hash] options
       #   options for width, height, the dom id and the format

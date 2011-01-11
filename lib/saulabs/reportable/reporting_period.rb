@@ -6,7 +6,7 @@ module Saulabs
     #
     class ReportingPeriod
 
-      # The actual +DateTime the reporting period represents
+      # The actual +Date+ or +Time+ the reporting period represents
       #
       attr_reader :date_time
 
@@ -18,8 +18,8 @@ module Saulabs
       #
       # @param [Saulabs::Reportable::Grouping] grouping
       #   the grouping the generate the reporting period for
-      # @param [DateTime] date_time
-      #   the +DateTime+ to generate the reporting period for
+      # @param [Date, Time] date_time
+      #   the +Date+ or +Time+ to generate the reporting period for
       #
       def initialize(grouping, date_time = nil)
         @grouping  = grouping

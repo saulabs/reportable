@@ -8,8 +8,8 @@ module Saulabs
     #
     # @example Cumulated reports as opposed to regular reports
     #
-    #  [[<DateTime today>, 1], [<DateTime yesterday>, 2], [<DateTime two days ago>, 4], etc.] # result of a regular report 
-    #  [[<DateTime today>, 7], [<DateTime yesterday>, 6], [<DateTime two days ago>, 4], etc.] # result of a cumulated report for the same dataset
+    #  [[<today>, 1], [<yesterday>, 2], [<two days ago>, 4], etc.] # result of a regular report 
+    #  [[<today>, 7], [<yesterday>, 6], [<two days ago>, 4], etc.] # result of a cumulated report for the same dataset
     #
     class CumulatedReport < Report
 

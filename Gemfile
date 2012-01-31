@@ -12,7 +12,7 @@ gem 'tzinfo', 			'>= 0.3.0'
 
 gem 'rake',       '>= 0.8.7'
 gem 'rspec',      '~> 1.3.0'
-gem 'rcov',       '>= 0.8.1'
+gem 'simplecov'
 gem 'excellent',  '>= 1.5.4'
 gem 'yard',       '>= 0.4.0'
 gem 'yard-rspec', '>= 0.1.0'

@@ -115,13 +115,13 @@ module Saulabs
             :value            => value
           )
         end
-        
+
         def self.serialize_conditions(conditions)
-          if conditions.is_a?(Array)
+          if conditions.is_a?(Array) && conditions.any?
             conditions.join
-          elsif conditions.is_a?(Hash)
+          elsif conditions.is_a?(Hash) && conditions.any?
             conditions.map.sort{|x,y|x.to_s<=>y.to_s}.flatten.join
-          else 
+          else
             conditions.to_s
           end
         end

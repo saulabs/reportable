@@ -1,6 +1,6 @@
 sqlite3:
   adapter:  sqlite3
-  database: spec/db/reportable.sqlite3.db
+  database: ":memory:"
 mysql:
   adapter:  mysql
   database: reportable_test

@@ -214,7 +214,7 @@ describe Saulabs::Reportable::ReportCache do
           @report.name.to_s,
           @report.options[:grouping].identifier.to_s,
           @report.aggregation.to_s,
-          @report.options[:conditions].to_s,
+          '',
           Saulabs::Reportable::ReportingPeriod.first(@report.options[:grouping], 10).date_time
         ],
         :limit => 10,
@@ -235,7 +235,7 @@ describe Saulabs::Reportable::ReportCache do
           @report.name.to_s,
           @report.options[:grouping].identifier.to_s,
           @report.aggregation.to_s,
-          @report.options[:conditions].to_s,
+          '',
           Saulabs::Reportable::ReportingPeriod.first(@report.options[:grouping], 9).date_time,
           Saulabs::Reportable::ReportingPeriod.new(@report.options[:grouping], end_date).date_time
         ],
@@ -258,7 +258,7 @@ describe Saulabs::Reportable::ReportCache do
           @report.name.to_s,
           grouping.identifier.to_s,
           @report.aggregation.to_s,
-          @report.options[:conditions].to_s,
+          '',
           Saulabs::Reportable::ReportingPeriod.first(grouping, 10).date_time
         ],
         :limit => 10,
@@ -278,6 +278,11 @@ describe Saulabs::Reportable::ReportCache do
   end
   
   describe '.serialize_conditions' do
+    
+    it 'should serialize empty conditions correctly' do
+      result = Saulabs::Reportable::ReportCache.send(:serialize_conditions, [])
+      result.should eql('')
+    end
     
     it 'should serialize a conditions array correctly' do
       result = Saulabs::Reportable::ReportCache.send(:serialize_conditions, ['active = ? AND gender = ?', true, 'male'])

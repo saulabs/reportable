@@ -1,5 +1,7 @@
 require File.join(File.dirname(File.dirname(File.expand_path(__FILE__))),'spec_helper')
 
+require 'reportable/report_tag_helper'
+
 describe Saulabs::Reportable::ReportTagHelper do
 
   before do

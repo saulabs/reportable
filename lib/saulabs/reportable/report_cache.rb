@@ -1,5 +1,6 @@
 require 'saulabs/reportable/reporting_period'
 require 'saulabs/reportable/result_set'
+require 'active_record'
 
 module Saulabs
 

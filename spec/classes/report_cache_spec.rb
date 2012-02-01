@@ -346,16 +346,17 @@ describe Saulabs::Reportable::ReportCache do
     it 'should return an array of arrays of Dates and Floats' do
       result = Saulabs::Reportable::ReportCache.send(:prepare_result, @new_data, [], @report, @report.options)
 
-      result.should be_kind_of(Array)
-      result[0].should be_kind_of(Array)
-      result[0][0].should be_kind_of(Date)
-      result[0][1].should be_kind_of(Float)
+      result.should be_kind_of(Saulabs::Reportable::ResultSet)
+      result.to_a.should be_kind_of(Array)
+      result.to_a[0].should be_kind_of(Array)
+      result.to_a[0][0].should be_kind_of(Date)
+      result.to_a[0][1].should be_kind_of(Float)
     end
 
     describe 'with :live_data = false' do
 
       before do
-        @result = Saulabs::Reportable::ReportCache.send(:prepare_result, @new_data, [], @report, @report.options)
+        @result = Saulabs::Reportable::ReportCache.send(:prepare_result, @new_data, [], @report, @report.options).to_a
       end
 
       it 'should return an array of length :limit' do

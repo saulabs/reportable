@@ -25,7 +25,7 @@ module Saulabs
           first_reporting_period = ReportingPeriod.first(options[:grouping], options[:limit], options[:end_date])
           acc = initial_cumulative_value(first_reporting_period.date_time, options)
           result = []
-          data.each do |element|
+          data.to_a.each do |element|
             acc += element[1].to_f
             result << [element[0], acc]
           end

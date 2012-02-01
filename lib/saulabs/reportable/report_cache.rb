@@ -64,7 +64,7 @@ module Saulabs
       # @option options [DateTime, Boolean] :end_date (false)
       #   when specified, the report will only include data for the +:limit+ reporting periods until this date.
       #
-      # @return [Array<Array<DateTime, Float>>]
+      # @return [ResultSet<Array<DateTime, Float>>]
       #   the result of the report as pairs of {DateTime}s and {Float}s
       #
       def self.process(report, options, &block)

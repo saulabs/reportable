@@ -368,7 +368,7 @@ describe Saulabs::Reportable::ReportCache do
 
       before do
         options = @report.options.merge(:live_data => true)
-        @result = Saulabs::Reportable::ReportCache.send(:prepare_result, @new_data, [], @report, options)
+        @result = Saulabs::Reportable::ReportCache.send(:prepare_result, @new_data, [], @report, options).to_a
       end
 
       it 'should return an array of length (:limit + 1)' do

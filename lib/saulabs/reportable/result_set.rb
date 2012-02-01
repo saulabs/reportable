@@ -8,7 +8,7 @@ module Saulabs
     # the name of the model and the report the result set
     # was generated from.
     #
-    class ResultSet < ::Array
+    class ResultSet
 
       # the name of the model the result set is based on
       #
@@ -17,6 +17,12 @@ module Saulabs
       # the name of the report the result is based on
       #
       attr_reader :report_name
+
+      # array representation of the result
+      #
+      def to_a
+        @results
+      end
 
       # Initializes a new result set.
       #
@@ -28,7 +34,7 @@ module Saulabs
       #   the name of the report the result is based on
       #
       def initialize(array, model_name, report_name)
-        super(array)
+        @results = array
         @model_name  = model_name
         @report_name = report_name.to_s
       end

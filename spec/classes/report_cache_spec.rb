@@ -248,8 +248,7 @@ describe Saulabs::Reportable::ReportCache do
 
     it "should read existing data from the cache for the correct grouping if one other than the report's default grouping is specified" do
       grouping = Saulabs::Reportable::Grouping.new(:month)
-      Saulabs::Reportable::ReportCache.should_receive(:find).once.with(
-        :all,
+      Saulabs::Reportable::ReportCache.should_receive(:all).once.with(
         :conditions => [
           %w(model_name report_name grouping aggregation conditions).map do |column_name|
             "#{Saulabs::Reportable::ReportCache.connection.quote_column_name(column_name)} = ?"

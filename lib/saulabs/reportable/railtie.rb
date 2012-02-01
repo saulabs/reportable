@@ -1,4 +1,5 @@
 require 'saulabs/reportable'
+require 'saulabs/reportable/report_tag_helper'
 require 'rails'
 
 module Saulabs

@@ -38,6 +38,9 @@ module Saulabs
         :grid   => { 
           :show => false
         },
+        :xaxis => {
+          :mode => :time
+        },
         :series => {
           :lines      => {
             :fill      => true,

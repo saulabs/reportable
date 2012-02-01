@@ -11,7 +11,7 @@ module Saulabs
     #
     class ReportCache < ActiveRecord::Base
 
-      set_table_name :reportable_cache
+      self.table_name = :reportable_cache
 
       validates_presence_of :model_name
       validates_presence_of :report_name

@@ -37,8 +37,7 @@ module Saulabs
       #
       def google_report_tag(data, options = {})
         options.reverse_merge!(Config.google_options)
-        data = options[:reverse] ? data.to_a.reverse : data.to_a
-        data = data.collect { |d| d[1] }
+        data = data.to_a.collect { |d| d[1] }
         labels = ''
         unless options[:labels].empty?
           chxr = {}
@@ -89,14 +88,13 @@ module Saulabs
         options.reverse_merge!(Config.raphael_options.slice(:width, :height, :format))
         options.reverse_merge!(:dom_id => default_dom_id)
         raphael_options.reverse_merge!(Config.raphael_options.except(:width, :height, :format))
-        data = options[:reverse] ? data.to_a.reverse : data.to_a
         %Q{<div id="#{options[:dom_id]}" style="width:#{options[:width]}px;height:#{options[:height]}px;"></div>
         <script type="text\/javascript" charset="utf-8">
           var graph = Raphael('#{options[:dom_id]}');
           graph.g.linechart(
             -10, 4, #{options[:width]}, #{options[:height]},
-            #{(0..data.size).to_a.to_json},
-            #{data.map { |d| d[1].send(:eval, options[:format]) }.to_json},
+            #{(0..data.to_a.size).to_a.to_json},
+            #{data.to_a.map { |d| d[1].send(:eval, options[:format]) }.to_json},
             #{raphael_options.to_json}
           ).hover(function() {
             this.disc = graph.g.disc(this.x, this.y, 3).attr({fill: "#{options[:hover_fill_color]}", stroke: '#{options[:hover_line_color]}' }).insertBefore(this);
@@ -145,11 +143,10 @@ module Saulabs
         options.reverse_merge!(Config.flot_options.slice(:width, :height, :format))
         options.reverse_merge!(:dom_id => default_dom_id)
         flot_options.reverse_merge!(Config.flot_options.except(:width, :height, :format))
-        data = options[:reverse] ? data.to_a.reverse : data.to_a
         %Q{<div id="#{options[:dom_id]}" style="width:#{options[:width]}px;height:#{options[:height]}px;"></div>
         <script type="text\/javascript" charset="utf-8">
         $(function() {
-          var set = #{data.map{|d| d[1] }.to_json},
+          var set = #{data.to_a.map{|d| d[1] }.to_json},
           data = [];
           for (var i = 0; i < set.length; i++) {
             data.push([i, set[i]]);

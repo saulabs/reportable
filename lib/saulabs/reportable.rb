@@ -1,5 +1,7 @@
+
 require 'saulabs/reportable/report'
 require 'saulabs/reportable/cumulated_report'
+require 'saulabs/reportable/railtie'
 
 module Saulabs
 
@@ -8,10 +10,6 @@ module Saulabs
     # The adapter connects Reportable and Rails.
     #
     module RailsAdapter
-
-      IS_RAILS3 = defined?(Rails) && Rails::VERSION::MAJOR >= 3
-
-      require 'saulabs/reportable/railtie' if IS_RAILS3
 
       # Extends the {Saulabs::Reportable::ClassMethods#reportable} method into +base+.
       #

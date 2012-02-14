@@ -56,13 +56,13 @@ describe Saulabs::Reportable::Report do
     it 'should return an array of the same length as the specified limit when :live_data is false' do
       @report = Saulabs::Reportable::Report.new(User, :cumulated_registrations, :limit => 10, :live_data => false)
 
-      @report.run.length.should == 10
+      @report.run.to_a.length.should == 10
     end
 
     it 'should return an array of the same length as the specified limit + 1 when :live_data is true' do
       @report = Saulabs::Reportable::Report.new(User, :cumulated_registrations, :limit => 10, :live_data => true)
 
-      @report.run.length.should == 11
+      @report.run.to_a.length.should == 11
     end
 
     for grouping in [:hour, :day, :week, :month] do
@@ -98,7 +98,7 @@ describe Saulabs::Reportable::Report do
                 :limit    => 10,
                 :end_date => @end_date
               )
-              @result = @report.run
+              @result = @report.run.to_a
             end
 
             it "should start with the reporting period (end_date - limit.#{grouping.to_s})" do
@@ -127,7 +127,7 @@ describe Saulabs::Reportable::Report do
                   :limit     => 10,
                   :live_data => live_data
                 )
-                @result = @report.run
+                @result = @report.run.to_a
               end
 
               it "should be an array starting reporting period (Time.now - limit.#{grouping.to_s})" do

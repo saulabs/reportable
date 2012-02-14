@@ -214,7 +214,7 @@ describe Saulabs::Reportable::ReportCache do
           @report.name.to_s,
           @report.options[:grouping].identifier.to_s,
           @report.aggregation.to_s,
-          @report.options[:conditions].to_s,
+          '',
           Saulabs::Reportable::ReportingPeriod.first(@report.options[:grouping], 10).date_time
         ],
         :limit => 10,
@@ -235,7 +235,7 @@ describe Saulabs::Reportable::ReportCache do
           @report.name.to_s,
           @report.options[:grouping].identifier.to_s,
           @report.aggregation.to_s,
-          @report.options[:conditions].to_s,
+          '',
           Saulabs::Reportable::ReportingPeriod.first(@report.options[:grouping], 9).date_time,
           Saulabs::Reportable::ReportingPeriod.new(@report.options[:grouping], end_date).date_time
         ],
@@ -248,8 +248,7 @@ describe Saulabs::Reportable::ReportCache do
 
     it "should read existing data from the cache for the correct grouping if one other than the report's default grouping is specified" do
       grouping = Saulabs::Reportable::Grouping.new(:month)
-      Saulabs::Reportable::ReportCache.should_receive(:find).once.with(
-        :all,
+      Saulabs::Reportable::ReportCache.should_receive(:all).once.with(
         :conditions => [
           %w(model_name report_name grouping aggregation conditions).map do |column_name|
             "#{Saulabs::Reportable::ReportCache.connection.quote_column_name(column_name)} = ?"
@@ -258,7 +257,7 @@ describe Saulabs::Reportable::ReportCache do
           @report.name.to_s,
           grouping.identifier.to_s,
           @report.aggregation.to_s,
-          @report.options[:conditions].to_s,
+          '',
           Saulabs::Reportable::ReportingPeriod.first(grouping, 10).date_time
         ],
         :limit => 10,
@@ -278,6 +277,11 @@ describe Saulabs::Reportable::ReportCache do
   end
   
   describe '.serialize_conditions' do
+    
+    it 'should serialize empty conditions correctly' do
+      result = Saulabs::Reportable::ReportCache.send(:serialize_conditions, [])
+      result.should eql('')
+    end
     
     it 'should serialize a conditions array correctly' do
       result = Saulabs::Reportable::ReportCache.send(:serialize_conditions, ['active = ? AND gender = ?', true, 'male'])
@@ -334,7 +338,7 @@ describe Saulabs::Reportable::ReportCache do
     end
 
     it 'should save the created Saulabs::Reportable::ReportCache' do
-      @cached.should_receive(:save!).once
+      @cached.should_receive(:save!)
 
       Saulabs::Reportable::ReportCache.send(:prepare_result, @new_data, [], @report, @report.options)
     end
@@ -342,16 +346,17 @@ describe Saulabs::Reportable::ReportCache do
     it 'should return an array of arrays of Dates and Floats' do
       result = Saulabs::Reportable::ReportCache.send(:prepare_result, @new_data, [], @report, @report.options)
 
-      result.should be_kind_of(Array)
-      result[0].should be_kind_of(Array)
-      result[0][0].should be_kind_of(Date)
-      result[0][1].should be_kind_of(Float)
+      result.should be_kind_of(Saulabs::Reportable::ResultSet)
+      result.to_a.should be_kind_of(Array)
+      result.to_a[0].should be_kind_of(Array)
+      result.to_a[0][0].should be_kind_of(Date)
+      result.to_a[0][1].should be_kind_of(Float)
     end
 
     describe 'with :live_data = false' do
 
       before do
-        @result = Saulabs::Reportable::ReportCache.send(:prepare_result, @new_data, [], @report, @report.options)
+        @result = Saulabs::Reportable::ReportCache.send(:prepare_result, @new_data, [], @report, @report.options).to_a
       end
 
       it 'should return an array of length :limit' do
@@ -368,7 +373,7 @@ describe Saulabs::Reportable::ReportCache do
 
       before do
         options = @report.options.merge(:live_data => true)
-        @result = Saulabs::Reportable::ReportCache.send(:prepare_result, @new_data, [], @report, options)
+        @result = Saulabs::Reportable::ReportCache.send(:prepare_result, @new_data, [], @report, options).to_a
       end
 
       it 'should return an array of length (:limit + 1)' do

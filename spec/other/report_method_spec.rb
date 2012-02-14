@@ -1,7 +1,17 @@
 require File.join(File.dirname(File.dirname(File.expand_path(__FILE__))),'spec_helper')
 
 describe Saulabs::Reportable do
+  
+  ActiveRecord::Base.class_eval do
+    include Saulabs::Reportable::RailsAdapter
+  end
+  
+  class User < ActiveRecord::Base
+    reportable :registrations, :limit => 10
+  end
 
+  class SpecialUser < User; end
+  
   before(:all) do
     User.create!(:login => 'test 1', :created_at => Time.now - 1.days,  :profile_visits => 1)
     User.create!(:login => 'test 2', :created_at => Time.now - 2.days, :profile_visits => 2)
@@ -59,10 +69,3 @@ describe Saulabs::Reportable do
 
 end
 
-class User < ActiveRecord::Base
-
-  reportable :registrations, :limit => 10
-
-end
-
-class SpecialUser < User; end

@@ -1,5 +1,6 @@
 require 'saulabs/reportable/reporting_period'
 require 'saulabs/reportable/result_set'
+require 'active_record'
 
 module Saulabs
 
@@ -10,7 +11,7 @@ module Saulabs
     #
     class ReportCache < ActiveRecord::Base
 
-      set_table_name :reportable_cache
+      self.table_name = :reportable_cache
 
       validates_presence_of :model_name
       validates_presence_of :report_name
@@ -63,7 +64,7 @@ module Saulabs
       # @option options [DateTime, Boolean] :end_date (false)
       #   when specified, the report will only include data for the +:limit+ reporting periods until this date.
       #
-      # @return [Array<Array<DateTime, Float>>]
+      # @return [ResultSet<Array<DateTime, Float>>]
       #   the result of the report as pairs of {DateTime}s and {Float}s
       #
       def self.process(report, options, &block)
@@ -122,7 +123,7 @@ module Saulabs
           elsif conditions.is_a?(Hash) && conditions.any?
             conditions.map.sort{|x,y|x.to_s<=>y.to_s}.flatten.join
           else
-            conditions.to_s
+            conditions.empty? ? '' : conditions.to_s
           end
         end
 

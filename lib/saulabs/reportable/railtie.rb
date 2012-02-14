@@ -1,4 +1,5 @@
 require 'saulabs/reportable'
+require 'saulabs/reportable/report_tag_helper'
 require 'rails'
 
 module Saulabs
@@ -10,7 +11,17 @@ module Saulabs
       GEM_ROOT = File.join(File.dirname(__FILE__), '..', '..', '..')
 
       initializer 'saulabs.reportable.initialization' do
-        require File.join(GEM_ROOT, 'rails', 'init')
+        ActiveSupport.on_load :active_record do
+          ActiveRecord::Base.class_eval do
+            include Saulabs::Reportable::RailsAdapter
+          end
+        end
+        ActiveSupport.on_load :action_view do
+          ActionView::Base.class_eval do
+            include Saulabs::Reportable::ReportTagHelper
+          end
+        end
+
       end
 
       generators do

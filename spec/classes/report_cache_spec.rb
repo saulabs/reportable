@@ -338,7 +338,7 @@ describe Saulabs::Reportable::ReportCache do
     end
 
     it 'should save the created Saulabs::Reportable::ReportCache' do
-      @cached.should_receive(:save!).once
+      @cached.should_receive(:save!)
 
       Saulabs::Reportable::ReportCache.send(:prepare_result, @new_data, [], @report, @report.options)
     end

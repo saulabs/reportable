@@ -14,11 +14,11 @@ pkg_files += Dir['spec/**/*.{rb,yml,opts}']
 Gem::Specification.new do |s|
 
   s.name    = %q{reportable}
-  s.version = '1.1.2'
+  s.version = '1.2.0'
 
   s.required_rubygems_version = Gem::Requirement.new('>= 0') if s.respond_to?(:required_rubygems_version=)
   s.authors                   = ['Marco Otte-Witte', 'Martin Kavalar']
-  s.date                      = %q{2010-06-28}
+  s.date                      = %q{2012-02-14}
   s.email                     = %q{reportable@saulabs.com}
   s.files                     = pkg_files
   s.homepage                  = %q{http://github.com/saulabs/reportable}
@@ -28,19 +28,8 @@ Gem::Specification.new do |s|
   s.summary                   = %q{Easy report generation for Ruby on Rails}
   s.description               = %q{Reportable allows for easy report generation from ActiveRecord models by the addition of the reportable method.}
 
-  if s.respond_to?(:specification_version) then
-    current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
-    s.specification_version = 2
-    if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
-      s.add_runtime_dependency(%q<activerecord>, ['>= 2.0.0'])
-      s.add_runtime_dependency(%q<activesupport>, ['>= 2.0.0'])
-    else
-      s.add_dependency(%q<activerecord>, ['>= 2.0.0'])
-      s.add_dependency(%q<activesupport>, ['>= 2.0.0'])
-    end
-  else
-    s.add_dependency(%q<activerecord>, ['>= 2.0'])
-    s.add_dependency(%q<activesupport>, ['>= 2.0.0'])
-  end
+
+  s.add_dependency(%q<activerecord>, ['>= 3.0'])
+  s.add_dependency(%q<activesupport>, ['>= 3.0.0'])
 
 end

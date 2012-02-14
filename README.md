@@ -60,27 +60,9 @@ To install the Reportable gem, simply run
 
     [sudo] gem install reportable
 
-### Rails 2.x
+### Rails 3.x
 
-To install Reportable for Rails 2.x, add it to your application's dependencies in your `environment.rb`:
-
-    config.gem 'reportable', :lib => 'saulabs/reportable'
-
-and generate the migration that create reportable's cache table:
-
-    ./script/generate reportable_migration
-
-If you want to use reportable's JavaScript graph output format, you also have to generate the JavaScript files:
-
-		./script/generate reportable_raphael_assets
-
-if you want to use [Raphael](http://raphaeljs.com/) or if you want to use [jQuery](http://jquery.com/) and [flot](http://code.google.com/p/flot/):
-
-		./script/generate reportable_jquery_flot_assets
-
-### Rails 3.0
-
-To install Reportable for Rails 3.0, add it to your application's Gemfile:
+To install Reportable for Rails 3.x, add it to your application's Gemfile:
 
     gem 'reportable', :require => 'saulabs/reportable'
 
@@ -109,7 +91,7 @@ Plans
 Authors
 -------
 
-© 2008-2010 Marco Otte-Witte (<http://simplabs.com>) and Martin Kavalar (<http://www.sauspiel.de>)
+© 2008-2012 Marco Otte-Witte (<http://simplabs.com>) and Martin Kavalar (<http://www.sauspiel.de>)
 
 Released under the MIT license
 

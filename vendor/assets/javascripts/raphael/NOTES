@@ -1,0 +1,6 @@
+
+  ** Don't forget to include Raphael as well as gRaphaels javascripts in your head section, e.g.
+  **
+  **    <%= javascript_include_tag 'raphael.min', 'g.raphael.min', 'g.line.min' %>
+  **
+

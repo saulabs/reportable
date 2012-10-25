@@ -4,15 +4,14 @@ require 'bundler'
 Bundler.setup
 Bundler.require
 
-require 'spec/rake/spectask'
-require 'simplabs/excellent/rake'
+require "rspec/core/rake_task"
+
 
 desc 'Default: run specs.'
 task :default => :spec
 
 desc 'Run the specs'
-Spec::Rake::SpecTask.new(:spec) do |t|
-  t.spec_files = FileList['spec/**/*_spec.rb']
+RSpec::Core::RakeTask.new(:spec) do |spec|
 end
 
 YARD::Rake::YardocTask.new(:doc) do |t|
@@ -20,6 +19,3 @@ YARD::Rake::YardocTask.new(:doc) do |t|
   t.options = ['--no-private', '--title', 'Reportable Documentation']
 end
 
-Simplabs::Excellent::Rake::ExcellentTask.new(:excellent) do |t|
-  t.paths = %w(lib)
-end

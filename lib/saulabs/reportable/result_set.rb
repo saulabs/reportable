@@ -9,6 +9,7 @@ module Saulabs
     # was generated from.
     #
     class ResultSet
+      include Enumerable
 
       # the name of the model the result set is based on
       #
@@ -37,6 +38,12 @@ module Saulabs
         @results = array
         @model_name  = model_name
         @report_name = report_name.to_s
+      end
+
+      # quack like an Enumerable
+      #
+      def each(&block)
+        @results.each(&block)
       end
 
     end

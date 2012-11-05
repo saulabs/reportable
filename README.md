@@ -60,13 +60,19 @@ To install the Reportable gem, simply run
 
     [sudo] gem install reportable
 
-### Rails 3.x
+ORM configuration
+-----------------
 
-To install Reportable for Rails 3.x, add it to your application's Gemfile:
+Currently Reportable still only supports ActiveRecord, but it has now been refactored so it should be easy to add additional ORM adapters. To use Reportable with Active Record in Rails, create an initializer file reportable.rb with the following
 
-    gem 'reportable', :require => 'saulabs/reportable'
+    Saulabs::Reportable.orm_adapter :active_record
 
-and generate the migration that create reportable's cache table (beware that reportable currently only supports ActiveRecord):
+The _#reportable_ macro should determine which Report to use for a given model, by inspecting the kind of class it is used in (fx if it inherits from ActiveRecord::Base it should use the ActiveRecord::Report)
+
+Generators
+----------
+
+To generate the migration that create reportable's cache table (beware that reportable currently only supports ActiveRecord):
 
     rails generate reportable_migration
 
@@ -76,8 +82,34 @@ If you want to use reportable's JavaScript graph output format, you also have to
 
 if you want to use [Raphael](http://raphaeljs.com/) or if you want to use [jQuery](http://jquery.com/) and [flot](http://code.google.com/p/flot/):
 
-		rails generate reportable_jquery_flot_assets
+    rails generate reportable_jquery_flot_assets
 
+
+### Rails 3.x
+
+To install Reportable for Rails 3.x, add it to your application's Gemfile:
+
+    gem 'reportable', :require => 'saulabs/reportable'
+
+Generators
+----------
+
+To generate the migration that create reportable's cache table (beware that reportable currently only supports ActiveRecord):
+
+    rails generate reportable:migration
+
+Assets
+------
+
+If you want to use reportable's JavaScript graph output format, you can copy the JavaScript files to your assets folder:
+
+    rails generate reportable:assets raphael
+
+If you want to use [flot](http://code.google.com/p/flot/):
+
+		rails generate reportable:assets flot
+
+Note: The assets are also included directly in this gem under vendor/assets and will be added to the Rails asset pipeline. 
 
 Plans
 -----

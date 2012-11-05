@@ -1,11 +1,12 @@
 
-require 'saulabs/reportable/report'
-require 'saulabs/reportable/cumulated_report'
-require 'saulabs/reportable/railtie'
+require 'saulabs/reportable/railtie' if defined?(::Rails::Railtie)
+require 'saulabs/reportable/engine' if defined?(::Rails::Engine)
 
 module Saulabs
-
   module Reportable
+    def self.orm_adapter name = :active_record
+      require 'saulabs/reportable/active_record'
+    end
 
     # The adapter connects Reportable and Rails.
     #
@@ -53,10 +54,18 @@ module Saulabs
         #  end
         def reportable(name, options = {})
           (class << self; self; end).instance_eval do
-            report_klass = if options.delete(:cumulate)
-              Saulabs::Reportable::CumulatedReport
+
+            orm = case self.class
+            when ActiveRecord::Base
+              :active_record
             else
-              Saulabs::Reportable::Report
+              raise "ORM currently not supported"
+            end
+
+            report_klass = if options.delete(:cumulate)
+              "Saulabs::Reportable::#{orm.to_s.camelize}::CumulatedReport".constantize
+            else
+              "Saulabs::Reportable::#{orm.to_s.camelize}::Report".constantize
             end
             define_method("#{name.to_s}_report".to_sym) do |*args|
               report = report_klass.new(self, name, options)

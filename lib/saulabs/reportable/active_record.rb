@@ -1,0 +1,6 @@
+require 'active_record'
+require 'saulabs/reportable/report'
+require 'saulabs/reportable/reporting_period'
+require 'saulabs/reportable/result_set'
+require 'saulabs/reportable/grouping'
+require 'saulabs/reportable/report_cache'

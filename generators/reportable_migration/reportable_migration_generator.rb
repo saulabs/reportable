@@ -2,11 +2,10 @@ class ReportableMigrationGenerator < Rails::Generators::Base
 
   include Rails::Generators::Migration
 
+  source_root File.expand_path('../templates/', __FILE__)
+
   def create_migration
-    migration_template(
-      File.join(File.dirname(__FILE__), 'templates', 'migration.rb'),
-      'db/migrate/create_reportable_cache.rb'
-    )
+    migration_template('migration.rb', 'db/migrate/create_reportable_cache.rb')
   end
 
   def self.next_migration_number(dirname)

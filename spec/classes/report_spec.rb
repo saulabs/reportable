@@ -65,7 +65,8 @@ describe Saulabs::Reportable::Report do
       @report.run.to_a.length.should == 11
     end
 
-    for grouping in [:hour, :day, :week, :month] do
+    %w(hour day week month).each do |grouping|
+      grouping = grouping.to_sym
 
       describe "for grouping :#{grouping.to_s}" do
 

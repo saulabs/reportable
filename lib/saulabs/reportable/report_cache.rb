@@ -69,6 +69,15 @@ module Saulabs
       #
       def self.process(report, options, &block)
         raise ArgumentError.new('A block must be given') unless block_given?
+
+        # If end_date is in the middle of the current reporting period it means it requests live_data.
+        # Update the options hash to reflect reality.
+        current_reporting_period = ReportingPeriod.new(options[:grouping])
+        if options[:end_date] && options[:end_date] > current_reporting_period.date_time
+          options[:live_data] = true
+          options.delete(:end_date)
+        end
+
         self.transaction do
           cached_data = read_cached_data(report, options)
           new_data = read_new_data(cached_data, options, &block)
@@ -140,11 +149,10 @@ module Saulabs
             serialize_conditions(options[:conditions])
           ]
           first_reporting_period = get_first_reporting_period(options)
-          last_reporting_period = get_last_reporting_period(options)
-          if last_reporting_period
+          if options[:end_date]
             conditions.first << ' AND reporting_period BETWEEN ? AND ?'
             conditions << first_reporting_period.date_time
-            conditions << last_reporting_period.date_time
+            conditions << ReportingPeriod.new(options[:grouping], options[:end_date]).date_time
           else
             conditions.first << ' AND reporting_period >= ?'
             conditions << first_reporting_period.date_time
@@ -157,16 +165,30 @@ module Saulabs
         end
 
         def self.read_new_data(cached_data, options, &block)
-          if !options[:live_data] && cached_data.length == options[:limit]
-            []
+          return [] if !options[:live_data] && cached_data.length == options[:limit]
+
+          first_reporting_period_to_read = get_first_reporting_period_to_read(cached_data, options)
+          last_reporting_period_to_read = options[:end_date] ? ReportingPeriod.new(options[:grouping], options[:end_date]).last_date_time : nil
+
+          yield(first_reporting_period_to_read.date_time, last_reporting_period_to_read)
+        end
+
+        def self.get_first_reporting_period_to_read(cached_data, options)
+          return get_first_reporting_period(options) if cached_data.empty?
+
+          last_cached_reporting_period = ReportingPeriod.new(options[:grouping], cached_data.last.reporting_period)
+          missing_reporting_periods = options[:limit] - cached_data.length
+          last_reporting_period = if !options[:live_data] && options[:end_date]
+            ReportingPeriod.new(options[:grouping], options[:end_date])
           else
-            first_reporting_period_to_read = if cached_data.length < options[:limit]
-              get_first_reporting_period(options)
-            else
-              ReportingPeriod.new(options[:grouping], cached_data.last.reporting_period).next
-            end
-            last_reporting_period_to_read = options[:end_date] ? ReportingPeriod.new(options[:grouping], options[:end_date]).last_date_time : nil
-            yield(first_reporting_period_to_read.date_time, last_reporting_period_to_read)
+            ReportingPeriod.new(options[:grouping]).previous
+          end
+
+          if missing_reporting_periods == 0 || last_cached_reporting_period.offset(missing_reporting_periods) == last_reporting_period
+            # cache only has missing data contiguously at the end
+            last_cached_reporting_period.next
+          else
+            get_first_reporting_period(options)
           end
         end
 
@@ -176,10 +198,6 @@ module Saulabs
           else
             ReportingPeriod.first(options[:grouping], options[:limit])
           end
-        end
-
-        def self.get_last_reporting_period(options)
-          return ReportingPeriod.new(options[:grouping], options[:end_date]) if options[:end_date]
         end
 
     end

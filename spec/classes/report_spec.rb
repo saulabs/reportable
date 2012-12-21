@@ -77,6 +77,142 @@ describe Saulabs::Reportable::Report do
           User.create!(:login => 'test 4', :created_at => Time.now - 3.send(grouping), :profile_visits => 3)
         end
 
+        describe 'optimized querying with contiguously cached data' do
+          it "should be optimized with specified end_date" do
+            @end_date = DateTime.now - 1.send(grouping)
+            @report = Saulabs::Reportable::Report.new(User, :registrations,
+              :grouping => grouping,
+              :limit    => 10,
+              :end_date => @end_date
+            )
+            @result = @report.run
+
+            Saulabs::Reportable::ReportCache.last.delete
+
+            grouping_instance = Saulabs::Reportable::Grouping.new(grouping)
+            reporting_period = Saulabs::Reportable::ReportingPeriod.new(grouping_instance, @end_date)
+
+            @report.should_receive(:read_data) do |begin_at, end_at, options|
+              begin_at.should == reporting_period.date_time
+              end_at.should == reporting_period.last_date_time
+              [] # without this rspec whines about an ambiguous return value
+            end
+
+            @result = @report.run
+          end
+
+          it "should be optimized without specific end_date and live_data" do
+            @report = Saulabs::Reportable::Report.new(User, :registrations,
+              :grouping => grouping,
+              :limit    => 10,
+              :live_data => true
+            )
+            @result = @report.run.to_a
+
+            Saulabs::Reportable::ReportCache.last.delete
+
+            grouping_instance = Saulabs::Reportable::Grouping.new(grouping)
+            reporting_period = Saulabs::Reportable::ReportingPeriod.new(grouping_instance, DateTime.now).previous
+
+            @report.should_receive(:read_data) do |begin_at, end_at, options|
+              begin_at.should == reporting_period.date_time
+              end_at.should == nil
+              [] # without this rspec whines about an ambiguous return value
+            end
+
+            @result = @report.run
+          end
+
+          it "should be optimized without specific end_date and without live_data requested" do
+            @report = Saulabs::Reportable::Report.new(User, :registrations,
+              :grouping => grouping,
+              :limit    => 10
+            )
+            @result = @report.run.to_a
+
+            Saulabs::Reportable::ReportCache.last.delete
+
+            grouping_instance = Saulabs::Reportable::Grouping.new(grouping)
+            reporting_period = Saulabs::Reportable::ReportingPeriod.new(grouping_instance, DateTime.now).previous
+
+            @report.should_receive(:read_data) do |begin_at, end_at, options|
+              begin_at.should == reporting_period.date_time
+              end_at.should == nil
+              [] # without this rspec whines about an ambiguous return value
+            end
+
+            @result = @report.run
+          end
+        end
+
+        describe 'non optimized querying when gaps present in cached data' do
+          it "should not be optimized with specified end_date" do
+            @end_date = DateTime.now - 1.send(grouping)
+            @report = Saulabs::Reportable::Report.new(User, :registrations,
+              :grouping => grouping,
+              :limit    => 10,
+              :end_date => @end_date
+            )
+            @result = @report.run
+
+            Saulabs::Reportable::ReportCache.first.delete
+
+            grouping_instance = Saulabs::Reportable::Grouping.new(grouping)
+            reporting_period = Saulabs::Reportable::ReportingPeriod.new(grouping_instance, @end_date)
+
+            @report.should_receive(:read_data) do |begin_at, end_at, options|
+              begin_at.should == reporting_period.offset(-9).date_time
+              end_at.should == reporting_period.last_date_time
+              [] # without this rspec whines about an ambiguous return value
+            end
+
+            @result = @report.run
+          end
+
+          it "should not be optimized without specific end_date and live_data" do
+            @report = Saulabs::Reportable::Report.new(User, :registrations,
+              :grouping => grouping,
+              :limit    => 10,
+              :live_data => true
+            )
+            @result = @report.run.to_a
+
+            Saulabs::Reportable::ReportCache.first.delete
+
+            grouping_instance = Saulabs::Reportable::Grouping.new(grouping)
+            reporting_period = Saulabs::Reportable::ReportingPeriod.new(grouping_instance, DateTime.now).previous
+
+            @report.should_receive(:read_data) do |begin_at, end_at, options|
+              begin_at.should == reporting_period.offset(-9).date_time
+              end_at.should == nil
+              [] # without this rspec whines about an ambiguous return value
+            end
+
+            @result = @report.run
+          end
+
+          it "should not be optimized without specific end_date and without live_data requested" do
+            @report = Saulabs::Reportable::Report.new(User, :registrations,
+              :grouping => grouping,
+              :limit    => 10
+            )
+            @result = @report.run.to_a
+
+            Saulabs::Reportable::ReportCache.first.delete
+
+            grouping_instance = Saulabs::Reportable::Grouping.new(grouping)
+            reporting_period = Saulabs::Reportable::ReportingPeriod.new(grouping_instance, DateTime.now).previous
+
+            @report.should_receive(:read_data) do |begin_at, end_at, options|
+              begin_at.should == reporting_period.offset(-9).date_time
+              end_at.should == nil
+              [] # without this rspec whines about an ambiguous return value
+            end
+
+            @result = @report.run
+          end
+        end
+
         describe 'when :end_date is specified' do
 
           it 'should not raise a SQL duplicate key error after multiple runs' do

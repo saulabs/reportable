@@ -184,7 +184,7 @@ describe Saulabs::Reportable::ReportCache do
       describe 'with :end_date = <some date>' do
 
         before do
-          @options = @report.options.merge(:end_date => Time.now)
+          @options = @report.options.merge(:end_date => Time.now - 1.send(@report.options[:grouping].identifier))
         end
 
         it 'should yield the last date and time of the reporting period for the specified end date' do
@@ -221,7 +221,7 @@ describe Saulabs::Reportable::ReportCache do
     end
 
     it 'should utilize the end_date in the conditions' do
-      end_date = Time.now
+      end_date = Time.now - 1.send(@report.options[:grouping].identifier)
       Saulabs::Reportable::ReportCache.should_receive(:all).once.with(
         :conditions => [
           %w(model_name report_name grouping aggregation conditions).map do |column_name|
@@ -232,7 +232,7 @@ describe Saulabs::Reportable::ReportCache do
           @report.options[:grouping].identifier.to_s,
           @report.aggregation.to_s,
           '',
-          Saulabs::Reportable::ReportingPeriod.first(@report.options[:grouping], 9).date_time,
+          Saulabs::Reportable::ReportingPeriod.first(@report.options[:grouping], 10).date_time,
           Saulabs::Reportable::ReportingPeriod.new(@report.options[:grouping], end_date).date_time
         ],
         :limit => 10,
@@ -271,7 +271,15 @@ describe Saulabs::Reportable::ReportCache do
       end
     end
   end
-  
+
+  describe '.get_first_reporting_period_to_read' do
+    it 'returns first reporting period if no cached data' do
+      Saulabs::Reportable::ReportCache.should_receive(:get_first_reporting_period).once.and_return('first')
+      result = Saulabs::Reportable::ReportCache.send(:get_first_reporting_period_to_read, [], {})
+      result.should == 'first'
+    end
+  end
+
   describe '.serialize_conditions' do
     
     it 'should serialize empty conditions correctly' do

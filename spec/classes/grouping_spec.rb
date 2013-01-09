@@ -76,6 +76,30 @@ describe Saulabs::Reportable::Grouping do
 
     end
 
+    describe 'for MS SQL Server' do
+
+      before do
+        ActiveRecord::Base.connection.stub!(:adapter_name).and_return('sqlserver')
+      end
+
+      it 'should output a format of "YYYY-MM-DD HH:00:00.0" for grouping :hour' do # string "%Y-%m-%d %h:00:00.0" 
+        Saulabs::Reportable::Grouping.new(:hour).send(:to_sql, 'created_at').should == "DATEADD(hh,DATEDIFF(hh,DATEADD(dd,DATEDIFF(dd,'1 Jan 1900',created_at), '1 Jan 1900'),created_at), DATEADD(dd,DATEDIFF(dd,'1 Jan 1900',created_at), '1 Jan 1900'))"
+      end
+
+      it 'should output a format of "YYYY-MM-DD" for grouping :day' do
+        Saulabs::Reportable::Grouping.new(:day).send(:to_sql, 'created_at').should == "DATEADD(dd,DATEDIFF(dd,'1 Jan 1900',created_at), '1 Jan 1900')"
+      end
+
+      it 'should output a format of "YYYY-WW" for grouping :week' do
+        Saulabs::Reportable::Grouping.new(:week).send(:to_sql, 'created_at').should == "LEFT(CONVERT(varchar,created_at,120), 4) + '-' + CAST(DATEPART(isowk,created_at) AS VARCHAR)"
+      end
+
+      it 'should output a format of "YYYY-MM-01" for grouping :month' do
+        Saulabs::Reportable::Grouping.new(:month).send(:to_sql, 'created_at').should == "DATEADD(mm,DATEDIFF(mm,'1 Jan 1900',created_at), '1 Jan 1900')"
+      end
+
+    end
+
   end
 
   describe '#date_parts_from_db_string' do
@@ -94,7 +118,7 @@ describe Saulabs::Reportable::Grouping do
 
       end
 
-      it 'should split the string with "-" and return teh calendar year and week for grouping :week' do
+      it 'should split the string with "-" and return the calendar year and week for grouping :week' do
         db_string = '2008-2-1'
         expected = [2008, 5]
 
@@ -143,6 +167,29 @@ describe Saulabs::Reportable::Grouping do
 
       it 'should use the first 4 numbers for the year and the last 2 numbers for the week for grouping :week' do
         db_string = '200852'
+        expected = [2008, 52]
+
+        Saulabs::Reportable::Grouping.new(:week).date_parts_from_db_string(db_string).should == expected
+      end
+
+    end
+
+    describe 'for MS SQL Server' do
+
+      before do
+        ActiveRecord::Base.connection.stub!(:adapter_name).and_return('sqlserver')
+      end
+
+      for grouping in [[:hour, '2008-12-31 12'], [:day, '2008-12-31'], [:month, '2008-12']] do
+
+        it "should split the string with '-' and ' ' for grouping :#{grouping[0].to_s}" do
+          Saulabs::Reportable::Grouping.new(grouping[0]).date_parts_from_db_string(grouping[1]).should == grouping[1].split(/[- ]/).map(&:to_i)
+        end
+
+      end
+
+      it 'should use the first 4 numbers for the year and the last 2 numbers for the week for grouping :week' do
+        db_string = '2008-52'
         expected = [2008, 52]
 
         Saulabs::Reportable::Grouping.new(:week).date_parts_from_db_string(db_string).should == expected

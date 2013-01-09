@@ -41,6 +41,8 @@ module Saulabs
             from_sqlite_db_string(db_string)
           when /postgres/i
             from_postgresql_db_string(db_string)
+          when /mssql/i, /sqlserver/i
+            from_sqlserver_db_string(db_string)
         end
       end
 
@@ -57,6 +59,8 @@ module Saulabs
             sqlite_format(date_column)
           when /postgres/i
             postgresql_format(date_column)
+          when /mssql/i, /sqlserver/i
+            sqlserver_format(date_column)
         end
       end
 
@@ -91,6 +95,14 @@ module Saulabs
               return [date.cwyear, date.cweek]
             when :month
               return db_string[0..6].split('-')[0..1].map(&:to_i)
+          end
+        end
+
+        def from_sqlserver_db_string(db_string)
+          if @identifier == :week
+            parts = [db_string[0..3], db_string[5..6]].map(&:to_i)
+          else
+            db_string.split(/[- ]/).map(&:to_i)
           end
         end
 
@@ -130,6 +142,19 @@ module Saulabs
               "date_trunc('week', #{date_column})"
             when :month
               "date_trunc('month', #{date_column})"
+          end
+        end
+
+        def sqlserver_format(date_column)
+          case @identifier
+            when :hour
+              "DATEADD(hh,DATEDIFF(hh,DATEADD(dd,DATEDIFF(dd,'1 Jan 1900',#{date_column}), '1 Jan 1900'),#{date_column}), DATEADD(dd,DATEDIFF(dd,'1 Jan 1900',#{date_column}), '1 Jan 1900'))"
+            when :day
+              "DATEADD(dd,DATEDIFF(dd,'1 Jan 1900',#{date_column}), '1 Jan 1900')"
+            when :week
+              "LEFT(CONVERT(varchar,#{date_column},120), 4) + '-' + CAST(DATEPART(isowk,#{date_column}) AS VARCHAR)"
+            when :month
+              "DATEADD(mm,DATEDIFF(mm,'1 Jan 1900',#{date_column}), '1 Jan 1900')"
           end
         end
 

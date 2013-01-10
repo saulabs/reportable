@@ -21,7 +21,7 @@ describe Saulabs::Reportable::Report do
     it 'should process the data with the report cache' do
       Saulabs::Reportable::ReportCache.should_receive(:process).once.with(
         @report,
-        { :limit => 100, :grouping => @report.options[:grouping], :conditions => [], :live_data => false, :end_date => false }
+        { :limit => 100, :grouping => @report.options[:grouping], :conditions => [], :live_data => false, :end_date => false, :distinct => false }
       )
 
       @report.run
@@ -30,7 +30,7 @@ describe Saulabs::Reportable::Report do
     it 'should process the data with the report cache when custom conditions are given' do
       Saulabs::Reportable::ReportCache.should_receive(:process).once.with(
         @report,
-        { :limit => 100, :grouping => @report.options[:grouping], :conditions => { :some => :condition }, :live_data => false, :end_date => false }
+        { :limit => 100, :grouping => @report.options[:grouping], :conditions => { :some => :condition }, :live_data => false, :end_date => false, :distinct => false }
       )
 
       @report.run(:conditions => { :some => :condition })
@@ -47,7 +47,7 @@ describe Saulabs::Reportable::Report do
       Saulabs::Reportable::Grouping.should_receive(:new).once.with(:month).and_return(grouping)
       Saulabs::Reportable::ReportCache.should_receive(:process).once.with(
         @report,
-        { :limit => 100, :grouping => grouping, :conditions => [], :live_data => false, :end_date => false }
+        { :limit => 100, :grouping => grouping, :conditions => [], :live_data => false, :end_date => false, :distinct => false }
       )
 
       @report.run(:grouping => :month)
@@ -71,10 +71,10 @@ describe Saulabs::Reportable::Report do
       describe "for grouping :#{grouping.to_s}" do
 
         before(:all) do
-          User.create!(:login => 'test 1', :created_at => Time.now,                    :profile_visits => 2)
-          User.create!(:login => 'test 2', :created_at => Time.now - 1.send(grouping), :profile_visits => 1)
-          User.create!(:login => 'test 3', :created_at => Time.now - 3.send(grouping), :profile_visits => 2)
-          User.create!(:login => 'test 4', :created_at => Time.now - 3.send(grouping), :profile_visits => 3)
+          User.create!(:login => 'test 1', :created_at => Time.now,                    :profile_visits => 2, :sub_type => "red")
+          User.create!(:login => 'test 2', :created_at => Time.now - 1.send(grouping), :profile_visits => 1, :sub_type => "red")
+          User.create!(:login => 'test 3', :created_at => Time.now - 3.send(grouping), :profile_visits => 2, :sub_type => "blue")
+          User.create!(:login => 'test 4', :created_at => Time.now - 3.send(grouping), :profile_visits => 3, :sub_type => "blue")
         end
 
         describe 'optimized querying with contiguously cached data' do
@@ -296,6 +296,24 @@ describe Saulabs::Reportable::Report do
               result[9][1].should  == 1.0
               result[8][1].should  == 0.0
               result[7][1].should  == 2.0
+              result[6][1].should  == 0.0
+            end
+
+            it 'should return correct data for aggregation :count with distinct: true' do
+              @report = Saulabs::Reportable::Report.new(User, :registrations,
+                :aggregation => :count,
+                :grouping    => grouping,
+                :value_column => :sub_type,
+                :distinct    => true,
+                :limit       => 10,
+                :live_data   => live_data
+              )
+              result = @report.run.to_a
+
+              result[10][1].should == 1.0 if live_data
+              result[9][1].should  == 1.0
+              result[8][1].should  == 0.0
+              result[7][1].should  == 1.0
               result[6][1].should  == 0.0
             end
 

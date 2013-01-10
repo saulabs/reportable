@@ -68,6 +68,7 @@ module Saulabs
         @value_column = (options[:value_column] || (@aggregation == :count ? 'id' : name)).to_s
         @options = {
           :limit      => options[:limit] || 100,
+          :distinct   => options[:distinct] || false,
           :conditions => options[:conditions] || [],
           :grouping   => Grouping.new(options[:grouping] || :day),
           :live_data  => options[:live_data] || false,
@@ -118,6 +119,7 @@ module Saulabs
           @klass.send(@aggregation,
             @value_column,
             :conditions => conditions,
+            :distinct   => options[:distinct],
             :group      => options[:grouping].to_sql(@date_column),
             :order      => "#{options[:grouping].to_sql(@date_column)} ASC",
             :limit      => options[:limit]
@@ -145,7 +147,7 @@ module Saulabs
           case context
             when :initialize
               options.each_key do |k|
-                raise ArgumentError.new("Invalid option #{k}!") unless [:limit, :aggregation, :grouping, :date_column, :value_column, :conditions, :live_data, :end_date].include?(k)
+                raise ArgumentError.new("Invalid option #{k}!") unless [:limit, :aggregation, :grouping, :distinct, :date_column, :value_column, :conditions, :live_data, :end_date].include?(k)
               end
               raise ArgumentError.new("Invalid aggregation #{options[:aggregation]}!") if options[:aggregation] && ![:count, :sum, :maximum, :minimum, :average].include?(options[:aggregation])
               raise ArgumentError.new('The name of the column holding the value to sum has to be specified for aggregation :sum!') if [:sum, :maximum, :minimum, :average].include?(options[:aggregation]) && !options.key?(:value_column)

@@ -4,6 +4,7 @@ ActiveRecord::Schema.define(:version => 1) do
     t.string  :login,          :null => false
     t.integer :profile_visits, :null => false, :default => 0
     t.string  :type,           :null => false, :default => 'User'
+    t.string  :sub_type
 
     t.timestamps
   end

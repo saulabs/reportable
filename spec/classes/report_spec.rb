@@ -21,7 +21,7 @@ describe Saulabs::Reportable::Report do
     it 'should process the data with the report cache' do
       Saulabs::Reportable::ReportCache.should_receive(:process).once.with(
         @report,
-        { :limit => 100, :grouping => @report.options[:grouping], :conditions => [], :live_data => false, :end_date => false, :distinct => false }
+        { :limit => 100, :grouping => @report.options[:grouping], :conditions => [], :live_data => false, :end_date => false, :distinct => false, :cacheable => true }
       )
 
       @report.run
@@ -30,7 +30,7 @@ describe Saulabs::Reportable::Report do
     it 'should process the data with the report cache when custom conditions are given' do
       Saulabs::Reportable::ReportCache.should_receive(:process).once.with(
         @report,
-        { :limit => 100, :grouping => @report.options[:grouping], :conditions => { :some => :condition }, :live_data => false, :end_date => false, :distinct => false }
+        { :limit => 100, :grouping => @report.options[:grouping], :conditions => { :some => :condition }, :live_data => false, :end_date => false, :distinct => false, :cacheable => true }
       )
 
       @report.run(:conditions => { :some => :condition })
@@ -47,7 +47,7 @@ describe Saulabs::Reportable::Report do
       Saulabs::Reportable::Grouping.should_receive(:new).once.with(:month).and_return(grouping)
       Saulabs::Reportable::ReportCache.should_receive(:process).once.with(
         @report,
-        { :limit => 100, :grouping => grouping, :conditions => [], :live_data => false, :end_date => false, :distinct => false }
+        { :limit => 100, :grouping => grouping, :conditions => [], :live_data => false, :end_date => false, :distinct => false, :cacheable => true  }
       )
 
       @report.run(:grouping => :month)

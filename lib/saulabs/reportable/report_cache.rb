@@ -63,6 +63,8 @@ module Saulabs
       #   specifies whether data for the current reporting period is to be read; <b>if +:live_data+ is +true+, you will experience a performance hit since the request cannot be satisfied from the cache alone</b>
       # @option options [DateTime, Boolean] :end_date (false)
       #   when specified, the report will only include data for the +:limit+ reporting periods until this date.
+      # @option options [Boolean] :cacheable (true)
+      #   when set to false, the report will never use the cache, which allows reuse of a named report with different conditions
       #
       # @return [ResultSet<Array<DateTime, Float>>]
       #   the result of the report as pairs of {DateTime}s and {Float}s
@@ -94,12 +96,15 @@ module Saulabs
           reporting_period = get_first_reporting_period(options)
           result = []
           while reporting_period < (options[:end_date] ? ReportingPeriod.new(options[:grouping], options[:end_date]).next : current_reporting_period)
-            if cached = cached_data.find { |cached| reporting_period == cached[0] }
+            if options[:cacheable] and cached = cached_data.find { |cached| reporting_period == cached[0] }
               result << [cached[0].date_time, cached[1]]
             else
-              new_cached = build_cached_data(report, options[:grouping], options[:conditions], reporting_period, find_value(new_data, reporting_period))
-              new_cached.save!
-              result << [reporting_period.date_time, new_cached.value]
+              value = find_value(new_data, reporting_period)
+              if options[:cacheable]
+                new_cached = build_cached_data(report, options[:grouping], options[:conditions], reporting_period, value)
+                new_cached.save! if options[:cacheable]
+              end
+              result << [reporting_period.date_time, value]
             end
             reporting_period = reporting_period.next
           end
@@ -137,6 +142,7 @@ module Saulabs
         end
 
         def self.read_cached_data(report, options)
+          return [] if not options[:cacheable]
           options[:conditions] ||= []
           conditions = [
             %w(model_name report_name grouping aggregation conditions).map do |column_name|

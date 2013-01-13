@@ -58,6 +58,8 @@ module Saulabs
       #   specifies whether data for the current reporting period is to be read; <b>if +:live_data+ is +true+, you will experience a performance hit since the request cannot be satisfied from the cache alone</b>
       # @option options [DateTime, Boolean] :end_date (false)
       #   when specified, the report will only include data for the +:limit+ reporting periods until this date.
+      # @option options [Boolean] :cacheable (true)
+      #   when set to false, the report will never use the cache, which allows reuse of a named report with different conditions
       #
       def initialize(klass, name, options = {})
         ensure_valid_options(options)
@@ -72,7 +74,8 @@ module Saulabs
           :conditions => options[:conditions] || [],
           :grouping   => Grouping.new(options[:grouping] || :day),
           :live_data  => options[:live_data] || false,
-          :end_date   => options[:end_date] || false
+          :end_date   => options[:end_date] || false,
+          :cacheable  => ( options[:cacheable] == false ? false : true )
         }
         @options.merge!(options)
         @options.freeze
@@ -93,6 +96,9 @@ module Saulabs
       #   specifies whether data for the current reporting period is to be read; <b>if +:live_data+ is +true+, you will experience a performance hit since the request cannot be satisfied from the cache alone</b>
       # @option options [DateTime, Boolean] :end_date (false)
       #   when specified, the report will only include data for the +:limit+ reporting periods until this date.
+      #
+      # @option options [Boolean] :cacheable (true)
+      #   when set to false, the report will never use the cache, which allows reuse of a named report with different conditions
       #
       # @return [Array<Array<DateTime, Float>>]
       #   the result of the report as pairs of {DateTime}s and {Float}s
@@ -147,7 +153,7 @@ module Saulabs
           case context
             when :initialize
               options.each_key do |k|
-                raise ArgumentError.new("Invalid option #{k}!") unless [:limit, :aggregation, :grouping, :distinct, :date_column, :value_column, :conditions, :live_data, :end_date].include?(k)
+                raise ArgumentError.new("Invalid option #{k}!") unless [:limit, :aggregation, :grouping, :distinct, :date_column, :value_column, :conditions, :live_data, :end_date, :cacheable].include?(k)
               end
               raise ArgumentError.new("Invalid aggregation #{options[:aggregation]}!") if options[:aggregation] && ![:count, :sum, :maximum, :minimum, :average].include?(options[:aggregation])
               raise ArgumentError.new('The name of the column holding the value to sum has to be specified for aggregation :sum!') if [:sum, :maximum, :minimum, :average].include?(options[:aggregation]) && !options.key?(:value_column)

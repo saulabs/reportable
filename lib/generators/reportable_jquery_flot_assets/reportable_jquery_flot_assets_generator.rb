@@ -2,6 +2,8 @@ class ReportableJqueryFlotAssetsGenerator < Rails::Generators::Base
 
   include Rails::Generators::Actions
 
+  source_root File.expand_path('../templates/', __FILE__)
+
   def create_jquery_flot_file
     empty_directory('public/javascripts')
     copy_file(

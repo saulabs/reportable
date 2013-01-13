@@ -2,6 +2,8 @@ class ReportableRaphaelAssetsGenerator < Rails::Generators::Base
 
   include Rails::Generators::Actions
 
+  source_root File.expand_path('../templates/', __FILE__)
+
   def create_raphael_file
     empty_directory('public/javascripts')
     copy_file(

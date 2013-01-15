@@ -40,10 +40,7 @@ module Saulabs
       #   Saulabs::Reportable::ReportCache.clear_for(User, :registrations)
       #
       def self.clear_for(klass, report)
-        self.delete_all(:conditions => {
-          :model_name  => klass.name,
-          :report_name => report.to_s
-        })
+        self.delete_all(:model_name  => klass.name, :report_name => report.to_s)
       end
 
       # Processes the report using the respective cache.

@@ -94,10 +94,10 @@ describe Saulabs::Reportable::ReportCache do
   describe '.clear_for' do
 
     it 'should delete all entries in the cache for the klass and report name' do
-      Saulabs::Reportable::ReportCache.should_receive(:delete_all).once.with(:conditions => {
+      Saulabs::Reportable::ReportCache.should_receive(:delete_all).once.with(
         :model_name  => User.name,
         :report_name => 'registrations'
-      })
+      )
 
       Saulabs::Reportable::ReportCache.clear_for(User, :registrations)
     end

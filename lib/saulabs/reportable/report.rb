@@ -69,6 +69,7 @@ module Saulabs
         @options = {
           :limit      => options[:limit] || 100,
           :distinct   => options[:distinct] || false,
+          :include    => options[:include] || [],
           :conditions => options[:conditions] || [],
           :grouping   => Grouping.new(options[:grouping] || :day),
           :live_data  => options[:live_data] || false,
@@ -119,6 +120,7 @@ module Saulabs
           @klass.send(@aggregation,
             @value_column,
             :conditions => conditions,
+            :include    => options[:include],
             :distinct   => options[:distinct],
             :group      => options[:grouping].to_sql(@date_column),
             :order      => "#{options[:grouping].to_sql(@date_column)} ASC",
@@ -147,13 +149,13 @@ module Saulabs
           case context
             when :initialize
               options.each_key do |k|
-                raise ArgumentError.new("Invalid option #{k}!") unless [:limit, :aggregation, :grouping, :distinct, :date_column, :value_column, :conditions, :live_data, :end_date].include?(k)
+                raise ArgumentError.new("Invalid option #{k}!") unless [:limit, :aggregation, :grouping, :distinct, :include, :date_column, :value_column, :conditions, :live_data, :end_date].include?(k)
               end
               raise ArgumentError.new("Invalid aggregation #{options[:aggregation]}!") if options[:aggregation] && ![:count, :sum, :maximum, :minimum, :average].include?(options[:aggregation])
               raise ArgumentError.new('The name of the column holding the value to sum has to be specified for aggregation :sum!') if [:sum, :maximum, :minimum, :average].include?(options[:aggregation]) && !options.key?(:value_column)
             when :run
               options.each_key do |k|
-                raise ArgumentError.new("Invalid option #{k}!") unless [:limit, :conditions, :grouping, :live_data, :end_date].include?(k)
+                raise ArgumentError.new("Invalid option #{k}!") unless [:limit, :conditions, :include, :grouping, :live_data, :end_date].include?(k)
               end
           end
           raise ArgumentError.new('Options :live_data and :end_date may not both be specified!') if options[:live_data] && options[:end_date]

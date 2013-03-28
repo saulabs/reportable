@@ -38,6 +38,8 @@ module Saulabs
         #   the number of reporting periods to get (see +:grouping+)
         # @option options [Hash] :conditions ({})
         #   conditions like in +ActiveRecord::Base#find+; only records that match these conditions are reported;
+        # @option options [Hash] :include ({})
+        #   include like in +ActiveRecord::Base#find+; names associations that should be loaded alongside; the symbols named refer to already defined associations
         # @option options [Boolean] :live_data (false)
         #   specifies whether data for the current reporting period is to be read; <b>if +:live_data+ is +true+, you will experience a performance hit since the request cannot be satisfied from the cache alone</b>
         # @option options [DateTime, Boolean] :end_date (false)

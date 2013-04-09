@@ -1,5 +1,6 @@
 Reportable
 ==========
+[![Build Status](https://travis-ci.org/saulabs/reportable.png?branch=master)](https://travis-ci.org/saulabs/reportable)
 
 Reportable allows for the easy creation of reports based on `ActiveRecord` models.
 

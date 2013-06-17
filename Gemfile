@@ -4,6 +4,7 @@ gem 'rails',         '~> 3.2.0'
 gem 'activerecord',  '~> 3.2.0', :require => 'active_record'
 gem 'activesupport', '~> 3.2.0', :require => 'active_support'
 gem 'actionpack',    '~> 3.2.0', :require => 'action_pack'
+gem 'protected_attributes'
 
 gem 'sqlite3-ruby', '>= 1.2.0'
 gem 'mysql', 				'>= 2.8.0'

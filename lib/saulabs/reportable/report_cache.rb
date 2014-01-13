@@ -20,7 +20,7 @@ module Saulabs
       validates_presence_of :value
       validates_presence_of :reporting_period
 
-      attr_accessible :model_name, :report_name, :grouping, :aggregation, :value, :reporting_period, :conditions
+      # attr_accessible :model_name, :report_name, :grouping, :aggregation, :value, :reporting_period, :conditions
 
       self.skip_time_zone_conversion_for_attributes = [:reporting_period]
 
@@ -40,10 +40,7 @@ module Saulabs
       #   Saulabs::Reportable::ReportCache.clear_for(User, :registrations)
       #
       def self.clear_for(klass, report)
-        self.delete_all(:conditions => {
-          :model_name  => klass.name,
-          :report_name => report.to_s
-        })
+        self.where(model_name: klass.name, report_name: report.to_s).delete_all
       end
 
       # Processes the report using the respective cache.
@@ -88,8 +85,8 @@ module Saulabs
       private
 
         def self.prepare_result(new_data, cached_data, report, options)
-          new_data = new_data.map { |data| [ReportingPeriod.from_db_string(options[:grouping], data[0]), data[1]] }
-          cached_data.map! { |cached| [ReportingPeriod.new(options[:grouping], cached.reporting_period), cached.value] }
+          new_data = new_data.to_a.map { |data| [ReportingPeriod.from_db_string(options[:grouping], data[0]), data[1]] }
+          cached_data.to_a.map! { |cached| [ReportingPeriod.new(options[:grouping], cached.reporting_period), cached.value] }
           current_reporting_period = ReportingPeriod.new(options[:grouping])
           reporting_period = get_first_reporting_period(options)
           result = []
@@ -137,35 +134,31 @@ module Saulabs
         end
 
         def self.read_cached_data(report, options)
-          options[:conditions] ||= []
-          conditions = [
-            %w(model_name report_name grouping aggregation conditions).map do |column_name|
-              "#{self.connection.quote_column_name(column_name)} = ?"
-            end.join(' AND '),
-            report.klass.to_s,
-            report.name.to_s,
-            options[:grouping].identifier.to_s,
-            report.aggregation.to_s,
-            serialize_conditions(options[:conditions])
-          ]
-          first_reporting_period = get_first_reporting_period(options)
-          if options[:end_date]
-            conditions.first << ' AND reporting_period BETWEEN ? AND ?'
-            conditions << first_reporting_period.date_time
-            conditions << ReportingPeriod.new(options[:grouping], options[:end_date]).date_time
-          else
-            conditions.first << ' AND reporting_period >= ?'
-            conditions << first_reporting_period.date_time
-          end
-          self.all(
-            :conditions => conditions,
-            :limit      => options[:limit],
-            :order      => 'reporting_period ASC'
+          conditions = build_conditions_for_reading_cached_data(report, options)
+          self.where(conditions).limit(options[:limit]).order('reporting_period ASC')
+        end
+
+        def self.build_conditions_for_reading_cached_data(report, options)
+          start_date = get_first_reporting_period(options).date_time
+
+          conditions = where('reporting_period >= ?', start_date).where(
+            model_name: report.klass.to_s,
+            report_name: report.name.to_s,
+            grouping: options[:grouping].identifier.to_s,
+            aggregation: report.aggregation.to_s,
+            conditions: serialize_conditions(options[:conditions] || [])
           )
+
+          if options[:end_date]
+            end_date = ReportingPeriod.new(options[:grouping], options[:end_date]).date_time
+            conditions.where('reporting_period <= ?', end_date)
+          else
+            conditions
+          end
         end
 
         def self.read_new_data(cached_data, options, &block)
-          return [] if !options[:live_data] && cached_data.length == options[:limit]
+          return [] if !options[:live_data] && cached_data.size == options[:limit]
 
           first_reporting_period_to_read = get_first_reporting_period_to_read(cached_data, options)
           last_reporting_period_to_read = options[:end_date] ? ReportingPeriod.new(options[:grouping], options[:end_date]).last_date_time : nil

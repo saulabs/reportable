@@ -91,19 +91,6 @@ describe Saulabs::Reportable::ReportCache do
 
   end
 
-  describe '.clear_for' do
-
-    it 'should delete all entries in the cache for the klass and report name' do
-      Saulabs::Reportable::ReportCache.should_receive(:delete_all).once.with(:conditions => {
-        :model_name  => User.name,
-        :report_name => 'registrations'
-      })
-
-      Saulabs::Reportable::ReportCache.clear_for(User, :registrations)
-    end
-
-  end
-
   describe '.process' do
 
     before do
@@ -136,7 +123,7 @@ describe Saulabs::Reportable::ReportCache do
       end
 
       it 'should yield the first reporting period if not all required data could be retrieved from the cache' do
-        Saulabs::Reportable::ReportCache.stub!(:all).and_return([Saulabs::Reportable::ReportCache.new])
+        Saulabs::Reportable::ReportCache.stub!(:read_cached_data).and_return([Saulabs::Reportable::ReportCache.new])
 
         Saulabs::Reportable::ReportCache.process(@report, @options) do |begin_at, end_at|
           begin_at.should == Saulabs::Reportable::ReportingPeriod.first(@report.options[:grouping], @report.options[:limit]).date_time
@@ -152,7 +139,7 @@ describe Saulabs::Reportable::ReportCache do
         )
         cached = Saulabs::Reportable::ReportCache.new
         cached.stub!(:reporting_period).and_return(reporting_period.date_time)
-        Saulabs::Reportable::ReportCache.stub!(:all).and_return(Array.new(@report.options[:limit] - 1, Saulabs::Reportable::ReportCache.new), cached)
+        Saulabs::Reportable::ReportCache.stub!(:read_cached_data).and_return(Array.new(@report.options[:limit] - 1, Saulabs::Reportable::ReportCache.new), cached)
 
         Saulabs::Reportable::ReportCache.process(@report, @options) do |begin_at, end_at|
           begin_at.should == reporting_period.date_time
@@ -166,7 +153,7 @@ describe Saulabs::Reportable::ReportCache do
     describe 'with :live_data = false' do
 
       it 'should not yield if all required data could be retrieved from the cache' do
-        Saulabs::Reportable::ReportCache.stub!(:all).and_return(Array.new(@report.options[:limit], Saulabs::Reportable::ReportCache.new))
+        Saulabs::Reportable::ReportCache.stub!(:read_cached_data).and_return(Array.new(@report.options[:limit], Saulabs::Reportable::ReportCache.new))
 
         lambda {
           Saulabs::Reportable::ReportCache.process(@report, @report.options) { raise YieldMatchException.new }
@@ -174,7 +161,7 @@ describe Saulabs::Reportable::ReportCache do
       end
 
       it 'should yield to the block if no data could be retrieved from the cache' do
-        Saulabs::Reportable::ReportCache.stub!(:all).and_return([])
+        Saulabs::Reportable::ReportCache.stub!(:read_cached_data).and_return([])
 
         lambda {
           Saulabs::Reportable::ReportCache.process(@report, @report.options) { raise YieldMatchException.new }

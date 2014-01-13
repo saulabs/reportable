@@ -119,15 +119,14 @@ module Saulabs
 
         def read_data(begin_at, end_at, options)
           conditions = setup_conditions(begin_at, end_at, options[:conditions])
-          @klass.send(@aggregation,
-            @value_column,
-            :conditions => conditions,
-            :include    => options[:include],
-            :distinct   => options[:distinct],
-            :group      => options[:grouping].to_sql("#{ActiveRecord::Base.connection.quote_table_name(@klass.table_name)}.#{ActiveRecord::Base.connection.quote_column_name(@date_column.to_s)}"),
-            :order      => "#{options[:grouping].to_sql("#{ActiveRecord::Base.connection.quote_table_name(@klass.table_name)}.#{ActiveRecord::Base.connection.quote_column_name(@date_column.to_s)}")} ASC",
-            :limit      => options[:limit]
-          )
+          table_name = ActiveRecord::Base.connection.quote_table_name(@klass.table_name)
+          date_column = ActiveRecord::Base.connection.quote_column_name(@date_column.to_s)
+          grouping = options[:grouping].to_sql("#{table_name}.#{date_column}")
+          order    = "#{grouping} ASC"
+
+          @klass.where(conditions).includes(options[:include]).distinct(options[:distinct]).
+            group(grouping).order(order).limit(options[:limit]).
+            calculate(@aggregation, @value_column)
         end
 
         def setup_conditions(begin_at, end_at, custom_conditions = [])

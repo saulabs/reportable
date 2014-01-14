@@ -135,7 +135,7 @@ module Saulabs
 
         def self.read_cached_data(report, options)
           conditions = build_conditions_for_reading_cached_data(report, options)
-          self.where(conditions).limit(options[:limit]).order('reporting_period ASC')
+          conditions.limit(options[:limit]).order('reporting_period ASC')
         end
 
         def self.build_conditions_for_reading_cached_data(report, options)

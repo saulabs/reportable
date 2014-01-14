@@ -27,8 +27,13 @@ require File.join(ROOT, 'lib', 'saulabs', 'reportable.rb')
 #   config.time_zone = 'Pacific Time (US & Canada)'
 # end
 
-FileUtils.mkdir_p File.join(File.dirname(__FILE__), 'log')
-ActiveRecord::Base.logger = ActiveSupport::BufferedLogger.new(File.dirname(__FILE__) + "/log/spec.log")
+# FileUtils.mkdir_p File.join(File.dirname(__FILE__), 'log')
+# ActiveRecord::Base.logger = ActiveSupport::BufferedLogger.new(File.dirname(__FILE__) + "/log/spec.log")
+
+RSpec.configure do |config|
+  config.filter_run :focus => true
+  config.run_all_when_everything_filtered = true
+end
 
 databases = YAML::load(IO.read(File.join(File.dirname(__FILE__), 'db', 'database.yml')))
 ActiveRecord::Base.establish_connection(databases[ENV['DB'] || 'sqlite3'])

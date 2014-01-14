@@ -1,16 +1,12 @@
 source "http://rubygems.org"
 
-gem 'rails',         '~> 3.2.0'
-gem 'activerecord',  '~> 3.2.0', :require => 'active_record'
-gem 'activesupport', '~> 3.2.0', :require => 'active_support'
-gem 'actionpack',    '~> 3.2.0', :require => 'action_pack'
+gem 'rails', '= 4.1.0.beta1'
+gem 'protected_attributes', github: "rails/protected_attributes"
 
-gem 'sqlite3-ruby', '>= 1.2.0'
-gem 'mysql', 				'>= 2.8.0'
-gem 'pg', 					'>= 0.9.0'
-gem 'tzinfo', 			'>= 0.3.0'
+gem 'sqlite3'
+# gem 'mysql',  '>= 2.8.0'
+gem 'pg', '<= 0.15.0' # https://groups.google.com/forum/#!topic/ruby-pg/5_ylGmog1S4
 
-gem 'rake',       '>= 0.8.7'
 gem 'rspec',      '~> 2.8.0'
 gem 'simplecov'
 gem 'excellent',  '>= 1.5.4'

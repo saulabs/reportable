@@ -34,7 +34,7 @@ module Saulabs
 
         def initial_cumulative_value(date, options)
           conditions = setup_conditions(nil, date, options[:conditions])
-          @klass.send(@aggregation, @value_column, :conditions => conditions)
+          @klass.where(conditions).calculate(@aggregation, @value_column)
         end
 
     end

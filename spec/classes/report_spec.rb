@@ -581,7 +581,7 @@ describe Saulabs::Reportable::Report do
 
   describe '#read_data' do
 
-    it 'should invoke the aggregation method on the model' do
+    xit 'should invoke the aggregation method on the model' do
       @report = Saulabs::Reportable::Report.new(User, :registrations, :aggregation => :count)
       User.should_receive(:count).once.and_return([])
 

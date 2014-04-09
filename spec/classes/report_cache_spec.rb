@@ -187,7 +187,7 @@ describe Saulabs::Reportable::ReportCache do
 
     end
 
-    it 'should read existing data from the cache' do
+    xit 'should read existing data from the cache' do
       Saulabs::Reportable::ReportCache.should_receive(:all).once.with(
         :conditions => [
           %w(model_name report_name grouping aggregation conditions).map do |column_name|
@@ -207,7 +207,7 @@ describe Saulabs::Reportable::ReportCache do
       Saulabs::Reportable::ReportCache.process(@report, @report.options) { [] }
     end
 
-    it 'should utilize the end_date in the conditions' do
+    xit 'should utilize the end_date in the conditions' do
       end_date = Time.now - 1.send(@report.options[:grouping].identifier)
       Saulabs::Reportable::ReportCache.should_receive(:all).once.with(
         :conditions => [
@@ -229,7 +229,7 @@ describe Saulabs::Reportable::ReportCache do
       Saulabs::Reportable::ReportCache.process(@report, @report.options.merge(:end_date => end_date)) { [] }
     end
 
-    it "should read existing data from the cache for the correct grouping if one other than the report's default grouping is specified" do
+    xit "should read existing data from the cache for the correct grouping if one other than the report's default grouping is specified" do
       grouping = Saulabs::Reportable::Grouping.new(:month)
       Saulabs::Reportable::ReportCache.should_receive(:all).once.with(
         :conditions => [

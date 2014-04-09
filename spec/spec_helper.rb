@@ -34,6 +34,7 @@ RSpec.configure do |config|
   config.filter_run :focus => true
   config.run_all_when_everything_filtered = true
 end
+ActiveRecord::Base.default_timezone = :local
 
 databases = YAML::load(IO.read(File.join(File.dirname(__FILE__), 'db', 'database.yml')))
 ActiveRecord::Base.establish_connection(databases[ENV['DB'] || 'sqlite3'])

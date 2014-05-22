@@ -93,10 +93,12 @@ module Saulabs
           while reporting_period < (options[:end_date] ? ReportingPeriod.new(options[:grouping], options[:end_date]).next : current_reporting_period)
             if cached = cached_data.find { |cached| reporting_period == cached[0] }
               result << [cached[0].date_time, cached[1]]
-            else
+            elsif reporting_period.last_date_time.past?
               new_cached = build_cached_data(report, options[:grouping], options[:conditions], reporting_period, find_value(new_data, reporting_period))
               new_cached.save!
               result << [reporting_period.date_time, new_cached.value]
+            else
+              result << [reporting_period.date_time, find_value(new_data, reporting_period)]
             end
             reporting_period = reporting_period.next
           end

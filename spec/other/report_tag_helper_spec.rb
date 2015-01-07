@@ -25,12 +25,12 @@ describe Saulabs::Reportable::ReportTagHelper do
     end
 
     it 'should assign a default dom id to the the div tag if none is specified' do
-      @helper.raphael_report_tag(data_set).should =~ /^<div id="#{data_set.model_name.downcase}_#{data_set.report_name}".*<\/div>/
+      @helper.raphael_report_tag(data_set).should =~ /^<div id="#{data_set.model_class_name.downcase}_#{data_set.report_name}".*<\/div>/
     end
 
     it 'should assign correct default dom ids to the the div tag if none is specified and there are more than one report tags on the page' do
-      @helper.raphael_report_tag(data_set).should =~ /^<div id="#{data_set.model_name.downcase}_#{data_set.report_name}".*<\/div>/
-      @helper.raphael_report_tag(data_set).should =~ /^<div id="#{data_set.model_name.downcase}_#{data_set.report_name}1".*<\/div>/
+      @helper.raphael_report_tag(data_set).should =~ /^<div id="#{data_set.model_class_name.downcase}_#{data_set.report_name}".*<\/div>/
+      @helper.raphael_report_tag(data_set).should =~ /^<div id="#{data_set.model_class_name.downcase}_#{data_set.report_name}1".*<\/div>/
     end
     
     it 'should include the data [1,3]' do
@@ -56,12 +56,12 @@ describe Saulabs::Reportable::ReportTagHelper do
     end
 
     it 'should assign a default dom id to the the div tag if none is specified' do
-      @helper.flot_report_tag(data_set).should =~ /^<div id="#{data_set.model_name.downcase}_#{data_set.report_name}".*<\/div>/
+      @helper.flot_report_tag(data_set).should =~ /^<div id="#{data_set.model_class_name.downcase}_#{data_set.report_name}".*<\/div>/
     end
 
     it 'should assign correct default dom ids to the the div tag if none is specified and there are more than one report tags on the page' do
-      @helper.flot_report_tag(data_set).should =~ /^<div id="#{data_set.model_name.downcase}_#{data_set.report_name}".*<\/div>/
-      @helper.flot_report_tag(data_set).should =~ /^<div id="#{data_set.model_name.downcase}_#{data_set.report_name}1".*<\/div>/
+      @helper.flot_report_tag(data_set).should =~ /^<div id="#{data_set.model_class_name.downcase}_#{data_set.report_name}".*<\/div>/
+      @helper.flot_report_tag(data_set).should =~ /^<div id="#{data_set.model_class_name.downcase}_#{data_set.report_name}1".*<\/div>/
     end
 
   end

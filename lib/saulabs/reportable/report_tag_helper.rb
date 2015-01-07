@@ -84,7 +84,7 @@ module Saulabs
       def raphael_report_tag(data, options = {}, raphael_options = {})
         @__raphael_report_tag_count ||= -1
         @__raphael_report_tag_count += 1
-        default_dom_id = "#{data.model_name.downcase}_#{data.report_name}#{@__raphael_report_tag_count > 0 ? @__raphael_report_tag_count : ''}"
+        default_dom_id = "#{data.model_class_name.downcase}_#{data.report_name}#{@__raphael_report_tag_count > 0 ? @__raphael_report_tag_count : ''}"
         options.reverse_merge!(Config.raphael_options.slice(:width, :height, :format))
         options.reverse_merge!(:dom_id => default_dom_id)
         raphael_options.reverse_merge!(Config.raphael_options.except(:width, :height, :format))
@@ -139,7 +139,7 @@ module Saulabs
       def flot_report_tag(data, options = {}, flot_options = {})
         @__flot_report_tag_count ||= -1
         @__flot_report_tag_count += 1
-        default_dom_id = "#{data.model_name.downcase}_#{data.report_name}#{@__flot_report_tag_count > 0 ? @__flot_report_tag_count : ''}"
+        default_dom_id = "#{data.model_class_name.downcase}_#{data.report_name}#{@__flot_report_tag_count > 0 ? @__flot_report_tag_count : ''}"
         options.reverse_merge!(Config.flot_options.slice(:width, :height, :format))
         options.reverse_merge!(:dom_id => default_dom_id)
         flot_options.reverse_merge!(Config.flot_options.except(:width, :height, :format))

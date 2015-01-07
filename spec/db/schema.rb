@@ -10,7 +10,7 @@ ActiveRecord::Schema.define(:version => 1) do
   end
 
   create_table :reportable_cache, :force => true do |t|
-    t.string   :model_name,       :null => false, :limit => 100
+    t.string   :model_class_name,       :null => false, :limit => 100
     t.string   :report_name,      :null => false, :limit => 100
     t.string   :grouping,         :null => false, :limit => 10
     t.string   :aggregation,      :null => false, :limit => 10
@@ -21,14 +21,14 @@ ActiveRecord::Schema.define(:version => 1) do
     t.timestamps
   end
   add_index :reportable_cache, [
-    :model_name,
+    :model_class_name,
     :report_name,
     :grouping,
     :aggregation,
     :conditions
   ], :name => 'name_model_grouping_agregation'
   add_index :reportable_cache, [
-    :model_name,
+    :model_class_name,
     :report_name,
     :grouping,
     :aggregation,

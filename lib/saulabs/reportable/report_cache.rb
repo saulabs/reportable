@@ -7,20 +7,20 @@ module Saulabs
   module Reportable
 
     # The +ReportCache+ class is a regular +ActiveRecord+ model and represents cached results for single {Saulabs::Reportable::ReportingPeriod}s.
-    # +ReportCache+ instances are identified by the combination of +model_name+, +report_name+, +grouping+, +aggregation+ and +reporting_period+.
+    # +ReportCache+ instances are identified by the combination of +model_class_name+, +report_name+, +grouping+, +aggregation+ and +reporting_period+.
     #
     class ReportCache < ActiveRecord::Base
 
       self.table_name = :reportable_cache
 
-      validates_presence_of :model_name
+      validates_presence_of :model_class_name
       validates_presence_of :report_name
       validates_presence_of :grouping
       validates_presence_of :aggregation
       validates_presence_of :value
       validates_presence_of :reporting_period
 
-      # attr_accessible :model_name, :report_name, :grouping, :aggregation, :value, :reporting_period, :conditions
+      # attr_accessible :model_class_name, :report_name, :grouping, :aggregation, :value, :reporting_period, :conditions
 
       self.skip_time_zone_conversion_for_attributes = [:reporting_period]
 
@@ -40,7 +40,7 @@ module Saulabs
       #   Saulabs::Reportable::ReportCache.clear_for(User, :registrations)
       #
       def self.clear_for(klass, report)
-        self.where(model_name: klass.name, report_name: report.to_s).delete_all
+        self.where(model_class_name: klass.name, report_name: report.to_s).delete_all
       end
 
       # Processes the report using the respective cache.
@@ -115,7 +115,7 @@ module Saulabs
 
         def self.build_cached_data(report, grouping, conditions, reporting_period, value)
           self.new(
-            :model_name       => report.klass.to_s,
+            :model_class_name       => report.klass.to_s,
             :report_name      => report.name.to_s,
             :grouping         => grouping.identifier.to_s,
             :aggregation      => report.aggregation.to_s,
@@ -144,7 +144,7 @@ module Saulabs
           start_date = get_first_reporting_period(options).date_time
 
           conditions = where('reporting_period >= ?', start_date).where(
-            model_name: report.klass.to_s,
+            model_class_name: report.klass.to_s,
             report_name: report.name.to_s,
             grouping: options[:grouping].identifier.to_s,
             aggregation: report.aggregation.to_s,

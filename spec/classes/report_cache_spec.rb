@@ -10,7 +10,7 @@ describe Saulabs::Reportable::ReportCache do
 
     before do
       @report_cache = Saulabs::Reportable::ReportCache.new(
-        :model_name       => User.name,
+        :model_class_name       => User.name,
         :report_name      => 'registrations',
         :grouping         => 'date',
         :aggregation      => 'count',
@@ -23,14 +23,14 @@ describe Saulabs::Reportable::ReportCache do
       @report_cache.should be_valid
     end
 
-    it 'should not succeed when no model_name is set' do
-      @report_cache.model_name = nil
+    it 'should not succeed when no model_class_name is set' do
+      @report_cache.model_class_name = nil
 
       @report_cache.should_not be_valid
     end
 
-    it 'should not succeed when a blank model_name is set' do
-      @report_cache.model_name = ''
+    it 'should not succeed when a blank model_class_name is set' do
+      @report_cache.model_class_name = ''
 
       @report_cache.should_not be_valid
     end
@@ -190,7 +190,7 @@ describe Saulabs::Reportable::ReportCache do
     xit 'should read existing data from the cache' do
       Saulabs::Reportable::ReportCache.should_receive(:all).once.with(
         :conditions => [
-          %w(model_name report_name grouping aggregation conditions).map do |column_name|
+          %w(model_class_name report_name grouping aggregation conditions).map do |column_name|
             "#{Saulabs::Reportable::ReportCache.connection.quote_column_name(column_name)} = ?"
           end.join(' AND ') + ' AND reporting_period >= ?',
           @report.klass.to_s,
@@ -211,7 +211,7 @@ describe Saulabs::Reportable::ReportCache do
       end_date = Time.now - 1.send(@report.options[:grouping].identifier)
       Saulabs::Reportable::ReportCache.should_receive(:all).once.with(
         :conditions => [
-          %w(model_name report_name grouping aggregation conditions).map do |column_name|
+          %w(model_class_name report_name grouping aggregation conditions).map do |column_name|
             "#{Saulabs::Reportable::ReportCache.connection.quote_column_name(column_name)} = ?"
           end.join(' AND ') + ' AND reporting_period BETWEEN ? AND ?',
           @report.klass.to_s,
@@ -233,7 +233,7 @@ describe Saulabs::Reportable::ReportCache do
       grouping = Saulabs::Reportable::Grouping.new(:month)
       Saulabs::Reportable::ReportCache.should_receive(:all).once.with(
         :conditions => [
-          %w(model_name report_name grouping aggregation conditions).map do |column_name|
+          %w(model_class_name report_name grouping aggregation conditions).map do |column_name|
             "#{Saulabs::Reportable::ReportCache.connection.quote_column_name(column_name)} = ?"
           end.join(' AND ') + ' AND reporting_period >= ?',
           @report.klass.to_s,

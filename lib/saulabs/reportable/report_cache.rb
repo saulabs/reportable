@@ -131,7 +131,7 @@ module Saulabs
           elsif conditions.is_a?(Hash) && conditions.any?
             conditions.map.sort{|x,y|x.to_s<=>y.to_s}.flatten.join
           else
-            conditions.empty? ? '' : conditions.to_s
+            conditions.blank? ? '' : conditions.to_s
           end
         end
 

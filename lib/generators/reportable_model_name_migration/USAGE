@@ -1,0 +1,6 @@
+Description:
+    Rename model_name column to model_class_name to be compatible with rails 4.2
+
+Example:
+    rails generate reportable_model_name_migration
+

@@ -22,7 +22,7 @@ describe Saulabs::Reportable do
   end
 
   it 'should return a result set that stores the name of the model the report was invoked on' do
-    User.registrations_report.model_name.should == User.name
+    User.registrations_report.model_class_name.should == User.name
   end
 
   it 'should return a result set that stores the name of the report that was invoked' do
@@ -36,7 +36,7 @@ describe Saulabs::Reportable do
     end
 
     it 'should return a result set that stores the model the report was invoked on' do
-      SpecialUser.registrations_report.model_name.should == SpecialUser.name
+      SpecialUser.registrations_report.model_class_name.should == SpecialUser.name
     end
 
     it 'should include all data when invoked on the base model class' do

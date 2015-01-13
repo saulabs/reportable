@@ -1,3 +1,7 @@
+v1.4.2
+------
+* Revert "Make ResultSet enumerable"
+
 v1.4.0
 ------
 

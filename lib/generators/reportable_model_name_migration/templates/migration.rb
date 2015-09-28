@@ -5,7 +5,7 @@ class ReportableRenameModelName < ActiveRecord::Migration
   end
 
   def self.down
-    rename_column :reportable_cache, :model_class_name, :model_class_name
+    rename_column :reportable_cache, :model_class_name, :model_name
   end
 
 end

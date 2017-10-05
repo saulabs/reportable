@@ -1,3 +1,7 @@
+v1.5.0
+------
+* Upgrade to ruby 2.3.1
+
 v1.4.2
 ------
 * Revert "Make ResultSet enumerable"
@@ -6,7 +10,7 @@ v1.4.0
 ------
 
 * rename model_name to model_class_name for rails 4.2 compatibility
-    
+
     to update, you must generate and run the migration
 
     	bundle exec rails generate reportable_model_name_migration

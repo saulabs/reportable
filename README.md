@@ -4,6 +4,7 @@ Reportable
 
 Reportable allows for the easy creation of reports based on `ActiveRecord` models.
 
+octanner fork to support ruby 2.3.1
 
 Usage
 -----

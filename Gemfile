@@ -1,6 +1,6 @@
 source "http://rubygems.org"
 
-gem 'rails', '~> 5.0.1'
+gem 'rails', '~> 4.1.0'
 gem 'protected_attributes'
 
 gem 'sqlite3'

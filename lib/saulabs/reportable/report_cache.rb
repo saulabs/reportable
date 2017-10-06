@@ -86,7 +86,7 @@ module Saulabs
 
         def self.prepare_result(new_data, cached_data, report, options)
           new_data = new_data.to_a.map { |data| [ReportingPeriod.from_db_string(options[:grouping], data[0]), data[1]] }
-          cached_data.to_a.map! { |cached| [ReportingPeriod.new(options[:grouping], cached.reporting_period), cached.value] }
+          cached_data = cached_data.to_a.map { |cached| [ReportingPeriod.new(options[:grouping], cached.reporting_period), cached.value] }
           current_reporting_period = ReportingPeriod.new(options[:grouping])
           reporting_period = get_first_reporting_period(options)
           result = []

@@ -4,7 +4,6 @@ Reportable
 
 Reportable allows for the easy creation of reports based on `ActiveRecord` models.
 
-
 Usage
 -----
 

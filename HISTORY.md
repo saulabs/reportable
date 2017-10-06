@@ -1,7 +1,3 @@
-v1.5.0
-------
-* Upgrade to ruby 2.3.1
-
 v1.4.2
 ------
 * Revert "Make ResultSet enumerable"

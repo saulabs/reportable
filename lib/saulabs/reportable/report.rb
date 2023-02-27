@@ -122,7 +122,7 @@ module Saulabs
           table_name = ActiveRecord::Base.connection.quote_table_name(@klass.table_name)
           date_column = ActiveRecord::Base.connection.quote_column_name(@date_column.to_s)
           grouping = options[:grouping].to_sql("#{table_name}.#{date_column}")
-          order    = "#{grouping} ASC"
+          order    = Arel.sql("#{grouping} ASC")
 
           @klass.where(conditions).includes(options[:include]).distinct(options[:distinct]).
             group(grouping).order(order).limit(options[:limit]).
